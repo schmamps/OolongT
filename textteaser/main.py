@@ -25,7 +25,7 @@ result = summarizer.summarize(input['text'], input['title'], 'Undefined', 'Undef
 result = summarizer.sortScore(result)
 result = summarizer.sortSentences(result[:30])
 
-print 'Summary:'
+print('Summary:')
 
 for r in result:
     print(r['sentence'])
