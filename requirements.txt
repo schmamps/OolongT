@@ -1,0 +1,2 @@
+-r textteaser/requirements.txt
+-r tests/requirements.txt
