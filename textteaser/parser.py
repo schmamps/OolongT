@@ -1,5 +1,6 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import nltk.data
 import os.path as path
 
@@ -20,7 +21,7 @@ class Parser:
         words = self.removeStopWords(words)
         uniqueWords = list(set(words))
 
-        keywords = [{'word': word, 'count': words.count(word)} for word in uniqueWords]
+        keywords = [{'word': word, 'count': words.count(word)} for word in uniqueWords]  # nopep8
         keywords = sorted(keywords, key=lambda x: -x['count'])
 
         return (keywords, len(words))
@@ -28,7 +29,7 @@ class Parser:
     def getSentenceLengthScore(self, sentence):
         return (self.ideal - abs(self.ideal - len(sentence))) / self.ideal
 
-    # Jagadeesh, J., Pingali, P., & Varma, V. (2005). Sentence Extraction Based Single Document Summarization. International Institute of Information Technology, Hyderabad, India, 5.
+    # nopep8 Jagadeesh, J., Pingali, P., & Varma, V. (2005). Sentence Extraction Based Single Document Summarization. International Institute of Information Technology, Hyderabad, India, 5.
     def getSentencePositionScore(self, i, sentenceCount):
         normalized = i / (sentenceCount * 1.0)
 
