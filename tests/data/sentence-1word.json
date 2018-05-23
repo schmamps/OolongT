@@ -1,0 +1,17 @@
+{
+	"meta": {
+		"description": "A very poor sentence",
+		"license": false
+	},
+	"title": "Puppies and Kittens Dance!",
+	"text": "Whatever!",
+	"words": ["Whatever!"],
+	"compareWords": ["whatever"],
+	"compareTitle": ["puppies", "and", "kittens", "dance"],
+	"splitWords": ["whatever!"],
+	"keywords": {},
+	"lengthScore": 0.0,
+	"titleScore": 0.0,
+	"removePunctations": "Whatever",
+	"removeStopWords": ["whatever!"]
+}

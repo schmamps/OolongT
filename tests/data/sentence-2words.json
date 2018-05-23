@@ -1,0 +1,12 @@
+{
+	"meta": {
+		"description": "A very poor sentence",
+		"license": false
+	},
+	"title": "Puppies and Kittens Dance",
+	"text": "Or whatever!",
+	"keywords": {},
+	"lengthScore": 0.0,
+	"titleScore": 0.0,
+	"removeStopWords": ["whatever!"]
+}

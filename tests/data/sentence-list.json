@@ -1,0 +1,29 @@
+{
+	"meta": {
+		"description": "Boilerplate text",
+		"license": false
+	},
+	"title": "Boilerplate Text",
+	"text": "The quick brown fox jumps over the lazy dog?   Now is the time for all good men! Lorem ipsum dolor, sit amet.",
+	"splitSentences": [
+		"The quick brown fox jumps over the lazy dog?",
+		"Now is the time for all good men!",
+		"Lorem ipsum dolor, sit amet."
+	],
+	"removePunctations": "The quick brown fox jumps over the lazy dog   Now is the time for all good men Lorem ipsum dolor sit amet",
+	"removeStopWords": [
+		"quick",
+		"brown",
+		"fox",
+		"jumps",
+		"lazy",
+		"dog?",
+		"good",
+		"men!",
+		"lorem",
+		"ipsum",
+		"dolor,",
+		"sit",
+		"amet."
+	]
+}

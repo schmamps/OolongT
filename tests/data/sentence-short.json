@@ -1,0 +1,19 @@
+{
+	"meta": {
+		"description": "a short paragraph",
+		"license": false
+	},
+	"title": "A short paragraph here",
+	"text": "This paragraph contains one sentence.",
+	"words": ["This", "paragraph", "contains", "one", "sentence."],
+	"compareWords": ["this", "paragraph", "contains", "one", "sentence"],
+	"compareTitle": ["a", "short", "paragraph", "here"],
+	"keywords": {
+		"paragraph": 1,
+		"contains": 1,
+		"sentence": 1
+	},
+	"lengthScore": 0.25,
+	"titleScore": 0.25,
+	"splitSentences": ["This paragraph contains one sentence."]
+}

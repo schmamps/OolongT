@@ -1,0 +1,48 @@
+{
+	"meta": {
+		"description": "A sentence of medium value",
+		"license": false
+	},
+	"title": "Kittens Frolic with Puppies?",
+	"text": "Fuzzy kittens and fluffy puppies dance happily in the woods.",
+	"words": [
+		"Fuzzy",
+		"kittens",
+		"and",
+		"fluffy",
+		"puppies",
+		"dance",
+		"happily",
+		"in",
+		"the",
+		"woods."
+	],
+	"compareWords": [
+		"fuzzy",
+		"kittens",
+		"and",
+		"fluffy",
+		"puppies",
+		"dance",
+		"happily",
+		"in",
+		"the",
+		"woods"
+	],
+	"compareTitle": ["kittens", "frolic","with", "puppies"],
+	"splitWords": [
+		"fuzzy",
+		"kittens",
+		"and",
+		"fluffy",
+		"puppies",
+		"dance",
+		"happily",
+		"in",
+		"the",
+		"woods."
+	],
+	"keywords": {},
+	"lengthScore": 0.5,
+	"titleScore":  0.5
+}
