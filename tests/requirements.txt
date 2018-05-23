@@ -1,4 +1,6 @@
 pytest
 pylint
 rope
-#json
+pep8
+pep8-naming
+flake8
