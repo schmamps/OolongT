@@ -1,6 +1,5 @@
 """ Test class for Summarizer """
 from textteaser.summarizer import Summarizer
-from typing import Dict, List, Tuple
 from .sample import Sample
 from math import floor
 from random import shuffle
@@ -9,10 +8,27 @@ from .assert_ex import assert_ex
 
 
 class TestSummarizer:
-    def compareFloat(self, val1, val2):
-        return (val1 * 100000 - val2 * 100000 < 2)
+    def _compareFloat(self, val1, val2):
+        """Compare two floating point values
 
-    def randomize_list(self, src: List) -> List[any]:
+        Arguments:
+            val1 {float} -- value 1
+            val2 {float} -- value 2
+
+        Returns:
+            bool -- the two values are close enough
+        """
+        return (int(val1 * 100000) - int(val2 * 100000) < 2)
+
+    def randomize_list(self, src):
+        """Reorder a copy of the supplied list
+
+        Arguments:
+            src {list} -- source list
+
+        Returns:
+            list -- copy of source list in different order
+        """
         dupe = list(src)
         while dupe == src:
             shuffle(dupe)
@@ -20,12 +36,33 @@ class TestSummarizer:
         return dupe
 
     def getTopKeywords(self, keywords):
+        """Shadow of Summarizer.getTopKeywords
+
+        Arguments:
+            keywords {List[Dict]} -- list of keyword Dicts
+
+        Returns:
+            List[Dict] -- the ten highest rated keywords
+        """
         return keywords[:10]
 
     def getKeywordList(self, keywords):
+        """Get just the words from the keyword Dict
+
+        Arguments:
+            keywords {List[Dict]} -- list of keyword Dicts
+
+        Returns:
+            List[str] -- list of every value at key 'word'
+        """
         return [x['word'] for x in keywords]
 
-    def _test_summarize(self, sample_name: str):
+    def _test_summarize(self, sample_name):
+        """Test Summarizer.summarize() with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         summ = Summarizer()
 
@@ -60,7 +97,12 @@ class TestSummarizer:
     def test_summarize_canada(self):
         self._test_summarize('canada')
 
-    def _test_getTopKeywords(self, sample_name: str):
+    def _test_getTopKeywords(self, sample_name):
+        """Test Summarizer.getTopKeywords with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         summ = Summarizer()
 
@@ -104,7 +146,12 @@ class TestSummarizer:
     def test_getTopKeywords_canada(self):
         self._test_getTopKeywords('canada')
 
-    def _test_sortScore(self, sample_name: str):
+    def _test_sortScore(self, sample_name):
+        """Test Summarizer.sortScore with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         summ = Summarizer()
         sentences = self.randomize_list(samp.d['sentences'])
@@ -119,7 +166,7 @@ class TestSummarizer:
 
                 rv = result['totalScore']
                 ev = expected['totalScore']
-                cv = self.compareFloat(rv, ev)
+                cv = self._compareFloat(rv, ev)
 
                 assert_ex('sort score', rv, ev, test=cv)
 
@@ -135,7 +182,12 @@ class TestSummarizer:
     def test_sortScore_canada(self):
         self._test_sortScore('canada')
 
-    def _test_sortSentences(self, sample_name: str):
+    def _test_sortSentences(self, sample_name):
+        """Test Summarizer.sortSentences with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         summ = Summarizer()
         sentences = self.randomize_list(samp.d['sentences'])
@@ -154,7 +206,12 @@ class TestSummarizer:
     def test_sortSentences_canada(self):
         self._test_sortSentences('canada')
 
-    def _test_computeScore(self, sample_name: str):
+    def _test_computeScore(self, sample_name):
+        """Test Summarizer.computeScore with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         summ = Summarizer()
         sentences = [x['text'] for x in samp.d['sentences']]
@@ -176,7 +233,7 @@ class TestSummarizer:
                 'sentence score',
                 result['totalScore'],
                 expected['totalScore'],
-                test=self.compareFloat(
+                test=self._compareFloat(
                     result['totalScore'], expected['totalScore']),
                 hint=[result['sentence'], expected['text']])
 
@@ -196,6 +253,12 @@ class TestSummarizer:
         self._test_computeScore('canada')
 
     def _test_sentence_scoring(self, sample_name, score_type):
+        """Test Summarizer.sbs or .dbs with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+            score_type  {str} -- score method ('sbs' or 'dbs')
+        """
         samp = Sample(sample_name)
         summ = Summarizer()
 
@@ -217,10 +280,15 @@ class TestSummarizer:
                 score_type,
                 expected,
                 result,
-                test=self.compareFloat(result, expected),
+                test=self._compareFloat(result, expected),
                 hint=unpunct)
 
-    def _test_sbs(self, sample_name: str):
+    def _test_sbs(self, sample_name):
+        """Test Summarizer.sbs with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         self._test_sentence_scoring(sample_name, 'sbs')
 
     def test_sbs_cambodia(self):
@@ -232,7 +300,12 @@ class TestSummarizer:
     def test_sbs_canada(self):
         self._test_sbs('canada')
 
-    def _test_dbs(self, sample_name: str):
+    def _test_dbs(self, sample_name):
+        """Test Summarizer.dbs with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         self._test_sentence_scoring(sample_name, 'dbs')
 
     def test_dbs_cambodia(self):

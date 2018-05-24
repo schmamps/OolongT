@@ -1,18 +1,39 @@
 from textteaser.parser import Parser
-from typing import Dict, List, Tuple
 from .sample import Sample
 from .assert_ex import assert_ex
 
 
 class TestParser:
     def _get_sample_keyword_data(self, samp):
+        """Get sample data in Parser.getKeywords() pattern
+
+        Arguments:
+            samp {Sample} -- instance of Sample class
+
+        Returns:
+            tuple[List[Dict], int] -- result of Parser.getKeywords()
+        """
+
         return (samp.d['keywords'], samp.d['instances'])
 
-    def _get_keyword_result(self, text) -> List[Dict]:
+    def _get_keyword_result(self, text):
+        """Get keywords from Parser
+
+        Arguments:
+            text {str} -- text of content
+
+        Returns:
+            tuple[List[Dict], int] -- result of Parser.getKeywords()
+        """
         parser = Parser()
         return parser.getKeywords(text)
 
     def _test_getKeywords(self, sample_name):
+        """Test Parser.getKeywords with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         text = samp.d['text']
 
@@ -42,10 +63,6 @@ class TestParser:
             for kw in result_kws
             if kw['count'] != expect_kws[kw['word']]]
 
-        # list(filter(
-        #     lambda kw: kw not in unexpected and
-        #     kw['count'] != expect_kws[kw['word']],
-        #     result_kws))
         assert_ex(
             'keyword count', miscounted, [], test=len(miscounted) == 0)
 
@@ -56,6 +73,11 @@ class TestParser:
         self._test_getKeywords('essay-snark')
 
     def _test_getSentenceLengthScore(self, sample_name):
+        """Test Parser.getSentenceLengthScore with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         parser = Parser()
         samp = Sample(sample_name)
         words = samp.d['compareWords']
@@ -85,6 +107,13 @@ class TestParser:
         self._test_getSentenceLengthScore('sentence-overlong')
 
     def _test_getSentencePositionScore(self, pos, sentence_count, expected):
+        """Test Parser.getSentencePositionScore
+
+        Arguments:
+            pos {int} -- sentence position (0-based)
+            sentence_count {int} -- number of sentences (len())
+            expected {float} -- expected score
+        """
         parser = Parser()
         result = parser.getSentencePositionScore(pos, sentence_count)
 
@@ -104,6 +133,11 @@ class TestParser:
         self._test_getSentencePositionScore(9, 10, .15)
 
     def _test_getTitleScore(self, sample_name):
+        """Test Parser.getTitleScore with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         parser = Parser()
         title = samp.d['compareTitle']
@@ -134,6 +168,11 @@ class TestParser:
         self._test_getTitleScore('sentence-overlong')
 
     def _test_splitSentences(self, sample_name):
+        """Test Parser.splitSentences with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         parser = Parser()
 
@@ -152,6 +191,11 @@ class TestParser:
         self._test_splitSentences('sentence-list')
 
     def _test_splitWords(self, sample_name):
+        """Test Parser.splitWords with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         samp = Sample(sample_name)
         parser = Parser()
         text = samp.d['text']
@@ -174,6 +218,11 @@ class TestParser:
         self._test_splitWords('sentence-medium')
 
     def _test_removePunctations(self, sample_name):
+        """Test Parser.removePunctations with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         parser = Parser()
         samp = Sample(sample_name)
 
@@ -195,6 +244,11 @@ class TestParser:
         self._test_removePunctations('sentence-list')
 
     def _test_removeStopWords(self, sample_name):
+        """Test Parser.removeStopWords with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
         parser = Parser()
         samp = Sample(sample_name)
         words = parser.splitWords(samp.d['text'])
