@@ -1,9 +1,8 @@
 """ Assertion Helpers """
-from typing import List
 import doctest
 
 
-def compare_list(left: List[any], right: List[any]) -> str:
+def compare_list(left, right):
     """Compare left to right, generate diff
 
     Arguments:
@@ -24,7 +23,7 @@ def compare_list(left: List[any], right: List[any]) -> str:
     return ', '.join([len_str, diff_str])
 
 
-def assert_ex(msg: str, result: any, expected: any, **kwargs) -> bool:
+def assert_ex(msg, result, expected, **kwargs):
     """Generate detailed AssertionError exceptions
 
     Arguments:
