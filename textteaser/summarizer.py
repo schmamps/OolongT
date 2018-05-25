@@ -13,7 +13,8 @@ class Summarizer:
         titleWords = self.parser.splitWords(title)
         (keywords, wordCount) = self.parser.getKeywords(text)
 
-        topKeywords = self.getTopKeywords(keywords[:10], wordCount, source, category)
+        topKeywords = self.getTopKeywords(
+            keywords[:10], wordCount, source, category)
 
         result = self.computeScore(sentences, titleWords, topKeywords)
         result = self.sortScore(result)
@@ -48,9 +49,12 @@ class Summarizer:
 
             titleFeature = self.parser.getTitleScore(titleWords, words)
             sentenceLength = self.parser.getSentenceLengthScore(words)
-            sentencePosition = self.parser.getSentencePositionScore(i, len(sentences))
+            sentencePosition = self.parser.getSentencePositionScore(
+                i, len(sentences))
             keywordFrequency = (sbsFeature + dbsFeature) / 2.0 * 10.0
-            totalScore = (titleFeature * 1.5 + keywordFrequency * 2.0 + sentenceLength * 0.5 + sentencePosition * 1.0) / 4.0
+            totalScore = (
+                titleFeature * 1.5 + keywordFrequency * 2.0 +
+                sentenceLength * 0.5 + sentencePosition * 1.0) / 4.0
 
             summaries.append({
                 # 'titleFeature': titleFeature,
@@ -93,12 +97,16 @@ class Summarizer:
                 index = keywordList.index(word)
 
                 if firstWord == {}:
-                    firstWord = {'i': i, 'score': topKeywords[index]['totalScore']}
+                    firstWord = {
+                        'i': i,
+                        'score': topKeywords[index]['totalScore']}
                 else:
                     secondWord = firstWord
-                    firstWord = {'i': i, 'score': topKeywords[index]['totalScore']}
+                    firstWord = {
+                        'i': i,
+                        'score': topKeywords[index]['totalScore']}
                     distance = firstWord['i'] - secondWord['i']
 
-                    summ += (firstWord['score'] * secondWord['score']) / (distance ** 2)
+                    summ += (firstWord['score'] * secondWord['score']) / (distance ** 2)  # nopep8
 
         return (1.0 / k * (k + 1.0)) * summ
