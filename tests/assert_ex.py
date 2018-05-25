@@ -18,7 +18,7 @@ def compare_list(left, right):
     'len: 3, exclusive: []'
     """
     len_str = 'len: ' + str(len(left))
-    diff_str = 'exclusive: ' + str([x for x in left if x not in right])
+    diff_str = 'exclusive: ' + str([repr(x) for x in left if x not in right])
 
     return ', '.join([len_str, diff_str])
 
