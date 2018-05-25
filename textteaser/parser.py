@@ -134,7 +134,15 @@ class Parser:
         return sentence.lower().split()
 
     def removePunctations(self, text):
-        return ''.join(t for t in text if t.isalnum() or t == ' ')
+        """Remove non-space, non-alphanumeric characters from string
+
+        Arguments:
+            text {str} -- ex: 'It\'s 4:00am, you say?'
+
+        Returns:
+            str -- ex: 'Its 400am you say'
+        """
+        return ''.join(t for t in text if t.isalnum() or t.isspace())
 
     def removeStopWords(self, words):
         return [word for word in words if word not in self.stopWords]
