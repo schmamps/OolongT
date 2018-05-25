@@ -1,19 +1,81 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from .simple_io import load_json
+from json import JSONDecodeError
 import nltk.data
-import os.path as path
+from pathlib import Path, PurePath
+
+
+BUILTIN = Path(__file__).parent.joinpath('lang')
+DEFAULT_LANG = 'en'
+JSON_SUFFIX = '.lang.json'
+TOKEN_SUFFIX = '.tokenizer.pickle'
 
 
 class Parser:
-    def __init__(self):
-        self.basePath = '/'.join([
-            path.dirname(path.abspath(__file__)),
-            'trainer',
-            ''
-        ])
-        self.ideal = 20.0
-        self.stopWords = self.getStopWords()
+    def __init__(self, path=BUILTIN, lang=DEFAULT_LANG):
+        """Initialize class for specified language
+
+        Load data from:
+            {path}/{lang}/{lang}.lang.json
+            {path}/{lang}/{lang}.tokenizer.pickle
+
+        Keyword Arguments:
+            path {any} -- override builtin language dir
+            lang {str} -- subdir of path containing data (default: {'en'})
+
+        Raises:
+            PermissionError: directory traversal in lang
+            FileNotFoundError: language files  not found
+            ValueError: incomplete/malformed configuration file
+        """
+        cfg_data = self.load_language(path, lang)
+
+        try:
+            self.language = cfg_data['meta']['name']
+            self.ideal = int(cfg_data['ideal'])
+            self.stopWords = cfg_data['stop_words']
+            self.token_path = cfg_data['token_path']
+
+        except (JSONDecodeError, KeyError):
+            raise ValueError(
+                'Invalid configuration for ' + lang + ' in ' + path)
+
+    def load_language(self, path, lang):
+        """Load language from specified path
+
+        Arguments:
+            path {str} -- Root directory for language data
+            lang {str} -- subdirectory for specific language
+
+        Raises:
+            PermissionError -- Directory traversal via lang
+            FileNotFoundError -- Language file(s) not found
+
+        Returns:
+            Dict -- data in language JSON + path to tokenizer pickle
+        """
+        root = Path(path)
+        sub = root.joinpath(lang)
+
+        try:
+            # pylint: disable=no-member
+            sub.resolve().relative_to(root.resolve())
+
+        except ValueError:
+            raise PermissionError('directory traversal in lang: ' + lang)
+
+        json_path = sub.joinpath(lang + JSON_SUFFIX)
+        token_path = sub.joinpath(lang + TOKEN_SUFFIX)
+
+        # pylint: disable=no-member
+        if not json_path.exists() or not token_path.exists():
+            raise FileNotFoundError('config dir: ' + str(root))
+
+        cfg_data = load_json(str(json_path))
+        cfg_data['token_path'] = str(token_path)
+
+        return cfg_data
 
     def getKeywords(self, text):
         text = self.removePunctations(text)
@@ -64,8 +126,7 @@ class Parser:
         return len(matchedWords) / (len(title) * 1.0)
 
     def splitSentences(self, text):
-        path = self.basePath + 'english.pickle'
-        tokenizer = nltk.data.load('file:' + path)
+        tokenizer = nltk.data.load('file:' + self.token_path, format='pickle')
 
         return tokenizer.tokenize(text)
 
@@ -77,10 +138,3 @@ class Parser:
 
     def removeStopWords(self, words):
         return [word for word in words if word not in self.stopWords]
-
-    def getStopWords(self):
-        path = self.basePath + 'stopWords.txt'
-        with open(path) as file:
-            words = file.readlines()
-
-        return [word.replace('\n', '') for word in words]

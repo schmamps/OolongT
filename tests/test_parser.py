@@ -1,9 +1,106 @@
-from textteaser.parser import Parser
+from textteaser.parser \
+    import Parser, DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX
+from textteaser.simple_io \
+    import load_json
+import os.path as path
+from pathlib import Path
 from .sample import Sample
 from .assert_ex import assert_ex
 
+BUILTIN = Path(__file__).parent.parent.joinpath('textteaser', 'lang')
+DATA_PATH = Path(__file__).parent.joinpath('data')
+BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
+TEST_LANG_NAME = 'valid'
+TEST_LANG_PATH = BASE_LANG_PATH.joinpath(TEST_LANG_NAME)
+TEST_LANG_JSON = TEST_LANG_PATH.joinpath(TEST_LANG_NAME + JSON_SUFFIX)
+TEST_LANG_TOKEN = TEST_LANG_PATH.joinpath(TEST_LANG_NAME + TOKEN_SUFFIX)
+TEST_LANG_EXPECTED = {
+    'meta': {
+        'name': 'Valid Language Config'
+    },
+    'ideal': 2,
+    'stop_words': 2,
+    'token_path': TEST_LANG_TOKEN}
+DEFAULT_LANG_EXPECTED = {
+    'meta': {
+        'name': 'English'
+    },
+    'ideal': 20,
+    'stop_words': 404,
+    'token_path': BUILTIN.joinpath(
+        DEFAULT_LANG, DEFAULT_LANG + TOKEN_SUFFIX)}
+
 
 class TestParser:
+    def _test_load_language(self, expected, path=False, lang=False):
+        """Load language and compare result with expected
+
+        Arguments:
+            expected {Dict} -- expected result
+
+        Keyword Arguments:
+            path {str or bool} -- path to language dir (default: {False})
+            lang {str or bool} -- language subdirectory (default: {False})
+        """
+        parser = Parser()
+
+        result = parser.load_language(path or BUILTIN, lang or DEFAULT_LANG)
+        result['stop_words'] = len(result['stop_words'])
+
+        for key in expected.keys():
+            assert_ex('config: ' + key, str(result[key]), str(expected[key]))
+
+    def _test_load_language_error(self, expected, path=False, lang=False):
+        """Load language and await an exception
+
+        Arguments:
+            expected {any} -- try: ... except (expected):
+
+        Keyword Arguments:
+            path {str or bool} -- path to language dir (default: {False})
+            lang {str or bool} -- language subdirectory (default: {False})
+        """
+        parser = Parser()
+
+        result = False
+
+        try:
+            parser.load_language(
+                path=path or BUILTIN, lang=lang or DEFAULT_LANG)
+
+        except Exception as e:
+            result = isinstance(e, expected)
+
+        assert result, 'expected throw(s): ' + str(expected)
+
+    def test_load_language_default(self):
+        self._test_load_language(DEFAULT_LANG_EXPECTED)
+
+    def test_load_language_by_lang(self):
+        self._test_load_language(DEFAULT_LANG_EXPECTED, lang='en')
+
+    def test_load_language_by_path(self):
+        self._test_load_language(DEFAULT_LANG_EXPECTED, path=BUILTIN)
+
+    def test_load_language_by_all(self):
+        self._test_load_language(
+            TEST_LANG_EXPECTED, lang=TEST_LANG_NAME, path=BASE_LANG_PATH)
+
+    def test_load_language_traversal(self):
+        self._test_load_language_error(PermissionError, lang='../../../etc')
+
+    def test_load_language_notfound(self):
+        path = Path(__file__)
+        self._test_load_language_error(FileNotFoundError, path=path)
+
+    def test_load_language_malformed(self):
+        self._test_load_language_error(
+            ValueError, lang='malformed', path=BASE_LANG_PATH)
+
+    def test_load_language_empty(self):
+        self._test_load_language_error(
+            FileNotFoundError, lang='nonexistent', path=BASE_LANG_PATH)
+
     def _get_sample_keyword_data(self, samp):
         """Get sample data in Parser.getKeywords() pattern
 
@@ -13,7 +110,6 @@ class TestParser:
         Returns:
             tuple[List[Dict], int] -- result of Parser.getKeywords()
         """
-
         return (samp.d['keywords'], samp.d['instances'])
 
     def _get_keyword_result(self, text):
@@ -34,7 +130,7 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         text = samp.d['text']
 
         (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
@@ -79,7 +175,7 @@ class TestParser:
             sample_name {str} -- name of data source
         """
         parser = Parser()
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         words = samp.d['compareWords']
 
         expected = samp.d['lengthScore']
@@ -138,7 +234,7 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         parser = Parser()
         title = samp.d['compareTitle']
         sentence = samp.d['compareWords']
@@ -173,7 +269,7 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         parser = Parser()
 
         expected = samp.d['splitSentences']
@@ -196,7 +292,7 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         parser = Parser()
         text = samp.d['text']
 
@@ -224,7 +320,7 @@ class TestParser:
             sample_name {str} -- name of data source
         """
         parser = Parser()
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
 
         expected = samp.d['removePunctations']
         result = parser.removePunctations(samp.d['text'])
@@ -250,7 +346,7 @@ class TestParser:
             sample_name {str} -- name of data source
         """
         parser = Parser()
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         words = parser.splitWords(samp.d['text'])
 
         expected = samp.d['removeStopWords']

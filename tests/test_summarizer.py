@@ -1,10 +1,12 @@
 """ Test class for Summarizer """
-from textteaser.summarizer import Summarizer
-from .sample import Sample
 from math import floor
+from pathlib import Path
 from random import shuffle
-import os.path as path
+from textteaser.summarizer import Summarizer
 from .assert_ex import assert_ex
+from .sample import Sample
+
+DATA_PATH = Path(__file__).parent.joinpath('data')
 
 
 class TestSummarizer:
@@ -63,7 +65,7 @@ class TestSummarizer:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
 
         expected = sorted(samp.d['sentences'], key=lambda x: x['rank'])
@@ -103,7 +105,7 @@ class TestSummarizer:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
 
         keywords = samp.d['keywords']
@@ -152,7 +154,7 @@ class TestSummarizer:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
         sentences = self.randomize_list(samp.d['sentences'])
 
@@ -188,7 +190,7 @@ class TestSummarizer:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
         sentences = self.randomize_list(samp.d['sentences'])
 
@@ -212,7 +214,7 @@ class TestSummarizer:
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
         sentences = [x['text'] for x in samp.d['sentences']]
         titleWords = samp.d['titleWords']
@@ -259,7 +261,7 @@ class TestSummarizer:
             sample_name {str} -- name of data source
             score_type  {str} -- score method ('sbs' or 'dbs')
         """
-        samp = Sample(sample_name)
+        samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
 
         for sentence in samp.d['sentences']:
