@@ -168,6 +168,73 @@ class TestParser:
     def test_getKeywords_essay(self):
         self._test_getKeywords('essay-snark')
 
+    def _get_expected_keywords(self, keywords):
+        expected = []
+        for key in keywords.keys():
+            expected += [key] * keywords[key]
+
+        return expected
+
+    def test_get_keyword_list(self):
+        sample_name = 'essay-snark'
+        samp = Sample(DATA_PATH, sample_name)
+        parser = Parser(lang=samp.d['lang'])
+
+        expected = sorted(self._get_expected_keywords(samp.d['keywords']))
+        result = sorted(parser.get_keyword_list(samp.d['text']))
+
+        assert_ex('keyword list', expected, result)
+
+    def _test_count_keyword(self, unique_word, expected):
+        parser = Parser()
+        all_words = ['one', 'two', 'three', 'two', 'three', 'three']
+
+        result = parser.count_keyword(unique_word, all_words)
+
+        assert_ex(
+            'counting keyword',
+            result['count'],
+            expected,
+            hint=unique_word)
+
+    def test_count_keyword0(self):
+        self._test_count_keyword('zero', 0)
+
+    def test_count_keyword1(self):
+        self._test_count_keyword('one', 1)
+
+    def test_count_keyword2(self):
+        self._test_count_keyword('two', 2)
+
+    def test_count_keyword3(self):
+        self._test_count_keyword('three', 3)
+
+    def _test_sort_keyword(self, keyword, expected):
+        parser = Parser()
+
+        result = parser.sort_keyword(keyword)
+        test = (result == expected)
+
+        assert_ex(
+            'sort keyword',
+            repr(result),
+            repr(expected),
+            test=test)
+
+    def test_sort_keyword1(self):
+        word = 'foo'
+        keyword = {'word': word, 'count': 1}
+        expected = (-1, -3, word)
+
+        self._test_sort_keyword(keyword, expected)
+
+    def test_sort_keyword2(self):
+        word = 'foobar'
+        keyword = {'word': word, 'count': 3}
+        expected = (-3, -6, word)
+
+        self._test_sort_keyword(keyword, expected)
+
     def _test_getSentenceLengthScore(self, sample_name):
         """Test Parser.getSentenceLengthScore with data from the selected sample
 

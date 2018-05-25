@@ -77,16 +77,58 @@ class Parser:
 
         return cfg_data
 
-    def getKeywords(self, text):
+    def get_keyword_list(self, text):
+        """Extract all meaningful words from text into a list
+
+        Arguments:
+            text {str} -- any text
+
+        Returns:
+            List[str] -- words in text, minus stop words
+        """
         text = self.removePunctations(text)
-        words = self.splitWords(text)
-        words = self.removeStopWords(words)
-        uniqueWords = list(set(words))
+        split = self.splitWords(text)
+        words = self.removeStopWords(split)
 
-        keywords = [{'word': word, 'count': words.count(word)} for word in uniqueWords]  # nopep8
-        keywords = sorted(keywords, key=lambda x: -x['count'])
+        return words
 
-        return (keywords, len(words))
+    def count_keyword(self, unique_word, all_words):
+        """Count number of instances of unique_word in all_words
+
+        Arguments:
+            unique_word {str} -- word
+            all_words {List[str]} -- list of all words in text
+
+        Returns:
+            Dict -- {word: unique_word, count: (instances in all_words)}
+        """
+
+        return {
+            'word': unique_word,
+            'count': all_words.count(unique_word)}
+
+    def sort_keyword(self, keyword):
+        """Get thorough sorting criteria
+
+        Arguments:
+            keyword {Dict} -- Dict with 'word' and 'count' keys
+
+        Returns:
+            Tuple[int, int, str] -- count, length, string value
+        """
+        word = keyword['word']
+
+        return (-keyword['count'], -len(word), word)
+
+    def getKeywords(self, text):
+        all_words = self.get_keyword_list(text)
+        keywords = [
+            self.count_keyword(unique_word, all_words)
+            for unique_word
+            in list(set(all_words))]
+        keywords = sorted(keywords, key=self.sort_keyword)
+
+        return (keywords, len(all_words))
 
     def getSentenceLengthScore(self, sentence):
         return (self.ideal - abs(self.ideal - len(sentence))) / self.ideal
