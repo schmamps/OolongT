@@ -5,13 +5,13 @@
 	},
 	"lang": "en",
 	"title": "Boilerplate Text",
-	"text": "The quick brown fox jumps over the lazy dog?   Now is the time for all good men! Lorem ipsum dolor, sit amet.",
+	"text": "The quick brown\nfox jumps over the lazy dog?   Now is the time for all good men! \n\tLorem ipsum dolor, sit amet.\t",
 	"splitSentences": [
-		"The quick brown fox jumps over the lazy dog?",
+		"The quick brown\nfox jumps over the lazy dog?",
 		"Now is the time for all good men!",
 		"Lorem ipsum dolor, sit amet."
 	],
-	"removePunctations": "The quick brown fox jumps over the lazy dog   Now is the time for all good men Lorem ipsum dolor sit amet",
+	"removePunctations": "The quick brown\nfox jumps over the lazy dog   Now is the time for all good men \n\tLorem ipsum dolor sit amet\t",
 	"removeStopWords": [
 		"quick",
 		"brown",
