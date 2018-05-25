@@ -99,6 +99,52 @@ class TestSummarizer:
     def test_summarize_canada(self):
         self._test_summarize('canada')
 
+    def _test_scoreKeyword(self, keyword, wordCount, expected):
+        """Score keyword frequency among other keywords
+
+        Arguments:
+            keyword {Dict} -- {count}
+            wordCount {int} -- total number of keywords
+            expected {float} -- expected score
+        """
+        summ = Summarizer()
+
+        result = summ.score_keyword(keyword, wordCount)
+
+        assert_ex(
+            'keyword score',
+            result['totalScore'],
+            expected,
+            hint=' of '.join([str(keyword['count']), str(wordCount)]))
+
+    def test_scoreKeyword_zero(self):
+        keyword = {'count': 0}
+        wordCount = 1
+        expected = 0
+
+        self._test_scoreKeyword(keyword, wordCount, expected)
+
+    def test_scoreKeyword_third(self):
+        keyword = {'count': 1}
+        wordCount = 3
+        expected = 0.5
+
+        self._test_scoreKeyword(keyword, wordCount, expected)
+
+    def test_scoreKeyword_half(self):
+        keyword = {'count': 1}
+        wordCount = 2
+        expected = 0.75
+
+        self._test_scoreKeyword(keyword, wordCount, expected)
+
+    def test_scoreKeyword_max(self):
+        keyword = {'count': 1}
+        wordCount = 1
+        expected = 1.5
+
+        self._test_scoreKeyword(keyword, wordCount, expected)
+
     def _test_getTopKeywords(self, sample_name):
         """Test Summarizer.getTopKeywords with data from the selected sample
 
@@ -113,7 +159,7 @@ class TestSummarizer:
         source = None
         category = None
 
-        expected = samp.d['keywords']
+        expected = samp.d['keywords'][:10]
         results = summ.getTopKeywords(keywords, wordCount, source, category)
 
         all_keywords = [kw['word'] for kw in keywords]

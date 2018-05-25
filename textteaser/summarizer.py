@@ -14,20 +14,34 @@ class Summarizer:
         (keywords, wordCount) = self.parser.getKeywords(text)
 
         topKeywords = self.getTopKeywords(
-            keywords[:10], wordCount, source, category)
+            keywords, wordCount, source, category)
 
         result = self.computeScore(sentences, titleWords, topKeywords)
         result = self.sortScore(result)
 
         return result
 
-    def getTopKeywords(self, keywords, wordCount, source, category):
-        # Add getting top keywords in the database here
-        for keyword in keywords:
-            articleScore = 1.0 * keyword['count'] / wordCount
-            keyword['totalScore'] = articleScore * 1.5
+    def score_keyword(self, keyword, wordCount):
+        """Calculate totalScore of keyword
 
-        return keywords
+        Arguments:
+            keyword {Dict} -- {word, count}
+            wordCount {int} -- total number of keywords
+
+        Returns:
+            Dict -- {word, count, totalScore}
+        """
+        keyword['totalScore'] = 1.5 * keyword['count'] / wordCount
+
+        return keyword
+
+    def getTopKeywords(self, keywords, wordCount, source, category):
+        top_keywords = [
+            self.score_keyword(keyword, wordCount)
+            for i, keyword in enumerate(keywords)
+            if i < 10]
+
+        return top_keywords
 
     def sortScore(self, dictList):
         return sorted(dictList, key=lambda x: -x['totalScore'])
