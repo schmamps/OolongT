@@ -3,6 +3,7 @@
 		"description": "a short paragraph",
 		"license": false
 	},
+	"lang": "en",
 	"title": "A short paragraph here",
 	"text": "This paragraph contains one sentence.",
 	"words": ["This", "paragraph", "contains", "one", "sentence."],

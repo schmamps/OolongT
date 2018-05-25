@@ -4,6 +4,7 @@
 		"license": false,
 		"source": "CIA World Factbook"
 	},
+	"lang": "en",
 	"title": "Economic Overview of Canada",
 	"text": false,
 	"wordCount": 183,
