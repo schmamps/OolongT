@@ -391,11 +391,13 @@ class TestParser:
 
         expected = samp.d['removePunctations']
         result = parser.removePunctations(samp.d['text'])
+        test = (result == expected)
 
         assert_ex(
             'punctuation removal',
-            result,
-            expected)
+            repr(result),
+            repr(expected),
+            test=test)
 
     def test_removePunctations_empty(self):
         self._test_removePunctations('empty')
