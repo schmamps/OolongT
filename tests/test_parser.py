@@ -174,8 +174,8 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        parser = Parser()
         samp = Sample(DATA_PATH, sample_name)
+        parser = Parser(lang=samp.d['lang'])
         words = samp.d['compareWords']
 
         expected = samp.d['lengthScore']
@@ -235,7 +235,7 @@ class TestParser:
             sample_name {str} -- name of data source
         """
         samp = Sample(DATA_PATH, sample_name)
-        parser = Parser()
+        parser = Parser(lang=samp.d['lang'])
         title = samp.d['compareTitle']
         sentence = samp.d['compareWords']
 
@@ -270,7 +270,7 @@ class TestParser:
             sample_name {str} -- name of data source
         """
         samp = Sample(DATA_PATH, sample_name)
-        parser = Parser()
+        parser = Parser(lang=samp.d['lang'])
 
         expected = samp.d['splitSentences']
         result = parser.splitSentences(samp.d['text'])
@@ -293,7 +293,7 @@ class TestParser:
             sample_name {str} -- name of data source
         """
         samp = Sample(DATA_PATH, sample_name)
-        parser = Parser()
+        parser = Parser(lang=samp.d['lang'])
         text = samp.d['text']
 
         expected = samp.d['splitWords']
@@ -319,8 +319,8 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        parser = Parser()
         samp = Sample(DATA_PATH, sample_name)
+        parser = Parser(lang=samp.d['lang'])
 
         expected = samp.d['removePunctations']
         result = parser.removePunctations(samp.d['text'])
@@ -345,8 +345,8 @@ class TestParser:
         Arguments:
             sample_name {str} -- name of data source
         """
-        parser = Parser()
         samp = Sample(DATA_PATH, sample_name)
+        parser = Parser(lang=samp.d['lang'])
         words = parser.splitWords(samp.d['text'])
 
         expected = samp.d['removeStopWords']

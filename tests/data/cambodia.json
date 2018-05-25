@@ -4,6 +4,7 @@
 		"license": false,
 		"source": "CIA World Factbook"
 	},
+	"lang": "en",
 	"title": "Economic overview of Cambodia",
 	"text": false,
 	"wordCount": 220,

@@ -3,6 +3,7 @@
 		"description": "Boilerplate text",
 		"license": false
 	},
+	"lang": "en",
 	"title": "Boilerplate Text",
 	"text": "The quick brown fox jumps over the lazy dog?   Now is the time for all good men! Lorem ipsum dolor, sit amet.",
 	"splitSentences": [
