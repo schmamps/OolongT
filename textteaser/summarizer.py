@@ -13,7 +13,7 @@ class Summarizer:
         titleWords = self.parser.splitWords(title)
         (keywords, wordCount) = self.parser.getKeywords(text)
 
-        topKeywords = self.getTopKeywords(
+        topKeywords = self.get_top_keywords(
             keywords, wordCount, source, category)
 
         result = self.computeScore(sentences, titleWords, topKeywords)
@@ -35,11 +35,37 @@ class Summarizer:
 
         return keyword
 
-    def getTopKeywords(self, keywords, wordCount, source, category):
+    def get_top_keyword_threshold(self, keywords):
+        """Get minimum frequency for top keywords
+
+        Arguments:
+            keywords {List[Dict]} -- list of keyword Dicts
+
+        Returns:
+            int -- minimum frequency
+        """
+        counts = sorted([x['count'] for x in keywords], reverse=True)
+
+        return counts[:10].pop()
+
+    def get_top_keywords(self, keywords, wordCount, source, category):
+        """Get list of the 1st-10th ranked keywords
+
+        Arguments:
+            keywords {List[Dict]} -- keyword list
+            wordCount {int} -- total number of keywords
+            source {any} -- unused
+            category {any} -- unused
+
+        Returns:
+            List[Dict] -- ten most frequently used words (more if same count)
+        """
+        min_count = self.get_top_keyword_threshold(keywords)
+
         top_keywords = [
             self.score_keyword(keyword, wordCount)
-            for i, keyword in enumerate(keywords)
-            if i < 10]
+            for keyword in keywords
+            if keyword['count'] >= min_count]
 
         return top_keywords
 

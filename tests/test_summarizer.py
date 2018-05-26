@@ -145,7 +145,62 @@ class TestSummarizer:
 
         self._test_scoreKeyword(keyword, wordCount, expected)
 
-    def _test_getTopKeywords(self, sample_name):
+    def _test_get_top_keyword_threshold(self, keywords, expected):
+        summ = Summarizer()
+
+        result = summ.get_top_keyword_threshold(keywords)
+
+        assert_ex(
+            'top keyword frequency >=',
+            result,
+            expected)
+
+    def test_get_top_keyword_threshold_short(self):
+        keywords = [
+            {"count": 11},
+            {"count": 8},
+            {"count": 7},
+            {"count": 10},
+            {"count": 9},
+            {"count": 12}]
+
+        self._test_get_top_keyword_threshold(keywords, 7)
+
+    def test_get_top_keyword_threshold_notie(self):
+        keywords = [
+            {"count": 2},
+            {"count": 4},
+            {"count": 7},
+            {"count": 1},
+            {"count": 8},
+            {"count": 5},
+            {"count": 12},
+            {"count": 9},
+            {"count": 11},
+            {"count": 6},
+            {"count": 10},
+            {"count": 3}]
+
+        self._test_get_top_keyword_threshold(keywords, 3)
+
+    def test_get_top_keyword_threshold_tie(self):
+        keywords = [
+            {"count": 4},
+            {"count": 1},
+            {"count": 4},
+            {"count": 7},
+            {"count": 4},
+            {"count": 6},
+            {"count": 5},
+            {"count": 8},
+            {"count": 11},
+            {"count": 9},
+            {"count": 12},
+            {"count": 10}]
+
+        self._test_get_top_keyword_threshold(keywords, 4)
+
+    def _test_get_top_keywords(self, sample_name):
         """Test Summarizer.getTopKeywords with data from the selected sample
 
         Arguments:
@@ -159,8 +214,12 @@ class TestSummarizer:
         source = None
         category = None
 
-        expected = samp.d['keywords'][:10]
-        results = summ.getTopKeywords(keywords, wordCount, source, category)
+        expected = [
+            kw
+            for kw in keywords
+            if kw['count'] >= keywords[9]['count']]
+
+        results = summ.get_top_keywords(keywords, wordCount, source, category)
 
         all_keywords = [kw['word'] for kw in keywords]
         assert_ex(
@@ -185,14 +244,14 @@ class TestSummarizer:
             except ValueError:
                 assert False, 'keyword error'
 
-    def test_getTopKeywords_cambodia(self):
-        self._test_getTopKeywords('cambodia')
+    def test_get_top_keywords_cambodia(self):
+        self._test_get_top_keywords('cambodia')
 
-    def test_getTopKeywords_cameroon(self):
-        self._test_getTopKeywords('cameroon')
+    def test_get_top_keywords_cameroon(self):
+        self._test_get_top_keywords('cameroon')
 
-    def test_getTopKeywords_canada(self):
-        self._test_getTopKeywords('canada')
+    def test_get_top_keywords_canada(self):
+        self._test_get_top_keywords('canada')
 
     def _test_sortScore(self, sample_name):
         """Test Summarizer.sortScore with data from the selected sample
