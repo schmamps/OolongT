@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from .nodash import pluck, sort_by
 from .parser import Parser
 
 
@@ -44,9 +45,10 @@ class Summarizer:
         Returns:
             int -- minimum frequency
         """
-        counts = sorted([x['count'] for x in keywords], reverse=True)
+        counts = pluck(keywords, 'count')
+        top_10 = sorted(counts, reverse=True)[:10]
 
-        return counts[:10].pop()
+        return top_10.pop()
 
     def get_top_keywords(self, keywords, wordCount, source, category):
         """Get list of the 1st-10th ranked keywords
@@ -60,24 +62,22 @@ class Summarizer:
         Returns:
             List[Dict] -- ten most frequently used words (more if same count)
         """
-        min_count = self.get_top_keyword_threshold(keywords)
+        minimum = self.get_top_keyword_threshold(keywords)
+        top_kws = [
+            self.score_keyword(kw, wordCount)
+            for kw in keywords
+            if kw['count'] >= minimum]
 
-        top_keywords = [
-            self.score_keyword(keyword, wordCount)
-            for keyword in keywords
-            if keyword['count'] >= min_count]
-
-        return top_keywords
+        return top_kws
 
     def sortScore(self, dictList):
-        return sorted(dictList, key=lambda x: -x['totalScore'])
+        return sort_by(dictList, 'totalScore', reverse=True)
 
     def sortSentences(self, dictList):
-
-        return sorted(dictList, key=lambda x: x['order'])
+        return sort_by(dictList, 'order')
 
     def computeScore(self, sentences, titleWords, topKeywords):
-        keywordList = [keyword['word'] for keyword in topKeywords]
+        keywordList = list(pluck(topKeywords, 'word'))
         summaries = []
 
         for i, sentence in enumerate(sentences):
