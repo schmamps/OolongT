@@ -77,6 +77,20 @@ class Parser:
 
         return cfg_data
 
+    def get_all_words(self, text):
+        """Get all the words from a text
+
+        Arguments:
+            text {str} -- text
+
+        Returns:
+            List[str] -- sequential list of words in text
+        """
+        bare = self.removePunctations(text)
+        split = self.splitWords(bare)
+
+        return split
+
     def get_keyword_list(self, text):
         """Extract all meaningful words from text into a list
 
@@ -86,11 +100,10 @@ class Parser:
         Returns:
             List[str] -- words in text, minus stop words
         """
-        text = self.removePunctations(text)
-        split = self.splitWords(text)
-        words = self.removeStopWords(split)
+        all_words = self.get_all_words(text)
+        keywords = self.removeStopWords(all_words)
 
-        return words
+        return keywords
 
     def count_keyword(self, unique_word, all_words):
         """Count number of instances of unique_word in all_words
@@ -102,7 +115,6 @@ class Parser:
         Returns:
             Dict -- {word: unique_word, count: (instances in all_words)}
         """
-
         return {
             'word': unique_word,
             'count': all_words.count(unique_word)}

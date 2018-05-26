@@ -3,6 +3,7 @@ from math import floor
 from pathlib import Path
 from random import shuffle
 from textteaser.summarizer import Summarizer
+from textteaser.nodash import pluck
 from .assert_ex import assert_ex
 from .sample import Sample
 
@@ -22,7 +23,7 @@ class TestSummarizer:
         """
         return (int(val1 * 100000) - int(val2 * 100000) < 2)
 
-    def randomize_list(self, src):
+    def _randomize_list(self, src):
         """Reorder a copy of the supplied list
 
         Arguments:
@@ -37,8 +38,10 @@ class TestSummarizer:
 
         return dupe
 
-    def getTopKeywords(self, keywords):
+    def _get_top_keywords(self, keywords):
         """Shadow of Summarizer.getTopKeywords
+
+        keywords should be pre-sorted by frequency
 
         Arguments:
             keywords {List[Dict]} -- list of keyword Dicts
@@ -46,9 +49,9 @@ class TestSummarizer:
         Returns:
             List[Dict] -- the ten highest rated keywords
         """
-        return keywords[:10]
+        return [kw for kw in keywords if kw['count'] >= keywords[9]['count']]
 
-    def getKeywordList(self, keywords):
+    def _get_keyword_list(self, keywords):
         """Get just the words from the keyword Dict
 
         Arguments:
@@ -59,7 +62,7 @@ class TestSummarizer:
         """
         return [x['word'] for x in keywords]
 
-    def _test_summarize(self, sample_name):
+    def summarize(self, sample_name):
         """Test Summarizer.summarize() with data from the selected sample
 
         Arguments:
@@ -91,59 +94,59 @@ class TestSummarizer:
                 hint=[rank, result['sentence']])
 
     def test_summarize_cambodia(self):
-        self._test_summarize('cambodia')
+        self.summarize('cambodia')
 
     def test_summarize_cameroon(self):
-        self._test_summarize('cameroon')
+        self.summarize('cameroon')
 
     def test_summarize_canada(self):
-        self._test_summarize('canada')
+        self.summarize('canada')
 
-    def _test_scoreKeyword(self, keyword, wordCount, expected):
+    def score_keyword(self, keyword, word_count, expected):
         """Score keyword frequency among other keywords
 
         Arguments:
             keyword {Dict} -- {count}
-            wordCount {int} -- total number of keywords
+            word_count {int} -- total number of keywords
             expected {float} -- expected score
         """
         summ = Summarizer()
 
-        result = summ.score_keyword(keyword, wordCount)
+        result = summ.score_keyword(keyword, word_count)
 
         assert_ex(
             'keyword score',
             result['totalScore'],
             expected,
-            hint=' of '.join([str(keyword['count']), str(wordCount)]))
+            hint=' of '.join([str(keyword['count']), str(word_count)]))
 
-    def test_scoreKeyword_zero(self):
+    def test_score_keyword_zero(self):
         keyword = {'count': 0}
-        wordCount = 1
+        word_count = 1
         expected = 0
 
-        self._test_scoreKeyword(keyword, wordCount, expected)
+        self.score_keyword(keyword, word_count, expected)
 
-    def test_scoreKeyword_third(self):
+    def test_score_keyword_third(self):
         keyword = {'count': 1}
-        wordCount = 3
+        word_count = 3
         expected = 0.5
 
-        self._test_scoreKeyword(keyword, wordCount, expected)
+        self.score_keyword(keyword, word_count, expected)
 
-    def test_scoreKeyword_half(self):
+    def test_score_keyword_half(self):
         keyword = {'count': 1}
-        wordCount = 2
+        word_count = 2
         expected = 0.75
 
-        self._test_scoreKeyword(keyword, wordCount, expected)
+        self.score_keyword(keyword, word_count, expected)
 
-    def test_scoreKeyword_max(self):
+    def test_score_keyword_max(self):
         keyword = {'count': 1}
-        wordCount = 1
+        word_count = 1
         expected = 1.5
 
-        self._test_scoreKeyword(keyword, wordCount, expected)
+        self.score_keyword(keyword, word_count, expected)
 
     def _test_get_top_keyword_threshold(self, keywords, expected):
         summ = Summarizer()
@@ -209,17 +212,13 @@ class TestSummarizer:
         samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
 
-        keywords = samp.d['keywords']
-        wordCount = samp.d['wordCount']
         source = None
         category = None
 
-        expected = [
-            kw
-            for kw in keywords
-            if kw['count'] >= keywords[9]['count']]
+        keywords = samp.d['keywords']
+        expected = self._get_top_keywords(keywords)
 
-        results = summ.get_top_keywords(keywords, wordCount, source, category)
+        results = summ.get_top_keywords(samp.d['text'], source, category)
 
         all_keywords = [kw['word'] for kw in keywords]
         assert_ex(
@@ -236,10 +235,14 @@ class TestSummarizer:
                     result['count'],
                     keywords[idx]['count'])
 
+                test = self._compareFloat(
+                    result['totalScore'], keywords[idx]['totalScore'])
+
                 assert_ex(
                     'keyword score',
                     result['totalScore'],
-                    keywords[idx]['totalScore'])
+                    keywords[idx]['totalScore'],
+                    test=test)
 
             except ValueError:
                 assert False, 'keyword error'
@@ -261,7 +264,7 @@ class TestSummarizer:
         """
         samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
-        sentences = self.randomize_list(samp.d['sentences'])
+        sentences = self._randomize_list(samp.d['sentences'])
 
         results = summ.sortScore(sentences)
 
@@ -297,7 +300,7 @@ class TestSummarizer:
         """
         samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
-        sentences = self.randomize_list(samp.d['sentences'])
+        sentences = self._randomize_list(samp.d['sentences'])
 
         results = summ.sortSentences(sentences)
 
@@ -313,7 +316,7 @@ class TestSummarizer:
     def test_sortSentences_canada(self):
         self._test_sortSentences('canada')
 
-    def _test_computeScore(self, sample_name):
+    def computeScore(self, sample_name):
         """Test Summarizer.computeScore with data from the selected sample
 
         Arguments:
@@ -321,20 +324,22 @@ class TestSummarizer:
         """
         samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
-        sentences = [x['text'] for x in samp.d['sentences']]
-        titleWords = samp.d['titleWords']
-        topKeywords = self.getTopKeywords(samp.d['keywords'])
+        sentences = pluck(samp.d['sentences'], 'text')
+        title_words = samp.d['titleWords']
+        top_keywords = self._get_top_keywords(samp.d['keywords'])
 
-        results = summ.computeScore(sentences, titleWords, topKeywords)
+        results = summ.computeScore(sentences, title_words, top_keywords)
 
         for order, result in enumerate(results):
             expected = samp.d['sentences'][order]
+            res_snip = result['sentence'][:17] + '...'
+            exp_snip = expected['text'][:17] + '...'
 
             assert_ex(
                 'sentence order',
                 result['order'],
                 order,
-                hint=[result['sentence'], expected['text']])
+                hint=[res_snip, exp_snip])
 
             assert_ex(
                 'sentence score',
@@ -342,7 +347,7 @@ class TestSummarizer:
                 expected['totalScore'],
                 test=self._compareFloat(
                     result['totalScore'], expected['totalScore']),
-                hint=[result['sentence'], expected['text']])
+                hint=[res_snip, exp_snip])
 
             assert_ex(
                 'sentence text',
@@ -351,13 +356,13 @@ class TestSummarizer:
                 hint=[result['sentence'], expected['text']])
 
     def test_computeScore_cambodia(self):
-        self._test_computeScore('cambodia')
+        self.computeScore('cambodia')
 
     def test_computeScore_cameroon(self):
-        self._test_computeScore('cameroon')
+        self.computeScore('cameroon')
 
     def test_computeScore_canada(self):
-        self._test_computeScore('canada')
+        self.computeScore('canada')
 
     def _test_sentence_scoring(self, sample_name, score_type):
         """Test Summarizer.sbs or .dbs with data from the selected sample
@@ -372,8 +377,8 @@ class TestSummarizer:
         for sentence in samp.d['sentences']:
             unpunct = summ.parser.removePunctations(sentence)
             words = summ.parser.splitWords(unpunct)
-            topKeywords = self.getTopKeywords(samp.d['keywords'])
-            keywordList = self.getKeywordList(samp.d['keywords'])
+            topKeywords = self._get_top_keywords(samp.d['keywords'])
+            keywordList = self._get_keyword_list(samp.d['keywords'])
 
             expected = sentence[score_type]
 
@@ -390,7 +395,7 @@ class TestSummarizer:
                 test=self._compareFloat(result, expected),
                 hint=unpunct)
 
-    def _test_sbs(self, sample_name):
+    def sbs(self, sample_name):
         """Test Summarizer.sbs with data from the selected sample
 
         Arguments:
@@ -399,15 +404,15 @@ class TestSummarizer:
         self._test_sentence_scoring(sample_name, 'sbs')
 
     def test_sbs_cambodia(self):
-        self._test_sbs('cambodia')
+        self.sbs('cambodia')
 
     def test_sbs_cameroon(self):
-        self._test_sbs('cameroon')
+        self.sbs('cameroon')
 
     def test_sbs_canada(self):
-        self._test_sbs('canada')
+        self.sbs('canada')
 
-    def _test_dbs(self, sample_name):
+    def dbs(self, sample_name):
         """Test Summarizer.dbs with data from the selected sample
 
         Arguments:
@@ -416,10 +421,10 @@ class TestSummarizer:
         self._test_sentence_scoring(sample_name, 'dbs')
 
     def test_dbs_cambodia(self):
-        self._test_dbs('cambodia')
+        self.dbs('cambodia')
 
     def test_dbs_cameroon(self):
-        self._test_dbs('cameroon')
+        self.dbs('cameroon')
 
     def test_dbs_canada(self):
-        self._test_dbs('canada')
+        self.dbs('canada')

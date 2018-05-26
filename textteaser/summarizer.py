@@ -9,15 +9,22 @@ class Summarizer:
         self.parser = Parser()
 
     def summarize(self, text, title, source, category):
+        """Get list of all sentences in text, sorted by score
+
+        Arguments:
+            text {str} -- text to analyze
+            title {str} -- title of text
+            source {any} -- unused
+            category {any} -- unused
+
+        Returns:
+            List[Dict] -- list of sentence Dict(s)
+        """
         sentences = self.parser.splitSentences(text)
-        titleWords = self.parser.removePunctations(title)
-        titleWords = self.parser.splitWords(title)
-        (keywords, wordCount) = self.parser.getKeywords(text)
+        title_words = self.parser.get_all_words(title)
+        top_keywords = self.get_top_keywords(text, source, category)
 
-        topKeywords = self.get_top_keywords(
-            keywords, wordCount, source, category)
-
-        result = self.computeScore(sentences, titleWords, topKeywords)
+        result = self.computeScore(sentences, title_words, top_keywords)
         result = self.sortScore(result)
 
         return result
@@ -50,7 +57,7 @@ class Summarizer:
 
         return top_10.pop()
 
-    def get_top_keywords(self, keywords, wordCount, source, category):
+    def get_top_keywords(self, text, source, category):
         """Get list of the 1st-10th ranked keywords
 
         Arguments:
@@ -62,6 +69,7 @@ class Summarizer:
         Returns:
             List[Dict] -- ten most frequently used words (more if same count)
         """
+        keywords, wordCount = self.parser.getKeywords(text)
         minimum = self.get_top_keyword_threshold(keywords)
         top_kws = [
             self.score_keyword(kw, wordCount)
