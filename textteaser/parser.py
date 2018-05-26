@@ -107,26 +107,12 @@ class Parser:
             'word': unique_word,
             'count': all_words.count(unique_word)}
 
-    def sort_keyword(self, keyword):
-        """Get thorough sorting criteria
-
-        Arguments:
-            keyword {Dict} -- Dict with 'word' and 'count' keys
-
-        Returns:
-            Tuple[int, int, str] -- count, length, string value
-        """
-        word = keyword['word']
-
-        return (-keyword['count'], -len(word), word)
-
     def getKeywords(self, text):
         all_words = self.get_keyword_list(text)
         keywords = [
             self.count_keyword(unique_word, all_words)
             for unique_word
             in list(set(all_words))]
-        keywords = sorted(keywords, key=self.sort_keyword)
 
         return (keywords, len(all_words))
 

@@ -209,32 +209,6 @@ class TestParser:
     def test_count_keyword3(self):
         self._test_count_keyword('three', 3)
 
-    def _test_sort_keyword(self, keyword, expected):
-        parser = Parser()
-
-        result = parser.sort_keyword(keyword)
-        test = (result == expected)
-
-        assert_ex(
-            'sort keyword',
-            repr(result),
-            repr(expected),
-            test=test)
-
-    def test_sort_keyword1(self):
-        word = 'foo'
-        keyword = {'word': word, 'count': 1}
-        expected = (-1, -3, word)
-
-        self._test_sort_keyword(keyword, expected)
-
-    def test_sort_keyword2(self):
-        word = 'foobar'
-        keyword = {'word': word, 'count': 3}
-        expected = (-3, -6, word)
-
-        self._test_sort_keyword(keyword, expected)
-
     def _test_getSentenceLengthScore(self, sample_name):
         """Test Parser.getSentenceLengthScore with data from the selected sample
 
