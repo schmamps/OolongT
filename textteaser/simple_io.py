@@ -32,9 +32,9 @@ def read_file(path):
     contents = ''
 
     with io_open(path, 'r', encoding='utf-8') as file:
-            contents = file.read()
+        contents = file.read()
 
     if version_info < (3, 0):
-            contents = contents.encode('ascii', 'ignore')
+        contents = contents.encode('ascii', 'ignore')
 
     return contents
