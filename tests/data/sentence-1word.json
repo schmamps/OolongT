@@ -7,12 +7,12 @@
 	"title": "Puppies and Kittens Dance!",
 	"text": "Whatever!",
 	"words": ["Whatever!"],
-	"compareWords": ["whatever"],
-	"compareTitle": ["puppies", "and", "kittens", "dance"],
-	"splitWords": ["whatever!"],
+	"compare_words": ["whatever"],
+	"compare_title": ["puppies", "and", "kittens", "dance"],
+	"split_words": ["whatever!"],
 	"keywords": {},
-	"lengthScore": 0.0,
-	"titleScore": 0.0,
-	"removePunctations": "Whatever",
-	"removeStopWords": ["whatever!"]
+	"length_score": 0.0,
+	"title_score": 0.0,
+	"remove_punctuations": "Whatever",
+	"remove_stop_words": ["whatever!"]
 }

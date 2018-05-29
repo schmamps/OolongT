@@ -7,7 +7,7 @@
 	"title": "Puppies and Kittens Dance",
 	"text": "Or whatever!",
 	"keywords": {},
-	"lengthScore": 0.0,
-	"titleScore": 0.0,
-	"removeStopWords": ["whatever!"]
+	"length_score": 0.0,
+	"title_score": 0.0,
+	"remove_stop_words": ["whatever!"]
 }

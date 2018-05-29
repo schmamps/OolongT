@@ -38,7 +38,7 @@
 		"of",
 		"Chopin"
 	],
-	"compareWords": [
+	"compare_words": [
 		"fuzzy",
 		"young",
 		"cats",
@@ -70,13 +70,13 @@
 		"of",
 		"chopin"
 	],
-	"compareTitle": [
+	"compare_title": [
 		"puppies",
 		"and",
 		"kittens",
 		"dance"
 	],
 	"keywords": {},
-	"lengthScore": 0.5,
-	"titleScore": 0.5
+	"length_score": 0.5,
+	"title_score": 0.5
 }

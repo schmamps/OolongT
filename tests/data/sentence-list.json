@@ -6,13 +6,13 @@
 	"lang": "en",
 	"title": "Boilerplate Text",
 	"text": "The quick brown\nfox jumps over the lazy dog?   Now is the time for all good men! \n\tLorem ipsum dolor, sit amet.\t",
-	"splitSentences": [
+	"split_sentences": [
 		"The quick brown\nfox jumps over the lazy dog?",
 		"Now is the time for all good men!",
 		"Lorem ipsum dolor, sit amet."
 	],
-	"removePunctations": "The quick brown\nfox jumps over the lazy dog   Now is the time for all good men \n\tLorem ipsum dolor sit amet\t",
-	"removeStopWords": [
+	"remove_punctuations": "The quick brown\nfox jumps over the lazy dog   Now is the time for all good men \n\tLorem ipsum dolor sit amet\t",
+	"remove_stop_words": [
 		"quick",
 		"brown",
 		"fox",

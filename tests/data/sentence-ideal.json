@@ -28,7 +28,7 @@
 		"and",
 		"horns."
 	],
-	"compareWords": [
+	"compare_words": [
 		"fuzzy",
 		"kittens",
 		"and",
@@ -50,8 +50,8 @@
 		"and",
 		"horns"
 	],
-	"compareTitle": ["puppies", "kittens", "dance", "happily"],
+	"compare_title": ["puppies", "kittens", "dance", "happily"],
 	"keywords": {},
-	"lengthScore": 1.0,
-	"titleScore": 1.0
+	"length_score": 1.0,
+	"title_score": 1.0
 }

@@ -18,7 +18,7 @@
 		"the",
 		"woods."
 	],
-	"compareWords": [
+	"compare_words": [
 		"fuzzy",
 		"kittens",
 		"and",
@@ -30,8 +30,8 @@
 		"the",
 		"woods"
 	],
-	"compareTitle": ["kittens", "frolic","with", "puppies"],
-	"splitWords": [
+	"compare_title": ["kittens", "frolic","with", "puppies"],
+	"split_words": [
 		"fuzzy",
 		"kittens",
 		"and",
@@ -44,6 +44,6 @@
 		"woods."
 	],
 	"keywords": {},
-	"lengthScore": 0.5,
-	"titleScore":  0.5
+	"length_score": 0.5,
+	"title_score":  0.5
 }
