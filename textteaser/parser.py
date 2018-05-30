@@ -1,10 +1,11 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
-from .simple_io import load_json
 from json import JSONDecodeError
-import nltk.data
-from pathlib import Path, PurePath
+from pathlib import Path
 
+import nltk.data
+
+from .simple_io import load_json
 
 BUILTIN = Path(__file__).parent.joinpath('lang')
 DEFAULT_LANG = 'en'
@@ -34,7 +35,7 @@ class Parser:
         try:
             self.language = cfg_data['meta']['name']
             self.ideal = int(cfg_data['ideal'])
-            self.stopWords = cfg_data['stop_words']
+            self.stop_words = cfg_data['stop_words']
             self.token_path = cfg_data['token_path']
 
         except (JSONDecodeError, KeyError):
@@ -86,8 +87,8 @@ class Parser:
         Returns:
             List[str] -- sequential list of words in text
         """
-        bare = self.removePunctations(text)
-        split = self.splitWords(bare)
+        bare = self.remove_punctuations(text)
+        split = self.split_words(bare)
 
         return split
 
@@ -101,7 +102,7 @@ class Parser:
             List[str] -- words in text, minus stop words
         """
         all_words = self.get_all_words(text)
-        keywords = self.removeStopWords(all_words)
+        keywords = self.remove_stop_words(all_words)
 
         return keywords
 
@@ -119,7 +120,15 @@ class Parser:
             'word': unique_word,
             'count': all_words.count(unique_word)}
 
-    def getKeywords(self, text):
+    def get_keywords(self, text):
+        """Get counted list of keywords and total number of keywords
+
+        Arguments:
+            text {str} -- text
+
+        Returns:
+            Tuple[List[Dict], int] -- individual and total keyword counts
+        """
         all_words = self.get_keyword_list(text)
         keywords = [
             self.count_keyword(unique_word, all_words)
@@ -128,12 +137,33 @@ class Parser:
 
         return (keywords, len(all_words))
 
-    def getSentenceLengthScore(self, sentence):
-        return (self.ideal - abs(self.ideal - len(sentence))) / self.ideal
+    def get_sentence_length_score(self, words):
+        """Score sentence based on actual word count vs. ideal
 
-    # nopep8 Jagadeesh, J., Pingali, P., & Varma, V. (2005). Sentence Extraction Based Single Document Summarization. International Institute of Information Technology, Hyderabad, India, 5.
-    def getSentencePositionScore(self, i, sentenceCount):
-        normalized = (i + 1) / (sentenceCount * 1.0)
+        Arguments:
+            words {List[str]} -- list of words in the sentence
+
+        Returns:
+            float -- score
+        """
+        score = (self.ideal - abs(self.ideal - len(words))) / self.ideal
+
+        return score
+
+    # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
+    # Sentence Extraction Based Single Document Summarization.
+    # International Institute of Information Technology, Hyderabad, India, 5.
+    def get_sentence_position_score(self, index, sentence_count):
+        """Score sentence based on position in a list of sentences
+
+        Arguments:
+            index {int} -- index of sentence in list
+            sentence_count {int} -- length of sentence list
+
+        Returns:
+            float -- score
+        """
+        normalized = (index + 1) / (sentence_count * 1.0)
 
         if normalized > 0 and normalized <= 0.1:
             return 0.17
@@ -156,24 +186,60 @@ class Parser:
         elif normalized > 0.9 and normalized <= 1.0:
             return 0.15
         else:
-            return 0
+            raise ValueError(' '.join([
+                'Invalid index:',
+                str(index),
+                'where sentence count:',
+                str(sentence_count)]))
 
-    def getTitleScore(self, title, sentence):
-        titleWords = self.removeStopWords(title)
-        sentenceWords = self.removeStopWords(sentence)
-        matchedWords = [word for word in sentenceWords if word in titleWords]
+    def get_title_score(self, title, text):
+        """Score text by keywords in title
 
-        return len(matchedWords) / (len(title) * 1.0)
+        Arguments:
+            title {str} -- title of the text content
+            text {str} -- text content
 
-    def splitSentences(self, text):
+        Returns:
+            float -- score
+        """
+        title_words = self.remove_stop_words(title)
+        sentence_words = self.remove_stop_words(text)
+        matched_words = [
+            word
+            for word in sentence_words
+            if word in title_words]
+
+        score = len(matched_words) / (len(title) * 1.0)
+
+        return score
+
+    def split_sentences(self, text):
+        """Split sentences via tokenizer
+
+        Arguments:
+            text {str} -- text to split by sentence
+
+        Returns:
+            List[str] -- sequential list of sentences in text
+        """
         tokenizer = nltk.data.load('file:' + self.token_path, format='pickle')
 
         return tokenizer.tokenize(text)
 
-    def splitWords(self, sentence):
-        return sentence.lower().split()
+    def split_words(self, text):
+        """Split text into sequential list of constituent words
 
-    def removePunctations(self, text):
+        Arguments:
+            sentence {str} -- text to split
+
+        Returns:
+            List[str] -- list of words in text
+        """
+        split = text.lower().split()
+
+        return split
+
+    def remove_punctuations(self, text):
         """Remove non-space, non-alphanumeric characters from string
 
         Arguments:
@@ -182,7 +248,11 @@ class Parser:
         Returns:
             str -- ex: 'Its 400am you say'
         """
-        return ''.join(t for t in text if t.isalnum() or t.isspace())
+        unpunct = ''.join(t for t in text if t.isalnum() or t.isspace())
 
-    def removeStopWords(self, words):
-        return [word for word in words if word not in self.stopWords]
+        return unpunct
+
+    def remove_stop_words(self, words):
+        filtered = [word for word in words if word not in self.stop_words]
+
+        return filtered
