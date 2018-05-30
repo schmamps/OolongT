@@ -1,4 +1,5 @@
 from textteaser import nodash
+
 from .assert_ex import assert_ex
 
 TEST_KEY = 'test_key'
