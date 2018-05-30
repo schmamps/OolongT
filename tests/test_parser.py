@@ -1,11 +1,11 @@
-from textteaser.parser \
-    import Parser, DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX
-from textteaser.simple_io \
-    import load_json
 import os.path as path
 from pathlib import Path
-from .sample import Sample
+
+from textteaser.parser import DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX, Parser
+from textteaser.simple_io import load_json
+
 from .assert_ex import assert_ex
+from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('textteaser', 'lang')
 DATA_PATH = Path(__file__).parent.joinpath('data')
@@ -101,35 +101,30 @@ class TestParser:
         self.load_language_error(
             FileNotFoundError, lang='nonexistent', path=BASE_LANG_PATH)
 
-    def get_all_words(self, sample_name):
+    def test_get_all_words(self):
         """Sequential list of the words in text
 
         Arguments:
             text {str} -- text
             expected {List[str]} -- words
         """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser()
+        for sample_name in ['sentence-1word', 'sentence-overlong']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser()
 
-        expected = samp.d['compareWords']
-        for result in p.get_all_words(samp.d['text']):
-            test = (result in expected)
-            assert_ex('all words', result, None, test=test)
-
-    def test_get_all_words_1word(self):
-        self.get_all_words('sentence-1word')
-
-    def test_get_all_words_overlong(self):
-        self.get_all_words('sentence-overlong')
+            expected = samp.d['compare_words']
+            for result in p.get_all_words(samp.d['text']):
+                test = (result in expected)
+                assert_ex('all words', result, None, test=test)
 
     def _get_sample_keyword_data(self, samp):
-        """Get sample data in Parser.getKeywords() pattern
+        """Get sample data in Parser.get_keywords() pattern
 
         Arguments:
             samp {Sample} -- instance of Sample class
 
         Returns:
-            tuple[List[Dict], int] -- result of Parser.getKeywords()
+            tuple[List[Dict], int] -- result of Parser.get_keywords()
         """
         return (samp.d['keywords'], samp.d['instances'])
 
@@ -140,54 +135,49 @@ class TestParser:
             text {str} -- text of content
 
         Returns:
-            tuple[List[Dict], int] -- result of Parser.getKeywords()
+            tuple[List[Dict], int] -- result of Parser.get_keywords()
         """
         p = Parser()
-        return p.getKeywords(text)
+        return p.get_keywords(text)
 
-    def getKeywords(self, sample_name):
-        """Test Parser.getKeywords with data from the selected sample
+    def test_get_keywords(self):
+        """Test Parser.get_keywords with data from the selected sample
 
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(DATA_PATH, sample_name)
-        text = samp.d['text']
+        for sample_name in ['empty', 'essay-snark']:
+            samp = Sample(DATA_PATH, sample_name)
+            text = samp.d['text']
 
-        (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
-        (result_kws, result_insts) = self._get_keyword_result(text)
+            (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
+            (result_kws, result_insts) = self._get_keyword_result(text)
 
-        assert_ex(
-            'total keyword count',
-            result_insts,
-            expect_insts)
+            assert_ex(
+                'total keyword count',
+                result_insts,
+                expect_insts)
 
-        assert_ex(
-            'unique keyword count',
-            len(result_kws),
-            len(expect_kws))
+            assert_ex(
+                'unique keyword count',
+                len(result_kws),
+                len(expect_kws))
 
-        unexpected = [
-            kw
-            for kw in result_kws
-            if kw['word'] not in expect_kws.keys()]
+            unexpected = [
+                kw
+                for kw in result_kws
+                if kw['word'] not in expect_kws.keys()]
 
-        assert_ex(
-            'keyword present', unexpected, [], test=len(unexpected) == 0)
+            assert_ex(
+                'keyword present', unexpected, [], test=len(unexpected) == 0)
 
-        miscounted = [
-            kw
-            for kw in result_kws
-            if kw['count'] != expect_kws[kw['word']]]
+            miscounted = [
+                kw
+                for kw in result_kws
+                if kw['count'] != expect_kws[kw['word']]]
 
-        assert_ex(
-            'keyword count', miscounted, [], test=len(miscounted) == 0)
-
-    def test_getKeywords_empty(self):
-        self.getKeywords('empty')
-
-    def test_getKeywords_essay(self):
-        self.getKeywords('essay-snark')
+            assert_ex(
+                'keyword count', miscounted, [], test=len(miscounted) == 0)
 
     def _get_expected_keywords(self, keywords):
         expected = []
@@ -206,229 +196,171 @@ class TestParser:
 
         assert_ex('keyword list', expected, result)
 
-    def count_keyword(self, unique_word, expected):
+    def test_count_keyword(self):
         p = Parser()
         all_words = ['one', 'two', 'three', 'two', 'three', 'three']
 
-        result = p.count_keyword(unique_word, all_words)
+        samples = [
+            ('zero', 0),
+            ('one', 1),
+            ('two', 2),
+            ('three', 3)]
 
-        assert_ex(
-            'counting keyword',
-            result['count'],
-            expected,
-            hint=unique_word)
+        for sample in samples:
+            unique_word, expected = sample
+            result = p.count_keyword(unique_word, all_words)
 
-    def test_count_keyword0(self):
-        self.count_keyword('zero', 0)
+            assert_ex(
+                'counting keyword',
+                result['count'],
+                expected,
+                hint=unique_word)
 
-    def test_count_keyword1(self):
-        self.count_keyword('one', 1)
-
-    def test_count_keyword2(self):
-        self.count_keyword('two', 2)
-
-    def test_count_keyword3(self):
-        self.count_keyword('three', 3)
-
-    def getSentenceLengthScore(self, sample_name):
-        """Test Parser.getSentenceLengthScore with data from the selected sample
+    def test_get_sentence_length_score(self):
+        """Test Parser.get_sentence_length_score with
+        data from the selected sample
 
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser(lang=samp.d['lang'])
-        words = samp.d['compareWords']
+        for sample_name in ['empty',
+                            'sentence-short', 'sentence-medium',
+                            'sentence-ideal', 'sentence-overlong']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser(lang=samp.d['lang'])
+            words = samp.d['compare_words']
 
-        expected = samp.d['lengthScore']
-        result = p.getSentenceLengthScore(words)
+            expected = samp.d['length_score']
+            result = p.get_sentence_length_score(words)
 
-        assert_ex(
-            'sentence score',
-            result,
-            expected,
-            hint=' '.join(words))
+            assert_ex(
+                'sentence score',
+                result,
+                expected,
+                hint=' '.join(words))
 
-    def test_getSentenceLengthScore_empty(self):
-        self.getSentenceLengthScore('empty')
-
-    def test_getSentenceLengthScore_qtr_ideal(self):
-        self.getSentenceLengthScore('sentence-short')
-
-    def test_getSentenceLengthScore_half_ideal(self):
-        self.getSentenceLengthScore('sentence-medium')
-
-    def test_getSentenceLengthScore_full_ideal(self):
-        self.getSentenceLengthScore('sentence-ideal')
-
-    def test_getSentenceLengthScore_over_ideal(self):
-        self.getSentenceLengthScore('sentence-overlong')
-
-    def getSentencePositionScore(self, pos, sentence_count, expected):
-        """Test Parser.getSentencePositionScore
+    def test_get_sentence_position_score(self):
+        """Test Parser.get_sentence_position_score
 
         Arguments:
             pos {int} -- sentence position (0-based)
             sentence_count {int} -- number of sentences (len())
             expected {float} -- expected score
         """
-        p = Parser()
-        result = p.getSentencePositionScore(pos, sentence_count)
+        samples = [
+            (0, 10, .17),      # first decile
+            (0, 5, .23),       # second decile
+            (999, 1000, .15)]  # last sentence
 
-        assert_ex(
-            'sentence position score',
-            result,
-            expected,
-            hint='/'.join([str(pos), str(sentence_count)]))
+        for sample in samples:
+            pos, sentence_count, expected = sample
 
-    def test_getSentencePositionScore_first(self):
-        self.getSentencePositionScore(0, 10, .17)
+            p = Parser()
+            result = p.get_sentence_position_score(pos, sentence_count)
 
-    def test_getSentencePositionScore_second(self):
-        self.getSentencePositionScore(1, 10, .23)
+            assert_ex(
+                'sentence position score',
+                result,
+                expected,
+                hint='/'.join([str(pos), str(sentence_count)]))
 
-    def test_getSentencePositionScore_last(self):
-        self.getSentencePositionScore(9, 10, .15)
-
-    def getTitleScore(self, sample_name):
-        """Test Parser.getTitleScore with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser(lang=samp.d['lang'])
-        title = samp.d['compareTitle']
-        sentence = samp.d['compareWords']
-
-        expected = samp.d['titleScore']
-        result = p.getTitleScore(title, sentence)
-
-        assert_ex(
-            'title score',
-            result,
-            expected,
-            hint=[title, sentence])
-
-    def test_getTitleScore_poor(self):
-        self.getTitleScore('sentence-1word')
-
-    def test_getTitleScore_short(self):
-        self.getTitleScore('sentence-short')
-
-    def test_getTitleScore_medium(self):
-        self.getTitleScore('sentence-medium')
-
-    def test_getTitleScore_ideal(self):
-        self.getTitleScore('sentence-ideal')
-
-    def test_getTitleScore_overlong(self):
-        self.getTitleScore('sentence-overlong')
-
-    def splitSentences(self, sample_name):
-        """Test Parser.splitSentences with data from the selected sample
+    def test_get_title_score(self):
+        """Test Parser.get_title_score with data from the selected sample
 
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser(lang=samp.d['lang'])
+        for sample_name in ['sentence-1word', 'sentence-short',
+                            'sentence-medium', 'sentence-ideal',
+                            'sentence-overlong']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser(lang=samp.d['lang'])
+            title = samp.d['compare_title']
+            sentence = samp.d['compare_words']
 
-        expected = samp.d['splitSentences']
-        result = p.splitSentences(samp.d['text'])
+            expected = samp.d['title_score']
+            result = p.get_title_score(title, sentence)
 
-        assert_ex(
-            'sentence split',
-            result,
-            expected)
+            assert_ex(
+                'title score',
+                result,
+                expected,
+                hint=[title, sentence])
 
-    def test_splitSentences_single(self):
-        self.splitSentences('sentence-short')
-
-    def test_splitSentences_multi(self):
-        self.splitSentences('sentence-list')
-
-    def splitWords(self, sample_name):
-        """Test Parser.splitWords with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser(lang=samp.d['lang'])
-        text = samp.d['text']
-
-        expected = samp.d['splitWords']
-        result = p.splitWords(text)
-
-        assert_ex(
-            'word split',
-            expected,
-            result)
-
-    def test_splitWords_empty(self):
-        self.splitWords('empty')
-
-    def test_splitWords_single(self):
-        self.splitWords('sentence-1word')
-
-    def test_splitWords_multi(self):
-        self.splitWords('sentence-medium')
-
-    def removePunctations(self, sample_name):
-        """Test Parser.removePunctations with data from the selected sample
+    def test_split_sentences(self):
+        """Test Parser.split_sentences with data from the selected sample
 
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser(lang=samp.d['lang'])
+        for sample_name in ['sentence-short', 'sentence-list']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser(lang=samp.d['lang'])
 
-        expected = samp.d['removePunctations']
-        result = p.removePunctations(samp.d['text'])
-        test = (result == expected)
+            expected = samp.d['split_sentences']
+            result = p.split_sentences(samp.d['text'])
 
-        assert_ex(
-            'punctuation removal',
-            repr(result),
-            repr(expected),
-            test=test)
+            assert_ex(
+                'sentence split',
+                result,
+                expected)
 
-    def test_removePunctations_empty(self):
-        self.removePunctations('empty')
-
-    def test_removePunctations_single(self):
-        self.removePunctations('sentence-1word')
-
-    def test_removePunctations_multi(self):
-        self.removePunctations('sentence-list')
-
-    def removeStopWords(self, sample_name):
-        """Test Parser.removeStopWords with data from the selected sample
+    def test_split_words(self):
+        """Test Parser.split_words with data from the selected sample
 
         Arguments:
             sample_name {str} -- name of data source
         """
-        samp = Sample(DATA_PATH, sample_name)
-        p = Parser(lang=samp.d['lang'])
-        words = p.splitWords(samp.d['text'])
+        for sample_name in ['empty', 'sentence-1word', 'sentence-medium']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser(lang=samp.d['lang'])
+            text = samp.d['text']
 
-        expected = samp.d['removeStopWords']
-        result = p.removeStopWords(words)
+            expected = samp.d['split_words']
+            result = p.split_words(text)
 
-        assert_ex(
-            'remove stop words',
-            result,
-            expected)
+            assert_ex(
+                'word split',
+                expected,
+                result)
 
-    def test_removeStopWords_empty(self):
-        self.removeStopWords('empty')
+    def test_remove_punctuations(self):
+        """Test Parser.remove_punctuations with data from the selected sample
 
-    def test_removeStopWords_single(self):
-        self.removeStopWords('sentence-1word')
+        Arguments:
+            sample_name {str} -- name of data source
+        """
+        for sample_name in ['empty', 'sentence-1word', 'sentence-list']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser(lang=samp.d['lang'])
 
-    def test_removeStopWords_simple(self):
-        self.removeStopWords('sentence-2words')
+            expected = samp.d['remove_punctuations']
+            result = p.remove_punctuations(samp.d['text'])
+            test = (result == expected)
 
-    def test_removeStopWords_multi(self):
-        self.removeStopWords('sentence-list')
+            assert_ex(
+                'punctuation removal',
+                repr(result),
+                repr(expected),
+                test=test)
+
+    def test_remove_stop_words(self):
+        """Test Parser.remove_stop_words with data from the selected sample
+
+        Arguments:
+            sample_name {str} -- name of data source
+        """
+        for sample_name in ['empty',
+                            'sentence-1word', 'sentence-2words',
+                            'sentence-list']:
+            samp = Sample(DATA_PATH, sample_name)
+            p = Parser(lang=samp.d['lang'])
+            words = p.split_words(samp.d['text'])
+
+            expected = samp.d['remove_stop_words']
+            result = p.remove_stop_words(words)
+
+            assert_ex(
+                'remove stop words',
+                result,
+                expected)
