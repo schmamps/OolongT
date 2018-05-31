@@ -285,7 +285,7 @@ class TestSummarizer:
                     hint=sample_name + ': ' + self._snip(text),
                     test=self._compare_float(result, expected))
 
-    def compute_score(self, sample_name):
+    def test_compute_score(self, sample_name):
         """Test Summarizer.computeScore with data from the selected sample
 
         Arguments:
