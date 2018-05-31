@@ -19,4 +19,4 @@ The original Scala TextTeaser can still be accessed
     >>> from oolongt import summarize
     >>> summarize(title, text)
 
-You can also test TextTeaser by running `python example.py`.
+You can also test TextTeaser by running `python demo.py`.
