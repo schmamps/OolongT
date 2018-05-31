@@ -90,7 +90,8 @@ class Summarizer:
         Returns:
             List[Dict] -- sorted list of sentences
         """
-        return sort_by(sentences, 'total_score', reverse=True)
+        return sort_by(
+            sentences, ['total_score', 'order'], reverse=True)
 
     def sort_sentences(self, sentences):
         """Sort list of sentences on 'order' key
@@ -141,10 +142,10 @@ class Summarizer:
             length_score * 0.5 + pos_score * 1.0) / 4.0
 
         return {
-            # 'title_feature': title_feature,
-            # 'sentence_length': sentence_length,
-            # 'sentence_position': sentence_position,
-            # 'keyword_frequency': keyword_frequency,
+            'title_feature': title_feature,
+            'sentence_length': length_score,
+            'sentence_position': pos_score,
+            'keyword_frequency': keyword_freq,
             'total_score': total_score,
             'text': text,
             'order': idx}
