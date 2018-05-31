@@ -298,8 +298,5 @@
 	],
 	"title_words": ["economic", "overview", "canada"],
 	"dbs": 0,
-	"sbs": 0,
-	"compute_score": 0,
-	"sort_score": [],
-	"get_top_keywords": []
+	"sbs": 0
 }
