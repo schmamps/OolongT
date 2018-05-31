@@ -1,13 +1,13 @@
 import os.path as path
 from pathlib import Path
 
-from textteaser.parser import DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX, Parser
-from textteaser.simple_io import load_json
+from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX, Parser
+from oolongt.simple_io import load_json
 
 from .assert_ex import assert_ex
 from .sample import Sample
 
-BUILTIN = Path(__file__).parent.parent.joinpath('textteaser', 'lang')
+BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
 DATA_PATH = Path(__file__).parent.joinpath('data')
 BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
 TEST_LANG_NAME = 'valid'

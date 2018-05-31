@@ -1,4 +1,4 @@
-from textteaser import nodash
+from oolongt import nodash
 
 from .assert_ex import assert_ex
 

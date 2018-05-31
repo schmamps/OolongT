@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from textteaser import parser, simple_io
+from oolongt import parser, simple_io
 
 from .assert_ex import assert_ex
 

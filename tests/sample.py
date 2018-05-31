@@ -1,5 +1,5 @@
 """ Load sample data """
-from textteaser import simple_io
+from oolongt import simple_io
 from pathlib import Path
 
 

@@ -5,8 +5,8 @@ from math import floor
 from pathlib import Path
 from random import shuffle
 
-from textteaser.nodash import pluck
-from textteaser.summarizer import Summarizer
+from oolongt.nodash import pluck
+from oolongt.summarizer import Summarizer
 
 from .assert_ex import assert_ex
 from .sample import Sample
