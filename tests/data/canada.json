@@ -300,7 +300,6 @@
 	"dbs": 0,
 	"sbs": 0,
 	"compute_score": 0,
-	"sort_sentences": [],
 	"sort_score": [],
 	"get_top_keywords": []
 }
