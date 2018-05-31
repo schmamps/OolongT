@@ -7,7 +7,7 @@
 	"title": "Boilerplate Text",
 	"text": "The quick brown\nfox jumps over the lazy dog?   Now is the time for all good men! \n\tLorem ipsum dolor, sit amet.\t",
 	"split_sentences": [
-		"The quick brown\nfox jumps over the lazy dog?",
+		"The quick brown fox jumps over the lazy dog?",
 		"Now is the time for all good men!",
 		"Lorem ipsum dolor, sit amet."
 	],
