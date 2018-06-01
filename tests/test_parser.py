@@ -71,7 +71,8 @@ class TestParser:
         except Exception as e:
             result = isinstance(e, expected)
 
-        assert result, 'expected throw(s): ' + str(expected)
+        assert result, assert_ex(
+            'load language', None, Exception)
 
     def test_load_language_default(self):
         self.load_language(DEFAULT_LANG_EXPECTED)
@@ -114,8 +115,8 @@ class TestParser:
 
             expected = samp.d['compare_words']
             for result in p.get_all_words(samp.d['text']):
-                test = (result in expected)
-                assert_ex('all words', result, None, test=test)
+                assert (result in expected), assert_ex(
+                    'all words', result, None)
 
     def _get_sample_keyword_data(self, samp):
         """Get sample data in Parser.get_keywords() pattern
@@ -168,16 +169,16 @@ class TestParser:
                 for kw in result_kws
                 if kw['word'] not in expect_kws.keys()]
 
-            assert_ex(
-                'keyword present', unexpected, [], test=len(unexpected) == 0)
+            assert (len(unexpected) == 0), assert_ex(
+                'keyword present', unexpected, [])
 
             miscounted = [
                 kw
                 for kw in result_kws
                 if kw['count'] != expect_kws[kw['word']]]
 
-            assert_ex(
-                'keyword count', miscounted, [], test=len(miscounted) == 0)
+            assert (len(miscounted) == 0), assert_ex(
+                'keyword count', miscounted, [])
 
     def _get_expected_keywords(self, keywords):
         expected = []
@@ -336,13 +337,11 @@ class TestParser:
 
             expected = samp.d['remove_punctuations']
             result = p.remove_punctuations(samp.d['text'])
-            test = (result == expected)
 
-            assert_ex(
+            assert (result == expected), assert_ex(
                 'punctuation removal',
                 repr(result),
-                repr(expected),
-                test=test)
+                repr(expected))
 
     def test_remove_stop_words(self):
         """Test Parser.remove_stop_words with data from the selected sample

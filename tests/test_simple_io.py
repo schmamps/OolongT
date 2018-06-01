@@ -33,9 +33,9 @@ def test_load_json():
         'stop_words': ['foo', 'bar'],
         'token_path': 'valid.tokenizer.pickle'}
     result = simple_io.load_json(path)
-    test = (result == expected)
 
-    assert_ex('json data', repr(result), repr(expected), test=test)
+    assert (result == expected), assert_ex(
+        'json data', repr(result), repr(expected))
 
 
 def test_read_file():
@@ -44,6 +44,6 @@ def test_read_file():
 
     expected = '{\n'
     result = simple_io.read_file(path)
-    test = (result == expected)
 
-    assert_ex('read file', repr(result), repr(expected), test=test)
+    assert (result == expected), assert_ex(
+        'read file', repr(result), repr(expected))
