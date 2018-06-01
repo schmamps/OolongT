@@ -5,7 +5,7 @@ from math import floor
 from pathlib import Path
 from random import shuffle
 
-from oolongt.nodash import pluck
+from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
 
 from .assert_ex import assert_ex
@@ -78,38 +78,49 @@ class TestSummarizer:
 
         return text[:max_len-len(ellip)] + ellip
 
-    def test_summarize(self):
+    def test_get_sentences(self):
         """Test Summarizer.summarize() with data from the samples
 
         Arguments:
             sample_name {str} -- name of data source
         """
+        test_keys = [
+            'text',            # 0
+            'order',           # 1
+            'title_score',     # 2
+            'length_score',    # 3
+            'position_score',  # 4
+            'keyword_score',   # 5
+            'keyword_score']   # 6
+
         for sample_name in SAMPLES:
             samp = Sample(DATA_PATH, sample_name)
             summ = Summarizer()
 
-            expected = sorted(samp.d['sentences'], key=lambda x: x['rank'])
-            results = summ.summarize(
+            expecteds = sort_by(samp.d['sentences'], 'order')
+            results = summ.get_sentences(
                 samp.d['text'], samp.d['title'], None, None)
 
-            assert_ex(
+            assert (len(results) == len(expecteds)), assert_ex(
                 'summary result count',
                 len(results),
-                len(expected),
+                len(expecteds),
                 hint=sample_name)
 
-            for rank, result in enumerate(results):
-                assert_ex(
-                    'sentence text at rank',
-                    result['text'],
-                    expected[rank]['text'],
-                    hint=[rank, result['text']])
+            for order in range(0, len(results)):
+                for key in test_keys:
+                    expected = expecteds[order][key]
+                    result = results[order][key]
 
-                assert_ex(
-                    'sentence order at rank',
-                    result['order'],
-                    expected[rank]['order'],
-                    hint=[rank, result['text']])
+                    test = (result == expected)
+                    if isinstance(expected, float):
+                        test = self._compare_float(result, expected)
+
+                    assert test, assert_ex(
+                        'summary ' + key,
+                        result,
+                        expected,
+                        hint=[order, self._snip(results[order]['text'])])
 
     def score_keyword(self, keyword, word_count, expected):
         """Score keyword frequency among other keywords
@@ -121,9 +132,9 @@ class TestSummarizer:
         """
         summ = Summarizer()
 
-        result = summ.score_keyword(keyword, word_count)
+        result = summ.score_keyword(keyword, word_count)['total_score']
 
-        assert_ex(
+        assert (result == expected), assert_ex(
             'keyword score',
             result['total_score'],
             expected,
@@ -248,14 +259,32 @@ class TestSummarizer:
                     test = self._compare_float(
                         result['total_score'], keywords[idx]['total_score'])
 
-                    assert_ex(
+                    assert test, assert_ex(
                         'keyword score',
                         result['total_score'],
-                        keywords[idx]['total_score'],
-                        test=test)
+                        keywords[idx]['total_score'])
 
                 except ValueError:
                     assert False, 'keyword error'
+
+    def test_score_frequency(self):
+        for sample_name in SAMPLES:
+            samp = Sample(DATA_PATH, sample_name)
+            sentences = samp.d['sentences']
+            summ = Summarizer()
+            top_keywords = summ.get_top_keywords(samp.d['text'], None, None)
+            top_keyword_list = summ._pluck_words(top_keywords)
+
+            for sentence in sentences:
+                text = sentence['text']
+                words = summ.parser.get_all_words(text)
+
+                expected = sentence['keyword_score']
+                result = summ.score_frequency(
+                    words, top_keywords, top_keyword_list)
+
+                assert self._compare_float(result, expected), assert_ex(
+                    'keyword score', result, expected)
 
     def test_score_sentence(self):
         sentences = []
@@ -277,60 +306,20 @@ class TestSummarizer:
                     idx, text,
                     title_words, top_keywords, keyword_list, num_sents)
                 result = output['total_score']
+                test = self._compare_float(result, expected)
 
-                assert_ex(
+                assert test, assert_ex(
                     'sentence score',
                     result,
                     expected,
-                    hint=sample_name + ': ' + self._snip(text),
-                    test=self._compare_float(result, expected))
+                    hint=sample_name + ': ' + self._snip(text))
 
-    def test_compute_score(self, sample_name):
-        """Test Summarizer.computeScore with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in SAMPLES:
-            samp = Sample(DATA_PATH, sample_name)
-            summ = Summarizer()
-            sentences = pluck(samp.d['sentences'], 'text')
-            title_words = samp.d['title_words']
-            top_keywords = self._get_top_keywords(samp.d['keywords'])
-
-            results = summ.compute_score(sentences, title_words, top_keywords)
-
-            for order, result in enumerate(results):
-                expected = samp.d['sentences'][order]
-                res_snip = self._snip(result['text'])
-                exp_snip = self._snip(expected['text'])
-
-                assert_ex(
-                    'sentence order',
-                    result['order'],
-                    order,
-                    hint=[res_snip, exp_snip])
-
-                assert_ex(
-                    'sentence score',
-                    result['total_score'],
-                    expected['total_score'],
-                    test=self._compare_float(
-                        result['total_score'], expected['total_score']),
-                    hint=[res_snip, exp_snip])
-
-                assert_ex(
-                    'sentence text',
-                    result['text'],
-                    expected['text'],
-                    hint=[result['text'], expected['text']])
-
-    def _test_sentence_scoring(self, sample_name, score_type):
+    def _test_sentence_score_type(self, sample_name, score_type):
         """Test Summarizer.sbs or .dbs with data from the selected sample
 
         Arguments:
             sample_name {str} -- name of data source
-            score_type  {str} -- score method ('sbs' or 'dbs')
+            score_type  {str: 'sbs' or 'dbs'} -- score method
         """
         samp = Sample(DATA_PATH, sample_name)
         summ = Summarizer()
@@ -348,11 +337,10 @@ class TestSummarizer:
             if score_type == 'dbs':
                 result = summ.dbs(words, top_keywords, keyword_list)
 
-            assert_ex(
+            assert self._compare_float(result, expected), assert_ex(
                 score_type,
                 expected,
                 result,
-                test=self._compare_float(result, expected),
                 hint=self._snip(words))
 
     def sbs(self):
@@ -362,7 +350,7 @@ class TestSummarizer:
             sample_name {str} -- name of data source
         """
         for sample_name in SAMPLES:
-            self._test_sentence_scoring(sample_name, 'sbs')
+            self._test_sentence_score_type(sample_name, 'sbs')
 
     def dbs(self, sample_name):
         """Test Summarizer.dbs with data from the selected sample
@@ -371,4 +359,4 @@ class TestSummarizer:
             sample_name {str} -- name of data source
         """
         for sample_name in SAMPLES:
-            self._test_sentence_scoring(sample_name, 'dbs')
+            self._test_sentence_score_type(sample_name, 'dbs')
