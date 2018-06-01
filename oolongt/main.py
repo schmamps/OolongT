@@ -18,9 +18,9 @@ def rank_sentences(title, text,
         List[Dict] -- List of sentences with scoring and metadata
     """
     summarizer = Summarizer()
-    sentences = summarizer.summarize(text, title, source, category)
+    sentences = summarizer.get_sentences(text, title, source, category)
 
-    return sentences
+    return sort_by(sentences, ['total_score', 'order'])
 
 
 def summarize(title, text, length=5,
@@ -38,8 +38,7 @@ def summarize(title, text, length=5,
     Keyword Arguments:
         length {int or float < 1} -- lines to return (int) or
             fraction of total (float) (default: {5})
-        order_by {str} -- sort sentences by specified key in list:
-            ['title_feature', 'total_score', 'text', 'order']
+        order_by {str} -- sort sentences by specified key
             (default: {'order'})
         asc {bool} -- ASCending order (default: {True})
         source {any} -- unused (default: {None})
