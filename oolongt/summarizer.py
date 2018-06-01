@@ -11,7 +11,7 @@ class Summarizer:
     def _pluck_words(self, keyword_list):
         return list(pluck(keyword_list, 'word'))
 
-    def summarize(self, text, title, source, category):
+    def get_sentences(self, text, title, source, category):
         """Get list of all sentences in text, sorted by score
 
         Arguments:
@@ -24,13 +24,18 @@ class Summarizer:
             List[Dict] -- list of sentence Dict(s)
         """
         sentences = self.parser.split_sentences(text)
-        title_words = self.parser.get_all_words(title)
+        title_words = self.parser.get_keyword_list(title)
         top_keywords = self.get_top_keywords(text, source, category)
+        top_keyword_list = self._pluck_words(top_keywords)
+        num_sents = len(sentences)
 
-        result = self.compute_score(sentences, title_words, top_keywords)
-        result = self.sort_score(result)
+        summaries = [
+            self.score_sentence(
+                idx, sentence,
+                title_words, top_keywords, top_keyword_list, num_sents)
+            for idx, sentence in enumerate(sentences)]
 
-        return result
+        return summaries
 
     def score_keyword(self, keyword, wordCount):
         """Calculate total_score of keyword
@@ -81,30 +86,6 @@ class Summarizer:
 
         return top_kws
 
-    def sort_score(self, sentences):
-        """Sort list of sentences on 'total_score' key
-
-        Arguments:
-            sentences {List[Dict]} -- list of sentences
-
-        Returns:
-            List[Dict] -- sorted list of sentences
-        """
-        return sort_by(
-            sentences, ['total_score', 'order'], reverse=True)
-
-    def sort_sentences(self, sentences):
-        """Sort list of sentences on 'order' key
-
-        Arguments:
-            sentences {List[Dict]} -- list of sentences
-
-        Returns:
-            List[Dict] -- sorted list of sentences
-        """
-
-        return sort_by(sentences, 'order')
-
     def score_frequency(self, words, top_keywords, keyword_list):
         k = 5.0
         sbs_feature = self.sbs(words, top_keywords, keyword_list)
@@ -128,52 +109,32 @@ class Summarizer:
         Returns:
             Dict -- {total_score, sentence, order}
         """
-
         words = self.parser.get_all_words(text)
 
-        title_feature = self.parser.get_title_score(title_words, words)
-        keyword_freq = self.score_frequency(
+        title_score = self.parser.get_title_score(title_words, words)
+        keyword_score = self.score_frequency(
             words, top_keywords, top_keyword_list)
         length_score = self.parser.get_sentence_length_score(words)
-        pos_score = self.parser.get_sentence_position_score(idx, num_sents)
+        position_score = self.parser.get_sentence_position_score(
+            idx, num_sents)
 
         total_score = (
-            title_feature * 1.5 + keyword_freq * 2.0 +
-            length_score * 0.5 + pos_score * 1.0) / 4.0
+            title_score * 1.5 +
+            keyword_score * 2.0 +
+            length_score * 0.5 +
+            position_score * 1.0) / 4.0
 
         return {
-            'title_feature': title_feature,
-            'sentence_length': length_score,
-            'sentence_position': pos_score,
-            'keyword_frequency': keyword_freq,
+            'title_score': title_score,
+            'length_score': length_score,
+            'position_score': position_score,
+            'keyword_score': keyword_score,
             'total_score': total_score,
             'text': text,
             'order': idx}
 
-    def compute_score(self, sentences, title_words, top_keywords):
-        """Score sentences of the overall text
-
-        Arguments:
-            sentences {List[Dict]} -- list of sentences
-            title_words {List[str]} -- list of words in title
-            top_keywords {List[Dict]} -- top keywords in overall text
-
-        Returns:
-            List[Dict] -- list of scored sentences
-        """
-        top_keyword_list = self._pluck_words(top_keywords)
-        sentence_count = len(sentences)
-
-        summaries = [
-            self.score_sentence(
-                idx, sentence,
-                title_words, top_keywords, top_keyword_list, sentence_count)
-            for idx, sentence in enumerate(sentences)]
-
-        return summaries
-
     def sbs(self, words, top_keywords, top_keyword_list):
-        """Score sentence
+        """Score sentence by keyword score
 
         Arguments:
             words {List[str]} -- sequential list of words in sentence
