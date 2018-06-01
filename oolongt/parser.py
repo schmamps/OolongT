@@ -193,7 +193,7 @@ class Parser:
                 'where sentence count:',
                 str(sentence_count)]))
 
-    def get_title_score(self, title, text):
+    def get_title_score(self, title_words, text):
         """Score text by keywords in title
 
         Arguments:
@@ -203,14 +203,14 @@ class Parser:
         Returns:
             float -- score
         """
-        title_words = self.remove_stop_words(title)
+        title_words = self.remove_stop_words(title_words)
         sentence_words = self.remove_stop_words(text)
         matched_words = [
             word
             for word in sentence_words
             if word in title_words]
 
-        score = len(matched_words) / (len(title) * 1.0)
+        score = len(matched_words) / (len(title_words) * 1.0)
 
         return score
 
