@@ -1,9 +1,12 @@
 from .nodash import pluck, sort_by
 from .summarizer import Summarizer
 
+DEFAULT_SORT_KEY = 'order'
+DEFAULT_REVERSE = False
+DEFAULT_LENGTH = 5
 
-def rank_sentences(title, text,
-                   source=None, category=None):
+
+def score_sentences(title, text, source=None, category=None):
     """List every sentence, sorted by total score
 
     Arguments:
@@ -20,11 +23,12 @@ def rank_sentences(title, text,
     summarizer = Summarizer()
     sentences = summarizer.get_sentences(text, title, source, category)
 
-    return sort_by(sentences, ['total_score', 'order'])
+    return sentences
 
 
-def summarize(title, text, length=5,
-              order_by='order', asc=True,
+def summarize(title, text,
+              length=DEFAULT_LENGTH,
+              sort_key=DEFAULT_SORT_KEY, reverse=DEFAULT_REVERSE,
               source=None, category=None):
     """Get top sentences in the specified order
 
@@ -47,12 +51,15 @@ def summarize(title, text, length=5,
     Returns:
         list[str] -- top sentences sorted by criteria
     """
-    ranked_list = rank_sentences(title, text, source, category)
-    slice_length = get_slice_length(length, len(ranked_list))
-    sorted_list = sort_by(
-        ranked_list[:slice_length], order_by, not asc)
+    sentences = sort_by(
+        score_sentences(title, text, source, category),
+        ['total_score', 'order'], reverse=True)
+    slice_length = get_slice_length(length, len(sentences))
 
-    return pluck(sorted_list, 'text')
+    ordered = sort_by(
+        sentences[:slice_length], sort_key, reverse=reverse)
+
+    return pluck(ordered, 'text')
 
 
 def get_slice_length(nominal, total):
@@ -67,6 +74,11 @@ def get_slice_length(nominal, total):
 
     Returns:
         int -- number of sentences to return
+
+    >>> get_slice_length(20, 1000)
+    20
+    >>> get_slice_length(.1, 1000)
+    100
     """
     if nominal <= 0:
         raise ValueError('Invalid summary length: ' + str(nominal))
