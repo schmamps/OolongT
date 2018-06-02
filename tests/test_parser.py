@@ -1,7 +1,7 @@
 import os.path as path
 from pathlib import Path
 
-from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX, Parser
+from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
 from .helpers import assert_ex, compare_float
@@ -13,22 +13,20 @@ BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
 TEST_LANG_NAME = 'valid'
 TEST_LANG_PATH = BASE_LANG_PATH.joinpath(TEST_LANG_NAME)
 TEST_LANG_JSON = TEST_LANG_PATH.joinpath(TEST_LANG_NAME + JSON_SUFFIX)
-TEST_LANG_TOKEN = TEST_LANG_PATH.joinpath(TEST_LANG_NAME + TOKEN_SUFFIX)
 TEST_LANG_EXPECTED = {
     'meta': {
         'name': 'Valid Language Config'
     },
+    'nltk_language': 'valid',
     'ideal': 2,
-    'stop_words': 2,
-    'token_path': TEST_LANG_TOKEN}
+    'stop_words': 2}
 DEFAULT_LANG_EXPECTED = {
     'meta': {
         'name': 'English'
     },
+    'nltk_language': 'english',
     'ideal': 20,
-    'stop_words': 404,
-    'token_path': BUILTIN.joinpath(
-        DEFAULT_LANG, DEFAULT_LANG + TOKEN_SUFFIX)}
+    'stop_words': 404}
 
 
 class TestParser:
@@ -363,4 +361,5 @@ class TestParser:
             assert (result == expected), assert_ex(
                 'remove stop words',
                 result,
-                expected)
+                expected,
+                hint=sample_name)
