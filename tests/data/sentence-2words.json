@@ -9,5 +9,5 @@
 	"keywords": {},
 	"length_score": 0.0,
 	"title_score": 0.0,
-	"remove_stop_words": ["whatever!"]
+	"remove_stop_words": ["!"]
 }

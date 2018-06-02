@@ -9,10 +9,10 @@
 	"words": ["Whatever!"],
 	"compare_words": ["whatever"],
 	"compare_title": ["puppies", "and", "kittens", "dance"],
-	"split_words": ["whatever!"],
+	"split_words": ["whatever", "!"],
 	"keywords": {},
 	"length_score": 0.0,
 	"title_score": 0.0,
 	"remove_punctuations": "Whatever",
-	"remove_stop_words": ["whatever!"]
+	"remove_stop_words": ["!"]
 }
