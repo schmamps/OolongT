@@ -1,1 +1,1 @@
-from .main import summarize, rank_sentences
+from .main import summarize, score_sentences
