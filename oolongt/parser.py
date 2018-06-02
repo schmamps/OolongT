@@ -231,7 +231,7 @@ class Parser:
         Returns:
             List[str] -- list of words in text
         """
-        split = text.lower().split()
+        split = word_tokenize(text.lower())
 
         return split
 
