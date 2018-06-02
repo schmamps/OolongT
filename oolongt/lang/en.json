@@ -3,6 +3,7 @@
 		"name": "English"
 	},
 	"ideal": 20,
+	"nltk_language": "english",
 	"stop_words": [
 		"-",
 		",",
