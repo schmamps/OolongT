@@ -1,48 +1,15 @@
 """ Test class for Summarizer """
-from decimal import Decimal
-from io import open as io_open
 from math import floor
-from pathlib import Path
-from random import shuffle
 
 from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
 
-from .assert_ex import assert_ex
+from .constants import DATA_PATH, SAMPLES
+from .helpers import assert_ex, compare_float, randomize_list, snip
 from .sample import Sample
-
-DATA_PATH = Path(__file__).parent.joinpath('data')
-SAMPLES = ['cambodia', 'cameroon', 'canada']
 
 
 class TestSummarizer:
-    def _compare_float(self, val1, val2):
-        """Compare two floating point values
-
-        Arguments:
-            val1 {float} -- value 1
-            val2 {float} -- value 2
-
-        Returns:
-            bool -- the two values are close enough
-        """
-        return (abs(val1 * 100000 - val2 * 100000) < 2.0)
-
-    def _randomize_list(self, src):
-        """Reorder a copy of the supplied list
-
-        Arguments:
-            src {list} -- source list
-
-        Returns:
-            list -- copy of source list in different order
-        """
-        dupe = list(src)
-        while dupe == src:
-            shuffle(dupe)
-
-        return dupe
-
     def _get_top_keywords(self, keywords):
         """Shadow of Summarizer.get_top_keywords
 
@@ -66,17 +33,6 @@ class TestSummarizer:
             List[str] -- list of every value at key 'word'
         """
         return [x['word'] for x in keywords]
-
-    def _snip(self, val, max_len=20, separator=' ', ellip="..."):
-        text = val
-
-        if isinstance(val, list):
-            text = separator.join(val)
-
-        if len(text) <= max_len:
-            return text
-
-        return text[:max_len-len(ellip)] + ellip
 
     def test_get_sentences(self):
         """Test Summarizer.summarize() with data from the samples
@@ -114,13 +70,13 @@ class TestSummarizer:
 
                     test = (result == expected)
                     if isinstance(expected, float):
-                        test = self._compare_float(result, expected)
+                        test = compare_float(result, expected)
 
                     assert test, assert_ex(
                         'summary ' + key,
                         result,
                         expected,
-                        hint=[order, self._snip(results[order]['text'])])
+                        hint=[order, snip(results[order]['text'])])
 
     def score_keyword(self, keyword, word_count, expected):
         """Score keyword frequency among other keywords
@@ -256,7 +212,7 @@ class TestSummarizer:
                         result['count'],
                         keywords[idx]['count'])
 
-                    test = self._compare_float(
+                    test = compare_float(
                         result['total_score'], keywords[idx]['total_score'])
 
                     assert test, assert_ex(
@@ -283,7 +239,7 @@ class TestSummarizer:
                 result = summ.score_frequency(
                     words, top_keywords, top_keyword_list)
 
-                assert self._compare_float(result, expected), assert_ex(
+                assert compare_float(result, expected), assert_ex(
                     'keyword score', result, expected)
 
     def test_score_sentence(self):
@@ -306,13 +262,13 @@ class TestSummarizer:
                     idx, text,
                     title_words, top_keywords, keyword_list, num_sents)
                 result = output['total_score']
-                test = self._compare_float(result, expected)
+                test = compare_float(result, expected)
 
                 assert test, assert_ex(
                     'sentence score',
                     result,
                     expected,
-                    hint=sample_name + ': ' + self._snip(text))
+                    hint=sample_name + ': ' + snip(text))
 
     def _test_sentence_score_type(self, sample_name, score_type):
         """Test Summarizer.sbs or .dbs with data from the selected sample
@@ -337,11 +293,11 @@ class TestSummarizer:
             if score_type == 'dbs':
                 result = summ.dbs(words, top_keywords, keyword_list)
 
-            assert self._compare_float(result, expected), assert_ex(
+            assert compare_float(result, expected), assert_ex(
                 score_type,
                 expected,
                 result,
-                hint=self._snip(words))
+                hint=snip(words))
 
     def sbs(self):
         """Test Summarizer.sbs with data from the selected sample

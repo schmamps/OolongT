@@ -4,7 +4,7 @@ from pathlib import Path
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
-from .assert_ex import assert_ex
+from .helpers import assert_ex
 from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')

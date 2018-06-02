@@ -4,7 +4,7 @@ from pathlib import Path
 
 from oolongt import parser, simple_io
 
-from .assert_ex import assert_ex
+from .helpers import assert_ex
 
 
 def get_json_path(lang):

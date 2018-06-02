@@ -1,6 +1,6 @@
 from oolongt import nodash
 
-from .assert_ex import assert_ex
+from .helpers import assert_ex
 
 TEST_KEY = 'test_key'
 VALID_DICT_LIST = [
