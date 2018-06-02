@@ -130,13 +130,13 @@ class Parser:
         Returns:
             Tuple[List[Dict], int] -- individual and total keyword counts
         """
-        all_words = self.get_keyword_list(text)
+        all_keywords = self.get_keyword_list(text)
         keywords = [
-            self.count_keyword(unique_word, all_words)
+            self.count_keyword(unique_word, all_keywords)
             for unique_word
-            in list(set(all_words))]
+            in list(set(all_keywords))]
 
-        return (keywords, len(all_words))
+        return (keywords, len(all_keywords))
 
     def get_sentence_length_score(self, words):
         """Score sentence based on actual word count vs. ideal
@@ -193,7 +193,7 @@ class Parser:
                 'where sentence count:',
                 str(sentence_count)]))
 
-    def get_title_score(self, title_words, text):
+    def get_title_score(self, title_words, sentence_words):
         """Score text by keywords in title
 
         Arguments:
@@ -203,14 +203,14 @@ class Parser:
         Returns:
             float -- score
         """
-        title_words = self.remove_stop_words(title_words)
-        sentence_words = self.remove_stop_words(text)
-        matched_words = [
+        title_keywords = self.remove_stop_words(title_words)
+        sentence_keywords = self.remove_stop_words(sentence_words)
+        matched_keywords = [
             word
-            for word in sentence_words
-            if word in title_words]
+            for word in sentence_keywords
+            if word in title_keywords]
 
-        score = len(matched_words) / (len(title_words) * 1.0)
+        score = len(matched_keywords) / (len(title_keywords) * 1.0)
 
         return score
 
@@ -257,6 +257,14 @@ class Parser:
         return unpunct
 
     def remove_stop_words(self, words):
+        """Get sequential list of non-stopwords in supplied list of words
+
+        Arguments:
+            words {List[str]} -- all words in text
+
+        Returns:
+            List[str] -- words not matching a stop word
+        """
         filtered = [word for word in words if word not in self.stop_words]
 
         return filtered
