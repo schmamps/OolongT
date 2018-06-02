@@ -4,7 +4,7 @@
 		"license": false
 	},
 	"lang": "en",
-	"title": "Puppies and Kittens Dance",
+	"title": "Puppies and Kittens Dance Merrily",
 	"text": "\tFuzzy young cats dance happily\nwith puppies in the woods to the merry sound of accordions, fiddles, banjos, and horns playing together in perfect accord to the music of Chopin",
 	"words": [
 		"Fuzzy",
@@ -74,7 +74,8 @@
 		"puppies",
 		"and",
 		"kittens",
-		"dance"
+		"dance",
+		"merrily"
 	],
 	"keywords": {},
 	"length_score": 0.5,

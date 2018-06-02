@@ -4,7 +4,7 @@
 		"license": false
 	},
 	"lang": "en",
-	"title": "Kittens Frolic with Puppies?",
+	"title": "Kittens Frolic with Tiny Puppies?",
 	"text": "Fuzzy kittens and fluffy puppies dance happily in the woods.",
 	"words": [
 		"Fuzzy",
@@ -30,7 +30,13 @@
 		"the",
 		"woods"
 	],
-	"compare_title": ["kittens", "frolic","with", "puppies"],
+	"compare_title": [
+		"kittens",
+		"frolic",
+		"with",
+		"tiny",
+		"puppies"
+	],
 	"split_words": [
 		"fuzzy",
 		"kittens",

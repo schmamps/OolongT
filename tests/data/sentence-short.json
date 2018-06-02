@@ -4,11 +4,20 @@
 		"license": false
 	},
 	"lang": "en",
-	"title": "A short paragraph here",
+	"title": "A short paragraph here yet a longer title",
 	"text": "This paragraph contains one sentence.",
 	"words": ["This", "paragraph", "contains", "one", "sentence."],
 	"compare_words": ["this", "paragraph", "contains", "one", "sentence"],
-	"compare_title": ["a", "short", "paragraph", "here"],
+	"compare_title": [
+		"a",
+		"short",
+		"paragraph",
+		"here",
+		"yet",
+		"a",
+		"longer",
+		"title"
+	],
 	"keywords": {
 		"paragraph": 1,
 		"contains": 1,
