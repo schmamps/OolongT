@@ -1,5 +1,61 @@
-""" Assertion Helpers """
-import doctest
+""" Test Helpers """
+from random import shuffle
+
+
+def snip(val, max_len=20, separator=' ', ellip="..."):
+    """Truncate text
+
+    Arguments:
+        val {str} -- string to snip
+
+    Keyword Arguments:
+        max_len {int} -- maximum length of string (default: {20})
+        separator {str} -- if list passed,
+            string to join members (default: {' '})
+        ellip {str} -- filler text if truncated (default: {"..."})
+
+    Returns:
+        str -- text, truncated if necessary
+    """
+
+    text = val
+
+    if isinstance(val, list):
+        text = separator.join(val)
+
+    if len(text) <= max_len:
+        return text
+
+    return text[:max_len-len(ellip)] + ellip
+
+
+def randomize_list(src):
+    """Reorder a copy of the supplied list
+
+    Arguments:
+        src {list} -- source list
+
+    Returns:
+        list -- copy of source list in different order
+    """
+    dupe = list(src)
+    while dupe == src:
+        shuffle(dupe)
+
+    return dupe
+
+
+def compare_float(val1, val2):
+    """Compare two floating point values
+
+    Arguments:
+        val1 {float} -- value 1
+        val2 {float} -- value 2
+
+    Returns:
+        bool -- the two values are close enough
+    """
+    return (abs(val1 * 100000 - val2 * 100000) < 2.0)
 
 
 def compare_list(left, right):
