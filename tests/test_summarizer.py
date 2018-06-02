@@ -32,7 +32,7 @@ class TestSummarizer:
         Returns:
             List[str] -- list of every value at key 'word'
         """
-        return [x['word'] for x in keywords]
+        return pluck(keywords, 'word')
 
     def test_get_sentences(self):
         """Test Summarizer.summarize() with data from the samples
