@@ -131,12 +131,12 @@ class Parser:
             Tuple[List[Dict], int] -- individual and total keyword counts
         """
         all_keywords = self.get_keyword_list(text)
-        keywords = [
+        counted_keywords = [
             self.count_keyword(unique_word, all_keywords)
             for unique_word
             in list(set(all_keywords))]
 
-        return (keywords, len(all_keywords))
+        return (counted_keywords, len(all_keywords))
 
     def get_sentence_length_score(self, words):
         """Score sentence based on actual word count vs. ideal
