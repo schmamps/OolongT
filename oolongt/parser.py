@@ -5,14 +5,13 @@ from pathlib import Path
 from re import sub
 
 import nltk.data
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
 
 from .simple_io import load_json
 
 BUILTIN = Path(__file__).parent.joinpath('lang')
 DEFAULT_LANG = 'en'
-JSON_SUFFIX = '.lang.json'
-TOKEN_SUFFIX = '.tokenizer.pickle'
+JSON_SUFFIX = '.json'
 
 
 class Parser:
@@ -35,10 +34,9 @@ class Parser:
         cfg_data = self.load_language(path, lang)
 
         try:
-            self.language = cfg_data['meta']['name']
+            self.language = cfg_data['nltk_language']
             self.ideal = int(cfg_data['ideal'])
             self.stop_words = cfg_data['stop_words']
-            self.token_path = cfg_data['token_path']
 
         except (JSONDecodeError, KeyError):
             raise ValueError(
@@ -59,24 +57,20 @@ class Parser:
             Dict -- data in language JSON + path to tokenizer pickle
         """
         root = Path(path)
-        sub = root.joinpath(lang)
+        cfg_path = root.joinpath(lang + '.json')
 
         try:
             # pylint: disable=no-member
-            sub.resolve().relative_to(root.resolve())
+            cfg_path.resolve().relative_to(root.resolve())
 
         except ValueError:
             raise PermissionError('directory traversal in lang: ' + lang)
 
-        json_path = sub.joinpath(lang + JSON_SUFFIX)
-        token_path = sub.joinpath(lang + TOKEN_SUFFIX)
-
         # pylint: disable=no-member
-        if not json_path.exists() or not token_path.exists():
+        if not cfg_path.exists():
             raise FileNotFoundError('config dir: ' + str(root))
 
-        cfg_data = load_json(str(json_path))
-        cfg_data['token_path'] = str(token_path)
+        cfg_data = load_json(str(cfg_path))
 
         return cfg_data
 
@@ -226,7 +220,7 @@ class Parser:
         """
         normalized = sub('\\s+', ' ', text)
 
-        return sent_tokenize(normalized)
+        return sent_tokenize(normalized, language=self.language)
 
     def split_words(self, text):
         """Split text into sequential list of constituent words
