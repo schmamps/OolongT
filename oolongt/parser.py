@@ -5,6 +5,7 @@ from pathlib import Path
 from re import sub
 
 import nltk.data
+from nltk.tokenize import sent_tokenize
 
 from .simple_io import load_json
 
@@ -223,12 +224,9 @@ class Parser:
         Returns:
             List[str] -- sequential list of sentences in text
         """
-        tokenizer = nltk.data.load('file:' + self.token_path, format='pickle')
-        texts = [
-            sub('\\s+', ' ', x)
-            for x in tokenizer.tokenize(text)]
+        normalized = sub('\\s+', ' ', text)
 
-        return texts
+        return sent_tokenize(normalized)
 
     def split_words(self, text):
         """Split text into sequential list of constituent words
