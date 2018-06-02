@@ -2,7 +2,7 @@
 	"meta": {
 		"name": "Valid Language Config"
 	},
+	"nltk_language": "valid",
 	"ideal": 2,
-	"stop_words": ["foo", "bar"],
-	"token_path": "valid.tokenizer.pickle"
+	"stop_words": ["foo", "bar"]
 }
