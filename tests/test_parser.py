@@ -4,7 +4,7 @@ from pathlib import Path
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, TOKEN_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
-from .helpers import assert_ex
+from .helpers import assert_ex, compare_float
 from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
@@ -195,7 +195,8 @@ class TestParser:
         expected = sorted(self._get_expected_keywords(samp.d['keywords']))
         result = sorted(p.get_keyword_list(samp.d['text']))
 
-        assert_ex('keyword list', expected, result)
+        assert (result == expected), assert_ex(
+            'keyword list', expected, result)
 
     def test_count_keyword(self):
         p = Parser()
@@ -209,11 +210,11 @@ class TestParser:
 
         for sample in samples:
             unique_word, expected = sample
-            result = p.count_keyword(unique_word, all_words)
+            result = p.count_keyword(unique_word, all_words)['count']
 
-            assert_ex(
+            assert (result == expected), assert_ex(
                 'counting keyword',
-                result['count'],
+                result,
                 expected,
                 hint=unique_word)
 
@@ -234,7 +235,7 @@ class TestParser:
             expected = samp.d['length_score']
             result = p.get_sentence_length_score(words)
 
-            assert_ex(
+            assert compare_float(result, expected), assert_ex(
                 'sentence score',
                 result,
                 expected,
@@ -259,7 +260,7 @@ class TestParser:
             p = Parser()
             result = p.get_sentence_position_score(pos, sentence_count)
 
-            assert_ex(
+            assert compare_float(result, expected), assert_ex(
                 'sentence position score',
                 result,
                 expected,
@@ -276,17 +277,17 @@ class TestParser:
                             'sentence-overlong']:
             samp = Sample(DATA_PATH, sample_name)
             p = Parser(lang=samp.d['lang'])
-            title = samp.d['compare_title']
-            sentence = samp.d['compare_words']
+            title_words = samp.d['compare_title']
+            sentence_words = samp.d['compare_words']
 
             expected = samp.d['title_score']
-            result = p.get_title_score(title, sentence)
+            result = p.get_title_score(title_words, sentence_words)
 
-            assert_ex(
+            assert compare_float(result, expected), assert_ex(
                 'title score',
                 result,
                 expected,
-                hint=[title, sentence])
+                hint=[title_words, sentence_words])
 
     def test_split_sentences(self):
         """Test Parser.split_sentences with data from the selected sample
@@ -301,7 +302,7 @@ class TestParser:
             expected = samp.d['split_sentences']
             result = p.split_sentences(samp.d['text'])
 
-            assert_ex(
+            assert (result == expected), assert_ex(
                 'sentence split',
                 result,
                 expected)
@@ -320,7 +321,7 @@ class TestParser:
             expected = samp.d['split_words']
             result = p.split_words(text)
 
-            assert_ex(
+            assert (result == expected), assert_ex(
                 'word split',
                 expected,
                 result)
@@ -359,7 +360,7 @@ class TestParser:
             expected = samp.d['remove_stop_words']
             result = p.remove_stop_words(words)
 
-            assert_ex(
+            assert (result == expected), assert_ex(
                 'remove stop words',
                 result,
                 expected)
