@@ -18,7 +18,7 @@ def get_json_path(lang):
     """
 
     return Path(__file__).parent.joinpath(
-        'lang', lang, lang + parser.JSON_SUFFIX)
+        'lang', lang + parser.JSON_SUFFIX)
 
 
 def test_load_json():
@@ -30,8 +30,8 @@ def test_load_json():
             'name': 'Valid Language Config'
         },
         'ideal': 2,
-        'stop_words': ['foo', 'bar'],
-        'token_path': 'valid.tokenizer.pickle'}
+        'nltk_language': 'valid',
+        'stop_words': ['foo', 'bar']}
     result = simple_io.load_json(path)
 
     assert (result == expected), assert_ex(
