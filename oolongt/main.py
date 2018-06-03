@@ -1,3 +1,4 @@
+from . import parser
 from .nodash import pluck, sort_by
 from .summarizer import Summarizer
 
@@ -6,7 +7,9 @@ DEFAULT_REVERSE = False
 DEFAULT_LENGTH = 5
 
 
-def score_sentences(title, text, source=None, category=None):
+def score_sentences(title, text,
+                    root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
+                    source=None, category=None):
     """List every sentence, sorted by total score
 
     Arguments:
@@ -29,6 +32,7 @@ def score_sentences(title, text, source=None, category=None):
 def summarize(title, text,
               length=DEFAULT_LENGTH,
               sort_key=DEFAULT_SORT_KEY, reverse=DEFAULT_REVERSE,
+              root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
               source=None, category=None):
     """Get top sentences in the specified order
 
@@ -52,8 +56,9 @@ def summarize(title, text,
         list[str] -- top sentences sorted by criteria
     """
     sentences = sort_by(
-        score_sentences(title, text, source, category),
-        ['total_score', 'order'], reverse=True)
+        score_sentences(title, text, root, lang, source, category),
+        ['total_score', 'order'],
+        reverse=True)
     slice_length = get_slice_length(length, len(sentences))
 
     ordered = sort_by(
