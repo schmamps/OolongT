@@ -5,7 +5,8 @@ from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
 
 from .constants import DATA_PATH, SAMPLES
-from .helpers import assert_ex, compare_float, randomize_list, snip
+from .helpers import (
+    assert_ex, compare_float, compare_dict, randomize_list, snip)
 from .sample import Sample
 
 
@@ -63,22 +64,17 @@ class TestSummarizer:
                 len(expecteds),
                 hint=sample_name)
 
-            for order in range(0, len(results)):
-                for key in test_keys:
-                    expected = expecteds[order][key]
-                    result = results[order][key]
+            for order, result in enumerate(results):
+                expected = expecteds[order]
+                test = compare_dict(expected, result, test_keys)
 
-                    test = (result == expected)
-                    if isinstance(expected, float):
-                        test = compare_float(result, expected)
+                assert test, assert_ex(
+                    'summary',
+                    result,
+                    expected,
+                    hint=[order, snip(results[order]['text'])])
 
-                    assert test, assert_ex(
-                        'summary ' + key,
-                        result,
-                        expected,
-                        hint=[order, snip(results[order]['text'])])
-
-    def score_keyword(self, keyword, word_count, expected):
+    def test_score_keyword(self):
         """Score keyword frequency among other keywords
 
         Arguments:
@@ -86,98 +82,76 @@ class TestSummarizer:
             word_count {int} -- total number of keywords
             expected {float} -- expected score
         """
+        #  (appearances of word, total words, expected)
+        #               zero|  one third|        half|     maximum|
+        samples = [(0, 1, 0), (1, 3, .5), (1, 2, .75), (1, 1, 1.5)]
         summ = Summarizer()
 
-        result = summ.score_keyword(keyword, word_count)['total_score']
+        for sample in samples:
+            count, word_count, expected = sample
+            keyword = {'count': count}
 
-        assert (result == expected), assert_ex(
-            'keyword score',
-            result['total_score'],
-            expected,
-            hint=' of '.join([str(keyword['count']), str(word_count)]))
+            result = summ.score_keyword(keyword, word_count)['total_score']
 
-    def test_score_keyword_zero(self):
-        keyword = {'count': 0}
-        word_count = 1
-        expected = 0
-
-        self.score_keyword(keyword, word_count, expected)
-
-    def test_score_keyword_third(self):
-        keyword = {'count': 1}
-        word_count = 3
-        expected = 0.5
-
-        self.score_keyword(keyword, word_count, expected)
-
-    def test_score_keyword_half(self):
-        keyword = {'count': 1}
-        word_count = 2
-        expected = 0.75
-
-        self.score_keyword(keyword, word_count, expected)
-
-    def test_score_keyword_max(self):
-        keyword = {'count': 1}
-        word_count = 1
-        expected = 1.5
-
-        self.score_keyword(keyword, word_count, expected)
+            assert (result == expected), assert_ex(
+                'keyword score',
+                result['total_score'],
+                expected,
+                hint=' of '.join([str(keyword['count']), str(word_count)]))
 
     def _test_get_top_keyword_threshold(self, keywords, expected):
         summ = Summarizer()
 
-        result = summ.get_top_keyword_threshold(keywords)
+        samples = [
+            # short
+            ([
+                {"count": 11},
+                {"count": 8},
+                {"count": 7},
+                {"count": 10},
+                {"count": 9},
+                {"count": 12}],
+                7),
+            # no tie
+            ([
+                {"count": 2},
+                {"count": 4},
+                {"count": 7},
+                {"count": 1},
+                {"count": 8},
+                {"count": 5},
+                {"count": 12},
+                {"count": 9},
+                {"count": 11},
+                {"count": 6},
+                {"count": 10},
+                {"count": 3}],
+                3),
+            # tied
+            ([
+                {"count": 4},
+                {"count": 1},
+                {"count": 4},
+                {"count": 7},
+                {"count": 4},
+                {"count": 6},
+                {"count": 5},
+                {"count": 8},
+                {"count": 11},
+                {"count": 9},
+                {"count": 12},
+                {"count": 10}],
+                4)]
 
-        assert_ex(
-            'top keyword frequency >=',
-            result,
-            expected)
+        for sample in samples:
+            keywords, expected = sample
 
-    def test_get_top_keyword_threshold_short(self):
-        keywords = [
-            {"count": 11},
-            {"count": 8},
-            {"count": 7},
-            {"count": 10},
-            {"count": 9},
-            {"count": 12}]
+            result = summ.get_top_keyword_threshold(keywords)
 
-        self._test_get_top_keyword_threshold(keywords, 7)
-
-    def test_get_top_keyword_threshold_notie(self):
-        keywords = [
-            {"count": 2},
-            {"count": 4},
-            {"count": 7},
-            {"count": 1},
-            {"count": 8},
-            {"count": 5},
-            {"count": 12},
-            {"count": 9},
-            {"count": 11},
-            {"count": 6},
-            {"count": 10},
-            {"count": 3}]
-
-        self._test_get_top_keyword_threshold(keywords, 3)
-
-    def test_get_top_keyword_threshold_tie(self):
-        keywords = [
-            {"count": 4},
-            {"count": 1},
-            {"count": 4},
-            {"count": 7},
-            {"count": 4},
-            {"count": 6},
-            {"count": 5},
-            {"count": 8},
-            {"count": 11},
-            {"count": 9},
-            {"count": 12},
-            {"count": 10}]
-
-        self._test_get_top_keyword_threshold(keywords, 4)
+            assert (result == expected), assert_ex(
+                'top keyword frequency >=',
+                result,
+                expected)
 
     def test_get_top_keywords(self):
         """Test Summarizer.get_top_keywords with data from the selected sample
@@ -207,7 +181,8 @@ class TestSummarizer:
                 try:
                     idx = all_keywords.index(result['word'])
 
-                    assert_ex(
+                    test = (result['count'] == keywords[idx]['count'])
+                    assert test, assert_ex(
                         'keyword count',
                         result['count'],
                         keywords[idx]['count'])
