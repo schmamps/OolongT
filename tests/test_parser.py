@@ -4,7 +4,7 @@ from pathlib import Path
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
-from .helpers import assert_ex, compare_float
+from .helpers import assert_ex, compare_float, compare_dict
 from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
@@ -30,7 +30,7 @@ DEFAULT_LANG_EXPECTED = {
 
 
 class TestParser:
-    def load_language(self, expected, path=False, lang=False):
+    def load_language(self, expected, root=False, lang=False):
         """Load language and compare result with expected
 
         Arguments:
@@ -41,64 +41,36 @@ class TestParser:
             lang {str or bool} -- language subdirectory (default: {False})
         """
         p = Parser()
+        test = False
 
-        result = p.load_language(path or BUILTIN, lang or DEFAULT_LANG)
-        result['stop_words'] = len(result['stop_words'])
+        samples = [
+            # defaults
+            (DEFAULT_LANG_EXPECTED, {}),
+            # by language
+            (DEFAULT_LANG_EXPECTED, {'lang': 'en'}),
+            # by path
+            (DEFAULT_LANG_EXPECTED, {'root': BUILTIN}),
+            # by language and path
+            (TEST_LANG_EXPECTED,
+                {'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH}),
+            # attempted traversal
+            (PermissionError, {'lang': '../../../etc'}),
+            # file not found
+            (FileNotFoundError, {'root': Path(__file__)}),
+            # invalid config
+            (ValueError, {'lang': 'malformed', 'root': BASE_LANG_PATH})]
 
-        for key in expected.keys():
-            assert_ex('config: ' + key, str(result[key]), str(expected[key]))
+        for sample in samples:
+            expected, kwargs = sample
 
-    def load_language_error(self, expected, path=False, lang=False):
-        """Load language and await an exception
+            try:
+                result = p.load_language(**kwargs)
+                test = compare_dict(expected, result)
 
-        Arguments:
-            expected {any} -- try: ... except (expected):
+            except Exception as e:
+                test = isinstance(e, expected)
 
-        Keyword Arguments:
-            path {str or bool} -- path to language dir (default: {False})
-            lang {str or bool} -- language subdirectory (default: {False})
-        """
-        p = Parser()
-
-        result = False
-
-        try:
-            p.load_language(
-                path=path or BUILTIN, lang=lang or DEFAULT_LANG)
-
-        except Exception as e:
-            result = isinstance(e, expected)
-
-        assert result, assert_ex(
-            'load language', None, Exception)
-
-    def test_load_language_default(self):
-        self.load_language(DEFAULT_LANG_EXPECTED)
-
-    def test_load_language_by_lang(self):
-        self.load_language(DEFAULT_LANG_EXPECTED, lang='en')
-
-    def test_load_language_by_path(self):
-        self.load_language(DEFAULT_LANG_EXPECTED, path=BUILTIN)
-
-    def test_load_language_by_all(self):
-        self.load_language(
-            TEST_LANG_EXPECTED, lang=TEST_LANG_NAME, path=BASE_LANG_PATH)
-
-    def test_load_language_traversal(self):
-        self.load_language_error(PermissionError, lang='../../../etc')
-
-    def test_load_language_notfound(self):
-        path = Path(__file__)
-        self.load_language_error(FileNotFoundError, path=path)
-
-    def test_load_language_malformed(self):
-        self.load_language_error(
-            ValueError, lang='malformed', path=BASE_LANG_PATH)
-
-    def test_load_language_empty(self):
-        self.load_language_error(
-            FileNotFoundError, lang='nonexistent', path=BASE_LANG_PATH)
+            assert test, assert_ex('config', result, expected)
 
     def test_get_all_words(self):
         """Sequential list of the words in text
