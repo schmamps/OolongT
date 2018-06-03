@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from . import parser
 from .nodash import pluck, sort_by
-from .parser import Parser
 
 
 class Summarizer:
-    def __init__(self):
-        self.parser = Parser()
+    def __init__(self, root=parser.BUILTIN, lang=parser.DEFAULT_LANG):
+        self.parser = parser.Parser(root, lang)
 
     def _pluck_words(self, keyword_list):
         return list(pluck(keyword_list, 'word'))
