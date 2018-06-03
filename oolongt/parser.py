@@ -15,7 +15,7 @@ JSON_SUFFIX = '.json'
 
 
 class Parser:
-    def __init__(self, path=BUILTIN, lang=DEFAULT_LANG):
+    def __init__(self, root=BUILTIN, lang=DEFAULT_LANG):
         """Initialize class for specified language
 
         Load data from:
@@ -31,7 +31,7 @@ class Parser:
             FileNotFoundError: language files  not found
             ValueError: incomplete/malformed configuration file
         """
-        cfg_data = self.load_language(path, lang)
+        cfg_data = self.load_language(root, lang)
 
         try:
             self.language = cfg_data['nltk_language']
@@ -40,9 +40,9 @@ class Parser:
 
         except (JSONDecodeError, KeyError):
             raise ValueError(
-                'Invalid configuration for ' + lang + ' in ' + path)
+                'Invalid configuration for ' + lang + ' in ' + root)
 
-    def load_language(self, path, lang):
+    def load_language(self, root, lang):
         """Load language from specified path
 
         Arguments:
@@ -56,21 +56,22 @@ class Parser:
         Returns:
             Dict -- data in language JSON + path to tokenizer pickle
         """
-        root = Path(path)
-        cfg_path = root.joinpath(lang + '.json')
+        root_path = Path(root)
+        cfg_path = root_path.joinpath(lang + '.json')
+        cfg_path_str = str(cfg_path)
 
         try:
             # pylint: disable=no-member
-            cfg_path.resolve().relative_to(root.resolve())
+            cfg_path.resolve().relative_to(root_path.resolve())
 
         except ValueError:
             raise PermissionError('directory traversal in lang: ' + lang)
 
         # pylint: disable=no-member
         if not cfg_path.exists():
-            raise FileNotFoundError('config dir: ' + str(root))
+            raise FileNotFoundError('config: ' + cfg_path_str)
 
-        cfg_data = load_json(str(cfg_path))
+        cfg_data = load_json(cfg_path_str)
 
         return cfg_data
 
