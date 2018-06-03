@@ -79,7 +79,41 @@ def compare_list(left, right):
     return ', '.join([len_str, diff_str])
 
 
-# noqa
+def compare_dict(left, right, keys=False):
+    """Compare left to right
+
+    Arguments:
+        left {Dict} -- lowest common denominator Dict
+        right {Dict} -- Dict that should contain the same values
+
+    Keyword Arguments:
+        keys {List[any]} -- keys to compare instead of left.keys()
+    >>> compare_dict({1: 1}, {1: 1})
+    True
+    >>> compare_dict({1: 1}, {1: 1, 2: 2})
+    True
+    >>> compare_dict({1: 1, 2: 2}, {1: 1})
+    False
+    >>> compare_dict({1: 1, 2: 2}, {1: 1}, keys=[1])
+    True
+    """
+    keys = keys or left.keys()
+    same = True
+
+    for key in keys:
+        comp = right.get(key, None)
+
+        if isinstance(left[key], float) or isinstance(comp, float):
+            same = compare_float(left[key], comp)
+        else:
+            same = (left[key] == comp)
+
+        if not same:
+            break
+
+    return same
+
+
 def assert_ex(msg, result, expected, hint=None):
     """Generate detailed AssertionError exceptions
 
