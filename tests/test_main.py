@@ -9,13 +9,13 @@ from oolongt.main import (
 from oolongt.nodash import sort_by, pluck
 
 from .constants import DATA_PATH, SAMPLES
-from .helpers import assert_ex, compare_float, snip
+from .helpers import (
+    assert_ex, compare_float, get_samples, snip)
 from .sample import Sample
 
 
 def test_score_sentences():
-    for sample_name in SAMPLES:
-        samp = Sample(DATA_PATH, sample_name)
+    for samp in get_samples(*SAMPLES):
         title = samp.d['title']
         text = samp.d['text']
 
@@ -29,6 +29,17 @@ def test_score_sentences():
 
 
 def _get_expected_summaries(samp, length, sort_key, reverse):
+    """Get text of top ranked sentences
+
+    Arguments:
+        samp {Sample} -- sample
+        length {int} -- number of sentences to return
+        sort_key {any} -- sort order of sentence Dicts
+        reverse {bool} -- False: ASC, True: DESC (default: {False})
+
+    Returns:
+        List[str] -- text of sentences in specified order
+    """
     length = length or DEFAULT_LENGTH
     sort_key = sort_key or DEFAULT_SORT_KEY
     reverse = reverse or DEFAULT_REVERSE
@@ -41,6 +52,18 @@ def _get_expected_summaries(samp, length, sort_key, reverse):
 
 
 def _get_result_summaries(title, text, length, sort_key, reverse):
+    """Summarize with correct keyword arguments
+
+    Arguments:
+        title {str} -- title of text
+        text {str} -- body of content
+        length {int} -- number of sentences to return
+        sort_key {any} -- sort order of sentence Dicts
+        reverse {bool} -- False: ASC, True: DESC (default: {False})
+
+    Returns:
+        List[str] -- text of sentences in specified order
+    """
     opts = [
         (length, 'length'),
         (sort_key, 'sort_key'),
@@ -55,6 +78,14 @@ def _get_result_summaries(title, text, length, sort_key, reverse):
 
 
 def _test_summarize(sample_name, length, sort_key, reverse):
+    """Test specified sample
+
+    Arguments:
+        sample_name {str} -- name of data source
+        length {int} -- number of sentences to return
+        sort_key {any} -- sort order of sentence Dicts
+        reverse {bool} -- False: ASC, True: DESC (default: {False})
+    """
     samp = Sample(DATA_PATH, sample_name)
     title = samp.d['title']
     text = samp.d['text']
