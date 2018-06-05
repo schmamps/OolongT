@@ -1,6 +1,9 @@
 """ Test Helpers """
 from random import shuffle
 
+from .constants import DATA_PATH
+from .sample import Sample
+
 
 def snip(val, max_len=20, separator=' ', ellip="..."):
     """Truncate text
@@ -152,3 +155,13 @@ def assert_ex(msg, result, expected, hint=None):
         msg + hint,
         'result   > ' + res_str,
         'expected > ' + exp_str])
+
+
+def get_samples(*args):
+    """Get Samples by name
+
+    Returns:
+        Iterator[Sample] - iterable of samples
+    """
+    for sample_name in args:
+        yield Sample(DATA_PATH, sample_name)
