@@ -16,7 +16,6 @@ def get_json_path(lang):
     Returns:
         str -- path to language config JSON file
     """
-
     return Path(__file__).parent.joinpath(
         'lang', lang + parser.JSON_SUFFIX)
 
