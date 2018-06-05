@@ -6,7 +6,7 @@ from oolongt.summarizer import Summarizer
 
 from .constants import DATA_PATH, SAMPLES
 from .helpers import (
-    assert_ex, compare_float, compare_dict, randomize_list, snip)
+    assert_ex, compare_float, compare_dict, get_samples, randomize_list, snip)
 from .sample import Sample
 
 
@@ -36,11 +36,7 @@ class TestSummarizer:
         return pluck(keywords, 'word')
 
     def test_get_sentences(self):
-        """Test Summarizer.summarize() with data from the samples
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
+        """Test Summarizer.summarize() w/ data from select samples"""
         test_keys = [
             'text',            # 0
             'order',           # 1
@@ -50,8 +46,7 @@ class TestSummarizer:
             'keyword_score',   # 5
             'keyword_score']   # 6
 
-        for sample_name in SAMPLES:
-            samp = Sample(DATA_PATH, sample_name)
+        for samp in get_samples(*SAMPLES):
             summ = Summarizer()
 
             expecteds = sort_by(samp.d['sentences'], 'order')
@@ -62,7 +57,7 @@ class TestSummarizer:
                 'summary result count',
                 len(results),
                 len(expecteds),
-                hint=sample_name)
+                hint=samp.name)
 
             for order, result in enumerate(results):
                 expected = expecteds[order]
@@ -154,13 +149,8 @@ class TestSummarizer:
                 expected)
 
     def test_get_top_keywords(self):
-        """Test Summarizer.get_top_keywords with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in SAMPLES:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Summarizer.get_top_keywords w/ data from select samples"""
+        for samp in get_samples(*SAMPLES):
             summ = Summarizer()
 
             source = None
@@ -199,8 +189,7 @@ class TestSummarizer:
                     assert False, 'keyword error'
 
     def test_score_frequency(self):
-        for sample_name in SAMPLES:
-            samp = Sample(DATA_PATH, sample_name)
+        for samp in get_samples(*SAMPLES):
             sentences = samp.d['sentences']
             summ = Summarizer()
             top_keywords = summ.get_top_keywords(samp.d['text'], None, None)
@@ -218,10 +207,8 @@ class TestSummarizer:
                     'keyword score', result, expected)
 
     def test_score_sentence(self):
-        sentences = []
-
-        for sample_name in SAMPLES:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Summarizer.score_sentence w/ data from select samples"""
+        for samp in get_samples(*SAMPLES):
             sentences = samp.d['sentences']
             summ = Summarizer()
             title_words = samp.d['title_words']
@@ -243,51 +230,29 @@ class TestSummarizer:
                     'sentence score',
                     result,
                     expected,
-                    hint=sample_name + ': ' + snip(text))
+                    hint=[samp.name, snip(text)])
 
-    def _test_sentence_score_type(self, sample_name, score_type):
-        """Test Summarizer.sbs or .dbs with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-            score_type  {str: 'sbs' or 'dbs'} -- score method
-        """
-        samp = Sample(DATA_PATH, sample_name)
+    def test_based_scoring(self):
+        """Test Summarizer.dbs and .sbs w/ data from select samples"""
         summ = Summarizer()
 
-        for sentence in samp.d['sentences']:
-            words = summ.parser.get_all_words(sentence['text'])
-            top_keywords = self._get_top_keywords(samp.d['keywords'])
-            keyword_list = summ._pluck_words(top_keywords)
+        for samp in get_samples(*SAMPLES):
+            for sentence in samp.d['sentences']:
+                words = summ.parser.get_all_words(sentence['text'])
+                top_keywords = self._get_top_keywords(samp.d['keywords'])
+                keyword_list = summ._pluck_words(top_keywords)
 
-            expected = sentence[score_type]
+                for score_type in ['sbs', 'dbs']:
+                    expected = sentence[score_type]
 
-            if score_type == 'sbs':
-                result = summ.sbs(words, top_keywords, keyword_list)
+                    if score_type == 'dbs':
+                        result = summ.dbs(words, top_keywords, keyword_list)
 
-            if score_type == 'dbs':
-                result = summ.dbs(words, top_keywords, keyword_list)
+                    if score_type == 'sbs':
+                        result = summ.sbs(words, top_keywords, keyword_list)
 
-            assert compare_float(result, expected), assert_ex(
-                score_type,
-                expected,
-                result,
-                hint=snip(words))
-
-    def sbs(self):
-        """Test Summarizer.sbs with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in SAMPLES:
-            self._test_sentence_score_type(sample_name, 'sbs')
-
-    def dbs(self, sample_name):
-        """Test Summarizer.dbs with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in SAMPLES:
-            self._test_sentence_score_type(sample_name, 'dbs')
+                    assert compare_float(result, expected), assert_ex(
+                        score_type,
+                        expected,
+                        result,
+                        hint=[score_type, snip(words)])
