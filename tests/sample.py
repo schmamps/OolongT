@@ -17,6 +17,7 @@ class Sample:
                 data['text'] = simple_io.read_file(base + '.txt')
 
         self.d = data
+        self.name = name
 
     def join_sentences(self, sentence_list):
         """Create text from sentence list
