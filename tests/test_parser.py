@@ -4,7 +4,7 @@ from pathlib import Path
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
-from .helpers import assert_ex, compare_float, compare_dict
+from .helpers import assert_ex, compare_float, compare_dict, get_samples
 from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
@@ -73,14 +73,8 @@ class TestParser:
             assert test, assert_ex('config', result, expected)
 
     def test_get_all_words(self):
-        """Sequential list of the words in text
-
-        Arguments:
-            text {str} -- text
-            expected {List[str]} -- words
-        """
-        for sample_name in ['sentence-1word', 'sentence-overlong']:
-            samp = Sample(DATA_PATH, sample_name)
+        """Get all words in text from select samples"""
+        for samp in get_samples('sentence-1word', 'sentence-overlong'):
             p = Parser()
 
             expected = samp.d['compare_words']
@@ -112,13 +106,8 @@ class TestParser:
         return p.get_keywords(text)
 
     def test_get_keywords(self):
-        """Test Parser.get_keywords with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['empty', 'essay-snark']:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Parser.get_keywords w/ data from select samples"""
+        for samp in get_samples('empty', 'essay-snark'):
             text = samp.d['text']
 
             (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
@@ -151,6 +140,11 @@ class TestParser:
                 'keyword count', miscounted, [])
 
     def _get_expected_keywords(self, keywords):
+        """Get list of expected keywords in text
+
+        Returns:
+            List[str] - list of keywords repeated by #occurrences in text
+        """
         expected = []
         for key in keywords.keys():
             expected += [key] * keywords[key]
@@ -158,6 +152,7 @@ class TestParser:
         return expected
 
     def test_get_keyword_list(self):
+        """Test list of all words in text"""
         sample_name = 'essay-snark'
         samp = Sample(DATA_PATH, sample_name)
         p = Parser(lang=samp.d['lang'])
@@ -189,16 +184,11 @@ class TestParser:
                 hint=unique_word)
 
     def test_get_sentence_length_score(self):
-        """Test Parser.get_sentence_length_score with
-        data from the selected sample
+        """Test Parser.get_sentence_length_score w/ data from select samples"""
 
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['empty',
-                            'sentence-short', 'sentence-medium',
-                            'sentence-ideal', 'sentence-overlong']:
-            samp = Sample(DATA_PATH, sample_name)
+        for samp in get_samples('empty',
+                                'sentence-short', 'sentence-medium',
+                                'sentence-ideal', 'sentence-overlong'):
             p = Parser(lang=samp.d['lang'])
             words = samp.d['compare_words']
 
@@ -237,15 +227,10 @@ class TestParser:
                 hint='/'.join([str(pos), str(sentence_count)]))
 
     def test_get_title_score(self):
-        """Test Parser.get_title_score with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['sentence-1word', 'sentence-short',
-                            'sentence-medium', 'sentence-ideal',
-                            'sentence-overlong']:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Parser.get_title_score w/ data from select samples"""
+        for samp in get_samples('sentence-1word', 'sentence-short',
+                                'sentence-medium', 'sentence-ideal',
+                                'sentence-overlong'):
             p = Parser(lang=samp.d['lang'])
             title_words = samp.d['compare_title']
             sentence_words = samp.d['compare_words']
@@ -260,13 +245,8 @@ class TestParser:
                 hint=[title_words, sentence_words])
 
     def test_split_sentences(self):
-        """Test Parser.split_sentences with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['sentence-short', 'sentence-list']:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Parser.split_sentences w/ data from select samples"""
+        for samp in get_samples('sentence-short', 'sentence-list'):
             p = Parser(lang=samp.d['lang'])
 
             expected = samp.d['split_sentences']
@@ -278,13 +258,8 @@ class TestParser:
                 expected)
 
     def test_split_words(self):
-        """Test Parser.split_words with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['empty', 'sentence-1word', 'sentence-medium']:
-            samp = Sample(DATA_PATH, sample_name)
+        """ Test Parser.split_words w/ data from select samples"""
+        for samp in get_samples('empty', 'sentence-1word', 'sentence-medium'):
             p = Parser(lang=samp.d['lang'])
             text = samp.d['text']
 
@@ -294,16 +269,12 @@ class TestParser:
             assert (result == expected), assert_ex(
                 'word split',
                 expected,
-                result)
+                result,
+                hint=samp.name)
 
     def test_remove_punctuations(self):
-        """Test Parser.remove_punctuations with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['empty', 'sentence-1word', 'sentence-list']:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Parser.remove_punctuations w/ data from select samples"""
+        for samp in get_samples('empty', 'sentence-1word', 'sentence-list'):
             p = Parser(lang=samp.d['lang'])
 
             expected = samp.d['remove_punctuations']
@@ -315,15 +286,10 @@ class TestParser:
                 repr(expected))
 
     def test_remove_stop_words(self):
-        """Test Parser.remove_stop_words with data from the selected sample
-
-        Arguments:
-            sample_name {str} -- name of data source
-        """
-        for sample_name in ['empty',
-                            'sentence-1word', 'sentence-2words',
-                            'sentence-list']:
-            samp = Sample(DATA_PATH, sample_name)
+        """Test Parser.remove_stop_words w/ data from the select samples"""
+        for samp in get_samples('empty',
+                                'sentence-1word', 'sentence-2words',
+                                'sentence-list'):
             p = Parser(lang=samp.d['lang'])
             words = p.split_words(samp.d['text'])
 
@@ -334,4 +300,4 @@ class TestParser:
                 'remove stop words',
                 result,
                 expected,
-                hint=sample_name)
+                hint=samp.name)
