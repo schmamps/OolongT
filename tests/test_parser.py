@@ -74,7 +74,7 @@ class TestParser:
 
     def test_get_all_words(self):
         """Get all words in text from select samples"""
-        for samp in get_samples('sentence-1word', 'sentence-overlong'):
+        for samp in get_samples('sentence_1word', 'sentence_overlong'):
             p = Parser()
 
             expected = samp.d['compare_words']
@@ -107,7 +107,7 @@ class TestParser:
 
     def test_get_keywords(self):
         """Test Parser.get_keywords w/ data from select samples"""
-        for samp in get_samples('empty', 'essay-snark'):
+        for samp in get_samples('empty', 'essay_snark'):
             text = samp.d['text']
 
             (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
@@ -153,7 +153,7 @@ class TestParser:
 
     def test_get_keyword_list(self):
         """Test list of all words in text"""
-        sample_name = 'essay-snark'
+        sample_name = 'essay_snark'
         samp = Sample(DATA_PATH, sample_name)
         p = Parser(lang=samp.d['lang'])
 
@@ -187,8 +187,8 @@ class TestParser:
         """Test Parser.get_sentence_length_score w/ data from select samples"""
 
         for samp in get_samples('empty',
-                                'sentence-short', 'sentence-medium',
-                                'sentence-ideal', 'sentence-overlong'):
+                                'sentence_short', 'sentence_medium',
+                                'sentence_ideal', 'sentence_overlong'):
             p = Parser(lang=samp.d['lang'])
             words = samp.d['compare_words']
 
@@ -228,9 +228,9 @@ class TestParser:
 
     def test_get_title_score(self):
         """Test Parser.get_title_score w/ data from select samples"""
-        for samp in get_samples('sentence-1word', 'sentence-short',
-                                'sentence-medium', 'sentence-ideal',
-                                'sentence-overlong'):
+        for samp in get_samples('sentence_1word', 'sentence_short',
+                                'sentence_medium', 'sentence_ideal',
+                                'sentence_overlong'):
             p = Parser(lang=samp.d['lang'])
             title_words = samp.d['compare_title']
             sentence_words = samp.d['compare_words']
@@ -246,7 +246,7 @@ class TestParser:
 
     def test_split_sentences(self):
         """Test Parser.split_sentences w/ data from select samples"""
-        for samp in get_samples('sentence-short', 'sentence-list'):
+        for samp in get_samples('sentence_short', 'sentence_list'):
             p = Parser(lang=samp.d['lang'])
 
             expected = samp.d['split_sentences']
@@ -259,7 +259,7 @@ class TestParser:
 
     def test_split_words(self):
         """ Test Parser.split_words w/ data from select samples"""
-        for samp in get_samples('empty', 'sentence-1word', 'sentence-medium'):
+        for samp in get_samples('empty', 'sentence_1word', 'sentence_medium'):
             p = Parser(lang=samp.d['lang'])
             text = samp.d['text']
 
@@ -274,7 +274,7 @@ class TestParser:
 
     def test_remove_punctuations(self):
         """Test Parser.remove_punctuations w/ data from select samples"""
-        for samp in get_samples('empty', 'sentence-1word', 'sentence-list'):
+        for samp in get_samples('empty', 'sentence_1word', 'sentence_list'):
             p = Parser(lang=samp.d['lang'])
 
             expected = samp.d['remove_punctuations']
@@ -288,8 +288,8 @@ class TestParser:
     def test_remove_stop_words(self):
         """Test Parser.remove_stop_words w/ data from the select samples"""
         for samp in get_samples('empty',
-                                'sentence-1word', 'sentence-2words',
-                                'sentence-list'):
+                                'sentence_1word', 'sentence_2words',
+                                'sentence_list'):
             p = Parser(lang=samp.d['lang'])
             words = p.split_words(samp.d['text'])
 

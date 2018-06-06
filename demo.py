@@ -32,7 +32,7 @@ def get_input():
 
 def get_sample():
     base = str(Path(__file__).parent.joinpath(
-        'tests', 'data', 'essay-snark.'))
+        'tests', 'data', 'essay_snark.'))
 
     title = simple_io.load_json(base + 'json')['title']
     content = simple_io.read_file(base + 'txt')
