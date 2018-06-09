@@ -162,7 +162,7 @@ class TestSummarizer:
             results = summ.get_top_keywords(samp.d['text'], source, category)
 
             all_keywords = [kw['word'] for kw in keywords]
-            assert_ex(
+            assert (len(results) == len(expected)), assert_ex(
                 'result count',
                 len(results),
                 len(expected))

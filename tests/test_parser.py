@@ -113,12 +113,12 @@ class TestParser:
             (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
             (result_kws, result_insts) = self._get_keyword_result(text)
 
-            assert_ex(
+            assert (result_insts == expect_insts), assert_ex(
                 'total keyword count',
                 result_insts,
                 expect_insts)
 
-            assert_ex(
+            assert (len(result_kws) == len(expect_kws)), assert_ex(
                 'unique keyword count',
                 len(result_kws),
                 len(expect_kws))
