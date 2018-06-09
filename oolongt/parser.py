@@ -103,7 +103,7 @@ class Parser:
 
         return keywords
 
-    def count_keyword(self, unique_word, all_words):
+    def count_keyword(self, word, all_words):
         """Count number of instances of unique_word in all_words
 
         Arguments:
@@ -114,8 +114,8 @@ class Parser:
             Dict -- {word: unique_word, count: (instances in all_words)}
         """
         return {
-            'word': unique_word,
-            'count': all_words.count(unique_word)}
+            'word': word,
+            'count': all_words.count(word)}
 
     def get_keywords(self, text):
         """Get counted list of keywords and total number of keywords
@@ -127,10 +127,12 @@ class Parser:
             Tuple[List[Dict], int] -- individual and total keyword counts
         """
         all_keywords = self.get_keyword_list(text)
+        unique_words = list(set(all_keywords))
+
         counted_keywords = [
-            self.count_keyword(unique_word, all_keywords)
-            for unique_word
-            in list(set(all_keywords))]
+            self.count_keyword(word, all_keywords)
+            for word
+            in unique_words]
 
         return (counted_keywords, len(all_keywords))
 
