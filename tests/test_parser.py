@@ -89,7 +89,7 @@ class TestParser:
             samp {Sample} -- instance of Sample class
 
         Returns:
-            tuple[List[Dict], int] -- received of Parser.get_keywords()
+            tuple[List[Dict], int] -- return of Parser.get_keywords()
         """
         return (samp.d['keywords'], samp.d['instances'])
 
@@ -97,10 +97,10 @@ class TestParser:
         """Get keywords from Parser
 
         Arguments:
-            text {str} -- text of content
+            text {str} -- body of content
 
         Returns:
-            tuple[List[Dict], int] -- received of Parser.get_keywords()
+            tuple[List[Dict], int] -- return of Parser.get_keywords()
         """
         p = Parser()
         return p.get_keywords(text)

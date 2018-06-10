@@ -15,8 +15,8 @@ class Summarizer:
         """Get list of all sentences in text, sorted by score
 
         Arguments:
-            text {str} -- text to analyze
-            title {str} -- title of text
+            text {str} -- body of content
+            title {str} -- title of content
             source {any} -- unused
             category {any} -- unused
 
@@ -69,8 +69,7 @@ class Summarizer:
         """Get list of the 1st-10th ranked keywords
 
         Arguments:
-            keywords {List[Dict]} -- keyword list
-            wordCount {int} -- total number of keywords
+            text {str} -- body of content
             source {any} -- unused
             category {any} -- unused
 

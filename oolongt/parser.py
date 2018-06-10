@@ -94,7 +94,7 @@ class Parser:
         """Extract all meaningful words from text into a list
 
         Arguments:
-            text {str} -- any text
+            text {str} -- text
 
         Returns:
             List[str] -- words in text, minus stop words
@@ -183,7 +183,7 @@ class Parser:
 
         Arguments:
             title {str} -- title of the text content
-            text {str} -- text content
+            text {str} -- body of content
 
         Returns:
             float -- score
@@ -203,7 +203,7 @@ class Parser:
         """Split sentences via tokenizer
 
         Arguments:
-            text {str} -- text to split by sentence
+            text {str} -- body of content
 
         Returns:
             List[str] -- sequential list of sentences in text
