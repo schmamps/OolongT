@@ -50,24 +50,24 @@ class TestSummarizer:
             summ = Summarizer()
 
             expecteds = sort_by(samp.d['sentences'], 'order')
-            results = summ.get_sentences(
+            receiveds = summ.get_sentences(
                 samp.d['text'], samp.d['title'], None, None)
 
-            assert (len(results) == len(expecteds)), assert_ex(
+            assert (len(receiveds) == len(expecteds)), assert_ex(
                 'summary result count',
-                len(results),
+                len(receiveds),
                 len(expecteds),
                 hint=samp.name)
 
-            for order, result in enumerate(results):
+            for order, received in enumerate(receiveds):
                 expected = expecteds[order]
-                test = compare_dict(expected, result, test_keys)
+                test = compare_dict(expected, received, test_keys)
 
                 assert test, assert_ex(
                     'summary',
-                    result,
+                    received,
                     expected,
-                    hint=[order, snip(results[order]['text'])])
+                    hint=[order, snip(receiveds[order]['text'])])
 
     def test_score_keyword(self):
         """Score keyword frequency among other keywords
@@ -86,11 +86,11 @@ class TestSummarizer:
             count, word_count, expected = sample
             keyword = {'count': count}
 
-            result = summ.score_keyword(keyword, word_count)['total_score']
+            received = summ.score_keyword(keyword, word_count)['total_score']
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'keyword score',
-                result['total_score'],
+                received['total_score'],
                 expected,
                 hint=' of '.join([str(keyword['count']), str(word_count)]))
 
@@ -141,11 +141,11 @@ class TestSummarizer:
         for sample in samples:
             keywords, expected = sample
 
-            result = summ.get_top_keyword_threshold(keywords)
+            received = summ.get_top_keyword_threshold(keywords)
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'top keyword frequency >=',
-                result,
+                received,
                 expected)
 
     def test_get_top_keywords(self):
@@ -159,30 +159,30 @@ class TestSummarizer:
             keywords = samp.d['keywords']
             expected = self._get_top_keywords(keywords)
 
-            results = summ.get_top_keywords(samp.d['text'], source, category)
+            receiveds = summ.get_top_keywords(samp.d['text'], source, category)
 
             all_keywords = [kw['word'] for kw in keywords]
-            assert (len(results) == len(expected)), assert_ex(
+            assert (len(receiveds) == len(expected)), assert_ex(
                 'result count',
-                len(results),
+                len(receiveds),
                 len(expected))
 
-            for result in results:
+            for received in receiveds:
                 try:
-                    idx = all_keywords.index(result['word'])
+                    idx = all_keywords.index(received['word'])
 
-                    test = (result['count'] == keywords[idx]['count'])
+                    test = (received['count'] == keywords[idx]['count'])
                     assert test, assert_ex(
                         'keyword count',
-                        result['count'],
+                        received['count'],
                         keywords[idx]['count'])
 
                     test = compare_float(
-                        result['total_score'], keywords[idx]['total_score'])
+                        received['total_score'], keywords[idx]['total_score'])
 
                     assert test, assert_ex(
                         'keyword score',
-                        result['total_score'],
+                        received['total_score'],
                         keywords[idx]['total_score'])
 
                 except ValueError:
@@ -200,11 +200,11 @@ class TestSummarizer:
                 words = summ.parser.get_all_words(text)
 
                 expected = sentence['keyword_score']
-                result = summ.score_frequency(
+                received = summ.score_frequency(
                     words, top_keywords, top_keyword_list)
 
-                assert compare_float(result, expected), assert_ex(
-                    'keyword score', result, expected)
+                assert compare_float(received, expected), assert_ex(
+                    'keyword score', received, expected)
 
     def test_score_sentence(self):
         """Test Summarizer.score_sentence w/ data from select samples"""
@@ -223,12 +223,12 @@ class TestSummarizer:
                 output = summ.score_sentence(
                     idx, text,
                     title_words, top_keywords, keyword_list, num_sents)
-                result = output['total_score']
-                test = compare_float(result, expected)
+                received = output['total_score']
+                test = compare_float(received, expected)
 
                 assert test, assert_ex(
                     'sentence score',
-                    result,
+                    received,
                     expected,
                     hint=[samp.name, snip(text)])
 
@@ -246,13 +246,13 @@ class TestSummarizer:
                     expected = sentence[score_type]
 
                     if score_type == 'dbs':
-                        result = summ.dbs(words, top_keywords, keyword_list)
+                        received = summ.dbs(words, top_keywords, keyword_list)
 
                     if score_type == 'sbs':
-                        result = summ.sbs(words, top_keywords, keyword_list)
+                        received = summ.sbs(words, top_keywords, keyword_list)
 
-                    assert compare_float(result, expected), assert_ex(
+                    assert compare_float(received, expected), assert_ex(
                         score_type,
                         expected,
-                        result,
+                        received,
                         hint=[score_type, snip(words)])

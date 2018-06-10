@@ -117,12 +117,12 @@ def compare_dict(left, right, keys=False):
     return same
 
 
-def assert_ex(msg, result, expected, hint=None):
+def assert_ex(msg, received, expected, hint=None):
     """Generate detailed AssertionError exceptions
 
     Arguments:
         msg {str} -- description of error
-        result {any} -- outcome of test
+        received {any} -- outcome of test
         expected {any} -- expected outcome of test
 
     Returns:
@@ -131,29 +131,29 @@ def assert_ex(msg, result, expected, hint=None):
     >>> rv = [0]
     >>> ev = [1]
     >>> assert_ex('Mismatch', rv, ev)[:63]
-    "Mismatch\\nresult   > len: 1, exclusive: ['0']\\nexpected > len: 1,"
+    "Mismatch\\received   > len: 1, exclusive: ['0']\\nexpected > len: 1,"
     >>> rv = int(1)
     >>> rc = len(str(rv))
     >>> ev = float(1)
     >>> ec = len(str(ev))
     >>> assert_ex('Precision', rv, ev, hint='float')
-    "Precision ('float')\\nresult   > 1\\nexpected > 1.0"
+    "Precision ('float')\\received > 1\\nexpected > 1.0"
     """
     if hint is not None:
         hint = ' (' + repr(hint) + ')'
     else:
         hint = ''
 
-    res_str = str(result)
+    res_str = str(received)
     exp_str = str(expected)
 
-    if isinstance(result, list) and isinstance(expected, list):
-        res_str = compare_list(result, expected)
-        exp_str = compare_list(expected, result)
+    if isinstance(received, list) and isinstance(expected, list):
+        res_str = compare_list(received, expected)
+        exp_str = compare_list(expected, received)
 
     return '\n'.join([
         msg + hint,
-        'result   > ' + res_str,
+        'received > ' + res_str,
         'expected > ' + exp_str])
 
 

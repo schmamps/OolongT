@@ -31,10 +31,10 @@ DEFAULT_LANG_EXPECTED = {
 
 class TestParser:
     def load_language(self, expected, root=False, lang=False):
-        """Load language and compare result with expected
+        """Load language and compare received with expected
 
         Arguments:
-            expected {Dict} -- expected result
+            expected {Dict} -- expected received
 
         Keyword Arguments:
             path {str or bool} -- path to language dir (default: {False})
@@ -64,13 +64,13 @@ class TestParser:
             expected, kwargs = sample
 
             try:
-                result = p.load_language(**kwargs)
-                test = compare_dict(expected, result)
+                received = p.load_language(**kwargs)
+                test = compare_dict(expected, received)
 
             except Exception as e:
                 test = isinstance(e, expected)
 
-            assert test, assert_ex('config', result, expected)
+            assert test, assert_ex('config', received, expected)
 
     def test_get_all_words(self):
         """Get all words in text from select samples"""
@@ -78,9 +78,9 @@ class TestParser:
             p = Parser()
 
             expected = samp.d['compare_words']
-            for result in p.get_all_words(samp.d['text']):
-                assert (result in expected), assert_ex(
-                    'all words', result, None)
+            for received in p.get_all_words(samp.d['text']):
+                assert (received in expected), assert_ex(
+                    'all words', received, None)
 
     def _get_sample_keyword_data(self, samp):
         """Get sample data in Parser.get_keywords() pattern
@@ -89,7 +89,7 @@ class TestParser:
             samp {Sample} -- instance of Sample class
 
         Returns:
-            tuple[List[Dict], int] -- result of Parser.get_keywords()
+            tuple[List[Dict], int] -- received of Parser.get_keywords()
         """
         return (samp.d['keywords'], samp.d['instances'])
 
@@ -100,7 +100,7 @@ class TestParser:
             text {str} -- text of content
 
         Returns:
-            tuple[List[Dict], int] -- result of Parser.get_keywords()
+            tuple[List[Dict], int] -- received of Parser.get_keywords()
         """
         p = Parser()
         return p.get_keywords(text)
@@ -158,10 +158,10 @@ class TestParser:
         p = Parser(lang=samp.d['lang'])
 
         expected = sorted(self._get_expected_keywords(samp.d['keywords']))
-        result = sorted(p.get_keyword_list(samp.d['text']))
+        received = sorted(p.get_keyword_list(samp.d['text']))
 
-        assert (result == expected), assert_ex(
-            'keyword list', expected, result)
+        assert (received == expected), assert_ex(
+            'keyword list', expected, received)
 
     def test_count_keyword(self):
         p = Parser()
@@ -175,11 +175,11 @@ class TestParser:
 
         for sample in samples:
             unique_word, expected = sample
-            result = p.count_keyword(unique_word, all_words)['count']
+            received = p.count_keyword(unique_word, all_words)['count']
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'counting keyword',
-                result,
+                received,
                 expected,
                 hint=unique_word)
 
@@ -193,11 +193,11 @@ class TestParser:
             words = samp.d['compare_words']
 
             expected = samp.d['length_score']
-            result = p.get_sentence_length_score(words)
+            received = p.get_sentence_length_score(words)
 
-            assert compare_float(result, expected), assert_ex(
+            assert compare_float(received, expected), assert_ex(
                 'sentence score',
-                result,
+                received,
                 expected,
                 hint=' '.join(words))
 
@@ -222,11 +222,11 @@ class TestParser:
             p = Parser()
 
             try:
-                result = p.get_sentence_position_score(pos, sentence_count)
+                received = p.get_sentence_position_score(pos, sentence_count)
 
-                assert compare_float(result, expected), assert_ex(
+                assert compare_float(received, expected), assert_ex(
                     'sentence position score',
-                    result,
+                    received,
                     expected,
                     hint='/'.join([str(pos), str(sentence_count)]))
             except Exception as e:
@@ -246,11 +246,11 @@ class TestParser:
             sentence_words = samp.d['compare_words']
 
             expected = samp.d['title_score']
-            result = p.get_title_score(title_words, sentence_words)
+            received = p.get_title_score(title_words, sentence_words)
 
-            assert compare_float(result, expected), assert_ex(
+            assert compare_float(received, expected), assert_ex(
                 'title score',
-                result,
+                received,
                 expected,
                 hint=[title_words, sentence_words])
 
@@ -260,11 +260,11 @@ class TestParser:
             p = Parser(lang=samp.d['lang'])
 
             expected = samp.d['split_sentences']
-            result = p.split_sentences(samp.d['text'])
+            received = p.split_sentences(samp.d['text'])
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'sentence split',
-                result,
+                received,
                 expected)
 
     def test_split_words(self):
@@ -274,12 +274,12 @@ class TestParser:
             text = samp.d['text']
 
             expected = samp.d['split_words']
-            result = p.split_words(text)
+            received = p.split_words(text)
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'word split',
                 expected,
-                result,
+                received,
                 hint=samp.name)
 
     def test_remove_punctuations(self):
@@ -288,11 +288,11 @@ class TestParser:
             p = Parser(lang=samp.d['lang'])
 
             expected = samp.d['remove_punctuations']
-            result = p.remove_punctuations(samp.d['text'])
+            received = p.remove_punctuations(samp.d['text'])
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'punctuation removal',
-                repr(result),
+                repr(received),
                 repr(expected))
 
     def test_remove_stop_words(self):
@@ -304,10 +304,10 @@ class TestParser:
             words = p.split_words(samp.d['text'])
 
             expected = samp.d['remove_stop_words']
-            result = p.remove_stop_words(words)
+            received = p.remove_stop_words(words)
 
-            assert (result == expected), assert_ex(
+            assert (received == expected), assert_ex(
                 'remove stop words',
-                result,
+                received,
                 expected,
                 hint=samp.name)

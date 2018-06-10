@@ -21,11 +21,11 @@ def test_score_sentences():
 
         for i, sentence in enumerate(score_sentences(title, text)):
             expected = samp.d['sentences'][i]['total_score']
-            result = sentence['total_score']
+            received = sentence['total_score']
             hint = snip(sentence['text'])
 
-            assert compare_float(result, expected), assert_ex(
-                'sentence score', result, expected, hint=hint)
+            assert compare_float(received, expected), assert_ex(
+                'sentence score', received, expected, hint=hint)
 
 
 def _get_expected_summaries(samp, length, sort_key, reverse):
@@ -51,7 +51,7 @@ def _get_expected_summaries(samp, length, sort_key, reverse):
     return pluck(ordered, 'text')
 
 
-def _get_result_summaries(title, text, length, sort_key, reverse):
+def _get_received_summaries(title, text, length, sort_key, reverse):
     """Summarize with correct keyword arguments
 
     Arguments:
@@ -92,17 +92,17 @@ def _test_summarize(sample_name, length, sort_key, reverse):
 
     expecteds = _get_expected_summaries(
         samp, length, sort_key, reverse)
-    results = _get_result_summaries(title, text, length, sort_key, reverse)
+    receiveds = _get_received_summaries(title, text, length, sort_key, reverse)
 
-    assert (len(results) == len(expecteds)), assert_ex(
-        'summary sentence count', len(results), length)
+    assert (len(receiveds) == len(expecteds)), assert_ex(
+        'summary sentence count', len(receiveds), length)
 
-    for i, result in enumerate(results):
+    for i, received in enumerate(receiveds):
         expected = expecteds[i]
-        hint = [snip(result), i]
+        hint = [snip(received), i]
 
-        assert (result == expected), assert_ex(
-            'summary [text at index]', result, expected, hint=hint)
+        assert (received == expected), assert_ex(
+            'summary [text at index]', received, expected, hint=hint)
 
 
 def test_summarize():
@@ -137,14 +137,14 @@ def test_get_slice_length():
         test = False
 
         try:
-            result = get_slice_length(nominal, total)
-            test = (expected == result)
+            received = get_slice_length(nominal, total)
+            test = (expected == received)
 
         except Exception as e:
             test = isinstance(e, expected)
 
         assert test, assert_ex(
             'slice length',
-            result,
+            received,
             expected,
             hint='nominal: ' + str(nominal))

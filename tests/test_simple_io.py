@@ -31,10 +31,10 @@ def test_load_json():
         'ideal': 2,
         'nltk_language': 'valid',
         'stop_words': ['foo', 'bar']}
-    result = simple_io.load_json(path)
+    received = simple_io.load_json(path)
 
-    assert (result == expected), assert_ex(
-        'json data', repr(result), repr(expected))
+    assert (received == expected), assert_ex(
+        'json data', repr(received), repr(expected))
 
 
 def test_read_file():
@@ -42,7 +42,7 @@ def test_read_file():
     path = get_json_path('malformed')
 
     expected = '{\n'
-    result = simple_io.read_file(path)
+    received = simple_io.read_file(path)
 
-    assert (result == expected), assert_ex(
-        'read file', repr(result), repr(expected))
+    assert (received == expected), assert_ex(
+        'read file', repr(received), repr(expected))
