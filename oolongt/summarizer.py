@@ -143,22 +143,18 @@ class Summarizer:
         Returns:
             float -- score
         """
-        score = 0.0
+        summ = 0.0
 
-        if len(words) == 0:
-            return 0
+        if len(words) == summ:
+            return summ
 
-        for word in words:
-            word = word.lower()
-            index = -1
-
-        if word in top_keyword_list:
+        for word in [x for x in words if x in top_keyword_list]:
             index = top_keyword_list.index(word)
+            score = top_keywords[index]['total_score']
 
-        if index > -1:
-            score += top_keywords[index]['total_score']
+            summ += score
 
-        sbs = 1.0 / abs(len(words)) * score
+        sbs = 1.0 / len(words) * summ
 
         return sbs
 
