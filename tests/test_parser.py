@@ -210,21 +210,31 @@ class TestParser:
             expected {float} -- expected score
         """
         samples = [
-            (0, 10, .17),      # first decile
-            (0, 5, .23),       # second decile
-            (999, 1000, .15)]  # last sentence
+            (0, 10, .17),               # first decile
+            (0, 5, .23),                # second decile
+            (999, 1000, .15),           # last sentence
+            (999,    0, ValueError),    # out of range
+            (999,  999, ValueError), ]  # out of range
 
         for sample in samples:
             pos, sentence_count, expected = sample
 
             p = Parser()
-            result = p.get_sentence_position_score(pos, sentence_count)
 
-            assert compare_float(result, expected), assert_ex(
-                'sentence position score',
-                result,
-                expected,
-                hint='/'.join([str(pos), str(sentence_count)]))
+            try:
+                result = p.get_sentence_position_score(pos, sentence_count)
+
+                assert compare_float(result, expected), assert_ex(
+                    'sentence position score',
+                    result,
+                    expected,
+                    hint='/'.join([str(pos), str(sentence_count)]))
+            except Exception as e:
+                assert isinstance(e, expected), assert_ex(
+                    'sentence position score',
+                    e,
+                    expected
+                )
 
     def test_get_title_score(self):
         """Test Parser.get_title_score w/ data from select samples"""
