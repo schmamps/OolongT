@@ -1,6 +1,7 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 from json import JSONDecodeError
+from math import ceil
 from pathlib import Path
 from re import sub
 
@@ -162,33 +163,19 @@ class Parser:
         Returns:
             float -- score
         """
-        normalized = (index + 1) / (sentence_count * 1.0)
+        scores = [.17, .23, .14, .08, .05, .04, .06, .04, .04, .15]
 
-        if normalized > 0 and normalized <= 0.1:
-            return 0.17
-        elif normalized > 0.1 and normalized <= 0.2:
-            return 0.23
-        elif normalized > 0.2 and normalized <= 0.3:
-            return 0.14
-        elif normalized > 0.3 and normalized <= 0.4:
-            return 0.08
-        elif normalized > 0.4 and normalized <= 0.5:
-            return 0.05
-        elif normalized > 0.5 and normalized <= 0.6:
-            return 0.04
-        elif normalized > 0.6 and normalized <= 0.7:
-            return 0.06
-        elif normalized > 0.7 and normalized <= 0.8:
-            return 0.04
-        elif normalized > 0.8 and normalized <= 0.9:
-            return 0.04
-        elif normalized > 0.9 and normalized <= 1.0:
-            return 0.15
-        else:
+        try:
+            score_index = ceil(float(index + 1) / sentence_count * 10) - 1
+            position_score = scores[score_index]
+
+            return position_score
+
+        except (IndexError, ZeroDivisionError):
             raise ValueError(' '.join([
-                'Invalid index:',
+                'Invalid index/sentence count: ',
                 str(index),
-                'where sentence count:',
+                'of',
                 str(sentence_count)]))
 
     def get_title_score(self, title_words, sentence_words):
