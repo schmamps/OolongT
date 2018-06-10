@@ -102,7 +102,7 @@ class Summarizer:
             text {str} -- text of sentence
             title_words {List[str]} -- words in title
             top_keywords {List[Dict]} -- top keywords in overall text
-            keyword_list {List} -- values of 'word' in top_keywords
+            keyword_list {List[str]} -- values of 'word' in top_keywords
             num_sents {int} -- number of sentences in overall text
 
         Returns:
