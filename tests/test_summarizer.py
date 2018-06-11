@@ -38,13 +38,13 @@ class TestSummarizer:
     def test_get_sentences(self):
         """Test Summarizer.summarize() w/ data from select samples"""
         test_keys = [
-            'text',            # 0
-            'order',           # 1
-            'title_score',     # 2
-            'length_score',    # 3
-            'position_score',  # 4
-            'keyword_score',   # 5
-            'total_score'  ]   # 6
+            'text',
+            'order',
+            'title_score',
+            'length_score',
+            'position_score',
+            'keyword_score',
+            'total_score']
 
         for samp in get_samples(*SAMPLES):
             summ = Summarizer()
@@ -256,3 +256,76 @@ class TestSummarizer:
                         expected,
                         received,
                         hint=[score_type, snip(words)])
+
+    def test_get_sentence_length_score(self):
+        """Test Summarizer.get_sentence_length_score
+        w/ data from select samples"""
+
+        for samp in get_samples('empty',
+                                'sentence_short', 'sentence_medium',
+                                'sentence_ideal', 'sentence_overlong'):
+            summ = Summarizer(lang=samp.d['lang'])
+            words = samp.d['compare_words']
+
+            expected = samp.d['length_score']
+            received = summ.get_sentence_length_score(words)
+
+            assert compare_float(received, expected), assert_ex(
+                'sentence score',
+                received,
+                expected,
+                hint=' '.join(words))
+
+    def test_get_sentence_position_score(self):
+        """Test Parser.get_sentence_position_score
+
+        Arguments:
+            pos {int} -- sentence position (0-based)
+            sentence_count {int} -- number of sentences (len())
+            expected {float} -- expected score
+        """
+        samples = [
+            (0, 10, .17),               # first decile
+            (0, 5, .23),                # second decile
+            (999, 1000, .15),           # last sentence
+            (999,    0, ValueError),    # out of range
+            (999,  999, ValueError), ]  # out of range
+
+        for sample in samples:
+            pos, sentence_count, expected = sample
+
+            summ = Summarizer()
+
+            try:
+                received = summ.get_sentence_position_score(
+                    pos, sentence_count)
+
+                assert compare_float(received, expected), assert_ex(
+                    'sentence position score',
+                    received,
+                    expected,
+                    hint='/'.join([str(pos), str(sentence_count)]))
+            except Exception as e:
+                assert isinstance(e, expected), assert_ex(
+                    'sentence position score',
+                    e,
+                    expected
+                )
+
+    def test_get_title_score(self):
+        """Test Parser.get_title_score w/ data from select samples"""
+        for samp in get_samples('sentence_1word', 'sentence_short',
+                                'sentence_medium', 'sentence_ideal',
+                                'sentence_overlong'):
+            summ = Summarizer(lang=samp.d['lang'])
+            title_words = samp.d['compare_title']
+            sentence_words = samp.d['compare_words']
+
+            expected = samp.d['title_score']
+            received = summ.get_title_score(title_words, sentence_words)
+
+            assert compare_float(received, expected), assert_ex(
+                'title score',
+                received,
+                expected,
+                hint=[title_words, sentence_words])

@@ -1,7 +1,6 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 from json import JSONDecodeError
-from math import ceil
 from pathlib import Path
 from re import sub
 
@@ -36,7 +35,7 @@ class Parser:
 
         try:
             self.language = cfg_data['nltk_language']
-            self.ideal = int(cfg_data['ideal'])
+            self.ideal_sentence_length = int(cfg_data['ideal'])
             self.stop_words = cfg_data['stop_words']
 
         except (JSONDecodeError, KeyError):
@@ -136,68 +135,6 @@ class Parser:
             in unique_words]
 
         return (counted_keywords, len(all_keywords))
-
-    def get_sentence_length_score(self, words):
-        """Score sentence based on actual word count vs. ideal
-
-        Arguments:
-            words {List[str]} -- list of words in the sentence
-
-        Returns:
-            float -- score
-        """
-        score = (self.ideal - abs(self.ideal - len(words))) / self.ideal
-
-        return score
-
-    # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
-    # Sentence Extraction Based Single Document Summarization.
-    # International Institute of Information Technology, Hyderabad, India, 5.
-    def get_sentence_position_score(self, index, sentence_count):
-        """Score sentence based on position in a list of sentences
-
-        Arguments:
-            index {int} -- index of sentence in list
-            sentence_count {int} -- length of sentence list
-
-        Returns:
-            float -- score
-        """
-        scores = [.17, .23, .14, .08, .05, .04, .06, .04, .04, .15]
-
-        try:
-            score_index = ceil(float(index + 1) / sentence_count * 10) - 1
-            position_score = scores[score_index]
-
-            return position_score
-
-        except (IndexError, ZeroDivisionError):
-            raise ValueError(' '.join([
-                'Invalid index/sentence count: ',
-                str(index),
-                'of',
-                str(sentence_count)]))
-
-    def get_title_score(self, title_words, sentence_words):
-        """Score text by keywords in title
-
-        Arguments:
-            title {str} -- title of the text content
-            text {str} -- body of content
-
-        Returns:
-            float -- score
-        """
-        title_keywords = self.remove_stop_words(title_words)
-        sentence_keywords = self.remove_stop_words(sentence_words)
-        matched_keywords = [
-            word
-            for word in sentence_keywords
-            if word in title_keywords]
-
-        score = len(matched_keywords) / (len(title_keywords) * 1.0)
-
-        return score
 
     def split_sentences(self, text):
         """Split sentences via tokenizer

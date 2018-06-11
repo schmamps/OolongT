@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from math import ceil
+
 from . import parser
 from .nodash import pluck, sort_by
 
@@ -110,11 +112,11 @@ class Summarizer:
         """
         words = self.parser.get_all_words(text)
 
-        title_score = self.parser.get_title_score(title_words, words)
+        title_score = self.get_title_score(title_words, words)
         keyword_score = self.score_frequency(
             words, top_keywords, top_keyword_list)
-        length_score = self.parser.get_sentence_length_score(words)
-        position_score = self.parser.get_sentence_position_score(
+        length_score = self.get_sentence_length_score(words)
+        position_score = self.get_sentence_position_score(
             idx, num_sents)
 
         total_score = (
@@ -194,3 +196,67 @@ class Summarizer:
         dbs = (1.0 / k * (k + 1.0)) * summ
 
         return dbs
+
+    def get_sentence_length_score(self, words):
+        """Score sentence based on actual word count vs. ideal
+
+        Arguments:
+            words {List[str]} -- list of words in the sentence
+
+        Returns:
+            float -- score
+        """
+        ideal = self.parser.ideal_sentence_length
+        score = ideal - abs(ideal - len(words))
+        score /= ideal
+
+        return score
+
+    # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
+    # Sentence Extraction Based Single Document Summarization.
+    # International Institute of Information Technology, Hyderabad, India, 5.
+    def get_sentence_position_score(self, index, sentence_count):
+        """Score sentence based on position in a list of sentences
+
+        Arguments:
+            index {int} -- index of sentence in list
+            sentence_count {int} -- length of sentence list
+
+        Returns:
+            float -- score
+        """
+        scores = [.17, .23, .14, .08, .05, .04, .06, .04, .04, .15]
+
+        try:
+            score_index = ceil(float(index + 1) / sentence_count * 10) - 1
+            position_score = scores[score_index]
+
+            return position_score
+
+        except (IndexError, ZeroDivisionError):
+            raise ValueError(' '.join([
+                'Invalid index/sentence count: ',
+                str(index),
+                'of',
+                str(sentence_count)]))
+
+    def get_title_score(self, title_words, sentence_words):
+        """Score text by keywords in title
+
+        Arguments:
+            title {str} -- title of the text content
+            text {str} -- body of content
+
+        Returns:
+            float -- score
+        """
+        title_keywords = self.parser.remove_stop_words(title_words)
+        sentence_keywords = self.parser.remove_stop_words(sentence_words)
+        matched_keywords = [
+            word
+            for word in sentence_keywords
+            if word in title_keywords]
+
+        score = len(matched_keywords) / (len(title_keywords) * 1.0)
+
+        return score
