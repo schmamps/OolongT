@@ -1,9 +1,11 @@
 import os.path as path
 from pathlib import Path
 
+from oolongt.nodash import pluck
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
+from .constants import SAMPLES
 from .helpers import assert_ex, compare_float, compare_dict, get_samples
 from .sample import Sample
 
@@ -185,10 +187,15 @@ class TestParser:
 
     def test_split_sentences(self):
         """Test Parser.split_sentences w/ data from select samples"""
-        for samp in get_samples('sentence_short', 'sentence_list'):
+        for samp in get_samples('sentence_short', 'sentence_list', *SAMPLES):
+            DEFAULT_KEY = 'split_sentences'
             p = Parser(lang=samp.d['lang'])
 
-            expected = samp.d['split_sentences']
+            if DEFAULT_KEY in samp.d.keys():
+                expected = samp.d[DEFAULT_KEY]
+            else:
+                expected = pluck(samp.d['sentences'], 'text')
+
             received = p.split_sentences(samp.d['text'])
 
             assert (received == expected), assert_ex(
