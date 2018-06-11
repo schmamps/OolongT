@@ -44,7 +44,7 @@ class TestSummarizer:
             'length_score',    # 3
             'position_score',  # 4
             'keyword_score',   # 5
-            'keyword_score']   # 6
+            'total_score'  ]   # 6
 
         for samp in get_samples(*SAMPLES):
             summ = Summarizer()
