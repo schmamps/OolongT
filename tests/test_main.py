@@ -17,7 +17,7 @@ from .sample import Sample
 def test_score_sentences():
     for samp in get_samples(*SAMPLES):
         title = samp.d['title']
-        text = samp.d['text']
+        text = samp.text()
 
         for i, sentence in enumerate(score_sentences(title, text)):
             expected = samp.d['sentences'][i]['total_score']
@@ -88,7 +88,7 @@ def _test_summarize(sample_name, length, sort_key, reverse):
     """
     samp = Sample(DATA_PATH, sample_name)
     title = samp.d['title']
-    text = samp.d['text']
+    text = samp.text()
 
     expecteds = _get_expected_summaries(
         samp, length, sort_key, reverse)
