@@ -1,5 +1,6 @@
 """ Test class for Summarizer """
 from math import floor
+from pytest import approx
 
 from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
@@ -199,12 +200,19 @@ class TestSummarizer:
                 text = sentence['text']
                 words = summ.parser.get_all_words(text)
 
-                expected = sentence['keyword_score']
+                expected = (
+                    sentence['keyword_score'],
+                    sentence['sbs'],
+                    sentence['dbs'])
                 received = summ.score_frequency(
                     words, top_keywords, top_keyword_list)
+                hint = [samp.name, snip(text)]
 
-                assert compare_float(received, expected), assert_ex(
-                    'keyword score', received, expected)
+                for inv, desc in enumerate(['DBS', 'SBS', 'keyword score']):
+                    idx = abs(inv - 2)
+
+                    assert approx(expected[idx] == received[idx]), assert_ex(
+                        desc, received[idx], expected[idx], hint)
 
     def test_score_sentence(self):
         """Test Summarizer.score_sentence w/ data from select samples"""
