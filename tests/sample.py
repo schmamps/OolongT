@@ -24,3 +24,6 @@ class Sample:
             str -- text
         """
         return '\n  '.join([sent['text'] for sent in sentence_list])
+
+    def text(self):
+        return self.d['text']
