@@ -104,7 +104,7 @@ class Parser:
         return keywords
 
     def count_keyword(self, word, all_words):
-        """Count number of instances of unique_word in all_words
+        """Count number of instances of word in all_words
 
         Arguments:
             unique_word {str} -- word
