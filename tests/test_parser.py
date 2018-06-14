@@ -84,6 +84,25 @@ class TestParser:
                 assert (received in expected), assert_ex(
                     'all words', received, None)
 
+    def _count_keywords(self, keywords, insts):
+        """Reduce getKeywords() for counting
+
+        Arguments:
+            kwInstTuple {Tuple[Dict, int]} -- return of Parser.getKeywords()
+
+        Returns:
+            Dict[counts: Dict, words: List[str], total: int] - usable data
+        """
+        counts = {}
+        words = []
+
+        for kw in keywords:
+            word = kw['word']
+            counts[word] = kw['count']
+            words.append(word)
+
+        return {'counts': counts, 'words': words, 'total': insts}
+
     def _get_sample_keyword_data(self, samp):
         """Get sample data in Parser.get_keywords() pattern
 
@@ -93,7 +112,10 @@ class TestParser:
         Returns:
             tuple[List[Dict], int] -- return of Parser.get_keywords()
         """
-        return (samp.d['keywords'], samp.d['instances'])
+        keywords = samp.d['keywords']
+        insts = samp.d['instances']
+
+        return self._count_keywords(keywords, insts)
 
     def _get_keyword_result(self, text):
         """Get keywords from Parser
@@ -105,41 +127,41 @@ class TestParser:
             tuple[List[Dict], int] -- return of Parser.get_keywords()
         """
         p = Parser()
-        return p.get_keywords(text)
+        keywords, insts = p.get_keywords(text)
+
+        return self._count_keywords(keywords, insts)
 
     def test_get_keywords(self):
         """Test Parser.get_keywords w/ data from select samples"""
         for samp in get_samples('empty', 'essay_snark'):
             text = samp.d['text']
 
-            (expect_kws, expect_insts) = self._get_sample_keyword_data(samp)
-            (result_kws, result_insts) = self._get_keyword_result(text)
+            expected = self._get_sample_keyword_data(samp)
+            received = self._get_keyword_result(text)
 
-            assert (result_insts == expect_insts), assert_ex(
+            assert (received['total'] == expected['total']), assert_ex(
                 'total keyword count',
-                result_insts,
-                expect_insts)
+                received['total'],
+                expected['total'])
 
-            assert (len(result_kws) == len(expect_kws)), assert_ex(
-                'unique keyword count',
-                len(result_kws),
-                len(expect_kws))
+            for word in set(expected['words'] + received['words']):
+                assert word in expected['words'], assert_ex(
+                    'unexpected word received',
+                    word,
+                    None)
 
-            unexpected = [
-                kw
-                for kw in result_kws
-                if kw['word'] not in expect_kws.keys()]
+                assert word in received['words'], assert_ex(
+                    'expected word not received',
+                    word,
+                    None)
 
-            assert (len(unexpected) == 0), assert_ex(
-                'keyword present', unexpected, [])
-
-            miscounted = [
-                kw
-                for kw in result_kws
-                if kw['count'] != expect_kws[kw['word']]]
-
-            assert (len(miscounted) == 0), assert_ex(
-                'keyword count', miscounted, [])
+                exp_count = expected['counts'][word]
+                rcv_count = received['counts'][word]
+                assert exp_count == rcv_count, assert_ex(
+                    'bad keyword count',
+                    rcv_count,
+                    exp_count,
+                    hint=word)
 
     def _get_expected_keywords(self, keywords):
         """Get list of expected keywords in text
@@ -148,8 +170,8 @@ class TestParser:
             List[str] - list of keywords repeated by #occurrences in text
         """
         expected = []
-        for key in keywords.keys():
-            expected += [key] * keywords[key]
+        for kw in keywords:
+            expected += [kw['word']] * kw['count']
 
         return expected
 

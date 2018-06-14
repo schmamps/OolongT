@@ -18,11 +18,12 @@
 		"longer",
 		"title"
 	],
-	"keywords": {
-		"paragraph": 1,
-		"contains": 1,
-		"sentence": 1
-	},
+	"word_count": 3,
+	"keywords": [
+		{"word": "paragraph", "count": 1, "total_score": 0.50000000},
+		{"word": "contains", "count": 1, "total_score": 0.50000000},
+		{"word": "sentence", "count": 1, "total_score": 0.50000000}
+	],
 	"length_score": 0.25,
 	"title_score": 0.25,
 	"split_sentences": ["This paragraph contains one sentence."]
