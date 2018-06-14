@@ -1,6 +1,7 @@
 """Test for OoolongT exports"""
 from math import floor
 from pathlib import Path
+from pytest import approx
 from random import randint
 
 from oolongt.main import (
@@ -10,7 +11,7 @@ from oolongt.nodash import sort_by, pluck
 
 from .constants import DATA_PATH, SAMPLES
 from .helpers import (
-    assert_ex, compare_float, get_samples, snip)
+    assert_ex, get_samples, snip)
 from .sample import Sample
 
 
@@ -24,7 +25,7 @@ def test_score_sentences():
             received = sentence['total_score']
             hint = snip(sentence['text'])
 
-            assert compare_float(received, expected), assert_ex(
+            assert approx(received, expected), assert_ex(
                 'sentence score', received, expected, hint=hint)
 
 

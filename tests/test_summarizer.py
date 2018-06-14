@@ -7,7 +7,7 @@ from oolongt.summarizer import Summarizer
 
 from .constants import DATA_PATH, SAMPLES
 from .helpers import (
-    assert_ex, compare_float, compare_dict, get_samples, randomize_list, snip)
+    assert_ex, compare_dict, get_samples, randomize_list, snip)
 from .sample import Sample
 
 
@@ -178,7 +178,7 @@ class TestSummarizer:
                         received['count'],
                         keywords[idx]['count'])
 
-                    test = compare_float(
+                    test = approx(
                         received['total_score'], keywords[idx]['total_score'])
 
                     assert test, assert_ex(
@@ -232,7 +232,7 @@ class TestSummarizer:
                     idx, text,
                     title_words, top_keywords, keyword_list, num_sents)
                 received = output['total_score']
-                test = compare_float(received, expected)
+                test = approx(received, expected)
 
                 assert test, assert_ex(
                     'sentence score',
@@ -259,7 +259,7 @@ class TestSummarizer:
                     if score_type == 'sbs':
                         received = summ.sbs(words, top_keywords, keyword_list)
 
-                    assert compare_float(received, expected), assert_ex(
+                    assert approx(received, expected), assert_ex(
                         score_type,
                         expected,
                         received,
@@ -278,7 +278,7 @@ class TestSummarizer:
             expected = samp.d['length_score']
             received = summ.get_sentence_length_score(words)
 
-            assert compare_float(received, expected), assert_ex(
+            assert approx(received, expected), assert_ex(
                 'sentence score',
                 received,
                 expected,
@@ -308,7 +308,7 @@ class TestSummarizer:
                 received = summ.get_sentence_position_score(
                     pos, sentence_count)
 
-                assert compare_float(received, expected), assert_ex(
+                assert approx(received, expected), assert_ex(
                     'sentence position score',
                     received,
                     expected,
@@ -332,7 +332,7 @@ class TestSummarizer:
             expected = samp.d['title_score']
             received = summ.get_title_score(title_words, sentence_words)
 
-            assert compare_float(received, expected), assert_ex(
+            assert approx(received, expected), assert_ex(
                 'title score',
                 received,
                 expected,

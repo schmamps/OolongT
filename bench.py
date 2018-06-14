@@ -1,5 +1,6 @@
 from io import open as io_open
 from math import floor
+from pytest import approx
 from time import time
 
 from oolongt.nodash import pluck, sort_by
@@ -7,7 +8,7 @@ from oolongt.summarizer import Summarizer
 
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (
-    assert_ex, compare_float, compare_dict, get_samples, randomize_list, snip)
+    assert_ex, compare_dict, get_samples, randomize_list, snip)
 from tests.sample import Sample
 
 

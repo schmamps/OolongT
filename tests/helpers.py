@@ -1,4 +1,5 @@
 """ Test Helpers """
+from pytest import approx
 from random import shuffle
 
 from .constants import DATA_PATH
@@ -48,19 +49,6 @@ def randomize_list(src):
     return dupe
 
 
-def compare_float(val1, val2):
-    """Compare two floating point values
-
-    Arguments:
-        val1 {float} -- value 1
-        val2 {float} -- value 2
-
-    Returns:
-        bool -- the two values are close enough
-    """
-    return (abs(val1 * 100000 - val2 * 100000) < 2.0)
-
-
 def compare_list(left, right):
     """Compare left to right, generate diff
 
@@ -107,7 +95,7 @@ def compare_dict(left, right, keys=False):
         comp = right.get(key, None)
 
         if isinstance(left[key], float) or isinstance(comp, float):
-            same = compare_float(left[key], comp)
+            same = approx(left[key], comp)
         else:
             same = (left[key] == comp)
 

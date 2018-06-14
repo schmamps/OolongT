@@ -1,12 +1,13 @@
 import os.path as path
 from pathlib import Path
+from pytest import approx
 
 from oolongt.nodash import pluck
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
 from .constants import SAMPLES
-from .helpers import assert_ex, compare_float, compare_dict, get_samples
+from .helpers import assert_ex, compare_dict, get_samples
 from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
