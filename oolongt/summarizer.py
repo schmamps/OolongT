@@ -65,7 +65,11 @@ class Summarizer:
         counts = pluck(keywords, 'count')
         top_10 = sorted(counts, reverse=True)[:10]
 
-        return top_10.pop()
+        try:
+            return top_10.pop()
+
+        except IndexError:
+            return 0
 
     def get_top_keywords(self, text, source, category):
         """Get list of the 1st-10th ranked keywords
@@ -78,10 +82,10 @@ class Summarizer:
         Returns:
             List[Dict] -- ten most frequently used words (more if same count)
         """
-        keywords, wordCount = self.parser.get_keywords(text)
+        keywords, word_count = self.parser.get_keywords(text)
         minimum = self.get_top_keyword_threshold(keywords)
         top_kws = [
-            self.score_keyword(kw, wordCount)
+            self.score_keyword(kw, word_count)
             for kw in keywords
             if kw['count'] >= minimum]
 
@@ -93,7 +97,7 @@ class Summarizer:
         dbs_feature = self.dbs(words, top_keywords, keyword_list)
         keyword_freq = k * (sbs_feature + dbs_feature)
 
-        return keyword_freq
+        return keyword_freq, sbs_feature, dbs_feature
 
     def score_sentence(self, idx, text,
                        title_words, top_keywords, top_keyword_list, num_sents):
@@ -113,7 +117,7 @@ class Summarizer:
         words = self.parser.get_all_words(text)
 
         title_score = self.get_title_score(title_words, words)
-        keyword_score = self.score_frequency(
+        keyword_score, sbs, dbs = self.score_frequency(
             words, top_keywords, top_keyword_list)
         length_score = self.get_sentence_length_score(words)
         position_score = self.get_sentence_position_score(
@@ -126,6 +130,8 @@ class Summarizer:
             position_score * 1.0) / 4.0
 
         return {
+            'sbs': sbs,
+            'dbs': dbs,
             'title_score': title_score,
             'length_score': length_score,
             'position_score': position_score,
