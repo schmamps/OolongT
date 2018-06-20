@@ -25,5 +25,10 @@ class Sample:
         """
         return '\n  '.join([sent['text'] for sent in sentence_list])
 
+    @property
     def text(self):
         return self.d['text']
+
+    @property
+    def title(self):
+        return self.d['title']
