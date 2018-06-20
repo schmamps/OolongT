@@ -42,7 +42,7 @@ class Parser:
             raise ValueError(
                 'Invalid configuration for ' + lang + ' in ' + root)
 
-    def load_language(self, root, lang):
+    def load_language(self, root=BUILTIN, lang=DEFAULT_LANG):
         """Load language from specified path
 
         Arguments:
