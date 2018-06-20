@@ -29,7 +29,7 @@ def generate():
 
         for samp in get_samples():
             receiveds = summ.get_sentences(
-                samp.text(), samp.d['title'], None, None)
+                samp.text, samp.title, None, None)
 
             by_score = sorted(receiveds, key=lambda x: -x['total_score'])
             for rank, _ in enumerate(by_score):

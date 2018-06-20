@@ -16,7 +16,7 @@ def generate():
     p = Parser()
 
     for samp in get_samples():
-        receiveds, word_count = p.get_keywords(samp.text())
+        receiveds, word_count = p.get_keywords(samp.text)
         keywords = sorted(receiveds, key=lambda x: -x['count'])
         keywords = [summ.score_keyword(w, word_count) for w in keywords]
 
