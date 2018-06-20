@@ -1,3 +1,6 @@
+""" lodash-like functionality """
+
+
 def pluck(iterable, key):
     """Get value at specified key in a list of Dicts
 
