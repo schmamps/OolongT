@@ -1,13 +1,14 @@
+""" Test class for Parser """
 import os.path as path
 from pathlib import Path
-from pytest import approx
+from pytest import approx, mark
 
 from oolongt.nodash import pluck
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 
 from .constants import SAMPLES
-from .helpers import assert_ex, compare_dict, get_samples
+from .helpers import assert_ex, compare_dict, get_samples, check_exception
 from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
@@ -33,66 +34,91 @@ DEFAULT_LANG_EXPECTED = {
 
 
 class TestParser:
-    def load_language(self, expected, root=False, lang=False):
-        """Load language and compare received with expected
+    def _compare_loaded_language(self, received, expected):
+        """Compare loaded language data to expected
 
         Arguments:
-            expected {Dict} -- expected received
+            received {dict} -- received data
+            expected {dict} -- expected data
 
-        Keyword Arguments:
-            path {str or bool} -- path to language dir (default: {False})
-            lang {str or bool} -- language subdirectory (default: {False})
+        Raises:
+            ValueError -- Wrong data
+        """
+        if not (len(received['stop_words']) == expected['stop_words']):
+            raise ValueError('stop word mismatch')
+
+        if not compare_dict(expected, received, ignore=['stop_words']):
+            raise ValueError('wrong language data loaded')
+
+        return True
+
+    @mark.parametrize(
+        'expected,kwargs',
+        [
+            # defaults
+            [DEFAULT_LANG_EXPECTED, {}],
+            # by language
+            [DEFAULT_LANG_EXPECTED, {'lang': 'en'}],
+            # by path
+            [DEFAULT_LANG_EXPECTED, {'root': BUILTIN}],
+            # by language and path
+            [TEST_LANG_EXPECTED,
+                {'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH}],
+            # attempted traversal
+            [PermissionError, {'lang': '../../../etc'}],
+            # file not found
+            [FileNotFoundError, {'root': Path(__file__)}],
+            # invalid config
+            [ValueError, {'lang': 'malformed', 'root': BASE_LANG_PATH}],
+        ]
+    )
+    def test_load_language(self, expected, kwargs):
+        """Test Parser.load_language()
+
+        Arguments:
+            expected {dict} -- expected received
+            kwargs {dict} -- kwargs passed to Parser
         """
         p = Parser()
         test = False
 
-        samples = [
-            # defaults
-            (DEFAULT_LANG_EXPECTED, {}),
-            # by language
-            (DEFAULT_LANG_EXPECTED, {'lang': 'en'}),
-            # by path
-            (DEFAULT_LANG_EXPECTED, {'root': BUILTIN}),
-            # by language and path
-            (TEST_LANG_EXPECTED,
-                {'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH}),
-            # attempted traversal
-            (PermissionError, {'lang': '../../../etc'}),
-            # file not found
-            (FileNotFoundError, {'root': Path(__file__)}),
-            # invalid config
-            (ValueError, {'lang': 'malformed', 'root': BASE_LANG_PATH})]
+        try:
+            received = p.load_language(**kwargs)
+            test = self._compare_loaded_language(received, expected)
 
-        for sample in samples:
-            expected, kwargs = sample
+        except (PermissionError, FileNotFoundError, ValueError) as e:
+            test = check_exception(e, expected) is not None
 
-            try:
-                received = p.load_language(**kwargs)
-                test = compare_dict(expected, received)
+        assert test, assert_ex('config', received, expected)
 
-            except Exception as e:
-                test = isinstance(e, expected)
+    @mark.parametrize('samp', get_samples([
+        'sentence_1word',
+        'sentence_overlong',
+    ]))
+    def test_get_all_words(self, samp):
+        """Test Parser.get_all_words()
 
-            assert test, assert_ex('config', received, expected)
+        Arguments:
+            samp {Sample} -- sample data
+        """
+        p = Parser()
 
-    def test_get_all_words(self):
-        """Get all words in text from select samples"""
-        for samp in get_samples('sentence_1word', 'sentence_overlong'):
-            p = Parser()
-
-            expected = samp.d['compare_words']
-            for received in p.get_all_words(samp.d['text']):
-                assert (received in expected), assert_ex(
-                    'all words', received, None)
+        expected = samp.d['compare_words']
+        for received in p.get_all_words(samp.text):
+            assert (received in expected), assert_ex(
+                'all words', received, None)
 
     def _count_keywords(self, keywords, insts):
         """Reduce getKeywords() for counting
 
+        TODO: update this docstring
+
         Arguments:
-            kwInstTuple {Tuple[Dict, int]} -- return of Parser.getKeywords()
+            keywords {list[dict]} -- keywords
+            insts {int} -- instances
 
         Returns:
-            Dict[counts: Dict, words: List[str], total: int] - usable data
+            dict[counts: dict, words: list[str], total: int] - usable data
         """
         counts = {}
         words = []
@@ -108,10 +134,10 @@ class TestParser:
         """Get sample data in Parser.get_keywords() pattern
 
         Arguments:
-            samp {Sample} -- instance of Sample class
+            samp {Sample} -- sample data
 
         Returns:
-            tuple[List[Dict], int] -- return of Parser.get_keywords()
+            tuple[list[dict], int] -- return of Parser.get_keywords()
         """
         keywords = samp.d['keywords']
         insts = samp.d['instances']
@@ -125,50 +151,55 @@ class TestParser:
             text {str} -- body of content
 
         Returns:
-            tuple[List[Dict], int] -- return of Parser.get_keywords()
+            tuple[list[dict], int] -- return of Parser.get_keywords()
         """
         p = Parser()
         keywords, insts = p.get_keywords(text)
 
         return self._count_keywords(keywords, insts)
 
-    def test_get_keywords(self):
-        """Test Parser.get_keywords w/ data from select samples"""
-        for samp in get_samples('empty', 'essay_snark'):
-            text = samp.d['text']
+    @mark.parametrize('samp', get_samples([
+        'empty',
+        'essay_snark',
+    ]))
+    def test_get_keywords(self, samp):
+        """Test Parser.get_keywords()
 
-            expected = self._get_sample_keyword_data(samp)
-            received = self._get_keyword_result(text)
+        Arguments:
+            samp {Sample} -- sample data
+        """
+        expected = self._get_sample_keyword_data(samp)
+        received = self._get_keyword_result(samp.text)
 
-            assert (received['total'] == expected['total']), assert_ex(
-                'total keyword count',
-                received['total'],
-                expected['total'])
+        assert (received['total'] == expected['total']), assert_ex(
+            'total keyword count',
+            received['total'],
+            expected['total'])
 
-            for word in set(expected['words'] + received['words']):
-                assert word in expected['words'], assert_ex(
-                    'unexpected word received',
-                    word,
-                    None)
+        for word in set(expected['words'] + received['words']):
+            assert word in expected['words'], assert_ex(
+                'unexpected word received',
+                word,
+                None)
 
-                assert word in received['words'], assert_ex(
-                    'expected word not received',
-                    word,
-                    None)
+            assert word in received['words'], assert_ex(
+                'expected word not received',
+                word,
+                None)
 
-                exp_count = expected['counts'][word]
-                rcv_count = received['counts'][word]
-                assert exp_count == rcv_count, assert_ex(
-                    'bad keyword count',
-                    rcv_count,
-                    exp_count,
-                    hint=word)
+            exp_count = expected['counts'][word]
+            rcv_count = received['counts'][word]
+            assert exp_count == rcv_count, assert_ex(
+                'bad keyword count',
+                rcv_count,
+                exp_count,
+                hint=word)
 
     def _get_expected_keywords(self, keywords):
         """Get list of expected keywords in text
 
         Returns:
-            List[str] - list of keywords repeated by #occurrences in text
+            list[str] - list of keywords repeated by #occurrences in text
         """
         expected = []
         for kw in keywords:
@@ -176,97 +207,134 @@ class TestParser:
 
         return expected
 
-    def test_get_keyword_list(self):
-        """Test list of all words in text"""
-        sample_name = 'essay_snark'
-        samp = Sample(DATA_PATH, sample_name)
+    @mark.parametrize('samp', get_samples(['essay_snark'] + SAMPLES))
+    def test_get_keyword_list(self, samp):
+        """Test Parser.get_keyword_list()
+
+        Arguments:
+            samp {Sample} -- sample data
+        """
         p = Parser(lang=samp.d['lang'])
 
         expected = sorted(self._get_expected_keywords(samp.d['keywords']))
-        received = sorted(p.get_keyword_list(samp.d['text']))
+        received = sorted(p.get_keyword_list(samp.text))
 
         assert (received == expected), assert_ex(
             'keyword list', expected, received)
 
-    def test_count_keyword(self):
+    @mark.parametrize('samp', [
+        ('zero', 0),
+        ('one', 1),
+        ('two', 2),
+        ('three', 3),
+    ])
+    def test_count_keyword(self, samp):
+        """Test Parser.count_keyword()
+
+        Arguments:
+            samp {Tuple[str, int]} -- search string, count
+        """
         p = Parser()
         all_words = ['one', 'two', 'three', 'two', 'three', 'three']
 
-        samples = [
-            ('zero', 0),
-            ('one', 1),
-            ('two', 2),
-            ('three', 3)]
+        unique_word, expected = samp
+        received = p.count_keyword(unique_word, all_words)['count']
 
-        for sample in samples:
-            unique_word, expected = sample
-            received = p.count_keyword(unique_word, all_words)['count']
+        assert (received == expected), assert_ex(
+            'counting keyword',
+            received,
+            expected,
+            hint=unique_word)
 
-            assert (received == expected), assert_ex(
-                'counting keyword',
-                received,
-                expected,
-                hint=unique_word)
+    @mark.parametrize('samp', get_samples(
+        ['sentence_short', 'sentence_list', ] + SAMPLES
+    ))
+    def test_split_sentences(self, samp):
+        """Test Parser.split_sentences()
 
-    def test_split_sentences(self):
-        """Test Parser.split_sentences w/ data from select samples"""
-        for samp in get_samples('sentence_short', 'sentence_list', *SAMPLES):
-            DEFAULT_KEY = 'split_sentences'
-            p = Parser(lang=samp.d['lang'])
+        Arguments:
+            samp {Sample} -- sample data
+        """
+        DEFAULT_KEY = 'split_sentences'
+        p = Parser(lang=samp.d['lang'])
 
-            if DEFAULT_KEY in samp.d.keys():
-                expected = samp.d[DEFAULT_KEY]
-            else:
-                expected = pluck(samp.d['sentences'], 'text')
+        if DEFAULT_KEY in samp.d.keys():
+            expected = samp.d[DEFAULT_KEY]
+        else:
+            expected = pluck(samp.d['sentences'], 'text')
 
-            received = p.split_sentences(samp.d['text'])
+        received = p.split_sentences(samp.text)
 
-            assert (received == expected), assert_ex(
-                'sentence split',
-                received,
-                expected)
+        assert (received == expected), assert_ex(
+            'sentence split',
+            received,
+            expected)
 
-    def test_split_words(self):
-        """ Test Parser.split_words w/ data from select samples"""
-        for samp in get_samples('empty', 'sentence_1word', 'sentence_medium'):
-            p = Parser(lang=samp.d['lang'])
-            text = samp.d['text']
+    @mark.parametrize('samp', get_samples([
+        'empty',
+        'sentence_1word',
+        'sentence_medium',
+    ]))
+    def test_split_words(self, samp):
+        """Test Parser.split_words()
 
-            expected = samp.d['split_words']
-            received = p.split_words(text)
+        Arguments:
+            samp {Sample} -- sample data
+        """
 
-            assert (received == expected), assert_ex(
-                'word split',
-                expected,
-                received,
-                hint=samp.name)
+        p = Parser(lang=samp.d['lang'])
+        text = samp.text
 
-    def test_remove_punctuations(self):
-        """Test Parser.remove_punctuations w/ data from select samples"""
-        for samp in get_samples('empty', 'sentence_1word', 'sentence_list'):
-            p = Parser(lang=samp.d['lang'])
+        expected = samp.d['split_words']
+        received = p.split_words(text)
 
-            expected = samp.d['remove_punctuations']
-            received = p.remove_punctuations(samp.d['text'])
+        assert (received == expected), assert_ex(
+            'word split',
+            expected,
+            received,
+            hint=samp.name)
 
-            assert (received == expected), assert_ex(
-                'punctuation removal',
-                repr(received),
-                repr(expected))
+    @mark.parametrize('samp', get_samples([
+        'empty',
+        'sentence_1word',
+        'sentence_list',
+    ]))
+    def test_remove_punctuations(self, samp):
+        """Test Parser.remove_punctuations()
 
-    def test_remove_stop_words(self):
-        """Test Parser.remove_stop_words w/ data from the select samples"""
-        for samp in get_samples('empty',
-                                'sentence_1word', 'sentence_2words',
-                                'sentence_list'):
-            p = Parser(lang=samp.d['lang'])
-            words = p.split_words(samp.d['text'])
+        Arguments:
+            samp {Sample} -- sample data
+        """
+        p = Parser(lang=samp.d['lang'])
 
-            expected = samp.d['remove_stop_words']
-            received = p.remove_stop_words(words)
+        expected = samp.d['remove_punctuations']
+        received = p.remove_punctuations(samp.text)
 
-            assert (received == expected), assert_ex(
-                'remove stop words',
-                received,
-                expected,
-                hint=samp.name)
+        assert (received == expected), assert_ex(
+            'punctuation removal',
+            repr(received),
+            repr(expected))
+
+    @mark.parametrize('samp', get_samples([
+        'empty',
+        'sentence_1word',
+        'sentence_2words',
+        'sentence_list',
+    ]))
+    def test_remove_stop_words(self, samp):
+        """Test Parser.remove_stop_words()
+
+        Arguments:
+            samp {Sample} -- sample data
+        """
+        p = Parser(lang=samp.d['lang'])
+        words = p.split_words(samp.text)
+
+        expected = samp.d['remove_stop_words']
+        received = p.remove_stop_words(words)
+
+        assert (received == expected), assert_ex(
+            'remove stop words',
+            received,
+            expected,
+            hint=samp.name)
