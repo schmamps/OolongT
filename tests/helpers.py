@@ -1,66 +1,80 @@
-""" Test Helpers """
-from pytest import approx
+""" Helpers for testing """
 from random import shuffle
+
+from pytest import approx
 
 from .constants import DATA_PATH
 from .sample import Sample
 
 
-def snip(val, max_len=20, separator=' ', ellip="..."):
-    """Truncate text
+def snip(val, max_len=20, list_separator=', ', ellip="..."):
+    # type: (any, int, str, str) -> str
+    """Truncate `val` to specified length
 
     Arguments:
         val {str} -- string to snip
 
     Keyword Arguments:
         max_len {int} -- maximum length of string (default: {20})
-        separator {str} -- if list passed,
+        list_separator {str} -- if list passed,
             string to join members (default: {' '})
         ellip {str} -- filler text if truncated (default: {"..."})
 
     Returns:
         str -- text, truncated if necessary
+
+    >>> snip('1234567890')
+    '1234567890'
+    >>> snip('123456789012345678901')
+    '12345678901234567...'
+    >>> snip('1234567890', max_len=9 ellip='!')
+    '12345678!'
     """
-
-    text = val
-
-    if isinstance(val, list):
-        text = separator.join(val)
+    text = list_separator.join(val) if isinstance(val, list) else str(val)
 
     if len(text) <= max_len:
         return text
 
-    return text[:max_len-len(ellip)] + ellip
+    clip = text[:max_len - len(ellip)]
+
+    return clip + ellip
 
 
 def randomize_list(src):
-    """Reorder a copy of the supplied list
+    # type: (list[any]) -> list[any]
+    """Get a reordered copy of `src`
 
     Arguments:
         src {list} -- source list
 
     Returns:
-        list -- copy of source list in different order
+        list -- copy of source list in different order (if possible)
+
+    >>> [] == randomize_list([])
+    True
+    >>> [1, 2, 3] == randomize_list([1, 2, 3])
+    False
     """
     dupe = list(src)
-    while dupe == src:
+    while (dupe == src and len(src) > 1):
         shuffle(dupe)
 
     return dupe
 
 
 def compare_list(left, right):
-    """Compare left to right, generate diff
+    # type: (list, list) -> str
+    """Compare `left` as a subset of `right`
 
     Arguments:
-        left {List[Any]} - reference list
-        right {List[Any]} - list to compare against
+        left {list[Any]} - reference list
+        right {list[Any]} - list to compare against
 
     Returns:
         str -- length of left list, REPR of exclusive values
 
     >>> compare_list([1, 2, 3], [2, 3, 4])
-    "len: 3, exclusive: ['1']"
+    'len: 3, exclusive: ['1']'
     >>> compare_list([1, 2, 3], [1, 2, 3, 4])
     'len: 3, exclusive: []'
     """
@@ -70,31 +84,33 @@ def compare_list(left, right):
     return ', '.join([len_str, diff_str])
 
 
-def compare_dict(left, right, keys=False):
-    """Compare left to right
+def compare_dict(left, right, keys=[], ignore=[]):
+    # type: (dict, dict, list[any], list[any]) -> bool
+    """Compare `left` as a subset of `right`
 
     Arguments:
-        left {Dict} -- lowest common denominator Dict
-        right {Dict} -- Dict that should contain the same values
+        left {dict} -- lowest common denominator Dict
+        right {dict} -- Dict that should contain the same key/value pairs
 
     Keyword Arguments:
-        keys {List[any]} -- keys to compare instead of left.keys()
+        keys {list[any]} -- keys to compare (Default: left.keys())
+        ignore {list[any]} - keys to ignore (Default: [])
+
     >>> compare_dict({1: 1}, {1: 1})
-    True
-    >>> compare_dict({1: 1}, {1: 1, 2: 2})
     True
     >>> compare_dict({1: 1, 2: 2}, {1: 1})
     False
     >>> compare_dict({1: 1, 2: 2}, {1: 1}, keys=[1])
     True
     """
-    keys = keys or left.keys()
-    same = True
+    keys = [key for key in (keys or left.keys()) if key not in ignore]
+    same = False
 
     for key in keys:
         comp = right.get(key, None)
+        is_float = isinstance(left[key], float) or isinstance(comp, float)
 
-        if isinstance(left[key], float) or isinstance(comp, float):
+        if is_float:
             same = approx(left[key], comp)
         else:
             same = (left[key] == comp)
@@ -106,26 +122,19 @@ def compare_dict(left, right, keys=False):
 
 
 def assert_ex(msg, received, expected, hint=None):
-    """Generate detailed AssertionError exceptions
+    # type: (str, any, any, any) -> str
+    """Generate detailed AssertionError messages
 
     Arguments:
-        msg {str} -- description of error
-        received {any} -- outcome of test
-        expected {any} -- expected outcome of test
+        msg {str} -- description of test
+        received {any} -- received value
+        expected {any} -- expected value
+
+    Keyword Arguments:
+        hint {any} -- add'l detail for description (default: {None})
 
     Returns:
-        bool -- tested condition
-
-    >>> rv = [0]
-    >>> ev = [1]
-    >>> assert_ex('Mismatch', rv, ev)[:63]
-    "Mismatch\\received   > len: 1, exclusive: ['0']\\nexpected > len: 1,"
-    >>> rv = int(1)
-    >>> rc = len(str(rv))
-    >>> ev = float(1)
-    >>> ec = len(str(ev))
-    >>> assert_ex('Precision', rv, ev, hint='float')
-    "Precision ('float')\\received > 1\\nexpected > 1.0"
+        str -- detailed error message
     """
     if hint is not None:
         hint = ' (' + repr(hint) + ')'
@@ -145,11 +154,69 @@ def assert_ex(msg, received, expected, hint=None):
         'expected > ' + exp_str])
 
 
-def get_samples(*args):
+def get_sample(sample_name):
+    # type: (str) -> Sample
+    """Get Sample by name
+
+    Arguments:
+        sample_name {str} -- name of sample
+
+    Returns:
+        Sample -- sample data
+    """
+    return Sample(DATA_PATH, sample_name)
+
+
+def get_samples(sample_names):
+    # type (list[str]) -> list[Sample]
     """Get Samples by name
 
     Returns:
         Iterator[Sample] - iterable of samples
     """
-    for sample_name in args:
-        yield Sample(DATA_PATH, sample_name)
+    for sample_name in sample_names:
+        yield get_sample(sample_name)
+
+
+def get_sample_sentences(sample_names):
+    # type (list[str]) -> list[dict]
+    """Get Sample, each sentence from Sample
+
+    Arguments:
+        sample_names {list[str]} -- names of samples
+
+    Returns:
+        Iterator[Sample] -- Iterator of Samples
+    """
+    for sample_name in sample_names:
+        samp = get_sample(sample_name)
+
+        for sentence in samp.d['sentences']:
+            yield samp, sentence
+
+
+def check_exception(catch, expected):
+    # type: (Exception, any) -> any
+    """Compare caught exception to expected value
+
+    Arguments:
+        catch {Exception} -- caught exception
+        expected {any} -- expected exception (or value if unexpected)
+
+    Returns:
+        any -- expected if match, catch if no match
+    >>> check_exception(ValueError, ValueError)
+    ValueError
+    >>> check_exception(KeyError, IndexError)
+    KeyError
+    >>> check_exception(IndexError, 0)
+    IndexError
+    """
+    try:
+        if isinstance(catch, expected):
+            return expected
+
+    except TypeError:
+        pass
+
+    return catch
