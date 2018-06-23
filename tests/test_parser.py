@@ -35,6 +35,7 @@ DEFAULT_LANG_EXPECTED = {
 
 class TestParser:
     def _compare_loaded_language(self, received, expected):
+        # type: (dict, dict) -> bool
         """Compare loaded language data to expected
 
         Arguments:
@@ -73,6 +74,7 @@ class TestParser:
         ]
     )
     def test_load_language(self, expected, kwargs):
+        # type: (dict, dict) -> None
         """Test Parser.load_language()
 
         Arguments:
@@ -96,6 +98,7 @@ class TestParser:
         'sentence_overlong',
     ]))
     def test_get_all_words(self, samp):
+        # type: (Sample) -> None
         """Test Parser.get_all_words()
 
         Arguments:
@@ -109,6 +112,7 @@ class TestParser:
                 'all words', received, None)
 
     def _count_keywords(self, keywords, insts):
+        # type: (list[dict], int) -> dict
         """Reduce getKeywords() for counting
 
         TODO: update this docstring
@@ -131,6 +135,7 @@ class TestParser:
         return {'counts': counts, 'words': words, 'total': insts}
 
     def _get_sample_keyword_data(self, samp):
+        # type: (Sample) -> list[dict]
         """Get sample data in Parser.get_keywords() pattern
 
         Arguments:
@@ -145,6 +150,7 @@ class TestParser:
         return self._count_keywords(keywords, insts)
 
     def _get_keyword_result(self, text):
+        # type: (text) -> list[dict]
         """Get keywords from Parser
 
         Arguments:
@@ -163,6 +169,7 @@ class TestParser:
         'essay_snark',
     ]))
     def test_get_keywords(self, samp):
+        # type: (Sample) -> None
         """Test Parser.get_keywords()
 
         Arguments:
@@ -196,6 +203,7 @@ class TestParser:
                 hint=word)
 
     def _get_expected_keywords(self, keywords):
+        # type: (list[dict]) -> list[str]
         """Get list of expected keywords in text
 
         Returns:
@@ -209,6 +217,7 @@ class TestParser:
 
     @mark.parametrize('samp', get_samples(['essay_snark'] + SAMPLES))
     def test_get_keyword_list(self, samp):
+        # type: (Sample) -> None
         """Test Parser.get_keyword_list()
 
         Arguments:
@@ -229,6 +238,7 @@ class TestParser:
         ('three', 3),
     ])
     def test_count_keyword(self, samp):
+        # type: (Sample) -> None
         """Test Parser.count_keyword()
 
         Arguments:
@@ -250,6 +260,7 @@ class TestParser:
         ['sentence_short', 'sentence_list', ] + SAMPLES
     ))
     def test_split_sentences(self, samp):
+        # type: (Sample) -> None
         """Test Parser.split_sentences()
 
         Arguments:
@@ -276,6 +287,7 @@ class TestParser:
         'sentence_medium',
     ]))
     def test_split_words(self, samp):
+        # type: (Sample) -> None
         """Test Parser.split_words()
 
         Arguments:
@@ -300,6 +312,7 @@ class TestParser:
         'sentence_list',
     ]))
     def test_remove_punctuations(self, samp):
+        # type: (Sample) -> None
         """Test Parser.remove_punctuations()
 
         Arguments:
@@ -322,6 +335,7 @@ class TestParser:
         'sentence_list',
     ]))
     def test_remove_stop_words(self, samp):
+        # type: (Sample) -> None
         """Test Parser.remove_stop_words()
 
         Arguments:
