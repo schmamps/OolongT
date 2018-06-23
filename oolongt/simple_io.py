@@ -1,18 +1,18 @@
-""" Quick and dirty JSON loader """
-
+"""Quick and dirty file readers"""
 from io import open as io_open
 from json import loads
 from sys import version_info
 
 
 def load_json(path):
-    """Load data from the specified path
+    # type: (str) -> dict
+    """Load JSON from file at `path`
 
     Arguments:
             path {str} -- path to file
 
     Returns:
-            Dict -- data in file
+            dict -- data in file
     """
     contents = read_file(path)
 
@@ -20,7 +20,8 @@ def load_json(path):
 
 
 def read_file(path):
-    """Load text from the specified path
+    # type: (str) -> str
+    """Load text from file at `path`
 
     Arguments:
             path {str} -- path to file
