@@ -1,5 +1,4 @@
-# !/usr/bin/python
-# -*- coding: utf-8 -*-
+"""Text parser"""
 from json import JSONDecodeError
 from pathlib import Path
 from re import sub
@@ -16,11 +15,8 @@ JSON_SUFFIX = '.json'
 
 class Parser:
     def __init__(self, root=BUILTIN, lang=DEFAULT_LANG):
-        """Initialize class for specified language
-
-        Load data from:
-            {path}/{lang}/{lang}.lang.json
-            {path}/{lang}/{lang}.tokenizer.pickle
+        # type: (str, str) -> None
+        """Initialize class with `root`/`lang`.json
 
         Keyword Arguments:
             path {any} -- override builtin language dir
@@ -43,7 +39,8 @@ class Parser:
                 'Invalid configuration for ' + lang + ' in ' + root)
 
     def load_language(self, root=BUILTIN, lang=DEFAULT_LANG):
-        """Load language from specified path
+        # type: (str, str) -> dict
+        """Initialize class with `root`/`lang`.json
 
         Arguments:
             path {str} -- Root directory for language data
@@ -54,7 +51,7 @@ class Parser:
             FileNotFoundError -- Language file(s) not found
 
         Returns:
-            Dict -- data in language JSON + path to tokenizer pickle
+            dict -- class initialization data
         """
         root_path = Path(root)
         cfg_path = root_path.joinpath(lang + '.json')
@@ -76,13 +73,14 @@ class Parser:
         return cfg_data
 
     def get_all_words(self, text):
-        """Get all the words from a text
+        # type: (str) -> list[str]
+        """List words in `text` sequentially
 
         Arguments:
             text {str} -- text
 
         Returns:
-            List[str] -- sequential list of words in text
+            list[str] -- words in text
         """
         bare = self.remove_punctuations(text)
         split = self.split_words(bare)
@@ -90,13 +88,14 @@ class Parser:
         return split
 
     def get_keyword_list(self, text):
-        """Extract all meaningful words from text into a list
+        # type: (str) -> list[str]
+        """List all meaningful words in `text`
 
         Arguments:
             text {str} -- text
 
         Returns:
-            List[str] -- words in text, minus stop words
+            list[str] -- words in text, minus stop words
         """
         all_words = self.get_all_words(text)
         keywords = self.remove_stop_words(all_words)
@@ -104,27 +103,29 @@ class Parser:
         return keywords
 
     def count_keyword(self, word, all_words):
-        """Count number of instances of word in all_words
+        # type: (str, list[str]) -> dict
+        """Count number of instances of `word` in `all_words`
 
         Arguments:
             unique_word {str} -- word
-            all_words {List[str]} -- list of all words in text
+            all_words {list[str]} -- list of all words in text
 
         Returns:
-            Dict -- {word: unique_word, count: (instances in all_words)}
+            dict -- {word: unique_word, count: (instances in all_words)}
         """
         return {
             'word': word,
             'count': all_words.count(word)}
 
     def get_keywords(self, text):
-        """Get counted list of keywords and total number of keywords
+        # type: (str) -> list[dict]
+        """Get counted list of keywords and total number of keywords in `text`
 
         Arguments:
             text {str} -- text
 
         Returns:
-            Tuple[List[Dict], int] -- individual and total keyword counts
+            tuple[list[dict], int] -- individual and total keyword counts
         """
         all_keywords = self.get_keyword_list(text)
         unique_words = list(set(all_keywords))
@@ -137,33 +138,36 @@ class Parser:
         return (counted_keywords, len(all_keywords))
 
     def split_sentences(self, text):
-        """Split sentences via tokenizer
+        # type: (str) -> list[str]
+        """List sentences in `text` via tokenizer sequentially
 
         Arguments:
             text {str} -- body of content
 
         Returns:
-            List[str] -- sequential list of sentences in text
+            list[str] -- sentences in text
         """
         normalized = sub('\\s+', ' ', text)
 
         return sent_tokenize(normalized, language=self.language)
 
     def split_words(self, text):
-        """Split text into sequential list of constituent words
+        # type: (str) -> list[str]
+        """List constituent words of `text` via tokenizer sequentially
 
         Arguments:
             sentence {str} -- text to split
 
         Returns:
-            List[str] -- list of words in text
+            list[str] -- words in text
         """
         split = word_tokenize(text.lower())
 
         return split
 
     def remove_punctuations(self, text):
-        """Remove non-space, non-alphanumeric characters from string
+        # type: (str) -> str
+        """Remove non-space, non-alphanumeric characters from `text`
 
         Arguments:
             text {str} -- ex: 'It\'s 4:00am, you say?'
@@ -176,13 +180,14 @@ class Parser:
         return unpunct
 
     def remove_stop_words(self, words):
-        """Get sequential list of non-stopwords in supplied list of words
+        # type: (list[str]) -> list[str]
+        """Filter stop words from `words`
 
         Arguments:
-            words {List[str]} -- all words in text
+            words {list[str]} -- all words in text
 
         Returns:
-            List[str] -- words not matching a stop word
+            list[str] -- words not matching a stop word
         """
         filtered = [word for word in words if word not in self.stop_words]
 
