@@ -1,12 +1,16 @@
-from oolongt import nodash
+""" Test lodash-like functionality """
+from pytest import mark
 
-from .helpers import assert_ex
+from oolongt.nodash import pluck, sort_by
+
+from .helpers import assert_ex, check_exception
 
 TEST_KEY = 'test_key'
 VALID_DICT_LIST = [
     {TEST_KEY: 3},
     {'y': 2, TEST_KEY: 1},
     {'z': 3, 'y': 1, TEST_KEY: 2}]
+
 INVALID_DICT_LIST = [
     {TEST_KEY: 1},
     {'y': 1, TEST_KEY: 2},
@@ -15,54 +19,42 @@ VALID_DICT_LIST_SORTED = [
     {'y': 2, TEST_KEY: 1},
     {'z': 3, 'y': 1, TEST_KEY: 2},
     {TEST_KEY: 3}]
+VALID_DICT_LIST_REVERSED = list(reversed(VALID_DICT_LIST_SORTED))
+REV_KWARG = {'reverse': True}
 
 
-def test_pluck_valid():
-    expected = [3, 1, 2]
-    received = nodash.pluck(VALID_DICT_LIST, TEST_KEY)
+@mark.parametrize('data,expected', [
+    (VALID_DICT_LIST, [3, 1, 2]),
+    (INVALID_DICT_LIST, KeyError),
+])
+def test_pluck(data, expected):
+    received = None
+
+    try:
+        received = pluck(data, TEST_KEY)
+
+    except KeyError as e:
+        received = check_exception(e, expected)
 
     assert (received == expected), assert_ex(
         'pluck', received, expected)
 
 
-def test_pluck_invalid():
-    expected = True
+@mark.parametrize('data,expected,kwargs,key', [
+    (VALID_DICT_LIST, VALID_DICT_LIST_SORTED, False, False),
+    (VALID_DICT_LIST, VALID_DICT_LIST_REVERSED, REV_KWARG, False),
+    (INVALID_DICT_LIST, KeyError, False, 'y')
+])
+def test_sort_by(data, expected, kwargs, key):
+    kwargs = kwargs or {}
+    key = key or TEST_KEY
+    received = None
 
     try:
-        received = nodash.pluck(INVALID_DICT_LIST, TEST_KEY)
+        received = sort_by(data, key, **kwargs)
 
-    except KeyError:
-        received = expected
-
-    assert (received == expected), assert_ex(
-        'pluck error check', received, KeyError)
-
-
-def test_sort_by_valid_asc():
-    expected = VALID_DICT_LIST_SORTED
-    received = nodash.sort_by(VALID_DICT_LIST, TEST_KEY)
+    except KeyError as e:
+        received = check_exception(e, expected)
 
     assert (received == expected), assert_ex(
-        'sort by key asc', received, expected, hint=TEST_KEY)
-
-
-def test_sort_by_valid_desc():
-    expected = list(reversed(VALID_DICT_LIST_SORTED))
-    received = nodash.sort_by(VALID_DICT_LIST, TEST_KEY, reverse=True)
-
-    assert (received == expected), assert_ex(
-        'sort by key desc', received, expected, hint=TEST_KEY)
-
-
-def test_sort_by_invalid():
-    expected = True
-    invalid = 'y'
-
-    try:
-        received = nodash.sort_by(INVALID_DICT_LIST, invalid)
-
-    except KeyError:
-        received = expected
-
-    assert (received == expected), assert_ex(
-        'sort error check', received, KeyError, hint=invalid)
+        'sort by key', received, expected, hint=[key, kwargs])
