@@ -2,7 +2,8 @@
 
 
 def pluck(iterable, key):
-    """Get value at specified key in a list of Dicts
+    # type: (list, any) -> list[any]
+    """Get value at `key` in iterable of Dicts
 
     Arguments:
         iterable {iterable} -- an iterable of Dicts
@@ -15,35 +16,34 @@ def pluck(iterable, key):
 
 
 def get_sort_tuple(item, key):
+    # type: (dict, any) -> tuple
     """Create tuple of values suitable for sorted()
 
     Arguments:
-        item {Dict} -- Dict to be sorted
-        key {any, List[any]} -- sorting criteria, descending order
+        item {dict} -- Dict to be sorted
+        key {any} -- sorting criteria, descending order
 
     Returns:
-        any -- value(s) for sorting
+        tuple -- value(s) for sorting
     """
-    if isinstance(key, list):
-        values = [item[x] for x in key]
+    values = [item[k] for k in key] if isinstance(key, list) else [item[key]]
 
-        return tuple(values)
-
-    return item[key]
+    return tuple(values)
 
 
 def sort_by(iterable, key, reverse=False):
-    """Sort iterable of Dicts using value of one or more keys
+    # type: (list, any, bool) -> list[any]
+    """Sort `iterable` of Dicts by one or more `key`s
 
     Arguments:
         iterable {iterable} -- iterable list of Dicts
-        key {any or List[any]} -- key(s) to use for sort
+        key {any or list[any]} -- key(s) to use for sort
 
     Keyword Arguments:
         reverse {bool} -- False: ASC, True: DESC (default: {False})
 
     Returns:
-        List[any] -- sorted iterable
+        list[any] -- sorted iterable
     """
     return sorted(
         iterable, key=lambda x: get_sort_tuple(x, key), reverse=reverse)
