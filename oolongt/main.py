@@ -1,3 +1,4 @@
+"""Simple sentence scoring & summarization functions"""
 from . import parser
 from .nodash import pluck, sort_by
 from .summarizer import Summarizer
@@ -10,18 +11,21 @@ DEFAULT_LENGTH = 5
 def score_sentences(title, text,
                     root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
                     source=None, category=None):
-    """List every sentence, sorted by total score
+    # type: (str, str, str, str, any, any) -> list[dict]
+    """List and score every sentence in `text`
 
     Arguments:
         title {str} -- title of content
         text {str} -- body of content
 
     Keyword Arguments:
+        root {str} -- root directory of language config
+        lang {str} -- basename of language config
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
     Returns:
-        List[Dict] -- List of sentences with scoring and metadata
+        list[dict] -- List of sentences with scoring and metadata
     """
     summarizer = Summarizer()
     sentences = summarizer.get_sentences(text, title, source, category)
@@ -34,7 +38,8 @@ def summarize(title, text,
               sort_key=DEFAULT_SORT_KEY, reverse=DEFAULT_REVERSE,
               root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
               source=None, category=None):
-    """Get top sentences in the specified order
+    # type: (str, str, int, str, bool, str, str, any, any) -> list[dict]
+    """Get `length` sentences from `text` sorted by `sort_key`
 
     Where length >= 1, length is an absolute number of sentences
     Where length  < 1, length is a fraction of the total sentence count
@@ -46,9 +51,9 @@ def summarize(title, text,
     Keyword Arguments:
         length {int or float < 1} -- lines to return (int) or
             fraction of total (float) (default: {5})
-        order_by {str} -- sort sentences by specified key
+        sort_key {str} -- sort sentences by specified key
             (default: {'order'})
-        asc {bool} -- ASCending order (default: {True})
+        reverse {bool} -- descending order (default: {False})
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
@@ -68,17 +73,18 @@ def summarize(title, text,
 
 
 def get_slice_length(nominal, total):
-    """Determine how many sentences to return
+    # type: (float, int) -> int
+    """Calculate actual number of sentences to return
 
     Arguments:
-        nominal {int, float} -- fraction of total/absolute number to return
+        nominal {float} -- fraction of total/absolute number to return
         total {int} -- total number of sentences to return
 
     Raises:
         ValueError -- invalid length argument
 
     Returns:
-        int -- number of sentences to return
+        str -- number of sentences to return
 
     >>> get_slice_length(20, 1000)
     20
@@ -89,6 +95,6 @@ def get_slice_length(nominal, total):
         raise ValueError('Invalid summary length: ' + str(nominal))
 
     if nominal < 1:
-        return int(nominal * total)
+        return max([1, int(nominal * total)])
 
-    return max([1, int(nominal)])
+    return min([int(nominal), total])
