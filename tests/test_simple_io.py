@@ -8,6 +8,7 @@ from .helpers import assert_ex
 
 
 def get_json_path(lang):
+    # type: (str) -> str
     """Get path to test language config
 
     Arguments:
