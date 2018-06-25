@@ -266,12 +266,13 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        DEFAULT_KEY = 'split_sentences'
         p = Parser(lang=samp.lang)
+        expected = None
 
-        if DEFAULT_KEY in samp.d.keys():
-            expected = samp.d[DEFAULT_KEY]
-        else:
+        try:
+            expected = samp.split_sentences
+
+        except AttributeError:
             expected = pluck(samp.sentences, 'text')
 
         received = p.split_sentences(samp.text)
