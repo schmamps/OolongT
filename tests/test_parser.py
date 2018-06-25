@@ -106,7 +106,7 @@ class TestParser:
         """
         p = Parser()
 
-        expected = samp.d['compare_words']
+        expected = samp.compare_words
         for received in p.get_all_words(samp.text):
             assert (received in expected), assert_ex(
                 'all words', received, None)
@@ -144,8 +144,8 @@ class TestParser:
         Returns:
             tuple[list[dict], int] -- return of Parser.get_keywords()
         """
-        keywords = samp.d['keywords']
-        insts = samp.d['instances']
+        keywords = samp.keywords
+        insts = samp.instances
 
         return self._count_keywords(keywords, insts)
 
@@ -223,9 +223,9 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(lang=samp.d['lang'])
+        p = Parser(lang=samp.lang)
 
-        expected = sorted(self._get_expected_keywords(samp.d['keywords']))
+        expected = sorted(self._get_expected_keywords(samp.keywords))
         received = sorted(p.get_keyword_list(samp.text))
 
         assert (received == expected), assert_ex(
@@ -267,12 +267,12 @@ class TestParser:
             samp {Sample} -- sample data
         """
         DEFAULT_KEY = 'split_sentences'
-        p = Parser(lang=samp.d['lang'])
+        p = Parser(lang=samp.lang)
 
         if DEFAULT_KEY in samp.d.keys():
             expected = samp.d[DEFAULT_KEY]
         else:
-            expected = pluck(samp.d['sentences'], 'text')
+            expected = pluck(samp.sentences, 'text')
 
         received = p.split_sentences(samp.text)
 
@@ -294,10 +294,10 @@ class TestParser:
             samp {Sample} -- sample data
         """
 
-        p = Parser(lang=samp.d['lang'])
+        p = Parser(lang=samp.lang)
         text = samp.text
 
-        expected = samp.d['split_words']
+        expected = samp.split_words
         received = p.split_words(text)
 
         assert (received == expected), assert_ex(
@@ -318,9 +318,9 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(lang=samp.d['lang'])
+        p = Parser(lang=samp.lang)
 
-        expected = samp.d['remove_punctuations']
+        expected = samp.remove_punctuations
         received = p.remove_punctuations(samp.text)
 
         assert (received == expected), assert_ex(
@@ -341,10 +341,10 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(lang=samp.d['lang'])
+        p = Parser(lang=samp.lang)
         words = p.split_words(samp.text)
 
-        expected = samp.d['remove_stop_words']
+        expected = samp.remove_stop_words
         received = p.remove_stop_words(words)
 
         assert (received == expected), assert_ex(

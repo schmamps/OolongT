@@ -61,7 +61,7 @@ class TestSummarizer:
 
         summ = Summarizer()
 
-        expecteds = sort_by(samp.d['sentences'], 'order')
+        expecteds = sort_by(samp.sentences, 'order')
         receiveds = summ.get_sentences(
             samp.text, samp.title, None, None)
 
@@ -171,7 +171,7 @@ class TestSummarizer:
         source = None
         category = None
 
-        keywords = samp.d['keywords']
+        keywords = samp.keywords
         expected = self._get_top_keywords(keywords)
 
         receiveds = summ.get_top_keywords(samp.text, source, category)
@@ -243,10 +243,10 @@ class TestSummarizer:
             sentence {dict} -- individual sentence from sample
         """
         summ = Summarizer()
-        title_words = samp.d['title_words']
-        top_keywords = self._get_top_keywords(samp.d['keywords'])
+        title_words = samp.title_words
+        top_keywords = self._get_top_keywords(samp.keywords)
         keyword_list = summ._pluck_words(top_keywords)
-        num_sents = len(samp.d['sentences'])
+        num_sents = len(samp.sentences)
 
         idx = sentence['order']
         text = sentence['text']
@@ -277,10 +277,10 @@ class TestSummarizer:
         Arguments:
             samp {Sample} -- sample data
         """
-        summ = Summarizer(lang=samp.d['lang'])
-        words = samp.d['compare_words']
+        summ = Summarizer(lang=samp.lang)
+        words = samp.compare_words
 
-        expected = samp.d['length_score']
+        expected = samp.length_score
         received = summ.get_sentence_length_score(words)
 
         assert approx(received, expected), assert_ex(
@@ -335,11 +335,11 @@ class TestSummarizer:
         Arguments:
             samp {Sample} -- sample data
         """
-        summ = Summarizer(lang=samp.d['lang'])
-        title_words = samp.d['compare_title']
-        sentence_words = samp.d['compare_words']
+        summ = Summarizer(lang=samp.lang)
+        title_words = samp.compare_title
+        sentence_words = samp.compare_words
 
-        expected = samp.d['title_score']
+        expected = samp.title_score
         received = summ.get_title_score(title_words, sentence_words)
 
         assert approx(received, expected), assert_ex(

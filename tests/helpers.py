@@ -191,7 +191,7 @@ def get_sample_sentences(sample_names):
     for sample_name in sample_names:
         samp = get_sample(sample_name)
 
-        for sentence in samp.d['sentences']:
+        for sentence in samp.sentences:
             yield samp, sentence
 
 

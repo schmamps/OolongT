@@ -27,9 +27,10 @@ def generate():
             file.write(',\n'.join([jsonify(kw) for kw in keywords]))
             file.write(json_util.close(']'))
 
-        if 'keywords' in samp.d.keys():
-            basic_words = pluck(samp.d['keywords'] or {}, 'word')
-        else:
+        try:
+            basic_words = pluck(samp.keywords or {}, 'word')
+
+        except AttributeError:
             basic_words = []
 
         stem_words = pluck(keywords, 'word')

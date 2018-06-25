@@ -26,7 +26,7 @@ def test_score_sentences(samp):
     text = samp.text
 
     for i, sentence in enumerate(score_sentences(title, text)):
-        expected = samp.d['sentences'][i]['total_score']
+        expected = samp.sentences[i]['total_score']
         received = sentence['total_score']
         hint = snip(sentence['text'])
 
@@ -51,7 +51,7 @@ def _get_expected_summaries(samp, length, sort_key, reverse):
     sort_key = sort_key or DEFAULT_SORT_KEY
     reverse = reverse or DEFAULT_REVERSE
 
-    ranked = sort_by(samp.d['sentences'], 'rank')
+    ranked = sort_by(samp.sentences, 'rank')
     sliced = ranked[:length]
     ordered = sort_by(sliced, sort_key, reverse=reverse)
 
