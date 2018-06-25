@@ -31,11 +31,12 @@ def get_input():
 
 
 def get_sample():
-    base = str(Path(__file__).parent.joinpath(
-        'tests', 'data', 'essay_snark.'))
+    path = str(Path(__file__).parent.joinpath(
+        'tests', 'data', 'essay_snark.json'))
+    json = simple_io.load_json(path)
 
-    title = simple_io.load_json(base + 'json')['title']
-    content = simple_io.read_file(base + 'txt')
+    title = json['title']
+    content = ' '.join([x['text'] for x in json['sentences']])
 
     return title, content
 
