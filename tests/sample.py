@@ -32,7 +32,5 @@ class Sample:
     def __getattr__(self, name):
         if name in self._keys:
             return self._data[name]
-        elif name == 'd':
-            return self._data
 
         raise AttributeError('Property {0!r} not found'.format(name))
