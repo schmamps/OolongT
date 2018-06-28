@@ -17,7 +17,9 @@ def generate():
 
     for samp in get_samples():
         receiveds, word_count = p.get_keywords(samp.text)
-        keywords = sorted(receiveds, key=lambda x: -x['count'])
+        keywords = sorted(
+            receiveds,
+            key=lambda x: (-x['count'], x['word']))
         keywords = [summ.score_keyword(w, word_count) for w in keywords]
 
         with json_util.create(samp.name, 'keywords') as file:
