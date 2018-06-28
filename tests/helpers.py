@@ -84,6 +84,13 @@ def compare_list(left, right):
     return ', '.join([len_str, diff_str])
 
 
+def get_compare_value(val, rel=0.000001):
+    if isinstance(val, float):
+        return approx(val, rel=rel)
+
+    return val
+
+
 def compare_dict(left, right, keys=[], ignore=[]):
     # type: (dict, dict, list[any], list[any]) -> bool
     """Compare `left` as a subset of `right`
@@ -104,21 +111,15 @@ def compare_dict(left, right, keys=[], ignore=[]):
     True
     """
     keys = [key for key in (keys or left.keys()) if key not in ignore]
-    same = False
 
     for key in keys:
-        comp = right.get(key, None)
-        is_float = isinstance(left[key], float) or isinstance(comp, float)
+        left_val = left[key]
+        right_val = get_compare_value(right.get(key, None))
 
-        if is_float:
-            same = approx(left[key], comp)
-        else:
-            same = (left[key] == comp)
-
-        if not same:
+        if (left_val != right_val):
             break
 
-    return same
+    return (left_val == right_val)
 
 
 def assert_ex(msg, received, expected, hint=None):

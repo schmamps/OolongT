@@ -26,11 +26,11 @@ def test_score_sentences(samp):
     text = samp.text
 
     for i, sentence in enumerate(score_sentences(title, text)):
-        expected = samp.sentences[i]['total_score']
+        expected = approx(samp.sentences[i]['total_score'], 0.000001)
         received = sentence['total_score']
         hint = snip(sentence['text'])
 
-        assert approx(received, expected), assert_ex(
+        assert (received == expected), assert_ex(
             'sentence score', received, expected, hint=hint)
 
 

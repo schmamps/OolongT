@@ -192,8 +192,9 @@ class TestSummarizer:
                     received[CK],
                     keywords[idx][CK])
 
-                test = approx(
-                    received['total_score'], keywords[idx]['total_score'])
+                test = (
+                    received['total_score'] ==
+                    approx(keywords[idx]['total_score']))
 
                 assert test, assert_ex(
                     'keyword score',
@@ -219,19 +220,21 @@ class TestSummarizer:
         text = sentence['text']
         words = summ.parser.get_all_words(text)
 
-        expected = (
+        expecteds = (
             sentence['keyword_score'],
             sentence['sbs'],
             sentence['dbs'])
-        received = summ.score_frequency(
+        receiveds = summ.score_frequency(
             words, top_keywords, top_keyword_list)
         hint = [samp.name, snip(text)]
 
         for inv, desc in enumerate(['DBS', 'SBS', 'keyword score']):
             idx = abs(inv - 2)
+            expected = approx(expecteds[idx], 0.00001)
+            received = receiveds[idx]
 
-            assert approx(expected[idx] == received[idx]), assert_ex(
-                desc, received[idx], expected[idx], hint)
+            assert (received == expected), assert_ex(
+                desc, received, expected, hint)
 
     @mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
     def test_score_sentence(self, samp, sentence):
@@ -255,7 +258,7 @@ class TestSummarizer:
             idx, text,
             title_words, top_keywords, keyword_list, num_sents)
         received = output['total_score']
-        test = approx(received, expected)
+        test = (received == approx(expected, 0.00001))
 
         assert test, assert_ex(
             'sentence score',
@@ -280,21 +283,21 @@ class TestSummarizer:
         summ = Summarizer(lang=samp.lang)
         words = samp.compare_words
 
-        expected = samp.length_score
+        expected = approx(samp.length_score, 0.00001)
         received = summ.get_sentence_length_score(words)
 
-        assert approx(received, expected), assert_ex(
+        assert (received == expected), assert_ex(
             'sentence score',
             received,
             expected,
             hint=' '.join(words))
 
     @mark.parametrize('pos,sentence_count,expected', [
-        (0, 10, .17),               # first decile
-        (0, 5, .23),                # second decile
-        (999, 1000, .15),           # last sentence
-        (999,    0, ValueError),    # out of range
-        (999,  999, ValueError),    # out of range
+        (0, 10, approx(.17, 0.00001)),       # first decile
+        (0, 5, approx(.23, 0.00001)),        # second decile
+        (999, 1000, approx(.15, 0.00001)),   # last sentence
+        (999,    0, ValueError),             # out of range
+        (999,  999, ValueError),             # out of range
     ])
     def test_get_sentence_position_score(self, pos, sentence_count, expected):
         # type: (int, int, float) -> None
@@ -315,7 +318,7 @@ class TestSummarizer:
         except ValueError as e:
             received = check_exception(e, expected)
 
-        assert approx(received, expected), assert_ex(
+        assert (received == expected), assert_ex(
                 'sentence position score',
                 received,
                 expected,
@@ -339,10 +342,10 @@ class TestSummarizer:
         title_words = samp.compare_title
         sentence_words = samp.compare_words
 
-        expected = samp.title_score
+        expected = approx(samp.title_score, 0.00001)
         received = summ.get_title_score(title_words, sentence_words)
 
-        assert approx(received, expected), assert_ex(
+        assert (received == expected), assert_ex(
             'title score',
             received,
             expected,
