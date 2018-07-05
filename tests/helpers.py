@@ -3,8 +3,10 @@ from random import shuffle
 
 from pytest import approx
 
+from tests.typing.sample import Sample
+from tests.typing.sample_keyword import SampleKeyword
+
 from .constants import DATA_PATH
-from .sample import Sample
 
 
 def snip(val, max_len=20, list_separator=', ', ellip="..."):
@@ -169,7 +171,7 @@ def get_sample(sample_name):
 
 
 def get_samples(sample_names):
-    # type (list[str]) -> list[Sample]
+    # type (list[str]) -> Iterable[Sample]
     """Get Samples by name
 
     Returns:
@@ -180,7 +182,7 @@ def get_samples(sample_names):
 
 
 def get_sample_sentences(sample_names):
-    # type (list[str]) -> list[dict]
+    # type (list[str]) -> Iterable[tuple[Sample, SampleSentence]]
     """Get Sample, each sentence from Sample
 
     Arguments:
