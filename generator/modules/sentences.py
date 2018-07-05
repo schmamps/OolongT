@@ -3,24 +3,33 @@ from oolongt.summarizer import Summarizer
 from generator.util import get_samples, json as json_util
 
 
-def jsonify(sent):
-    try:
-        pairs = ',\n'.join([
-            json_util.prop(sent, 'order', 'd'),
-            json_util.prop(sent, 'sbs', '.10f'),
-            json_util.prop(sent, 'dbs', '.10f'),
-            json_util.prop(sent, 'title_score', '.8f'),
-            json_util.prop(sent, 'length_score', '.8f'),
-            json_util.prop(sent, 'position_score', '.2f'),
-            json_util.prop(sent, 'keyword_score', '.10f'),
-            json_util.prop(sent, 'total_score', '.8f'),
-            json_util.prop(sent, 'text'),
-            json_util.prop(sent, 'rank', 'd'),
-        ])
+def jsonify(sent, rank):
+    data = {
+        'text': sent.text,
+        'index': sent.index,
+        'of': sent.of,
+        'title_score': sent.title_score,
+        'length_score': sent.length_score,
+        'dbs_score': sent.dbs_score,
+        'sbs_score': sent.sbs_score,
+        'position_score': sent.position_score,
+        'keyword_score': sent.keyword_score,
+        'total_score': sent.total_score,
+        'rank': rank, }
 
-        return '\t\t{\n' + pairs + '\n\t\t}'
-    except (Exception):
-        return
+    pairs = ',\n\t\t\t'.join([
+        json_util.kv_pair(data, 'index', '2d'),
+        json_util.kv_pair(data, 'sbs_score', '.12f'),
+        json_util.kv_pair(data, 'dbs_score', '.12f'),
+        json_util.kv_pair(data, 'title_score', '.12f'),
+        json_util.kv_pair(data, 'length_score', '.12f'),
+        json_util.kv_pair(data, 'position_score', '.2f'),
+        json_util.kv_pair(data, 'keyword_score', '.12f'),
+        json_util.kv_pair(data, 'total_score', '.12f'),
+        json_util.kv_pair(data, 'text'),
+        json_util.kv_pair(data, 'rank', 'd'), ])
+
+    return '\t\t{\n\t\t\t' + pairs + '\n\t\t}'
 
 
 def generate():
@@ -29,19 +38,15 @@ def generate():
 
         for samp in get_samples():
             receiveds = summ.get_sentences(
-                samp.text, samp.title, None, None)
-
-            by_score = sorted(receiveds, key=lambda x: -x['total_score'])
-            for rank, _ in enumerate(by_score):
-                by_score[rank]['rank'] = rank
-
-            by_order = sorted(by_score, key=lambda x: x['order'])
+                samp.body, samp.title, None, None)
+            ranks = [
+                sent.index for sent in sorted(receiveds, reverse=True)]
 
             with json_util.create(samp.name, 'sentences') as file:
                 file.write(json_util.open('sentences', '['))
 
-                file.write(',\n'.join(
-                    [jsonify(x) for x in by_order]
-                ))
+                file.write(',\n'.join([
+                    jsonify(sent, ranks.index(idx))
+                    for idx, sent in enumerate(receiveds)]))
 
                 file.write(json_util.close(']'))
