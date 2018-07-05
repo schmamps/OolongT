@@ -6,6 +6,9 @@ from re import sub
 import nltk.data
 from nltk.tokenize import sent_tokenize, word_tokenize
 
+from oolongt.typing.scored_keyword import ScoredKeyword
+from oolongt.typing.scored_sentence import ScoredSentence
+
 from .simple_io import load_json
 
 BUILTIN = Path(__file__).parent.joinpath('lang')
@@ -87,7 +90,7 @@ class Parser:
 
         return split
 
-    def get_keyword_list(self, text):
+    def get_keyword_strings(self, text):
         # type: (str) -> list[str]
         """List all meaningful words in `text`
 
@@ -97,28 +100,13 @@ class Parser:
         Returns:
             list[str] -- words in text, minus stop words
         """
-        all_words = self.get_all_words(text)
-        keywords = self.remove_stop_words(all_words)
+        all_strings = self.get_all_words(text)
+        keyword_strings = self.remove_stop_words(all_strings)
 
-        return keywords
-
-    def count_keyword(self, word, all_words):
-        # type: (str, list[str]) -> dict
-        """Count number of instances of `word` in `all_words`
-
-        Arguments:
-            unique_word {str} -- word
-            all_words {list[str]} -- list of all words in text
-
-        Returns:
-            dict -- {word: unique_word, count: (instances in all_words)}
-        """
-        return {
-            'word': word,
-            'count': all_words.count(word)}
+        return keyword_strings
 
     def get_keywords(self, text):
-        # type: (str) -> list[dict]
+        # type: (str) -> list[ScoredKeyword]
         """Get counted list of keywords and total number of keywords in `text`
 
         Arguments:
@@ -127,15 +115,15 @@ class Parser:
         Returns:
             tuple[list[dict], int] -- individual and total keyword counts
         """
-        all_keywords = self.get_keyword_list(text)
+        all_keywords = self.get_keyword_strings(text)
         unique_words = list(set(all_keywords))
 
-        counted_keywords = [
-            self.count_keyword(word, all_keywords)
+        scored_keywords = [
+            ScoredKeyword(word, all_keywords.count(word), len(all_keywords))
             for word
             in unique_words]
 
-        return (counted_keywords, len(all_keywords))
+        return scored_keywords
 
     def split_sentences(self, text):
         # type: (str) -> list[str]
