@@ -3,6 +3,7 @@ from math import ceil
 
 from . import parser
 from .nodash import pluck, sort_by
+from .typing.scored_sentence import ScoredSentence
 
 
 class Summarizer:
@@ -12,14 +13,14 @@ class Summarizer:
 
     def _pluck_words(self, keyword_list):
         # type: (list[dict]) -> list[str]
-        return list(pluck(keyword_list, 'word'))
+        return [kw.word for kw in keyword_list]
 
-    def get_sentences(self, text, title, source, category):
+    def get_sentences(self, body, title, source, category):
         # type: (str, str, any, any) -> list[dict]
         """List and score all sentences in `text`
 
         Arguments:
-            text {str} -- body of content
+            body {str} -- body of content
             title {str} -- title of content
             source {any} -- unused
             category {any} -- unused
@@ -27,34 +28,19 @@ class Summarizer:
         Returns:
             list[dict] -- list of sentence Dict(s)
         """
-        sentences = self.parser.split_sentences(text)
-        title_words = self.parser.get_keyword_list(title)
-        top_keywords = self.get_top_keywords(text, source, category)
+        sentences = self.parser.split_sentences(body)
+        title_words = self.parser.get_keyword_strings(title)
+        top_keywords = self.get_top_keywords(body, source, category)
         top_keyword_list = self._pluck_words(top_keywords)
-        num_sents = len(sentences)
+        of = len(sentences)
 
-        summaries = [
-            self.score_sentence(
-                idx, sentence,
-                title_words, top_keywords, top_keyword_list, num_sents)
-            for idx, sentence in enumerate(sentences)]
+        scored_sentences = [
+            self.get_scored_sentence(
+                text, idx, of,
+                title_words, top_keywords, top_keyword_list)
+            for idx, text in enumerate(sentences)]
 
-        return summaries
-
-    def score_keyword(self, keyword, wordCount):
-        # type: (dict, int) -> dict
-        """Calculate total_score of `keyword`
-
-        Arguments:
-            keyword {dict} -- {word, count}
-            wordCount {int} -- total number of keywords
-
-        Returns:
-            dict -- {word, count, total_score}
-        """
-        keyword['total_score'] = 1.5 * keyword['count'] / wordCount
-
-        return keyword
+        return scored_sentences
 
     def get_top_keyword_threshold(self, keywords):
         # type: (list[dict]) -> int
@@ -66,14 +52,13 @@ class Summarizer:
         Returns:
             int -- minimum frequency
         """
-        counts = pluck(keywords, 'count')
-        top_10 = sorted(counts, reverse=True)[:10]
-
-        try:
-            return top_10.pop()
-
-        except IndexError:
+        if (len(keywords) == 0):
             return 0
+
+        tenth = sorted(
+            keywords, reverse=True)[:10].pop()  # type: ScoredKeyword
+
+        return tenth.score
 
     def get_top_keywords(self, text, source, category):
         # type: (str, any, any) -> list[dict]
@@ -87,35 +72,14 @@ class Summarizer:
         Returns:
             list[dict] -- ten most frequently used words (more if same count)
         """
-        keywords, word_count = self.parser.get_keywords(text)
+        keywords = self.parser.get_keywords(text)
         minimum = self.get_top_keyword_threshold(keywords)
-        top_kws = [
-            self.score_keyword(kw, word_count)
-            for kw in keywords
-            if kw['count'] >= minimum]
+        top_keywords = [kw for kw in keywords if kw.score >= minimum]
 
-        return top_kws
+        return top_keywords
 
-    def score_frequency(self, words, top_keywords, top_keyword_list):
-        """Score `words` by number of appearances in `top_keywords`
-
-        Arguments:
-            words {list[str]} -- sequential list of words in sentence
-            top_keywords {list[dict]} -- top keywords in content body
-            top_keyword_list {list[str]} -- values of 'word' in top_keywords
-
-        Returns:
-            tuple[float, float, float] -- keyword, sbs, & dbs frequency scores
-        """
-        k = 5.0
-        sbs_feature = self.sbs(words, top_keywords, top_keyword_list)
-        dbs_feature = self.dbs(words, top_keywords, top_keyword_list)
-        keyword_freq = k * (sbs_feature + dbs_feature)
-
-        return keyword_freq, sbs_feature, dbs_feature
-
-    def score_sentence(self, idx, text,
-                       title_words, top_keywords, top_keyword_list, num_sents):
+    def get_scored_sentence(self, text, index, of,
+                            title_words, top_keywords, top_keyword_list):
         # type: (int, str, list[str], list[dict], list[str], int) -> dict
         """Score sentence (`text`) on several factors
 
@@ -128,62 +92,22 @@ class Summarizer:
             num_sents {int} -- number of sentences in overall text
 
         Returns:
-            dict -- {total_score: float, sentence: str, order: int}
+            dict -- {total_score: float, sentence: str, index: int}
         """
         words = self.parser.get_all_words(text)
 
-        title_score = self.get_title_score(title_words, words)
-        keyword_score, sbs, dbs = self.score_frequency(
-            words, top_keywords, top_keyword_list)
-        length_score = self.get_sentence_length_score(words)
-        position_score = self.get_sentence_position_score(
-            idx, num_sents)
+        title_score = self.score_title(title_words, words)
+        length_score = self.score_sentence_length(words)
+        dbs_score = self.score_dbs(words, top_keywords, top_keyword_list)
+        sbs_score = self.score_sbs(words, top_keywords, top_keyword_list)
 
-        total_score = (
-            title_score * 1.5 +
-            keyword_score * 2.0 +
-            length_score * 0.5 +
-            position_score * 1.0) / 4.0
+        scored = ScoredSentence(
+                text, index, of,
+                title_score, length_score, dbs_score, sbs_score)
 
-        return {
-            'sbs': sbs,
-            'dbs': dbs,
-            'title_score': title_score,
-            'length_score': length_score,
-            'position_score': position_score,
-            'keyword_score': keyword_score,
-            'total_score': total_score,
-            'text': text,
-            'order': idx}
+        return scored
 
-    def sbs(self, words, top_keywords, top_keyword_list):
-        # type: (list[str], list[dict], list[str]) -> float
-        """Score sentence (`words`) by summation
-
-        Arguments:
-            words {list[str]} -- sequential list of words in sentence
-            top_keywords {list[dict]} -- top keywords in content body
-            top_keyword_list {list[str]} -- values of 'word' in top_keywords
-
-        Returns:
-            float -- score
-        """
-        summ = 0.0
-
-        if len(words) == summ:
-            return summ
-
-        for word in [x for x in words if x in top_keyword_list]:
-            index = top_keyword_list.index(word)
-            score = top_keywords[index]['total_score']
-
-            summ += score
-
-        sbs = 1.0 / len(words) * summ
-
-        return sbs
-
-    def dbs(self, words, top_keywords, top_keyword_list):
+    def score_dbs(self, words, top_keywords, top_keyword_list):
         # type: (list[str], list[dict], list[str]) -> float
         """Score sentence (`words`) by keyword density
 
@@ -207,12 +131,12 @@ class Summarizer:
                 if first_word == {}:
                     first_word = {
                         'i': i,
-                        'score': top_keywords[index]['total_score']}
+                        'score': top_keywords[index].score}
                 else:
                     second_word = first_word
                     first_word = {
                         'i': i,
-                        'score': top_keywords[index]['total_score']}
+                        'score': top_keywords[index].score}
                     distance = first_word['i'] - second_word['i']
 
                     summ += (first_word['score'] * second_word['score']) / (distance ** 2)  # nopep8
@@ -221,7 +145,34 @@ class Summarizer:
 
         return dbs
 
-    def get_sentence_length_score(self, words):
+    def score_sbs(self, words, top_keywords, top_keyword_list):
+        # type: (list[str], list[dict], list[str]) -> float
+        """Score sentence (`words`) by summation
+
+        Arguments:
+            words {list[str]} -- sequential list of words in sentence
+            top_keywords {list[dict]} -- top keywords in content body
+            top_keyword_list {list[str]} -- values of 'word' in top_keywords
+
+        Returns:
+            float -- score
+        """
+        summ = 0.0
+
+        if len(words) == summ:
+            return summ
+
+        for word in [x for x in words if x in top_keyword_list]:
+            index = top_keyword_list.index(word)
+            score = top_keywords[index].score
+
+            summ += score
+
+        sbs = 1.0 / len(words) * summ
+
+        return sbs
+
+    def score_sentence_length(self, words):
         # type: list[str] -> float
         """Score sentence (`words`) based on actual word count vs. ideal
 
@@ -237,36 +188,7 @@ class Summarizer:
 
         return score
 
-    # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
-    # Sentence Extraction Based Single Document Summarization.
-    # International Institute of Information Technology, Hyderabad, India, 5.
-    def get_sentence_position_score(self, index, sentence_count):
-        # type: (int, int) -> float
-        """Score sentences[`index`] where len(sentences) = `sentence_count`
-
-        Arguments:
-            index {int} -- index of sentence in list
-            sentence_count {int} -- length of sentence list
-
-        Returns:
-            float -- score
-        """
-        scores = [.17, .23, .14, .08, .05, .04, .06, .04, .04, .15]
-
-        try:
-            score_index = ceil(float(index + 1) / sentence_count * 10) - 1
-            position_score = scores[score_index]
-
-            return position_score
-
-        except (IndexError, ZeroDivisionError):
-            raise ValueError(' '.join([
-                'Invalid index/sentence count: ',
-                str(index),
-                '/',
-                str(sentence_count)]))
-
-    def get_title_score(self, title_words, sentence_words):
+    def score_title(self, title_words, sentence_words):
         # type: (list[str], list[str]) -> float
         """Score `sentence_words` by matches with `title_words`
 
