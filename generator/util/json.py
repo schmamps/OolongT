@@ -1,4 +1,5 @@
 from io import open as io_open
+from json import dumps
 from os import mkdir
 from pathlib import Path
 
@@ -34,12 +35,11 @@ def close(wrap):
     return closed
 
 
-def prop(obj, prop, fmt='s'):
-    val = obj[prop]
-    if isinstance(val, str):
-        val = '"{0}"'.format(val)
+def kv_pair(obj, prop, fmt='s', alt_key=False):
+    key = dumps(alt_key or prop)
+    val = dumps(obj[prop]) if (fmt == 's') else obj[prop]
 
-    formatter = '\t\t\t"{{0}}": {{1:{0}}}'.format(fmt)
-    formatted = formatter.format(prop, val)
+    template = '{{0}}: {{1:{0}}}'.format(fmt)
+    formattted = template.format(key, val)
 
-    return formatted
+    return formattted
