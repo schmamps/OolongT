@@ -5,7 +5,20 @@
 	},
 	"lang": "en",
 	"title": "A short paragraph here yet a longer title",
-	"text": "This paragraph contains one sentence.",
+	"sentences": [
+		{
+			"index": 0,
+			"sbs_score": 0.3000000000,
+			"dbs_score": 0.3906250000,
+			"title_score": 0.2500000000,
+			"length_score": 0.2500000000,
+			"position_score": 0.15,
+			"keyword_score": 3.4531250000,
+			"total_score": 1.8890625000,
+			"text": "This paragraph contains one sentence.",
+			"rank": 0
+		}
+	],
 	"words": ["This", "paragraph", "contains", "one", "sentence."],
 	"compare_words": ["this", "paragraph", "contains", "one", "sentence"],
 	"compare_title": [

@@ -5,7 +5,20 @@
 	},
 	"lang": "en",
 	"title": "Puppies and Kittens Dance Merrily",
-	"text": "\tFuzzy young cats dance happily\nwith puppies in the woods to the merry sound of accordions, fiddles, banjos, and horns playing together in perfect accord to the music of Chopin",
+	"sentences": [
+		{
+			"index": 0,
+			"sbs_score": 0.0500000000,
+			"dbs_score": 0.0763482781,
+			"title_score": 0.5000000000,
+			"length_score": 0.5000000000,
+			"position_score": 0.15,
+			"keyword_score": 0.6317413905,
+			"total_score": 0.6033706953,
+			"text": "\tFuzzy young cats dance happily\nwith puppies in the woods to the merry sound of accordions, fiddles, banjos, and horns playing together in perfect accord to the music of Chopin",
+			"rank": 0
+		}
+	],
 	"words": [
 		"Fuzzy",
 		"young",

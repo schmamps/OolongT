@@ -5,7 +5,20 @@
 	},
 	"lang": "en",
 	"title": "Kittens Frolic with Tiny Puppies?",
-	"text": "Fuzzy kittens and fluffy puppies dance happily in the woods.",
+	"sentences": [
+		{
+			"index": 0,
+			"sbs_score": 0.1500000000,
+			"dbs_score": 0.2252869898,
+			"title_score": 0.5000000000,
+			"length_score": 0.5000000000,
+			"position_score": 0.15,
+			"keyword_score": 1.8764349490,
+			"total_score": 1.2257174745,
+			"text": "Fuzzy kittens and fluffy puppies dance happily in the woods.",
+			"rank": 0
+		}
+	],
 	"words": [
 		"Fuzzy",
 		"kittens",

@@ -9,7 +9,6 @@
 	},
 	"lang": "en",
 	"title": "Lewis Carroll and The Hunting of the Snark",
-	"text": false,
 	"instances": 417,
 	"keywords": [
 		{"word": "poem", "count": 17, "total_score": 0.06115108},
@@ -329,124 +328,508 @@
 	],
 	"sentences": [
 		{
-			"text": "Although best known as the author of Alice’s Adventures in Wonderland (1865) and Through the Looking-Glass (1871), Lewis Carroll – the pen-name of Charles Lutwidge Dodgson, a mathematical lecturer at Christ Church, Oxford – was also an avid reader and writer of poetry."
+			"index": 0,
+			"sbs_score": 0.0013160204,
+			"dbs_score": 0.0000026081,
+			"title_score": 0.5000000000,
+			"length_score": -0.0500000000,
+			"position_score": 0.17,
+			"keyword_score": 0.0065931425,
+			"total_score": 0.2270465712,
+			"text": "Although best known as the author of Alice\u2019s Adventures in Wonderland (1865) and Through the Looking-Glass (1871), Lewis Carroll \u2013 the pen-name of Charles Lutwidge Dodgson, a mathematical lecturer at Christ Church, Oxford \u2013 was also an avid reader and writer of poetry.",
+			"rank": 4
 		},
 		{
-			"text": "He greatly enjoyed the poems of Victorian writers such as Alfred, Lord Tennyson, and Christina Rossetti."
+			"index": 1,
+			"sbs_score": 0.0011241007,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.17,
+			"keyword_score": 0.0056205036,
+			"total_score": 0.1453102518,
+			"text": "He greatly enjoyed the poems of Victorian writers such as Alfred, Lord Tennyson, and Christina Rossetti.",
+			"rank": 15
 		},
 		{
-			"text": "His own poems were varied – some just humorous nonsense, some filled with hidden meanings, and some serious poems about love and life."
+			"index": 2,
+			"sbs_score": 0.0032701112,
+			"dbs_score": 0.0004314606,
+			"title_score": 0.0000000000,
+			"length_score": 0.9000000000,
+			"position_score": 0.17,
+			"keyword_score": 0.0185078589,
+			"total_score": 0.1642539294,
+			"text": "His own poems were varied \u2013 some just humorous nonsense, some filled with hidden meanings, and some serious poems about love and life.",
+			"rank": 12
 		},
 		{
-			"text": "Probably his best known is called “Jabberwocky,” with its opening line of “’Twas brillig, and the slithy toves…”, and its many invented words, some that have now entered the English language, such as “chortle” and “galumph”."
+			"index": 3,
+			"sbs_score": 0.0008992806,
+			"dbs_score": 0.0000422144,
+			"title_score": 0.0000000000,
+			"length_score": 0.2000000000,
+			"position_score": 0.17,
+			"keyword_score": 0.0047074750,
+			"total_score": 0.0698537375,
+			"text": "Probably his best known is called \u201cJabberwocky,\u201d with its opening line of \u201c\u2019Twas brillig, and the slithy toves\u2026\u201d, and its many invented words, some that have now entered the English language, such as \u201cchortle\u201d and \u201cgalumph\u201d.",
+			"rank": 35
 		},
 		{
-			"text": "Such nonsense verse is as popular now as it was when first published."
+			"index": 4,
+			"sbs_score": 0.0027670172,
+			"dbs_score": 0.0001955450,
+			"title_score": 0.0000000000,
+			"length_score": 0.6500000000,
+			"position_score": 0.23,
+			"keyword_score": 0.0148128108,
+			"total_score": 0.1461564054,
+			"text": "Such nonsense verse is as popular now as it was when first published.",
+			"rank": 14
 		},
 		{
-			"text": "His more serious poetry, it must be admitted, is generally inferior to his humorous verse and often over sentimental."
+			"index": 5,
+			"sbs_score": 0.0022718667,
+			"dbs_score": 0.0002808861,
+			"title_score": 0.0000000000,
+			"length_score": 0.9500000000,
+			"position_score": 0.23,
+			"keyword_score": 0.0127637640,
+			"total_score": 0.1826318820,
+			"text": "His more serious poetry, it must be admitted, is generally inferior to his humorous verse and often over sentimental.",
+			"rank": 7
 		},
 		{
-			"text": "Between 1860 and 1863 he contributed a dozen or more poems to College Rhymes, a pamphlet issued each term to members of Oxford and Cambridge universities, and which, for a time, he edited."
+			"index": 6,
+			"sbs_score": 0.0008720296,
+			"dbs_score": 0.0000071885,
+			"title_score": 0.0000000000,
+			"length_score": 0.3500000000,
+			"position_score": 0.23,
+			"keyword_score": 0.0043960907,
+			"total_score": 0.1034480454,
+			"text": "Between 1860 and 1863 he contributed a dozen or more poems to College Rhymes, a pamphlet issued each term to members of Oxford and Cambridge universities, and which, for a time, he edited.",
+			"rank": 26
 		},
 		{
-			"text": "In 1869, he compiled a book of poems, many of which he had already published elsewhere but now issued in revised form, together with one main new poem, which gives its title to the book, Phantasmagoria."
+			"index": 7,
+			"sbs_score": 0.0043964828,
+			"dbs_score": 0.0002154744,
+			"title_score": 0.0000000000,
+			"length_score": 0.2000000000,
+			"position_score": 0.23,
+			"keyword_score": 0.0230597860,
+			"total_score": 0.0940298930,
+			"text": "In 1869, he compiled a book of poems, many of which he had already published elsewhere but now issued in revised form, together with one main new poem, which gives its title to the book, Phantasmagoria.",
+			"rank": 30
 		},
 		{
-			"text": "One particular poem stands out from all the others that Carroll wrote."
+			"index": 8,
+			"sbs_score": 0.0077937650,
+			"dbs_score": 0.0000412440,
+			"title_score": 0.2500000000,
+			"length_score": 0.6000000000,
+			"position_score": 0.14,
+			"keyword_score": 0.0391750449,
+			"total_score": 0.2233375224,
+			"text": "One particular poem stands out from all the others that Carroll wrote.",
+			"rank": 6
 		},
 		{
-			"text": "It has inspired parodies, continuations, musical adaptations, and a wide variety of interpretations."
+			"index": 9,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.6500000000,
+			"position_score": 0.14,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.1162500000,
+			"text": "It has inspired parodies, continuations, musical adaptations, and a wide variety of interpretations.",
+			"rank": 21
 		},
 		{
-			"text": "It is an epic nonsense poem written at a time when Carroll was struggling with his religious beliefs following the serious illness of his cousin and godson, Charlie Wilcox, who eventually died from tuberculosis."
+			"index": 10,
+			"sbs_score": 0.0034913246,
+			"dbs_score": 0.0011270121,
+			"title_score": 0.2500000000,
+			"length_score": 0.3000000000,
+			"position_score": 0.14,
+			"keyword_score": 0.0230916832,
+			"total_score": 0.1777958416,
+			"text": "It is an epic nonsense poem written at a time when Carroll was struggling with his religious beliefs following the serious illness of his cousin and godson, Charlie Wilcox, who eventually died from tuberculosis.",
+			"rank": 9
 		},
 		{
-			"text": "Although the poem concerns death and danger, it is filled with humour and whimsical ideas."
+			"index": 11,
+			"sbs_score": 0.0040767386,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.7500000000,
+			"position_score": 0.14,
+			"keyword_score": 0.0203836930,
+			"total_score": 0.1389418465,
+			"text": "Although the poem concerns death and danger, it is filled with humour and whimsical ideas.",
+			"rank": 18
 		},
 		{
-			"text": "Strangely, it was written backwards."
+			"index": 12,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.2500000000,
+			"position_score": 0.08,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.0512500000,
+			"text": "Strangely, it was written backwards.",
+			"rank": 38
 		},
 		{
-			"text": "After a night nursing his cousin, Carroll went for a long walk over the hills near Guildford, and a solitary line of verse came into his head – “For the Snark was a Boojum, you see!” The rest of the stanza, the last in the poem, came to him a few days later."
+			"index": 13,
+			"sbs_score": 0.0026978417,
+			"dbs_score": 0.0000504988,
+			"title_score": 0.5000000000,
+			"length_score": -0.6000000000,
+			"position_score": 0.08,
+			"keyword_score": 0.0137417028,
+			"total_score": 0.1393708514,
+			"text": "After a night nursing his cousin, Carroll went for a long walk over the hills near Guildford, and a solitary line of verse came into his head \u2013 \u201cFor the Snark was a Boojum, you see!\u201d The rest of the stanza, the last in the poem, came to him a few days later.",
+			"rank": 17
 		},
 		{
-			"text": "Over a period of six months, the rest of poem was composed, ending up as 141 stanzas in 8 sections that Carroll called “fits."
+			"index": 14,
+			"sbs_score": 0.0043465228,
+			"dbs_score": 0.0004538860,
+			"title_score": 0.2500000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.08,
+			"keyword_score": 0.0240020439,
+			"total_score": 0.2257510219,
+			"text": "Over a period of six months, the rest of poem was composed, ending up as 141 stanzas in 8 sections that Carroll called \u201cfits.",
+			"rank": 5
 		},
 		{
-			"text": "” The poem concerns a quest by a crew sailing to catch a mysterious creature called a Snark."
+			"index": 15,
+			"sbs_score": 0.0063478629,
+			"dbs_score": 0.0001063662,
+			"title_score": 0.2500000000,
+			"length_score": 0.8500000000,
+			"position_score": 0.08,
+			"keyword_score": 0.0322711456,
+			"total_score": 0.2361355728,
+			"text": "\u201d The poem concerns a quest by a crew sailing to catch a mysterious creature called a Snark.",
+			"rank": 3
 		},
 		{
-			"text": "Each member of the crew has an occupation beginning with the letter “B” – Bellman (the Captain), Baker, Banker, Barrister, Billiard-Marker, Boots, Bonnet-Maker, Broker, and Butcher, accompanied by a Beaver."
+			"index": 16,
+			"sbs_score": 0.0003721161,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.5500000000,
+			"position_score": 0.05,
+			"keyword_score": 0.0018605805,
+			"total_score": 0.0821802903,
+			"text": "Each member of the crew has an occupation beginning with the letter \u201cB\u201d \u2013 Bellman (the Captain), Baker, Banker, Barrister, Billiard-Marker, Boots, Bonnet-Maker, Broker, and Butcher, accompanied by a Beaver.",
+			"rank": 33
 		},
 		{
-			"text": "Their maritime map is an absolute blank."
+			"index": 17,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.3500000000,
+			"position_score": 0.05,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.0562500000,
+			"text": "Their maritime map is an absolute blank.",
+			"rank": 37
 		},
 		{
-			"text": "They reach an island, and the hunt for a Snark begins."
+			"index": 18,
+			"sbs_score": 0.0022890778,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.2500000000,
+			"length_score": 0.5500000000,
+			"position_score": 0.05,
+			"keyword_score": 0.0114453891,
+			"total_score": 0.1807226946,
+			"text": "They reach an island, and the hunt for a Snark begins.",
+			"rank": 8
 		},
 		{
-			"text": "But the quest is fraught with danger because although Snarks are not in themselves harmful, those that are Boojums are ferocious and will kill."
+			"index": 19,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.05,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.1125000000,
+			"text": "But the quest is fraught with danger because although Snarks are not in themselves harmful, those that are Boojums are ferocious and will kill.",
+			"rank": 24
 		},
 		{
-			"text": "The question that naturally arises is “does the poem have a meaning?” Carroll denied that he meant anything in particular – the poem was all nonsense – but that did not stop people asking him, and it inspired others to give it their own meaning."
+			"index": 20,
+			"sbs_score": 0.0039317383,
+			"dbs_score": 0.0003074204,
+			"title_score": 0.2500000000,
+			"length_score": -0.1500000000,
+			"position_score": 0.05,
+			"keyword_score": 0.0211957938,
+			"total_score": 0.0980978969,
+			"text": "The question that naturally arises is \u201cdoes the poem have a meaning?\u201d Carroll denied that he meant anything in particular \u2013 the poem was all nonsense \u2013 but that did not stop people asking him, and it inspired others to give it their own meaning.",
+			"rank": 28
 		},
 		{
-			"text": "To some extent, the poem is about the relationships that emerge among the crew, and the interaction between this motley bunch of characters."
+			"index": 21,
+			"sbs_score": 0.0031279324,
+			"dbs_score": 0.0000108626,
+			"title_score": 0.0000000000,
+			"length_score": 0.8500000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0156939752,
+			"total_score": 0.1240969876,
+			"text": "To some extent, the poem is about the relationships that emerge among the crew, and the interaction between this motley bunch of characters.",
+			"rank": 19
 		},
 		{
-			"text": "All behave in odd ways, some have close-shaves, and one completely vanishes – caught by a Boojum."
+			"index": 22,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.1100000000,
+			"text": "All behave in odd ways, some have close-shaves, and one completely vanishes \u2013 caught by a Boojum.",
+			"rank": 25
 		},
 		{
-			"text": "The poem was entitled The Hunting of the Snark with the subtitle, An Agony in Eight Fits."
+			"index": 23,
+			"sbs_score": 0.0050782903,
+			"dbs_score": 0.0000418986,
+			"title_score": 0.5000000000,
+			"length_score": 0.8500000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0256009448,
+			"total_score": 0.3165504724,
+			"text": "The poem was entitled The Hunting of the Snark with the subtitle, An Agony in Eight Fits.",
+			"rank": 0
 		},
 		{
-			"text": "Carroll originally intended it as a set of verses to be included in another of his children’s stories, but it grew too long and became a book in its own right."
+			"index": 24,
+			"sbs_score": 0.0023207241,
+			"dbs_score": 0.0000080215,
+			"title_score": 0.2500000000,
+			"length_score": 0.4500000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0116437280,
+			"total_score": 0.1658218640,
+			"text": "Carroll originally intended it as a set of verses to be included in another of his children\u2019s stories, but it grew too long and became a book in its own right.",
+			"rank": 11
 		},
 		{
-			"text": "He published it on 1 April 1876 – the date chosen with care."
+			"index": 25,
+			"sbs_score": 0.0008992806,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.6000000000,
+			"position_score": 0.06,
+			"keyword_score": 0.0044964029,
+			"total_score": 0.0922482014,
+			"text": "He published it on 1 April 1876 \u2013 the date chosen with care.",
+			"rank": 31
 		},
 		{
-			"text": "However, many of his presentation copies to friends are dated 29 March."
+			"index": 26,
+			"sbs_score": 0.0017985612,
+			"dbs_score": 0.0000388179,
+			"title_score": 0.0000000000,
+			"length_score": 0.6000000000,
+			"position_score": 0.06,
+			"keyword_score": 0.0091868951,
+			"total_score": 0.0945934475,
+			"text": "However, many of his presentation copies to friends are dated 29 March.",
+			"rank": 29
 		},
 		{
-			"text": "Although issued in a pictorial buff coloured cloth, he had copies bound in red, blue, green, and white cloth, all with gold decoration, to give away to his friends and family."
+			"index": 27,
+			"sbs_score": 0.0010443258,
+			"dbs_score": 0.0000022464,
+			"title_score": 0.0000000000,
+			"length_score": 0.4500000000,
+			"position_score": 0.06,
+			"keyword_score": 0.0052328612,
+			"total_score": 0.0738664306,
+			"text": "Although issued in a pictorial buff coloured cloth, he had copies bound in red, blue, green, and white cloth, all with gold decoration, to give away to his friends and family.",
+			"rank": 34
 		},
 		{
-			"text": "The book was dedicated to one of his friends, Gertrude Chataway, and a dedicatory acrostic poem that introduces the book embodies her name as the first word of each stanza, Gert, Rude, Chat, Away, and also the first letter of each line."
+			"index": 28,
+			"sbs_score": 0.0033401850,
+			"dbs_score": 0.0001565167,
+			"title_score": 0.0000000000,
+			"length_score": -0.1000000000,
+			"position_score": 0.06,
+			"keyword_score": 0.0174835086,
+			"total_score": 0.0112417543,
+			"text": "The book was dedicated to one of his friends, Gertrude Chataway, and a dedicatory acrostic poem that introduces the book embodies her name as the first word of each stanza, Gert, Rude, Chat, Away, and also the first letter of each line.",
+			"rank": 41
 		},
 		{
-			"text": "Accompanying the poem were illustrations by Henry Holiday (1839-1927), artist, sculptor, stained-glass designer, and book illustrator."
+			"index": 29,
+			"sbs_score": 0.0056205036,
+			"dbs_score": 0.0000162939,
+			"title_score": 0.0000000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0281839876,
+			"total_score": 0.1240919938,
+			"text": "Accompanying the poem were illustrations by Henry Holiday (1839-1927), artist, sculptor, stained-glass designer, and book illustrator.",
+			"rank": 20
 		},
 		{
-			"text": "He drew nine illustrations for the book; a tenth illustration depicting a Snark was rejected by Carroll – he wanted the creature to remain unimaginable."
+			"index": 30,
+			"sbs_score": 0.0035971223,
+			"dbs_score": 0.0000888453,
+			"title_score": 0.5000000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0184298380,
+			"total_score": 0.3067149190,
+			"text": "He drew nine illustrations for the book; a tenth illustration depicting a Snark was rejected by Carroll \u2013 he wanted the creature to remain unimaginable.",
+			"rank": 1
 		},
 		{
-			"text": "The poem owes a debt to “Jabberwocky” – some of the invented words from these verses reappear in The Hunting of the Snark and Carroll explains their derivation in his Preface, such as frumious being a portmanteau word based on “fuming” and “furious."
+			"index": 31,
+			"sbs_score": 0.0030832477,
+			"dbs_score": 0.0002558928,
+			"title_score": 0.7500000000,
+			"length_score": -0.1000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0166957022,
+			"total_score": 0.2870978511,
+			"text": "The poem owes a debt to \u201cJabberwocky\u201d \u2013 some of the invented words from these verses reappear in The Hunting of the Snark and Carroll explains their derivation in his Preface, such as frumious being a portmanteau word based on \u201cfuming\u201d and \u201cfurious.",
+			"rank": 2
 		},
 		{
-			"text": "” Some of the creatures also make a second appearance – the vicious Jubjub bird and the terrifying Bandersnatch."
+			"index": 32,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.8500000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.1162500000,
+			"text": "\u201d Some of the creatures also make a second appearance \u2013 the vicious Jubjub bird and the terrifying Bandersnatch.",
+			"rank": 22
 		},
 		{
-			"text": "The poem was very popular – it was reprinted many times."
+			"index": 33,
+			"sbs_score": 0.0061151079,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.5000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0305755396,
+			"total_score": 0.0877877698,
+			"text": "The poem was very popular \u2013 it was reprinted many times.",
+			"rank": 32
 		},
 		{
-			"text": "In Carroll’s lifetime, over 20,000 copies were sold."
+			"index": 34,
+			"sbs_score": 0.0013489209,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.4000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0067446043,
+			"total_score": 0.0633723022,
+			"text": "In Carroll\u2019s lifetime, over 20,000 copies were sold.",
+			"rank": 36
 		},
 		{
-			"text": "The poem was incorporated into Carroll’s compendium of humorous poetry entitled Rhyme? and Reason? (1883)."
+			"index": 35,
+			"sbs_score": 0.0068944844,
+			"dbs_score": 0.0001624013,
+			"title_score": 0.0000000000,
+			"length_score": 0.6000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0352844285,
+			"total_score": 0.1026422142,
+			"text": "The poem was incorporated into Carroll\u2019s compendium of humorous poetry entitled Rhyme?",
+			"rank": 27
 		},
 		{
-			"text": "Since then it has been illustrated by a variety of artists and translated into many languages, and the book rarely goes out of print."
+			"index": 36,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.1000000000,
+			"position_score": 0.04,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.0225000000,
+			"text": "and Reason?",
+			"rank": 40
 		},
 		{
-			"text": "People are known to memorise and recite the poem."
+			"index": 37,
+			"sbs_score": 0.0000000000,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.0500000000,
+			"position_score": 0.15,
+			"keyword_score": 0.0000000000,
+			"total_score": 0.0437500000,
+			"text": "(1883).",
+			"rank": 39
 		},
 		{
-			"text": "Some people form Snark Clubs."
+			"index": 38,
+			"sbs_score": 0.0011990408,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.8000000000,
+			"position_score": 0.15,
+			"keyword_score": 0.0059952038,
+			"total_score": 0.1404976019,
+			"text": "Since then it has been illustrated by a variety of artists and translated into many languages, and the book rarely goes out of print.",
+			"rank": 16
 		},
 		{
-			"text": "There is a timeless nature about the verses that make it as relevant today as it did in 1876."
+			"index": 39,
+			"sbs_score": 0.0079936051,
+			"dbs_score": 0.0000244409,
+			"title_score": 0.0000000000,
+			"length_score": 0.4500000000,
+			"position_score": 0.15,
+			"keyword_score": 0.0400902300,
+			"total_score": 0.1137951150,
+			"text": "People are known to memorise and recite the poem.",
+			"rank": 23
+		},
+		{
+			"index": 40,
+			"sbs_score": 0.0050359712,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.2500000000,
+			"length_score": 0.2500000000,
+			"position_score": 0.15,
+			"keyword_score": 0.0251798561,
+			"total_score": 0.1750899281,
+			"text": "Some people form Snark Clubs.",
+			"rank": 10
+		},
+		{
+			"index": 41,
+			"sbs_score": 0.0005679667,
+			"dbs_score": 0.0000000000,
+			"title_score": 0.0000000000,
+			"length_score": 0.9500000000,
+			"position_score": 0.15,
+			"keyword_score": 0.0028398334,
+			"total_score": 0.1576699167,
+			"text": "There is a timeless nature about the verses that make it as relevant today as it did in 1876.",
+			"rank": 13
 		}
 	]
 }

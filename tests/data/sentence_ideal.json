@@ -5,7 +5,20 @@
 	},
 	"lang": "en",
 	"title": "Puppies, Kittens Dance Happily!",
-	"text": "Fuzzy kittens and fluffy puppies dance happily in the woods to the merry sound of accordions, fiddles, banjos, and horns.",
+	"sentences": [
+		{
+			"index": 0,
+			"sbs_score": 0.0750000000,
+			"dbs_score": 0.1137204142,
+			"title_score": 1.0000000000,
+			"length_score": 1.0000000000,
+			"position_score": 0.15,
+			"keyword_score": 0.9436020710,
+			"total_score": 1.0093010355,
+			"text": "Fuzzy kittens and fluffy puppies dance happily in the woods to the merry sound of accordions, fiddles, banjos, and horns.",
+			"rank": 0
+		}
+	],
 	"words": [
 		"Fuzzy",
 		"kittens",
