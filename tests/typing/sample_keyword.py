@@ -1,14 +1,16 @@
 
 
-from oolongt.typing.scored_keyword import ScoredKeyword, SCORE_K
+from oolongt.typing.scored_keyword import (
+    score_keyword, ScoredKeyword, SCORE_K)
 
 
 class SampleKeyword(ScoredKeyword):
-    def __init__(self, pairs):
+    def __init__(self, pairs, of):
         self.word = pairs.get('word', 'foo')
-        self.score = pairs.get('total_score', 0)
-        self.count = pairs.get('count', 0)
+        self.count = pairs.get('count', 1)
+        self.of = of
+        self.score = pairs.get('score', score_keyword(self.count, of))
 
     @classmethod
-    def by_score(cls, score, count=0):
-        return cls({'total_score': score, 'count': count})
+    def by_score(cls, score, count=1):
+        return cls({'score': score, 'count': count}, 1)
