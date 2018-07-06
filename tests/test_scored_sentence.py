@@ -1,12 +1,14 @@
 import pytest
 
+from oolongt import roughly
+
 from oolongt.typing.scored_sentence import (ScoredSentence,
                                             score_keyword_frequency,
                                             score_position, score_total)
 
 from .constants import SAMPLES
 from .helpers import (assert_ex, check_exception, get_sample_sentences,
-                      get_samples, roughly)
+                      get_samples)
 
 
 @pytest.mark.parametrize('index,of,expected', [
