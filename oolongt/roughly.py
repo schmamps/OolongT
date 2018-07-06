@@ -1,4 +1,7 @@
-def eq(a, b, rel_tol=0.00001, abs_tol=0.0):
+DEFAULT_TOLERANCE = 0.0000001
+
+
+def eq(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     """Test `a`(-ish) == `b`(-ish)
 
     Arguments:
@@ -6,7 +9,7 @@ def eq(a, b, rel_tol=0.00001, abs_tol=0.0):
         b {float} -- another value
 
     Keyword Arguments:
-        rel_tol {float} -- relative tolerance (default: {0.00001})
+        rel_tol {float} -- relative tolerance (default: {DEFAULT_TOLERANCE})
         abs_tol {float} -- absolute tolerance (default: {0.0})
 
     Returns:
@@ -16,7 +19,7 @@ def eq(a, b, rel_tol=0.00001, abs_tol=0.0):
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
-def ne(a, b, rel_tol=0.00001, abs_tol=0.0):
+def ne(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     """Test `a`(-ish) != `b`(-ish)
 
     Arguments:
@@ -24,7 +27,7 @@ def ne(a, b, rel_tol=0.00001, abs_tol=0.0):
         b {float} -- another value
 
     Keyword Arguments:
-        rel_tol {float} -- relative tolerance (default: {0.00001})
+        rel_tol {float} -- relative tolerance (default: {DEFAULT_TOLERANCE})
         abs_tol {float} -- absolute tolerance (default: {0.0})
 
     Returns:
@@ -34,7 +37,7 @@ def ne(a, b, rel_tol=0.00001, abs_tol=0.0):
     return not eq(a, b, rel_tol, abs_tol)
 
 
-def lt(a, b, rel_tol=0.00001, abs_tol=0.0):
+def lt(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     """Test `a`(-ish) < `b`(-ish)
 
     Arguments:
@@ -42,7 +45,7 @@ def lt(a, b, rel_tol=0.00001, abs_tol=0.0):
         b {float} -- another value
 
     Keyword Arguments:
-        rel_tol {float} -- relative tolerance (default: {0.00001})
+        rel_tol {float} -- relative tolerance (default: {DEFAULT_TOLERANCE})
         abs_tol {float} -- absolute tolerance (default: {0.0})
 
     Returns:
@@ -52,7 +55,7 @@ def lt(a, b, rel_tol=0.00001, abs_tol=0.0):
     return a < b and not eq(a, b, rel_tol, abs_tol)
 
 
-def gt(a, b, rel_tol=0.00001, abs_tol=0.0):
+def gt(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     """Test `a`(-ish) > `b`(-ish)
 
     Arguments:
@@ -60,7 +63,7 @@ def gt(a, b, rel_tol=0.00001, abs_tol=0.0):
         b {float} -- another value
 
     Keyword Arguments:
-        rel_tol {float} -- relative tolerance (default: {0.00001})
+        rel_tol {float} -- relative tolerance (default: {DEFAULT_TOLERANCE})
         abs_tol {float} -- absolute tolerance (default: {0.0})
 
     Returns:
@@ -70,7 +73,7 @@ def gt(a, b, rel_tol=0.00001, abs_tol=0.0):
     return a > b and not eq(a, b, rel_tol, abs_tol)
 
 
-def ge(a, b, rel_tol=0.00001, abs_tol=0.0):
+def ge(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     """Test `a`(-ish) >= `b`(-ish)
 
     Arguments:
@@ -78,7 +81,7 @@ def ge(a, b, rel_tol=0.00001, abs_tol=0.0):
         b {float} -- another value
 
     Keyword Arguments:
-        rel_tol {float} -- relative tolerance (default: {0.00001})
+        rel_tol {float} -- relative tolerance (default: {DEFAULT_TOLERANCE})
         abs_tol {float} -- absolute tolerance (default: {0.0})
 
     Returns:
@@ -88,7 +91,7 @@ def ge(a, b, rel_tol=0.00001, abs_tol=0.0):
     return not lt(a, b, rel_tol, abs_tol)
 
 
-def le(a, b, rel_tol=0.00001, abs_tol=0.0):
+def le(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     """Test `a`(-ish) <= `b`(-ish)
 
     Arguments:
@@ -96,7 +99,7 @@ def le(a, b, rel_tol=0.00001, abs_tol=0.0):
         b {float} -- another value
 
     Keyword Arguments:
-        rel_tol {float} -- relative tolerance (default: {0.00001})
+        rel_tol {float} -- relative tolerance (default: {DEFAULT_TOLERANCE})
         abs_tol {float} -- absolute tolerance (default: {0.0})
 
     Returns:
