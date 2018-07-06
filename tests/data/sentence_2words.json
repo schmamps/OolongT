@@ -5,7 +5,9 @@
 	},
 	"lang": "en",
 	"title": "Puppies and Kittens Dance",
-		"sentences": [
+	"keyword_count": 0,
+	"keywords": [],
+	"sentences": [
 		{
 			"index": 0,
 			"sbs_score": 0.0000000000,
@@ -19,7 +21,6 @@
 			"rank": 0
 		}
 	],
-	"keywords": {},
 	"length_score": 0.0,
 	"title_score": 0.0,
 	"remove_stop_words": ["!"]

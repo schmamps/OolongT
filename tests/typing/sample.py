@@ -27,7 +27,7 @@ def load_config(root, name):
     sentences = config.pop('sentences', [])
     sent_of = len(sentences)
     keywords = config.pop('keywords', [])
-    kw_of = config.get('word_count', 0)
+    kw_of = config.get('keyword_count', 0)
 
     config['body'] = text if text is not False else join_sentences(sentences)
     config['sentences'] = [

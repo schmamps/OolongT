@@ -25,11 +25,11 @@ def generate():
     for samp in get_samples():
         receiveds = p.get_keywords(samp.body)
         keywords = sorted(receiveds, reverse=True)
-        word_count = sum([kw.count for kw in keywords])
+        keyword_count = sum([kw.count for kw in keywords])
 
         with json_util.create(samp.name, 'keywords') as file:
             file.write('{\n')
-            file.write('\t"word_count": {0:d},\n'.format(word_count))
+            file.write('\t"keyword_count": {0:d},\n'.format(keyword_count))
             file.write('\t"keywords": [\n')
             file.write(',\n'.join([jsonify(kw) for kw in keywords]))
             file.write(json_util.close(']'))

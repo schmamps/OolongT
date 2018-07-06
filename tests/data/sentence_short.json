@@ -5,6 +5,12 @@
 	},
 	"lang": "en",
 	"title": "A short paragraph here yet a longer title",
+	"keyword_count": 3,
+	"keywords": [
+		{"word": "paragraph", "count": 1, "total_score": 0.50000000},
+		{"word": "contains", "count": 1, "total_score": 0.50000000},
+		{"word": "sentence", "count": 1, "total_score": 0.50000000}
+	],
 	"sentences": [
 		{
 			"index": 0,
@@ -30,12 +36,6 @@
 		"a",
 		"longer",
 		"title"
-	],
-	"word_count": 3,
-	"keywords": [
-		{"word": "paragraph", "count": 1, "total_score": 0.50000000},
-		{"word": "contains", "count": 1, "total_score": 0.50000000},
-		{"word": "sentence", "count": 1, "total_score": 0.50000000}
 	],
 	"length_score": 0.25,
 	"title_score": 0.25,

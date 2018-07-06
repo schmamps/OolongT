@@ -5,6 +5,27 @@
 	},
 	"lang": "en",
 	"title": "Puppies and Kittens Dance Merrily",
+	"keyword_count": 18,
+	"keywords": [
+		{"score": 0.083333333333, "count":  1, "word": "accordions"},
+		{"score": 0.083333333333, "count":  1, "word": "puppies"},
+		{"score": 0.083333333333, "count":  1, "word": "playing"},
+		{"score": 0.083333333333, "count":  1, "word": "perfect"},
+		{"score": 0.083333333333, "count":  1, "word": "happily"},
+		{"score": 0.083333333333, "count":  1, "word": "fiddles"},
+		{"score": 0.083333333333, "count":  1, "word": "chopin"},
+		{"score": 0.083333333333, "count":  1, "word": "banjos"},
+		{"score": 0.083333333333, "count":  1, "word": "accord"},
+		{"score": 0.083333333333, "count":  1, "word": "young"},
+		{"score": 0.083333333333, "count":  1, "word": "woods"},
+		{"score": 0.083333333333, "count":  1, "word": "sound"},
+		{"score": 0.083333333333, "count":  1, "word": "music"},
+		{"score": 0.083333333333, "count":  1, "word": "merry"},
+		{"score": 0.083333333333, "count":  1, "word": "horns"},
+		{"score": 0.083333333333, "count":  1, "word": "fuzzy"},
+		{"score": 0.083333333333, "count":  1, "word": "dance"},
+		{"score": 0.083333333333, "count":  1, "word": "cats"}
+	],
 	"sentences": [
 		{
 			"index": 0,
@@ -90,7 +111,6 @@
 		"dance",
 		"merrily"
 	],
-	"keywords": {},
 	"length_score": 0.5,
 	"title_score": 0.5
 }

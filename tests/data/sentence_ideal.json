@@ -5,6 +5,22 @@
 	},
 	"lang": "en",
 	"title": "Puppies, Kittens Dance Happily!",
+	"keyword_count": 13,
+	"keywords": [
+		{"score": 0.115384615385, "count":  1, "word": "accordions"},
+		{"score": 0.115384615385, "count":  1, "word": "puppies"},
+		{"score": 0.115384615385, "count":  1, "word": "kittens"},
+		{"score": 0.115384615385, "count":  1, "word": "happily"},
+		{"score": 0.115384615385, "count":  1, "word": "fiddles"},
+		{"score": 0.115384615385, "count":  1, "word": "fluffy"},
+		{"score": 0.115384615385, "count":  1, "word": "banjos"},
+		{"score": 0.115384615385, "count":  1, "word": "woods"},
+		{"score": 0.115384615385, "count":  1, "word": "sound"},
+		{"score": 0.115384615385, "count":  1, "word": "merry"},
+		{"score": 0.115384615385, "count":  1, "word": "horns"},
+		{"score": 0.115384615385, "count":  1, "word": "fuzzy"},
+		{"score": 0.115384615385, "count":  1, "word": "dance"}
+	],
 	"sentences": [
 		{
 			"index": 0,
@@ -64,7 +80,6 @@
 		"horns"
 	],
 	"compare_title": ["puppies", "kittens", "dance", "happily"],
-	"keywords": {},
 	"length_score": 1.0,
 	"title_score": 1.0
 }

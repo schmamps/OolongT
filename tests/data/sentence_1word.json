@@ -5,6 +5,8 @@
 	},
 	"lang": "en",
 	"title": "Puppies and Kittens Dance!",
+	"keyword_count": 0,
+	"keywords": [],
 	"sentences": [
 		{
 			"index": 0,
@@ -23,7 +25,6 @@
 	"compare_words": ["whatever"],
 	"compare_title": ["puppies", "and", "kittens", "dance"],
 	"split_words": ["whatever", "!"],
-	"keywords": {},
 	"length_score": 0.0,
 	"title_score": 0.0,
 	"remove_punctuations": "Whatever",

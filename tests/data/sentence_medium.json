@@ -5,6 +5,16 @@
 	},
 	"lang": "en",
 	"title": "Kittens Frolic with Tiny Puppies?",
+	"keyword_count": 7,
+	"keywords": [
+		{"score": 0.214285714286, "count":  1, "word": "puppies"},
+		{"score": 0.214285714286, "count":  1, "word": "kittens"},
+		{"score": 0.214285714286, "count":  1, "word": "happily"},
+		{"score": 0.214285714286, "count":  1, "word": "fluffy"},
+		{"score": 0.214285714286, "count":  1, "word": "woods"},
+		{"score": 0.214285714286, "count":  1, "word": "fuzzy"},
+		{"score": 0.214285714286, "count":  1, "word": "dance"}
+	],
 	"sentences": [
 		{
 			"index": 0,
@@ -63,7 +73,6 @@
 		"woods",
 		"."
 	],
-	"keywords": {},
 	"length_score": 0.5,
 	"title_score":  0.5
 }
