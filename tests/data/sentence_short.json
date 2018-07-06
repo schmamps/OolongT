@@ -14,13 +14,13 @@
 	"sentences": [
 		{
 			"index": 0,
-			"sbs_score": 0.3000000000,
-			"dbs_score": 0.3906250000,
-			"title_score": 0.2500000000,
-			"length_score": 0.2500000000,
+			"sbs_score": 0.300000000000,
+			"dbs_score": 0.390625000000,
+			"title_score": 0.250000000000,
+			"length_score": 0.250000000000,
 			"position_score": 0.15,
-			"keyword_score": 3.4531250000,
-			"total_score": 1.8890625000,
+			"keyword_score": 3.453125000000,
+			"total_score": 1.889062500000,
 			"text": "This paragraph contains one sentence.",
 			"rank": 0
 		}

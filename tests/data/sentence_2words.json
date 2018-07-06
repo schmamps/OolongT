@@ -10,13 +10,13 @@
 	"sentences": [
 		{
 			"index": 0,
-			"sbs_score": 0.0000000000,
-			"dbs_score": 0.0000000000,
-			"title_score": 0.0000000000,
-			"length_score": 0.1000000000,
+			"sbs_score": 0.000000000000,
+			"dbs_score": 0.000000000000,
+			"title_score": 0.000000000000,
+			"length_score": 0.100000000000,
 			"position_score": 0.15,
-			"keyword_score": 0.0000000000,
-			"total_score": 0.0500000000,
+			"keyword_score": 0.000000000000,
+			"total_score": 0.050000000000,
 			"text": "Or whatever!",
 			"rank": 0
 		}
