@@ -4,6 +4,9 @@ from oolongt import roughly
 from oolongt.typing.repr_able import ReprAble
 
 
+SCORE_TOLERANCE = 0.00000011
+
+
 # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
 # Sentence Extraction Based Single Document Summarization.
 # International Institute of Information Technology, Hyderabad, India, 5.
@@ -102,19 +105,22 @@ class ScoredSentence(ReprAble):
             self.sbs_score)
 
     def __eq__(self, other):
-        return roughly.eq(self.total_score, other.total_score)
+        return roughly.eq(
+            self.total_score, other.total_score, rel_tol=SCORE_TOLERANCE)
 
     def __lt__(self, other):
-        return roughly.lt(self.total_score, other.total_score)
+        return roughly.lt(
+            self.total_score, other.total_score, rel_tol=SCORE_TOLERANCE)
 
     def __gt__(self, other):
-        return roughly.gt(self.total_score, other.total_score)
+        return roughly.gt(
+            self.total_score, other.total_score, rel_tol=SCORE_TOLERANCE)
 
     def __ne__(self, other):
-        return roughly.ne(self.total_score, other.total_score)
+        return not (self == other)
 
     def __ge__(self, other):
-        return roughly.ge(self.total_score, other.total_score)
+        return not (self < other)
 
     def __le__(self, other):
-        return roughly.le(self.total_score, other.total_score)
+        return not (self > other)

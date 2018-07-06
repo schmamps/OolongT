@@ -7,6 +7,7 @@ from oolongt import roughly
 
 from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
+from oolongt.typing.scored_sentence import SCORE_TOLERANCE
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception,
                            get_sample_sentences, get_samples, randomize_list,
@@ -182,7 +183,7 @@ class TestSummarizer:
             ), )
 
         for desc, expected, received in params:
-            assert roughly.eq(received, expected), assert_ex(
+            assert roughly.eq(received, expected, SCORE_TOLERANCE), assert_ex(
                 desc,
                 received,
                 expected)

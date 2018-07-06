@@ -1,4 +1,4 @@
-from oolongt.typing.scored_sentence import ScoredSentence
+from oolongt.typing.scored_sentence import SCORE_TOLERANCE, ScoredSentence
 
 from oolongt import roughly
 
@@ -34,25 +34,31 @@ class SampleSentence(ScoredSentence):
         if (self.of != other.of):
             return False
 
-        if roughly.ne(self.title_score, other.title_score):
+        if roughly.ne(self.title_score, other.title_score,
+                      rel_tol=SCORE_TOLERANCE):
+                return False
+
+        if roughly.ne(self.length_score, other.length_score,
+                      rel_tol=SCORE_TOLERANCE):
             return False
 
-        if roughly.ne(self.length_score, other.length_score):
+        if roughly.ne(self.dbs_score, other.dbs_score,
+                      rel_tol=SCORE_TOLERANCE):
             return False
 
-        if roughly.ne(self.dbs_score, other.dbs_score):
-            return False
-
-        if roughly.ne(self.sbs_score, other.sbs_score):
+        if roughly.ne(self.sbs_score, other.sbs_score,
+                      rel_tol=SCORE_TOLERANCE):
             return False
 
         if roughly.ne(self.position_score, other.position_score):
             return False
 
-        if roughly.ne(self.keyword_score, other.keyword_score):
+        if roughly.ne(self.keyword_score, other.keyword_score,
+                      rel_tol=SCORE_TOLERANCE):
             return False
 
-        if roughly.ne(self.total_score, other.total_score):
+        if roughly.ne(self.total_score, other.total_score,
+                      rel_tol=SCORE_TOLERANCE):
             return False
 
         return True
