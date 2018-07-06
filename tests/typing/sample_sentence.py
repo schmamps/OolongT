@@ -1,5 +1,6 @@
 from oolongt.typing.scored_sentence import ScoredSentence
-from tests import helpers
+
+from oolongt import roughly
 
 
 class SampleSentence(ScoredSentence):
@@ -33,25 +34,25 @@ class SampleSentence(ScoredSentence):
         if (self.of != other.of):
             return False
 
-        if self.title_score != helpers.roughly(other.title_score):
+        if roughly.ne(self.title_score, other.title_score):
             return False
 
-        if self.length_score != helpers.roughly(other.length_score):
+        if roughly.ne(self.length_score, other.length_score):
             return False
 
-        if self.dbs_score != helpers.roughly(other.dbs_score):
+        if roughly.ne(self.dbs_score, other.dbs_score):
             return False
 
-        if self.sbs_score != helpers.roughly(other.sbs_score):
+        if roughly.ne(self.sbs_score, other.sbs_score):
             return False
 
-        if self.position_score != helpers.roughly(other.position_score):
+        if roughly.ne(self.position_score, other.position_score):
             return False
 
-        if self.keyword_score != helpers.roughly(other.keyword_score):
+        if roughly.ne(self.keyword_score, other.keyword_score):
             return False
 
-        if self.total_score != helpers.roughly(other.total_score):
+        if roughly.ne(self.total_score, other.total_score):
             return False
 
         return True
