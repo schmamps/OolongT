@@ -18,7 +18,7 @@ def jsonify(sent, rank):
         'rank': rank, }
 
     pairs = ',\n\t\t\t'.join([
-        json_util.kv_pair(data, 'index', '2d'),
+        json_util.kv_pair(data, 'index', 'd'),
         json_util.kv_pair(data, 'sbs_score', '.12f'),
         json_util.kv_pair(data, 'dbs_score', '.12f'),
         json_util.kv_pair(data, 'title_score', '.12f'),

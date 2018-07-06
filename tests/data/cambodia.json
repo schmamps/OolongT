@@ -176,7 +176,7 @@
 	],
 	"sentences": [
 		{
-			"index":  0,
+			"index": 0,
 			"sbs_score": 0.003291536050,
 			"dbs_score": 0.001252986183,
 			"title_score": 0.666666666667,
@@ -188,7 +188,7 @@
 			"rank": 1
 		},
 		{
-			"index":  1,
+			"index": 1,
 			"sbs_score": 0.002982954545,
 			"dbs_score": 0.000003794906,
 			"title_score": 0.000000000000,
@@ -200,7 +200,7 @@
 			"rank": 6
 		},
 		{
-			"index":  2,
+			"index": 2,
 			"sbs_score": 0.001604278075,
 			"dbs_score": 0.000000000000,
 			"title_score": 0.000000000000,
@@ -212,7 +212,7 @@
 			"rank": 4
 		},
 		{
-			"index":  3,
+			"index": 3,
 			"sbs_score": 0.002807486631,
 			"dbs_score": 0.000743801653,
 			"title_score": 0.000000000000,
@@ -224,7 +224,7 @@
 			"rank": 7
 		},
 		{
-			"index":  4,
+			"index": 4,
 			"sbs_score": 0.001778656126,
 			"dbs_score": 0.000139462810,
 			"title_score": 0.000000000000,
@@ -236,7 +236,7 @@
 			"rank": 10
 		},
 		{
-			"index":  5,
+			"index": 5,
 			"sbs_score": 0.001363636364,
 			"dbs_score": 0.000000000000,
 			"title_score": 0.000000000000,
@@ -248,7 +248,7 @@
 			"rank": 8
 		},
 		{
-			"index":  6,
+			"index": 6,
 			"sbs_score": 0.003519061584,
 			"dbs_score": 0.000879681844,
 			"title_score": 0.666666666667,
@@ -260,7 +260,7 @@
 			"rank": 3
 		},
 		{
-			"index":  7,
+			"index": 7,
 			"sbs_score": 0.003409090909,
 			"dbs_score": 0.000716683884,
 			"title_score": 0.000000000000,
@@ -272,7 +272,7 @@
 			"rank": 9
 		},
 		{
-			"index":  8,
+			"index": 8,
 			"sbs_score": 0.001704545455,
 			"dbs_score": 0.000000000000,
 			"title_score": 0.000000000000,
@@ -284,7 +284,7 @@
 			"rank": 14
 		},
 		{
-			"index":  9,
+			"index": 9,
 			"sbs_score": 0.001203208556,
 			"dbs_score": 0.000000000000,
 			"title_score": 0.000000000000,
