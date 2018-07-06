@@ -1,23 +1,27 @@
 """ Test class for Summarizer """
 from math import floor
-from pytest import approx, mark
+
+import pytest
+
+from oolongt import roughly
 
 from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
+from tests.constants import DATA_PATH, SAMPLES
+from tests.helpers import (assert_ex, check_exception,
+                           get_sample_sentences, get_samples, randomize_list,
+                           snip)
+from tests.typing.sample import Sample
+from tests.typing.sample_keyword import SampleKeyword
 
-from .constants import DATA_PATH, SAMPLES
-from .helpers import (
-    assert_ex, compare_dict,
-    get_samples, get_sample_sentences,
-    randomize_list, snip, check_exception)
-from .sample import Sample
 
-CK = 'count'
+def kbs(score):
+    return SampleKeyword.by_score(score)
 
 
 class TestSummarizer:
     def _get_top_keywords(self, keywords):
-        # type: (list[dict]) -> list[dict]
+        # type: (list[dict]) -> list[SampleKeyword]
         """Shadow of `Summarizer.get_top_keywords()`
 
         keywords should be pre-sorted by frequency
@@ -26,23 +30,11 @@ class TestSummarizer:
             keywords {list[dict]} -- list of keyword Dicts
 
         Returns:
-            list[dict] -- the ten highest rated keywords
+            list[SampleKeyword] -- the ten highest rated keywords
         """
-        return [kw for kw in keywords if kw[CK] >= keywords[9][CK]]
+        return [kw for kw in keywords if kw.score >= keywords[9].score]
 
-    def _get_keyword_list(self, keywords):
-        # type: (list[dict]) -> list[str]
-        """Get all values at key 'word' in `keywords`
-
-        Arguments:
-            keywords {list[dict]} -- list of keyword Dicts
-
-        Returns:
-            list[str] -- all words
-        """
-        return pluck(keywords, 'word')
-
-    @mark.parametrize('samp', get_samples(SAMPLES))
+    @pytest.mark.parametrize('samp', get_samples(SAMPLES))
     def test_get_sentences(self, samp):
         # type: (Sample) -> list[dict]
         """Test `Summarizer.summarize()`
@@ -50,20 +42,11 @@ class TestSummarizer:
         Arguments:
             samp {Sample} -- sample data
         """
-        test_keys = [
-            'text',
-            'order',
-            'title_score',
-            'length_score',
-            'position_score',
-            'keyword_score',
-            'total_score']
-
         summ = Summarizer()
+        sentences = samp.sentences  # type: list[SampleSentence]
 
-        expecteds = sort_by(samp.sentences, 'order')
-        receiveds = summ.get_sentences(
-            samp.text, samp.title, None, None)
+        expecteds = sorted(sentences, key=lambda sent: sent.index)
+        receiveds = summ.get_sentences(samp.body, samp.title, None, None)
 
         assert (len(receiveds) == len(expecteds)), assert_ex(
             'summary result count',
@@ -71,75 +54,55 @@ class TestSummarizer:
             len(expecteds),
             hint=samp.name)
 
-        for order, received in enumerate(receiveds):
-            expected = expecteds[order]
-            test = compare_dict(expected, received, test_keys)
+        for index, received in enumerate(receiveds):
+            expected = expecteds[index]  # type: SampleSentence
 
-            assert test, assert_ex(
+            assert expected.equals(received), assert_ex(
                 'summary',
                 received,
                 expected,
-                hint=[order, snip(receiveds[order]['text'])])
+                hint=[index, snip(receiveds[index].text)])
 
-    @mark.parametrize('count,word_count,expected', [
-        (0, 1, 0.00),  # zero
-        (1, 3, 0.50),  # one third
-        (1, 2, 0.75),  # half
-        (1, 1, 1.50),  # maximum
-    ])
-    def test_score_keyword(self, count, word_count, expected):
-        # type: (int, int, float) -> None
-        """Test `Summarizer.score_keyword()`
-
-        Arguments:
-            count {int} -- {count}
-            word_count {int} -- total number of keywords
-            expected {float} -- expected score
-        """
-        summ = Summarizer()
-        keyword = {CK: count}
-
-        received = summ.score_keyword(keyword, word_count)['total_score']
-
-        assert (received == expected), assert_ex(
-            'keyword score',
-            received['total_score'],
-            expected,
-            hint=' of '.join([str(keyword[CK]), str(word_count)]))
-
-    @mark.parametrize('keywords,expected', [
+    @pytest.mark.parametrize('keywords,expected', [
         # short
-        ([{CK: 11}, {CK: 8}, {CK: 7}, {CK: 10}, {CK: 9}, {CK: 12}], 7),
+        ([
+            kbs(.11),
+            kbs(.08),
+            kbs(.07),
+            kbs(.10),
+            kbs(.09),
+            kbs(.12),
+        ], .07),
         # no tie
         ([
-            {CK: 2},
-            {CK: 4},
-            {CK: 7},
-            {CK: 1},
-            {CK: 8},
-            {CK: 5},
-            {CK: 12},
-            {CK: 9},
-            {CK: 11},
-            {CK: 6},
-            {CK: 10},
-            {CK: 3},
-        ], 3),
+            kbs(.02),
+            kbs(.04),
+            kbs(.07),
+            kbs(.01),
+            kbs(.08),
+            kbs(.05),
+            kbs(.12),
+            kbs(.09),
+            kbs(.11),
+            kbs(.06),
+            kbs(.10),
+            kbs(.03),
+        ], .03),
         # tied
         ([
-            {CK: 4},
-            {CK: 1},
-            {CK: 4},
-            {CK: 7},
-            {CK: 4},
-            {CK: 6},
-            {CK: 5},
-            {CK: 8},
-            {CK: 11},
-            {CK: 9},
-            {CK: 12},
-            {CK: 10}
-        ], 4),
+            kbs(.04),
+            kbs(.01),
+            kbs(.04),
+            kbs(.07),
+            kbs(.04),
+            kbs(.06),
+            kbs(.05),
+            kbs(.08),
+            kbs(.11),
+            kbs(.09),
+            kbs(.12),
+            kbs(.10),
+        ], .04),
     ])
     def test_get_top_keyword_threshold(self, keywords, expected):
         # type: (list[dict], int) - None
@@ -158,7 +121,7 @@ class TestSummarizer:
             received,
             expected)
 
-    @mark.parametrize('samp', get_samples(SAMPLES))
+    @pytest.mark.parametrize('samp', get_samples(SAMPLES))
     def test_get_top_keywords(self, samp):
         # type: (Sample) -> None
         """Test `Summarizer.get_top_keywords()`
@@ -174,9 +137,9 @@ class TestSummarizer:
         keywords = samp.keywords
         expected = self._get_top_keywords(keywords)
 
-        receiveds = summ.get_top_keywords(samp.text, source, category)
+        receiveds = summ.get_top_keywords(samp.body, source, category)
 
-        all_keywords = [kw['word'] for kw in keywords]
+        all_keywords = summ._pluck_words(keywords)
         assert (len(receiveds) == len(expected)), assert_ex(
             'result count',
             len(receiveds),
@@ -184,27 +147,18 @@ class TestSummarizer:
 
         for received in receiveds:
             try:
-                idx = all_keywords.index(received['word'])
+                idx = all_keywords.index(received.word)
 
-                test = (received[CK] == keywords[idx][CK])
-                assert test, assert_ex(
-                    'keyword count',
-                    received[CK],
-                    keywords[idx][CK])
-
-                test = (
-                    received['total_score'] ==
-                    approx(keywords[idx]['total_score']))
-
+                test = roughly.eq(received.score, keywords[idx].score)
                 assert test, assert_ex(
                     'keyword score',
-                    received['total_score'],
-                    keywords[idx]['total_score'])
+                    received.score,
+                    keywords[idx].score)
 
             except ValueError:
                 assert False, 'keyword error'
 
-    @mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
+    @pytest.mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
     def test_score_frequency(self, samp, sentence):
         # type: (Sample, dict) -> None
         """Test `Summarizer` sentence scoring by keyword frequency
@@ -214,29 +168,29 @@ class TestSummarizer:
             sentence {dict} -- individual sentence from sample
         """
         summ = Summarizer()
-        top_keywords = summ.get_top_keywords(samp.text, None, None)
+        words = summ.parser.get_all_words(sentence.text)
+        top_keywords = summ.get_top_keywords(samp.body, None, None)
         top_keyword_list = summ._pluck_words(top_keywords)
 
-        text = sentence['text']
-        words = summ.parser.get_all_words(text)
+        params = (
+            (
+                'density score',
+                sentence.dbs_score,
+                summ.score_dbs(words, top_keywords, top_keyword_list),
+            ),
+            (
+                'summation score',
+                sentence.sbs_score,
+                summ.score_sbs(words, top_keywords, top_keyword_list),
+            ), )
 
-        expecteds = (
-            sentence['keyword_score'],
-            sentence['sbs'],
-            sentence['dbs'])
-        receiveds = summ.score_frequency(
-            words, top_keywords, top_keyword_list)
-        hint = [samp.name, snip(text)]
+        for desc, expected, received in params:
+            assert roughly.eq(received, expected), assert_ex(
+                desc,
+                received,
+                expected)
 
-        for inv, desc in enumerate(['DBS', 'SBS', 'keyword score']):
-            idx = abs(inv - 2)
-            expected = approx(expecteds[idx], 0.00001)
-            received = receiveds[idx]
-
-            assert (received == expected), assert_ex(
-                desc, received, expected, hint)
-
-    @mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
+    @pytest.mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
     def test_score_sentence(self, samp, sentence):
         # type: (Sample, dict) -> None
         """Test `Summarizer.score_sentence()`
@@ -248,25 +202,23 @@ class TestSummarizer:
         summ = Summarizer()
         title_words = samp.title_words
         top_keywords = self._get_top_keywords(samp.keywords)
-        keyword_list = summ._pluck_words(top_keywords)
-        num_sents = len(samp.sentences)
+        top_keyword_list = summ._pluck_words(top_keywords)
+        text = sentence.text
+        index = sentence.index
+        of = len(samp.sentences)
 
-        idx = sentence['order']
-        text = sentence['text']
-        expected = sentence['total_score']
-        output = summ.score_sentence(
-            idx, text,
-            title_words, top_keywords, keyword_list, num_sents)
-        received = output['total_score']
-        test = (received == approx(expected, 0.00001))
+        expected = sentence.total_score
+        received = summ.get_scored_sentence(
+            text, index, of,
+            title_words, top_keywords, top_keyword_list).total_score
 
-        assert test, assert_ex(
+        assert roughly.eq(received, expected), assert_ex(
             'sentence score',
             received,
             expected,
             hint=[samp.name, snip(text)])
 
-    @mark.parametrize('samp', get_samples([
+    @pytest.mark.parametrize('samp', get_samples([
         'empty',
         'sentence_short',
         'sentence_medium',
@@ -283,48 +235,16 @@ class TestSummarizer:
         summ = Summarizer(lang=samp.lang)
         words = samp.compare_words
 
-        expected = approx(samp.length_score, 0.00001)
-        received = summ.get_sentence_length_score(words)
+        expected = samp.length_score
+        received = summ.score_sentence_length(words)
 
-        assert (received == expected), assert_ex(
+        assert roughly.eq(received, expected), assert_ex(
             'sentence score',
             received,
             expected,
             hint=' '.join(words))
 
-    @mark.parametrize('pos,sentence_count,expected', [
-        (0, 10, approx(.17, 0.00001)),       # first decile
-        (0, 5, approx(.23, 0.00001)),        # second decile
-        (999, 1000, approx(.15, 0.00001)),   # last sentence
-        (999,    0, ValueError),             # out of range
-        (999,  999, ValueError),             # out of range
-    ])
-    def test_get_sentence_position_score(self, pos, sentence_count, expected):
-        # type: (int, int, float) -> None
-        """Test Parser.get_sentence_position_scor()
-
-        Arguments:
-            pos {int} -- sentence position (0-based)
-            sentence_count {int} -- number of sentences (len())
-            expected {float} -- expected score
-        """
-        summ = Summarizer()
-        received = None
-
-        try:
-            received = summ.get_sentence_position_score(
-                pos, sentence_count)
-
-        except ValueError as e:
-            received = check_exception(e, expected)
-
-        assert (received == expected), assert_ex(
-                'sentence position score',
-                received,
-                expected,
-                hint=' of '.join([str(pos), str(sentence_count)]))
-
-    @mark.parametrize('samp', get_samples([
+    @pytest.mark.parametrize('samp', get_samples([
         'sentence_1word',
         'sentence_short',
         'sentence_medium',
@@ -342,10 +262,10 @@ class TestSummarizer:
         title_words = samp.compare_title
         sentence_words = samp.compare_words
 
-        expected = approx(samp.title_score, 0.00001)
-        received = summ.get_title_score(title_words, sentence_words)
+        expected = samp.title_score
+        received = summ.score_title(title_words, sentence_words)
 
-        assert (received == expected), assert_ex(
+        assert roughly.eq(received, expected), assert_ex(
             'title score',
             received,
             expected,
