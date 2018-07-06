@@ -1,21 +1,25 @@
 """Test for OoolongT exports"""
 from math import floor
 from pathlib import Path
-from pytest import approx, mark
 from random import randint
+
+import pytest
+
+from oolongt import roughly
 
 from oolongt.main import (
     score_sentences, summarize, get_slice_length,
     DEFAULT_SORT_KEY, DEFAULT_REVERSE, DEFAULT_LENGTH)
 from oolongt.nodash import sort_by, pluck
+from tests.typing.sample import Sample
+from tests.typing.sample_sentence import SampleSentence
 
 from .constants import DATA_PATH, SAMPLES
 from .helpers import (
     assert_ex, get_samples, snip, check_exception)
-from .sample import Sample
 
 
-@mark.parametrize('samp', get_samples(SAMPLES))
+@pytest.mark.parametrize('samp', get_samples(SAMPLES))
 def test_score_sentences(samp):
     """Test main.score_sentences()
 
@@ -23,123 +27,95 @@ def test_score_sentences(samp):
         samp {Sample} -- sample data
     """
     title = samp.title
-    text = samp.text
+    text = samp.body
 
     for i, sentence in enumerate(score_sentences(title, text)):
-        expected = approx(samp.sentences[i]['total_score'], 0.000001)
-        received = sentence['total_score']
-        hint = snip(sentence['text'])
+        expected = samp.sentences[i].total_score
+        received = sentence.total_score
 
-        assert (received == expected), assert_ex(
-            'sentence score', received, expected, hint=hint)
+        assert roughly.eq(received, expected), assert_ex(
+            'sentence score',
+            received,
+            expected,
+            hint=snip(sentence.text))
 
 
-def _get_expected_summaries(samp, length, sort_key, reverse):
-    # type: (Sample, int, any, bool) -> list[str]
+def _get_best_sentences(samp, length):
+    ranked = sorted(samp.sentences, reverse=True)
+
+    return sorted(ranked[:length], key=lambda sent: sent.index)
+
+
+def _get_expected_sentences(samp, length):
+    # type: (Sample, int) -> list[str]
     """Get text of top ranked sentences
 
     Arguments:
         samp {Sample} -- sample
         length {int} -- number of sentences to return
-        sort_key {any} -- sort order of sentence Dicts
-        reverse {bool} -- False: ASC, True: DESC (default: {False})
 
     Returns:
         list[str] -- text of sentences in specified order
     """
-    length = length or DEFAULT_LENGTH
-    sort_key = sort_key or DEFAULT_SORT_KEY
-    reverse = reverse or DEFAULT_REVERSE
+    best_sentences = _get_best_sentences(samp, length)
 
-    ranked = sort_by(samp.sentences, 'rank')
-    sliced = ranked[:length]
-    ordered = sort_by(sliced, sort_key, reverse=reverse)
-
-    return pluck(ordered, 'text')
+    return [sent.text for sent in best_sentences]
 
 
-def _get_received_summaries(title, text, length, sort_key, reverse):
-    # type: (str, str, int, any, bool) -> list[str]
+def _get_received_sentences(title, text, length):
+    # type: (str, str, int) -> list[str]
     """Summarize with correct keyword arguments
 
     Arguments:
         title {str} -- title of text
         text {str} -- body of content
         length {int} -- number of sentences to return
-        sort_key {any} -- sort order of sentence Dicts
-        reverse {bool} -- False: ASC, True: DESC (default: {False})
 
     Returns:
         list[str] -- text of sentences in specified order
     """
-    opts = [
-        (length, 'length'),
-        (sort_key, 'sort_key'),
-        (reverse, 'reverse')]
+    scored_sentences = summarize(title, text, length=length)
 
-    kwargs = {}
-    for opt in [opt for opt in opts if opt[0] is not None]:
-        val, key = opt
-        kwargs[key] = val
-
-    summaries = summarize(title, text, **kwargs)
-
-    return summaries
+    return scored_sentences
 
 
 def permute_test_summarize():
-    # type () -> list[tuple[str, int, any, bool]]
-    """Generate parameters for test_summarize()
-    """
-    sort_keys = [
-        None,
-        'order',
-        'total_score',
-        'title_score',
-        'length_score',
-        'position_score',
-        'keyword_score',
-        'text']
-    reverse_keys = [None, True, False]
-
-    for idx_samp, sample_name in enumerate(SAMPLES):
-        for idx_rev, reverse in enumerate(reverse_keys):
-            for idx_order, sort_key in enumerate(sort_keys):
-                length = (idx_samp * idx_rev * idx_order) % 8
-                yield (sample_name, length + 1, sort_key, reverse)
+    # type () -> Iterable[tuple[str, int]]
+    """Generate parameters for test_summarize() """
+    for sample_name in SAMPLES:
+        for length in range(1, 8, 2):
+            yield (sample_name, length)
 
 
-@mark.parametrize(
-    'sample_name,length,sort_key,reverse', permute_test_summarize())
-def test_summarize(sample_name, length, sort_key, reverse):
+@pytest.mark.parametrize('sample_name,length', permute_test_summarize())
+def test_summarize(sample_name, length):
     """Test specified sample
 
     Arguments:
         sample_name {str} -- name of data source
         length {int} -- number of sentences to return
-        sort_key {any} -- sort order of sentence Dicts
-        reverse {bool} -- False: ASC, True: DESC (default: {False})
     """
     samp = Sample(DATA_PATH, sample_name)
     title = samp.title
-    text = samp.text
+    text = samp.body
 
-    expecteds = _get_expected_summaries(
-        samp, length, sort_key, reverse)
-    receiveds = _get_received_summaries(title, text, length, sort_key, reverse)
+    expecteds = _get_expected_sentences(samp, length)
+    receiveds = _get_received_sentences(title, text, length)
 
     assert (len(receiveds) == len(expecteds)), assert_ex(
         'summary sentence count', len(receiveds), length)
 
     for i, received in enumerate(receiveds):
         expected = expecteds[i]
-        hint = [snip(received), i]
 
         assert (received == expected), assert_ex(
-            'summary [text at index]', received, expected, hint=hint)
+            'summary [text at index]',
+            received,
+            expected,
+            hint=[snip(received), i])
 
 
-@mark.parametrize('nominal,total,expected', [
+@pytest.mark.parametrize('nominal,total,expected', [
     (0, 0, ValueError),
     (20, 1000, 20),
     (.1, 1000, 100),
