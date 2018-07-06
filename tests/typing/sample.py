@@ -25,14 +25,15 @@ def load_config(root, name):
 
     text = config.pop('text', False)
     sentences = config.pop('sentences', [])
+    sent_of = len(sentences)
     keywords = config.pop('keywords', [])
-    of = len(sentences)
+    kw_of = config.get('word_count', 0)
 
     config['body'] = text if text is not False else join_sentences(sentences)
     config['sentences'] = [
-        SampleSentence(data_dict, of) for data_dict in sentences]
+        SampleSentence(data_dict, sent_of) for data_dict in sentences]
     config['keywords'] = [
-        SampleKeyword(data_dict) for data_dict in keywords]
+        SampleKeyword(data_dict, kw_of) for data_dict in keywords]
 
     return config
 
