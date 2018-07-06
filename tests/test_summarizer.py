@@ -32,7 +32,7 @@ class TestSummarizer:
         Returns:
             list[SampleKeyword] -- the ten highest rated keywords
         """
-        return [kw for kw in keywords if kw.score >= keywords[9].score]
+        return [kw for kw in keywords if kw.count >= keywords[9].count]
 
     @pytest.mark.parametrize('samp', get_samples(SAMPLES))
     def test_get_sentences(self, samp):
@@ -134,29 +134,26 @@ class TestSummarizer:
         source = None
         category = None
 
-        keywords = samp.keywords
-        expected = self._get_top_keywords(keywords)
+        expecteds = sorted(
+            self._get_top_keywords(samp.keywords))
+        exp_len = len(expecteds)
 
-        receiveds = summ.get_top_keywords(samp.body, source, category)
+        receiveds = sorted(
+            summ.get_top_keywords(samp.body, source, category))
+        rcv_len = len(receiveds)
 
-        all_keywords = summ._pluck_words(keywords)
-        assert (len(receiveds) == len(expected)), assert_ex(
-            'result count',
-            len(receiveds),
-            len(expected))
+        assert (rcv_len == exp_len), assert_ex(
+            'top keywords count',
+            rcv_len,
+            exp_len)
 
-        for received in receiveds:
-            try:
-                idx = all_keywords.index(received.word)
+        for i, expected in enumerate(expecteds):
+            received = receiveds[i]
 
-                test = roughly.eq(received.score, keywords[idx].score)
-                assert test, assert_ex(
-                    'keyword score',
-                    received.score,
-                    keywords[idx].score)
-
-            except ValueError:
-                assert False, 'keyword error'
+            assert (received == expected), assert_ex(
+                'top keyword',
+                received,
+                expected)
 
     @pytest.mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
     def test_score_frequency(self, samp, sentence):
