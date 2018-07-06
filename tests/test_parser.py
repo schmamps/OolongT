@@ -1,15 +1,19 @@
 """ Test class for Parser """
 import os.path as path
 from pathlib import Path
-from pytest import approx, mark
+
+from pytest import mark
+
+from oolongt import roughly
 
 from oolongt.nodash import pluck
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
+from tests.constants import SAMPLES
+from tests.helpers import (
+    assert_ex, check_exception, compare_dict, get_samples)
+from tests.typing.sample import Sample
 
-from .constants import SAMPLES
-from .helpers import assert_ex, compare_dict, get_samples, check_exception
-from .sample import Sample
 
 BUILTIN = Path(__file__).parent.parent.joinpath('oolongt', 'lang')
 DATA_PATH = Path(__file__).parent.joinpath('data')
@@ -107,32 +111,31 @@ class TestParser:
         p = Parser()
 
         expected = samp.compare_words
-        for received in p.get_all_words(samp.text):
+        for received in p.get_all_words(samp.body):
             assert (received in expected), assert_ex(
                 'all words', received, None)
 
-    def _count_keywords(self, keywords, insts):
-        # type: (list[dict], int) -> dict
+    def _count_keywords(self, keywords):
+        # type: (list[dict], int) -> tuple[list[str], dict[str, float]]
         """Reduce getKeywords() for counting
 
         TODO: update this docstring
 
         Arguments:
             keywords {list[dict]} -- keywords
-            insts {int} -- instances
 
         Returns:
-            dict[counts: dict, words: list[str], total: int] - usable data
+            tuple[list[str], dict[str, float]] - usable data
         """
-        counts = {}
+        scores = {}
         words = []
 
         for kw in keywords:
-            word = kw['word']
-            counts[word] = kw['count']
+            word = kw.word
+            scores[word] = kw.score
             words.append(word)
 
-        return {'counts': counts, 'words': words, 'total': insts}
+        return words, scores
 
     def _get_sample_keyword_data(self, samp):
         # type: (Sample) -> list[dict]
@@ -145,9 +148,8 @@ class TestParser:
             tuple[list[dict], int] -- return of Parser.get_keywords()
         """
         keywords = samp.keywords
-        insts = samp.instances
 
-        return self._count_keywords(keywords, insts)
+        return self._count_keywords(keywords)
 
     def _get_keyword_result(self, text):
         # type: (text) -> list[dict]
@@ -160,9 +162,9 @@ class TestParser:
             tuple[list[dict], int] -- return of Parser.get_keywords()
         """
         p = Parser()
-        keywords, insts = p.get_keywords(text)
+        keywords = p.get_keywords(text)
 
-        return self._count_keywords(keywords, insts)
+        return self._count_keywords(keywords)
 
     @mark.parametrize('samp', get_samples([
         'empty',
@@ -175,31 +177,21 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        expected = self._get_sample_keyword_data(samp)
-        received = self._get_keyword_result(samp.text)
+        exp_words, exp_scores = self._get_sample_keyword_data(samp)
+        rcv_words, rcv_scores = self._get_keyword_result(samp.body)
 
-        assert (received['total'] == expected['total']), assert_ex(
-            'total keyword count',
-            received['total'],
-            expected['total'])
+        for word in set(exp_words + rcv_words):
+            assert (word in exp_words) and (word in rcv_words), assert_ex(
+                'word list mismatch',
+                rcv_words,
+                exp_words)
 
-        for word in set(expected['words'] + received['words']):
-            assert word in expected['words'], assert_ex(
-                'unexpected word received',
-                word,
-                None)
-
-            assert word in received['words'], assert_ex(
-                'expected word not received',
-                word,
-                None)
-
-            exp_count = expected['counts'][word]
-            rcv_count = received['counts'][word]
-            assert exp_count == rcv_count, assert_ex(
-                'bad keyword count',
-                rcv_count,
-                exp_count,
+            expected = exp_scores[word]
+            received = rcv_scores[word]
+            assert roughly.eq(received, expected), assert_ex(
+                'bad keyword score',
+                received,
+                expected,
                 hint=word)
 
     def _get_expected_keywords(self, keywords):
@@ -211,7 +203,7 @@ class TestParser:
         """
         expected = []
         for kw in keywords:
-            expected += [kw['word']] * kw['count']
+            expected += [kw.word] * kw.count
 
         return expected
 
@@ -226,35 +218,10 @@ class TestParser:
         p = Parser(lang=samp.lang)
 
         expected = sorted(self._get_expected_keywords(samp.keywords))
-        received = sorted(p.get_keyword_list(samp.text))
+        received = sorted(p.get_keyword_strings(samp.body))
 
         assert (received == expected), assert_ex(
             'keyword list', expected, received)
-
-    @mark.parametrize('samp', [
-        ('zero', 0),
-        ('one', 1),
-        ('two', 2),
-        ('three', 3),
-    ])
-    def test_count_keyword(self, samp):
-        # type: (Sample) -> None
-        """Test Parser.count_keyword()
-
-        Arguments:
-            samp {Tuple[str, int]} -- search string, count
-        """
-        p = Parser()
-        all_words = ['one', 'two', 'three', 'two', 'three', 'three']
-
-        unique_word, expected = samp
-        received = p.count_keyword(unique_word, all_words)['count']
-
-        assert (received == expected), assert_ex(
-            'counting keyword',
-            received,
-            expected,
-            hint=unique_word)
 
     @mark.parametrize('samp', get_samples(
         ['sentence_short', 'sentence_list', ] + SAMPLES
@@ -273,9 +240,9 @@ class TestParser:
             expected = samp.split_sentences
 
         except AttributeError:
-            expected = pluck(samp.sentences, 'text')
+            expected = [sent.text for sent in samp.sentences]
 
-        received = p.split_sentences(samp.text)
+        received = p.split_sentences(samp.body)
 
         assert (received == expected), assert_ex(
             'sentence split',
@@ -294,9 +261,8 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-
         p = Parser(lang=samp.lang)
-        text = samp.text
+        text = samp.body
 
         expected = samp.split_words
         received = p.split_words(text)
@@ -322,7 +288,7 @@ class TestParser:
         p = Parser(lang=samp.lang)
 
         expected = samp.remove_punctuations
-        received = p.remove_punctuations(samp.text)
+        received = p.remove_punctuations(samp.body)
 
         assert (received == expected), assert_ex(
             'punctuation removal',
@@ -343,7 +309,7 @@ class TestParser:
             samp {Sample} -- sample data
         """
         p = Parser(lang=samp.lang)
-        words = p.split_words(samp.text)
+        words = p.split_words(samp.body)
 
         expected = samp.remove_stop_words
         received = p.remove_stop_words(words)
