@@ -147,9 +147,7 @@ class TestParser:
         Returns:
             tuple[list[dict], int] -- return of Parser.get_keywords()
         """
-        keywords = samp.keywords
-
-        return self._count_keywords(keywords)
+        return self._count_keywords(samp.keywords)
 
     def _get_keyword_result(self, text):
         # type: (text) -> list[dict]
