@@ -9,7 +9,7 @@
 	},
 	"lang": "en",
 	"title": "Lewis Carroll and The Hunting of the Snark",
-	"instances": 417,
+	"word_count": 417,
 	"keywords": [
 		{"word": "poem", "count": 17, "total_score": 0.06115108},
 		{"word": "carroll", "count": 9, "total_score": 0.03237410},
