@@ -1,6 +1,5 @@
 from oolongt.summarizer import Summarizer
 from oolongt.parser import Parser
-from oolongt.nodash import pluck
 
 from generator.util import get_samples, json as json_util
 

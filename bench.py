@@ -3,7 +3,6 @@ from math import floor
 from pytest import approx
 from time import time
 
-from oolongt.nodash import pluck, sort_by
 from oolongt.summarizer import Summarizer
 
 from tests.constants import DATA_PATH, SAMPLES

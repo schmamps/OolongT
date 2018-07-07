@@ -6,7 +6,6 @@ from pytest import mark
 
 from oolongt import roughly
 
-from oolongt.nodash import pluck
 from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
 from oolongt.simple_io import load_json
 from tests.constants import SAMPLES

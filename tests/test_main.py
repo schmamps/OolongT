@@ -10,7 +10,6 @@ from oolongt import roughly
 from oolongt.main import (
     score_sentences, summarize, get_slice_length,
     DEFAULT_SORT_KEY, DEFAULT_REVERSE, DEFAULT_LENGTH)
-from oolongt.nodash import sort_by, pluck
 from tests.typing.sample import Sample
 from tests.typing.sample_sentence import SampleSentence
 

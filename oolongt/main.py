@@ -1,6 +1,5 @@
 """Simple sentence scoring & summarization functions"""
 from . import parser
-from .nodash import pluck, sort_by
 from .summarizer import Summarizer
 
 DEFAULT_SORT_KEY = 'index'

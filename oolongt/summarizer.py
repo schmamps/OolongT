@@ -2,18 +2,18 @@
 from math import ceil
 
 from . import parser
-from .nodash import pluck, sort_by
 from .typing.scored_sentence import ScoredSentence
+
+
+def pluck_keyword_words(keyword_list):
+    # type: (list[dict]) -> list[str]
+    return [kw.word for kw in keyword_list]
 
 
 class Summarizer:
     def __init__(self, root=parser.BUILTIN, lang=parser.DEFAULT_LANG):
         # type: (str, str) -> None
         self.parser = parser.Parser(root, lang)
-
-    def _pluck_words(self, keyword_list):
-        # type: (list[dict]) -> list[str]
-        return [kw.word for kw in keyword_list]
 
     def get_sentences(self, body, title, source, category):
         # type: (str, str, any, any) -> list[dict]
@@ -31,7 +31,7 @@ class Summarizer:
         sentences = self.parser.split_sentences(body)
         title_words = self.parser.get_keyword_strings(title)
         top_keywords = self.get_top_keywords(body, source, category)
-        top_keyword_list = self._pluck_words(top_keywords)
+        top_keyword_list = pluck_keyword_words(top_keywords)
         of = len(sentences)
 
         scored_sentences = [

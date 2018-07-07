@@ -5,8 +5,7 @@ import pytest
 
 from oolongt import roughly
 
-from oolongt.nodash import pluck, sort_by
-from oolongt.summarizer import Summarizer
+from oolongt.summarizer import pluck_keyword_words, Summarizer
 from oolongt.typing.scored_sentence import SCORE_TOLERANCE
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception,
@@ -168,7 +167,7 @@ class TestSummarizer:
         summ = Summarizer()
         words = summ.parser.get_all_words(sentence.text)
         top_keywords = summ.get_top_keywords(samp.body, None, None)
-        top_keyword_list = summ._pluck_words(top_keywords)
+        top_keyword_list = pluck_keyword_words(top_keywords)
 
         params = (
             (
@@ -200,7 +199,7 @@ class TestSummarizer:
         summ = Summarizer()
         title_words = samp.title_words
         top_keywords = self._get_top_keywords(samp.keywords)
-        top_keyword_list = summ._pluck_words(top_keywords)
+        top_keyword_list = pluck_keyword_words(top_keywords)
         text = sentence.text
         index = sentence.index
         of = len(samp.sentences)

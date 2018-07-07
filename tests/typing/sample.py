@@ -1,7 +1,7 @@
 """ Load sample data """
 from pathlib import Path
 
-from oolongt import nodash, simple_io
+from oolongt import simple_io
 from tests.typing.sample_keyword import SampleKeyword
 from tests.typing.sample_sentence import SampleSentence
 
@@ -16,7 +16,7 @@ def join_sentences(sentence_list):
     Returns:
         str -- text
     """
-    return '\n  '.join(nodash.pluck(sentence_list, 'text'))
+    return '\n  '.join([sent['text'] for sent in sentence_list])
 
 
 def load_config(root, name):
