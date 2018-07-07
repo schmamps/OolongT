@@ -9,7 +9,7 @@ from oolongt.summarizer import Summarizer
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (
     assert_ex, compare_dict, get_samples, randomize_list, snip)
-from tests.sample import Sample
+from tests.typing.sample import Sample
 
 
 def report(title, *data):
