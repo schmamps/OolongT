@@ -20,6 +20,15 @@ def join_sentences(sentence_list):
 
 
 def load_config(root, name):
+    """Load initialization data for Sample
+
+    Arguments:
+        root {str} -- root directory
+        name {str} -- basename of config
+
+    Returns:
+        dict -- initialization data
+    """
     path = str(root.joinpath(name + '.json'))
     config = simple_io.load_json(path)
 
@@ -51,4 +60,4 @@ class Sample(object):
         if name in self._keys:
             return self._data[name]
 
-        raise AttributeError('Property {0!r} not found'.format(name))
+        raise AttributeError('Property {!r} not found'.format(name))
