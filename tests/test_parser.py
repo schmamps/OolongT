@@ -6,7 +6,7 @@ from pytest import mark
 
 from oolongt import roughly
 
-from oolongt.parser import DEFAULT_LANG, JSON_SUFFIX, Parser
+from oolongt.parser import DEFAULT_LANG, load_language, Parser
 from oolongt.simple_io import load_json
 from tests.constants import SAMPLES
 from tests.helpers import (
@@ -19,7 +19,7 @@ DATA_PATH = Path(__file__).parent.joinpath('data')
 BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
 TEST_LANG_NAME = 'valid'
 TEST_LANG_PATH = BASE_LANG_PATH.joinpath(TEST_LANG_NAME)
-TEST_LANG_JSON = TEST_LANG_PATH.joinpath(TEST_LANG_NAME + JSON_SUFFIX)
+TEST_LANG_JSON = TEST_LANG_PATH.joinpath(TEST_LANG_NAME + '.json')
 TEST_LANG_EXPECTED = {
     'meta': {
         'name': 'Valid Language Config'
@@ -36,66 +36,67 @@ DEFAULT_LANG_EXPECTED = {
     'stop_words': 404}
 
 
+def compare_loaded_language(received, expected):
+    # type: (dict, dict) -> bool
+    """Compare loaded language data to expected
+
+    Arguments:
+        received {dict} -- received data
+        expected {dict} -- expected data
+
+    Raises:
+        ValueError -- Wrong data
+    """
+    if not (len(received['stop_words']) == expected['stop_words']):
+        raise ValueError('stop word mismatch')
+
+    if not compare_dict(expected, received, ignore=['stop_words']):
+        raise ValueError('wrong language data loaded')
+
+    return True
+
+
+@mark.parametrize(
+    'kwargs,expected',
+    [
+        # defaults
+        ({}, DEFAULT_LANG_EXPECTED),
+        # by language
+        ({'lang': 'en'}, DEFAULT_LANG_EXPECTED),
+        # by path
+        ({'root': BUILTIN}, DEFAULT_LANG_EXPECTED),
+        # by language and path
+        ({'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH},
+            TEST_LANG_EXPECTED),
+        # attempted traversal
+        [{'lang': '../../../etc'}, PermissionError],
+        # file not found
+        [{'root': Path(__file__)}, FileNotFoundError],
+        # invalid config
+        [{'lang': 'malformed', 'root': BASE_LANG_PATH}, ValueError],
+    ]
+)
+def test_load_language(kwargs, expected):
+    # type: (dict, dict) -> None
+    """Test Parser.load_language()
+
+    Arguments:
+        kwargs {dict} -- kwargs passed to Parser
+        expected {dict} -- expected data
+    """
+    test = False
+
+    try:
+        received = load_language(**kwargs)
+        test = compare_loaded_language(received, expected)
+
+    except (PermissionError, FileNotFoundError, ValueError) as e:
+        test = check_exception(e, expected) is not None
+
+    assert test, assert_ex('config', received, expected)
+
+
 class TestParser:
-    def _compare_loaded_language(self, received, expected):
-        # type: (dict, dict) -> bool
-        """Compare loaded language data to expected
-
-        Arguments:
-            received {dict} -- received data
-            expected {dict} -- expected data
-
-        Raises:
-            ValueError -- Wrong data
-        """
-        if not (len(received['stop_words']) == expected['stop_words']):
-            raise ValueError('stop word mismatch')
-
-        if not compare_dict(expected, received, ignore=['stop_words']):
-            raise ValueError('wrong language data loaded')
-
-        return True
-
-    @mark.parametrize(
-        'expected,kwargs',
-        [
-            # defaults
-            [DEFAULT_LANG_EXPECTED, {}],
-            # by language
-            [DEFAULT_LANG_EXPECTED, {'lang': 'en'}],
-            # by path
-            [DEFAULT_LANG_EXPECTED, {'root': BUILTIN}],
-            # by language and path
-            [TEST_LANG_EXPECTED,
-                {'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH}],
-            # attempted traversal
-            [PermissionError, {'lang': '../../../etc'}],
-            # file not found
-            [FileNotFoundError, {'root': Path(__file__)}],
-            # invalid config
-            [ValueError, {'lang': 'malformed', 'root': BASE_LANG_PATH}],
-        ]
-    )
-    def test_load_language(self, expected, kwargs):
-        # type: (dict, dict) -> None
-        """Test Parser.load_language()
-
-        Arguments:
-            expected {dict} -- expected received
-            kwargs {dict} -- kwargs passed to Parser
-        """
-        p = Parser()
-        test = False
-
-        try:
-            received = p.load_language(**kwargs)
-            test = self._compare_loaded_language(received, expected)
-
-        except (PermissionError, FileNotFoundError, ValueError) as e:
-            test = check_exception(e, expected) is not None
-
-        assert test, assert_ex('config', received, expected)
-
     @mark.parametrize('samp', get_samples([
         'sentence_1word',
         'sentence_overlong',
