@@ -1,3 +1,4 @@
+"""Compare floating point values"""
 DEFAULT_TOLERANCE = 0.0000001
 
 
