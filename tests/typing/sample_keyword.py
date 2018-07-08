@@ -12,4 +12,16 @@ class SampleKeyword(ScoredKeyword):
 
     @classmethod
     def by_score(cls, score, count=1):
+        # type: (float, int) -> SampleKeyword
+        """When you don't need a fancy ScoredKeyword
+
+        Arguments:
+            score {float} -- keyword score
+
+        Keyword Arguments:
+            count {int} -- number of appearances (default: {1})
+
+        Returns:
+            SampleKeyword -- sample keyword with specified score, count
+        """
         return cls({'score': score, 'count': count}, 1)
