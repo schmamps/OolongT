@@ -1,10 +1,9 @@
 """ Simple I/O module tests """
-
 from pathlib import Path
 
 from oolongt import parser, simple_io
 
-from .helpers import assert_ex
+from tests.helpers import assert_ex
 
 
 def get_json_path(lang):
@@ -18,7 +17,7 @@ def get_json_path(lang):
         str -- path to language config JSON file
     """
     return Path(__file__).parent.joinpath(
-        'lang', lang + parser.JSON_SUFFIX)
+        'lang', lang + '.json')
 
 
 def test_load_json():
