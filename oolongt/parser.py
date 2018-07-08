@@ -13,7 +13,56 @@ from .simple_io import load_json
 
 BUILTIN = Path(__file__).parent.joinpath('lang')
 DEFAULT_LANG = 'en'
-JSON_SUFFIX = '.json'
+
+
+def get_config_paths(root, lang):
+    # type: (str, str) -> str
+    """Get path to language config
+
+    Arguments:
+        root {str} -- root directory
+        lang {str} -- basename of config
+
+    Returns:
+        Path -- pathlib.Path to file
+    """
+    root_path = Path(root)
+    return root_path.joinpath(lang + '.json'), root_path
+
+
+def load_language(root=BUILTIN, lang=DEFAULT_LANG):
+    # type: (str, str) -> dict
+    """Get class initialization data from `root`/`lang`.json
+
+    Arguments:
+        root {str} -- root directory of language data
+            (default: {parser.BUILTIN})
+        lang {str} -- basename of language file
+            (default: {parser.DEFAULT_LANG})
+
+    Raises:
+        PermissionError -- Directory traversal via lang
+        FileNotFoundError -- Language file(s) not found
+
+    Returns:
+        dict -- class initialization data
+    """
+    cfg_path, root_path = get_config_paths(root, lang)
+
+    try:
+        # pylint: disable=no-member
+        cfg_path.resolve().relative_to(root_path.resolve())
+
+    except ValueError:
+        raise PermissionError('directory traversal in lang: ' + lang)
+
+    # pylint: disable=no-member
+    if not cfg_path.exists():
+        raise FileNotFoundError(cfg_path)
+
+    cfg_data = load_json(str(cfg_path.absolute()))
+
+    return cfg_data
 
 
 class Parser:
@@ -22,58 +71,26 @@ class Parser:
         """Initialize class with `root`/`lang`.json
 
         Keyword Arguments:
-            path {any} -- override builtin language dir
-            lang {str} -- subdir of path containing data (default: {'en'})
+            root {str} -- root directory of language data
+                (default: {parser.BUILTIN})
+            lang {str} -- basename of language file
+                (default: {parser.DEFAULT_LANG})
 
         Raises:
-            PermissionError: directory traversal in lang
-            FileNotFoundError: language files  not found
-            ValueError: incomplete/malformed configuration file
+            ValueError: missing/invalid configuration file
         """
-        cfg_data = self.load_language(root, lang)
-
         try:
-            self.language = cfg_data['nltk_language']
-            self.ideal_sentence_length = int(cfg_data['ideal'])
-            self.stop_words = cfg_data['stop_words']
+            cfg_data = load_language(root, lang)
+
+            self.language = str(cfg_data['nltk_language'])  # type: str
+            self.ideal_sentence_length = int(cfg_data['ideal'])  # type: int
+            self.stop_words = cfg_data['stop_words']  # type: list[str]
 
         except (JSONDecodeError, KeyError):
-            raise ValueError(
-                'Invalid configuration for ' + lang + ' in ' + root)
+            template = 'invalid config file: {!r}'
+            cfg_path, _ = get_config_paths(root, lang)
 
-    def load_language(self, root=BUILTIN, lang=DEFAULT_LANG):
-        # type: (str, str) -> dict
-        """Initialize class with `root`/`lang`.json
-
-        Arguments:
-            path {str} -- Root directory for language data
-            lang {str} -- subdirectory for specific language
-
-        Raises:
-            PermissionError -- Directory traversal via lang
-            FileNotFoundError -- Language file(s) not found
-
-        Returns:
-            dict -- class initialization data
-        """
-        root_path = Path(root)
-        cfg_path = root_path.joinpath(lang + '.json')
-        cfg_path_str = str(cfg_path)
-
-        try:
-            # pylint: disable=no-member
-            cfg_path.resolve().relative_to(root_path.resolve())
-
-        except ValueError:
-            raise PermissionError('directory traversal in lang: ' + lang)
-
-        # pylint: disable=no-member
-        if not cfg_path.exists():
-            raise FileNotFoundError('config: ' + cfg_path_str)
-
-        cfg_data = load_json(cfg_path_str)
-
-        return cfg_data
+            raise ValueError(template.format(cfg_path))
 
     def get_all_words(self, text):
         # type: (str) -> list[str]
@@ -107,13 +124,13 @@ class Parser:
 
     def get_keywords(self, text):
         # type: (str) -> list[ScoredKeyword]
-        """Get counted list of keywords and total number of keywords in `text`
+        """List scored keywords in `text`
 
         Arguments:
             text {str} -- text
 
         Returns:
-            tuple[list[dict], int] -- individual and total keyword counts
+            list[ScoredKeyword] -- list of keywords, scored
         """
         all_keywords = self.get_keyword_strings(text)
         unique_words = list(set(all_keywords))
