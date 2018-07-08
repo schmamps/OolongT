@@ -1,5 +1,4 @@
-
-
+"""Mock ScoredKeyword """
 from oolongt.typing.scored_keyword import (
     score_keyword, ScoredKeyword, SCORE_K)
 

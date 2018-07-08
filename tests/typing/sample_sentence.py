@@ -1,3 +1,4 @@
+"""Mock ScoredSentence"""
 from oolongt.typing.scored_sentence import SCORE_TOLERANCE, ScoredSentence
 
 from oolongt import roughly
