@@ -8,8 +8,7 @@ import pytest
 from oolongt import roughly
 
 from oolongt.main import (
-    score_sentences, summarize, get_slice_length,
-    DEFAULT_SORT_KEY, DEFAULT_REVERSE, DEFAULT_LENGTH)
+    score_body_sentences, summarize, get_slice_length, DEFAULT_LENGTH)
 from tests.typing.sample import Sample
 from tests.typing.sample_sentence import SampleSentence
 
@@ -19,16 +18,13 @@ from .helpers import (
 
 
 @pytest.mark.parametrize('samp', get_samples(SAMPLES))
-def test_score_sentences(samp):
+def test_score_body_sentences(samp):
     """Test main.score_sentences()
 
     Arguments:
         samp {Sample} -- sample data
     """
-    title = samp.title
-    text = samp.body
-
-    for i, sentence in enumerate(score_sentences(title, text)):
+    for i, sentence in enumerate(score_body_sentences(samp.body, samp.title)):
         expected = samp.sentences[i].total_score
         received = sentence.total_score
 
