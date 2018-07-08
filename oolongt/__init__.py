@@ -1,1 +1,1 @@
-from .main import summarize, score_sentences
+from .main import summarize, score_body_sentences
