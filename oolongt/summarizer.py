@@ -16,7 +16,7 @@ class Summarizer:
         self.parser = parser.Parser(root, lang)
 
     def get_sentences(self, body, title, source, category):
-        # type: (str, str, any, any) -> list[dict]
+        # type: (str, str, any, any) -> list[ScoredSentence]
         """List and score all sentences in `text`
 
         Arguments:
@@ -26,7 +26,7 @@ class Summarizer:
             category {any} -- unused
 
         Returns:
-            list[dict] -- list of sentence Dict(s)
+            list[ScoredSentence] -- list of scored sentences
         """
         sentences = self.parser.split_sentences(body)
         title_words = self.parser.get_keyword_strings(title)
@@ -43,11 +43,11 @@ class Summarizer:
         return scored_sentences
 
     def get_top_keyword_threshold(self, keywords):
-        # type: (list[dict]) -> int
+        # type: (list[ScoredKeyword]) -> int
         """Get minimum frequency for top `keywords`
 
         Arguments:
-            keywords {list[dict]} -- list of keyword Dicts
+            keywords {list[ScoredKeyword]} -- list of scored keywords
 
         Returns:
             int -- minimum frequency
@@ -70,7 +70,7 @@ class Summarizer:
             category {any} -- unused
 
         Returns:
-            list[dict] -- ten most frequently used words (more if same count)
+            list[ScoredKeyword] -- most frequent keywords
         """
         keywords = self.parser.get_keywords(text)
         minimum = self.get_top_keyword_threshold(keywords)
@@ -80,7 +80,7 @@ class Summarizer:
 
     def get_scored_sentence(self, text, index, of,
                             title_words, top_keywords, top_keyword_list):
-        # type: (int, str, list[str], list[dict], list[str], int) -> dict
+        # type: (str, int, int, list, list, list[str], int) -> ScoredSentence
         """Score sentence (`text`) on several factors
 
         Arguments:
@@ -108,7 +108,7 @@ class Summarizer:
         return scored
 
     def score_dbs(self, words, top_keywords, top_keyword_list):
-        # type: (list[str], list[dict], list[str]) -> float
+        # type: (list[str], list[ScoredKeyword], list[str]) -> float
         """Score sentence (`words`) by keyword density
 
         Arguments:
@@ -146,7 +146,7 @@ class Summarizer:
         return dbs
 
     def score_sbs(self, words, top_keywords, top_keyword_list):
-        # type: (list[str], list[dict], list[str]) -> float
+        # type: (list[str], list[ScoredKeyword], list[str]) -> float
         """Score sentence (`words`) by summation
 
         Arguments:
