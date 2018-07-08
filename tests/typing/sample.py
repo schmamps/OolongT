@@ -1,4 +1,4 @@
-""" Load sample data """
+"""Load sample data"""
 from pathlib import Path
 
 from oolongt import simple_io
