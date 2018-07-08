@@ -72,8 +72,10 @@ def get_best_sentences(body, title,
 
     Keyword Arguments:
         length {int or float} -- # of sentences (default: {DEFAULT_LENGTH})
-        root {str} -- root dir for language data (default: {parser.BUILTIN})
-        lang {str} -- basename of lang file (default: {parser.DEFAULT_LANG})
+        root {str} -- root directory of language data
+            (default: {parser.BUILTIN})
+        lang {str} -- basename of language file
+            (default: {parser.DEFAULT_LANG})
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
@@ -106,6 +108,10 @@ def summarize(body, title,
     Keyword Arguments:
         length {int or float < 1} -- sentences to return (int) or
             fraction of total (float) (default: {5})
+        root {str} -- root directory of language data
+            (default: {parser.BUILTIN})
+        lang {str} -- basename of language file
+            (default: {parser.DEFAULT_LANG})
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
