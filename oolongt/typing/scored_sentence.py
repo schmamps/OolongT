@@ -60,8 +60,8 @@ class ScoredSentence(ReprAble):
     def _init_(
             self, text, index, of,
             title_score, length_score,
-            dbs_score, sbs_score,
-            position_score, keyword_score, total_score):
+            dbs_score, sbs_score, keyword_score,
+            position_score, total_score):
         self.text = str(text)
         self.index = int(index)
         self.of = int(of)
@@ -88,8 +88,8 @@ class ScoredSentence(ReprAble):
         self._init_(
             text, index, of,
             title_score, length_score,
-            dbs_score, sbs_score,
-            position_score, keyword_score, total_score)
+            dbs_score, sbs_score, keyword_score,
+            position_score, total_score)
 
     def __str__(self):
         return self.text

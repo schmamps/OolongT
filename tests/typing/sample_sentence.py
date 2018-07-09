@@ -21,8 +21,8 @@ class SampleSentence(ScoredSentence):
         self._init_(
             text, index, of,
             title_score, length_score,
-            dbs_score, sbs_score,
-            position_score, keyword_score, total_score)
+            dbs_score, sbs_score, keyword_score,
+            position_score, total_score)
 
     def __eq__(self, other):
         # type: (SampleSentence, ScoredSentence) -> bool
