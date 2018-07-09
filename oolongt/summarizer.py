@@ -1,6 +1,4 @@
 """Text summarizer"""
-from math import ceil
-
 from . import parser
 from .typing.scored_sentence import ScoredSentence
 

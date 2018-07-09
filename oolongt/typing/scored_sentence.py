@@ -1,4 +1,4 @@
-from math import ceil, isclose
+from math import ceil
 
 from oolongt import roughly
 from oolongt.typing.repr_able import ReprAble
