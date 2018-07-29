@@ -34,20 +34,6 @@ def test_randomize_list(src, expected):
     )
 
 
-@mark.parametrize('left,right,expected', [
-    ([1, 2, 3], [2, 3, 4], 'len: 3, exclusive: [\'1\']'),
-    ([1, 2, 3], [1, 2, 3, 4], 'len: 3, exclusive: []'),
-    ([1, 2, 3, 4], [1, 2, 3], 'len: 4, exclusive: [\'4\']'),
-])
-def test_compare_list(left, right, expected):
-    received = helpers.compare_list(left, right)
-
-    assert (received == expected), helpers.assert_ex(
-        'compare_list',
-        received,
-        expected)
-
-
 @mark.parametrize('left,right,kwargs,expected', [
     ({1: 1}, {1: 1}, {}, True),
     ({1: 1}, {1: 1, 2: 2}, {}, True),

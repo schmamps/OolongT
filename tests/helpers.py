@@ -64,28 +64,6 @@ def randomize_list(src):
     return dupe
 
 
-def compare_list(left, right):
-    # type: (list, list) -> str
-    """Compare `left` as a subset of `right`
-
-    Arguments:
-        left {list[Any]} - reference list
-        right {list[Any]} - list to compare against
-
-    Returns:
-        str -- length of left list, REPR of exclusive values
-
-    >>> compare_list([1, 2, 3], [2, 3, 4])
-    'len: 3, exclusive: ['1']'
-    >>> compare_list([1, 2, 3], [1, 2, 3, 4])
-    'len: 3, exclusive: []'
-    """
-    len_str = 'len: ' + str(len(left))
-    diff_str = 'exclusive: ' + str([repr(x) for x in left if x not in right])
-
-    return ', '.join([len_str, diff_str])
-
-
 def get_compare_value(val, rel=0.000001):
     if isinstance(val, float):
         return approx(val, rel=rel)
@@ -146,10 +124,6 @@ def assert_ex(msg, received, expected, hint=None):
 
     res_str = str(received)
     exp_str = str(expected)
-
-    if isinstance(received, list) and isinstance(expected, list):
-        res_str = compare_list(received, expected)
-        exp_str = compare_list(expected, received)
 
     return '\n'.join([
         msg + hint,
