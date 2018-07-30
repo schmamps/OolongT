@@ -1,13 +1,11 @@
 """Simple sentence scoring & summarization functions"""
-from . import parser
-from .summarizer import Summarizer
-
-
-DEFAULT_LENGTH = 5
+from oolongt.constants import BUILTIN, DEFAULT_LANG, DEFAULT_LENGTH
+from oolongt.parser import Parser
+from oolongt.summarizer import Summarizer
 
 
 def score_body_sentences(body, title,
-                         root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
+                         root=BUILTIN, lang=DEFAULT_LANG,
                          source=None, category=None):
     # type: (str, str, str, str, any, any) -> list[ScoredSentence]
     """List and score every sentence in `text`
@@ -61,7 +59,7 @@ def get_slice_length(nominal, of):
 
 def get_best_sentences(body, title,
                        length=DEFAULT_LENGTH,
-                       root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
+                       root=BUILTIN, lang=DEFAULT_LANG,
                        source=None, category=None):
     # type: (str, str, int, str, str, any, any) -> list[ScoredSentence]
     """Get best sentences from `body` in score order, qty: `length`
@@ -91,7 +89,7 @@ def get_best_sentences(body, title,
 
 def summarize(body, title,
               length=DEFAULT_LENGTH,
-              root=parser.BUILTIN, lang=parser.DEFAULT_LANG,
+              root=BUILTIN, lang=DEFAULT_LANG,
               source=None, category=None):
     # type: (str, str, int, str, str, any, any) -> list[str]
     """Get `length` best sentences from `body` in content order

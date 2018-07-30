@@ -1,5 +1,6 @@
 """Text summarizer"""
-from . import parser
+from .constants import BUILTIN, DEFAULT_LANG
+from .parser import Parser
 from .typing.scored_sentence import ScoredSentence
 
 
@@ -9,9 +10,9 @@ def pluck_keyword_words(keyword_list):
 
 
 class Summarizer:
-    def __init__(self, root=parser.BUILTIN, lang=parser.DEFAULT_LANG):
+    def __init__(self, root=BUILTIN, lang=DEFAULT_LANG):
         # type: (str, str) -> None
-        self.parser = parser.Parser(root, lang)
+        self.parser = Parser(root, lang)
 
     def get_sentences(self, body, title, source, category):
         # type: (str, str, any, any) -> list[ScoredSentence]
