@@ -1,5 +1,5 @@
 """Compare floating point values"""
-DEFAULT_TOLERANCE = 0.0000001
+from .constants import DEFAULT_TOLERANCE
 
 
 def eq(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
