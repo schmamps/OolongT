@@ -1,6 +1,4 @@
 """Text parser"""
-from json import JSONDecodeError
-from pathlib import Path
 from re import sub
 
 import nltk.data
@@ -8,61 +6,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 from oolongt.typing.scored_keyword import ScoredKeyword
 from oolongt.typing.scored_sentence import ScoredSentence
-
-from .simple_io import load_json
-
-BUILTIN = Path(__file__).parent.joinpath('lang')
-DEFAULT_LANG = 'en'
-
-
-def get_config_paths(root, lang):
-    # type: (str, str) -> str
-    """Get path to language config
-
-    Arguments:
-        root {str} -- root directory
-        lang {str} -- basename of config
-
-    Returns:
-        Path -- pathlib.Path to file
-    """
-    root_path = Path(root)
-    return root_path.joinpath(lang + '.json'), root_path
-
-
-def load_language(root=BUILTIN, lang=DEFAULT_LANG):
-    # type: (str, str) -> dict
-    """Get class initialization data from `root`/`lang`.json
-
-    Arguments:
-        root {str} -- root directory of language data
-            (default: {parser.BUILTIN})
-        lang {str} -- basename of language file
-            (default: {parser.DEFAULT_LANG})
-
-    Raises:
-        PermissionError -- Directory traversal via lang
-        FileNotFoundError -- Language file(s) not found
-
-    Returns:
-        dict -- class initialization data
-    """
-    cfg_path, root_path = get_config_paths(root, lang)
-
-    try:
-        # pylint: disable=no-member
-        cfg_path.resolve().relative_to(root_path.resolve())
-
-    except ValueError:
-        raise PermissionError('directory traversal in lang: ' + lang)
-
-    # pylint: disable=no-member
-    if not cfg_path.exists():
-        raise FileNotFoundError(cfg_path)
-
-    cfg_data = load_json(str(cfg_path.absolute()))
-
-    return cfg_data
+from oolongt.typing.parser_config import ParserConfig, BUILTIN, DEFAULT_LANG
 
 
 class Parser:
@@ -79,18 +23,14 @@ class Parser:
         Raises:
             ValueError: missing/invalid configuration file
         """
-        try:
-            cfg_data = load_language(root, lang)
+        config = ParserConfig(root, lang)
 
-            self.language = str(cfg_data['nltk_language'])  # type: str
-            self.ideal_sentence_length = int(cfg_data['ideal'])  # type: int
-            self.stop_words = cfg_data['stop_words']  # type: list[str]
-
-        except (JSONDecodeError, KeyError):
-            template = 'invalid config file: {!r}'
-            cfg_path, _ = get_config_paths(root, lang)
-
-            raise ValueError(template.format(cfg_path))
+        self.ideal_sentence_length = \
+            config.ideal_sentence_length  # type: int
+        self.language = \
+            config.nltk_language          # type: str
+        self.stop_words = \
+            config.stop_words             # type: list[str]
 
     def get_all_words(self, text):
         # type: (str) -> list[str]
