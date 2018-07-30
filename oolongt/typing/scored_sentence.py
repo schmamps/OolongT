@@ -1,10 +1,8 @@
 from math import ceil
 
 from oolongt import roughly
+from oolongt.constants import COMPOSITE_TOLERANCE
 from oolongt.typing.repr_able import ReprAble
-
-
-SCORE_TOLERANCE = 0.00000011
 
 
 # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
@@ -106,15 +104,15 @@ class ScoredSentence(ReprAble):
 
     def __eq__(self, other):
         return roughly.eq(
-            self.total_score, other.total_score, rel_tol=SCORE_TOLERANCE)
+            self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
     def __lt__(self, other):
         return roughly.lt(
-            self.total_score, other.total_score, rel_tol=SCORE_TOLERANCE)
+            self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
     def __gt__(self, other):
         return roughly.gt(
-            self.total_score, other.total_score, rel_tol=SCORE_TOLERANCE)
+            self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
     def __ne__(self, other):
         return not (self == other)

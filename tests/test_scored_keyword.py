@@ -3,7 +3,7 @@ import pytest
 from oolongt.typing.scored_keyword import (
     score_keyword,
     compare_length, compare_score, compare_word, compare_keywords,
-    SCORE_K, ScoredKeyword)
+    KEYWORD_SCORE_K, ScoredKeyword)
 from tests.helpers import assert_ex, check_exception
 
 
