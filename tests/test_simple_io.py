@@ -30,7 +30,7 @@ def test_load_json():
         },
         'ideal': 2,
         'nltk_language': 'valid',
-        'stop_words': ['foo', 'bar']}
+        'stop_words': {'initial': [], 'custom': ['foo', 'bar']}}
     received = simple_io.load_json(path)
 
     assert (received == expected), assert_ex(
