@@ -1,10 +1,8 @@
 from math import ceil
 
 from oolongt import roughly
+from oolongt.constants import KEYWORD_SCORE_K
 from oolongt.typing.repr_able import ReprAble
-
-
-SCORE_K = 1.5
 
 
 def score_keyword(count, of):
@@ -21,7 +19,7 @@ def score_keyword(count, of):
     if (count < 0) or (of < 1) or (of < count):
         raise ValueError('invalid word count ({!r} of {!r})'.format(count, of))
 
-    return SCORE_K * count / of
+    return KEYWORD_SCORE_K * count / of
 
 
 def compare_score(a, b):
