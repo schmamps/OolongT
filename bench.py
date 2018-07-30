@@ -4,11 +4,24 @@ from pytest import approx
 from time import time
 
 from oolongt.summarizer import Summarizer
+from oolongt.simple_io import load_json
 
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (
     assert_ex, compare_dict, get_samples, randomize_list, snip)
 from tests.typing.sample import Sample
+
+from nltk.corpus import stopwords
+
+
+def print_list(desc, items):
+    fmt = '{{0:{0}d}}. {{1}}'.format(len(str(len(items))))
+
+    print(desc.upper())
+    print('-' * len(desc))
+
+    for i, item in enumerate(items):
+        print(fmt.format(i + 1, item))
 
 
 def report(title, *data):
