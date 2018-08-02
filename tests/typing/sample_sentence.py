@@ -5,6 +5,12 @@ from oolongt.typing.scored_sentence import ScoredSentence
 from oolongt import roughly
 
 
+def auto_id(index, of):
+    pad = len(str(of))
+    template = 'sentence {{0:{0}d}} of {{1}}'.format(pad)
+    return template.format(index + 1, of)
+
+
 class SampleSentence(ScoredSentence):
     def __init__(self, data_dict, of):
         # type: (dict, int) -> None
@@ -24,6 +30,7 @@ class SampleSentence(ScoredSentence):
             title_score, length_score,
             dbs_score, sbs_score, keyword_score,
             position_score, total_score)
+        self.id = data_dict.get('id', auto_id(index, of))
 
     def __eq__(self, other):
         # type: (SampleSentence, ScoredSentence) -> bool
