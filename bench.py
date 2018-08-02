@@ -8,7 +8,7 @@ from oolongt.simple_io import load_json
 
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (
-    assert_ex, compare_dict, get_samples, randomize_list, snip)
+    assert_ex, get_samples, randomize_list, snip)
 from tests.typing.sample import Sample
 
 from nltk.corpus import stopwords
