@@ -1,6 +1,8 @@
 """ Simple I/O module tests """
 from pathlib import Path
 
+from pytest import mark
+
 from oolongt import parser, simple_io
 
 from tests.helpers import assert_ex
@@ -20,10 +22,12 @@ def get_json_path(lang):
         'lang', lang + '.json')
 
 
-def test_load_json():
+@mark.parametrize(
+    'path',
+    [(get_json_path('valid'))],
+    ids=['valid'])
+def test_load_json(path):
     """Test correct JSON parse"""
-    path = get_json_path('valid')
-
     expected = {
         'meta': {
             'name': 'Valid Language Config'
@@ -37,10 +41,12 @@ def test_load_json():
         'json data', repr(received), repr(expected))
 
 
-def test_read_file():
+@mark.parametrize(
+    'path',
+    [(get_json_path('malformed'))],
+    ids=['malformed'])
+def test_read_file(path):
     """Test correct file read"""
-    path = get_json_path('malformed')
-
     expected = '{\n'
     received = simple_io.read_file(path)
 
