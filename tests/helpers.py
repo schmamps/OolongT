@@ -117,7 +117,7 @@ def get_samples(sample_names):
 
 def get_sample_ids(sample_names):
     # TODO: more detail?
-    return sample_names
+    return pad_to_longest(sample_names)
 
 
 def get_sample_sentences(sample_names):
