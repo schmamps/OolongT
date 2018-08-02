@@ -145,7 +145,7 @@ def get_sample_sentence_ids(sample_names):
         for sentence in samp.sentences:
             ids.append('{0}: {1}'.format(samp.name, sentence.id))
 
-    return ids
+    return pad_to_longest(ids)
 
 
 def check_exception(catch, expected):
