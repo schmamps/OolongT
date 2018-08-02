@@ -8,15 +8,22 @@ from oolongt import roughly
 from oolongt.parser import DEFAULT_LANG, Parser
 from oolongt.simple_io import load_json
 from tests.constants import SAMPLES
-from tests.helpers import assert_ex, get_samples
+from tests.helpers import (
+    assert_ex, get_samples, get_sample_ids, pad_to_longest)
 from tests.typing.sample import Sample
 
 
 class TestParser:
-    @mark.parametrize('samp', get_samples([
-        'sentence_1word',
-        'sentence_overlong',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'sentence_1word',
+            'sentence_overlong',
+        ]),
+        ids=pad_to_longest([
+            'one ',
+            'a long sentence',
+        ]))
     def test_get_all_words(self, samp):
         # type: (Sample) -> None
         """Test Parser.get_all_words()
@@ -80,10 +87,16 @@ class TestParser:
 
         return self._count_keywords(keywords)
 
-    @mark.parametrize('samp', get_samples([
-        'empty',
-        'essay_snark',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'empty',
+            'essay_snark',
+        ]),
+        ids=pad_to_longest([
+            'empty string',
+            'Snark essay'
+        ]))
     def test_get_keywords(self, samp):
         # type: (Sample) -> None
         """Test Parser.get_keywords()
@@ -121,7 +134,10 @@ class TestParser:
 
         return expected
 
-    @mark.parametrize('samp', get_samples(['essay_snark'] + SAMPLES))
+    @mark.parametrize(
+        'samp',
+        get_samples(['essay_snark'] + SAMPLES),
+        ids=get_sample_ids(['essay_snark'] + SAMPLES))
     def test_get_keyword_list(self, samp):
         # type: (Sample) -> None
         """Test Parser.get_keyword_list()
@@ -137,9 +153,10 @@ class TestParser:
         assert (received == expected), assert_ex(
             'keyword list', expected, received)
 
-    @mark.parametrize('samp', get_samples(
-        ['sentence_short', 'sentence_list', ] + SAMPLES
-    ))
+    @mark.parametrize(
+        'samp',
+        get_samples(['sentence_short', 'sentence_list', ] + SAMPLES),
+        ids=get_sample_ids(['sentence_short', 'sentence_list', ] + SAMPLES))
     def test_split_sentences(self, samp):
         # type: (Sample) -> None
         """Test Parser.split_sentences()
@@ -163,11 +180,18 @@ class TestParser:
             received,
             expected)
 
-    @mark.parametrize('samp', get_samples([
-        'empty',
-        'sentence_1word',
-        'sentence_medium',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'empty',
+            'sentence_1word',
+            'sentence_medium',
+        ]),
+        ids=pad_to_longest([
+            'empty string',
+            'one word',
+            'medium sentence',
+        ]))
     def test_split_words(self, samp):
         # type: (Sample) -> None
         """Test Parser.split_words()
@@ -187,11 +211,18 @@ class TestParser:
             received,
             hint=samp.name)
 
-    @mark.parametrize('samp', get_samples([
-        'empty',
-        'sentence_1word',
-        'sentence_list',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'empty',
+            'sentence_1word',
+            'sentence_list',
+        ]),
+        ids=pad_to_longest([
+            'empty string',
+            'one word',
+            'list of sentences',
+        ]))
     def test_remove_punctuations(self, samp):
         # type: (Sample) -> None
         """Test Parser.remove_punctuations()
@@ -209,12 +240,20 @@ class TestParser:
             repr(received),
             repr(expected))
 
-    @mark.parametrize('samp', get_samples([
-        'empty',
-        'sentence_1word',
-        'sentence_2words',
-        'sentence_list',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'empty',
+            'sentence_1word',
+            'sentence_2words',
+            'sentence_list',
+        ]),
+        ids=pad_to_longest([
+            'empty string',
+            'one word',
+            'two words',
+            'list of sentences',
+        ]))
     def test_remove_stop_words(self, samp):
         # type: (Sample) -> None
         """Test Parser.remove_stop_words()
