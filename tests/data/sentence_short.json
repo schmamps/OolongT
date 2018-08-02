@@ -1,6 +1,6 @@
 {
 	"meta": {
-		"description": "a short paragraph",
+		"description": "A short sentence",
 		"license": false
 	},
 	"lang": "en",
@@ -14,6 +14,7 @@
 	"sentences": [
 		{
 			"index": 0,
+			"id": "(the only one)",
 			"sbs_score": 0.300000000000,
 			"dbs_score": 0.390625000000,
 			"title_score": 0.250000000000,

@@ -24,6 +24,7 @@
 	"sentences": [
 		{
 			"index": 0,
+			"id": "(the only one)",
 			"sbs_score": 0.075000000000,
 			"dbs_score": 0.113720414201,
 			"title_score": 1.000000000000,
