@@ -7,7 +7,7 @@ from oolongt.typing.parser_config import (
     ParserConfig, get_config_paths, get_stop_word_key, get_stop_words,
     load_language, parse_config,
     DEFAULT_INITIAL_STOPS, DEFAULT_CUSTOM_STOPS)
-from tests.helpers import assert_ex, check_exception, compare_dict
+from tests.helpers import assert_ex, check_exception, pad_to_longest
 
 BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
 TEST_LANG_NAME = 'valid'
@@ -70,13 +70,12 @@ def test_get_config_paths(root, lang, expected_path):
         ({'foo': 'nltk'}, 'foo', None, None, 100, 99999),
         ({}, 'foo', None, 'nltk', 100, 99999),
     ],
-    ids=[
-        'value at key \'foo\'',
+    ids=pad_to_longest([
+        'value at key "foo"',
         'return default',
         'NLTK (explicit)',
         'NLTK (implicit)',
-    ]
-)
+    ]))
 def test_get_stop_word_key(stop_cfg, key, nltk_language, default_val,
                            min_len, max_len):
     received = len(
@@ -101,13 +100,13 @@ def test_get_stop_word_key(stop_cfg, key, nltk_language, default_val,
         ({'custom': []},  TEST_DEFAULT_STOPS, TEST_DEFAULT_INITIAL,),
         ({}, TEST_DEFAULT_STOPS, TEST_DEFAULT_INITIAL + TEST_DEFAULT_CUSTOM,),
     ],
-    ids=[
-        'exp. initial, exp. custom (empty)',
-        'exp. initial, exp. custom (populated)',
-        'exp. initial, def. custom (populated)',
-        'def. initial, exp. custom (populated)',
-        'def. initial, def. custom (populated)',
-    ])
+    ids=pad_to_longest([
+        'initial: exp., custom: exp. == (empty)',
+        'initial: exp., custom: exp. == (populated)',
+        'initial: exp., custom: def. == (populated)',
+        'initial: def., custom: exp. == (populated)',
+        'initial: def., custom: def. == (populated)',
+    ]))
 def test_get_stop_words(spec, defaults, expected):
     expected = sorted(
         expected)
@@ -129,14 +128,14 @@ def test_get_stop_words(spec, defaults, expected):
         ({'lang': 'malformed', 'root': BASE_LANG_PATH}, ValueError),
         ({'lang': 'INVALID', 'root': BASE_LANG_PATH}, FileNotFoundError),
     ],
-    ids=[
-        'def. path, def. lang',
-        'def. path, exp. lang',
-        'exp. path, def. lang',
-        'exp. path, exp. lang',
-        'invalid language config',
-        'missing language config',
-    ])
+    ids=pad_to_longest([
+        'root: def., lang: def.      == default lang',
+        'root: def., lang: exp.      == default lang',
+        'root: exp., lang: def.      == default lang',
+        'root: exp., lang: exp.      == default lang',
+        'root: exp., lang: MALFORMED == (error)',
+        'root: exp., lang: INVALID   == (error)',
+    ]))
 def test_parse_config(path_dict, expected):
     path_kwargs = {'root': BUILTIN, 'lang': DEFAULT_LANG}
     path_kwargs.update(path_dict)
@@ -146,7 +145,7 @@ def test_parse_config(path_dict, expected):
         ideal, nltk_language, stop_words = parse_config(cfg_path)
         received = (ideal, nltk_language, len(stop_words))
 
-    except Exception as e:
+    except (ValueError, FileNotFoundError) as e:
         received = check_exception(e, expected)
 
     assert (received == expected), assert_ex(
@@ -163,12 +162,12 @@ def test_parse_config(path_dict, expected):
         [{'root': Path(__file__)}, FileNotFoundError],
         [{'lang': 'malformed', 'root': BASE_LANG_PATH}, ValueError],
     ],
-    ids=[
-        'defaults',
-        'attempted traversal',
-        'file not found',
-        'invalid config',
-    ])
+    ids=pad_to_longest([
+        'valid: yes',
+        'valid: no, traversal',
+        'valid: no, file not found',
+        'valid: no, parse error',
+    ]))
 def test_load_language(kwargs, expected):
     # type: (dict, dict) -> None
     """Test Parser.load_language()
@@ -192,8 +191,8 @@ def test_load_language(kwargs, expected):
 class TestParserConfig(object):
     @mark.parametrize(
         'root,lang,expected',
-        [(BUILTIN, DEFAULT_LANG, DEFAULT_LANG_EXPECTED)],
-        ids=['defaults']
+        [(BUILTIN, DEFAULT_LANG, DEFAULT_LANG_EXPECTED), ],
+        ids=pad_to_longest(['defaults', ])
     )
     def test_init(self, root, lang, expected):
         config = ParserConfig(root, lang)
