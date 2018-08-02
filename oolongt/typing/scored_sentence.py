@@ -19,19 +19,19 @@ def score_position(index, of):
     Returns:
         float -- score
     """
-    POS_SCORES = [.17, .23, .14, .08, .05, .04, .06, .04, .04, .15]
+    POS_SCORES = (.17, .23, .14, .08, .05, .04, .06, .04, .04, .15)
 
     try:
         score_index = ceil((index + 1) / of * 10) - 1
 
-        return POS_SCORES[score_index]
+        if score_index in range(len(POS_SCORES)):
+            return POS_SCORES[score_index]
 
-    except (IndexError, ZeroDivisionError):
-        raise ValueError(' '.join([
-            'Invalid index/sentence count: ',
-            str(index),
-            '/',
-            str(of)]))
+    except ZeroDivisionError:
+        pass
+
+    raise ValueError(
+        'Invalid index/sentence count ({0}/{1})'.format(index, of))
 
 
 def score_keyword_frequency(dbs_score, sbs_score):
