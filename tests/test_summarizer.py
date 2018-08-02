@@ -1,16 +1,15 @@
 """ Test class for Summarizer """
 from math import floor
 
-import pytest
+from pytest import mark
 
 from oolongt import roughly
-
 from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.summarizer import pluck_keyword_words, Summarizer
+from oolongt.summarizer import Summarizer, pluck_keyword_words
 from tests.constants import DATA_PATH, SAMPLES
-from tests.helpers import (assert_ex, check_exception,
-                           get_sample_sentences, get_samples, randomize_list,
-                           snip)
+from tests.helpers import (assert_ex, check_exception, get_sample_ids,
+                           get_sample_sentence_ids, get_sample_sentences,
+                           get_samples, pad_to_longest, randomize_list, snip)
 from tests.typing.sample import Sample
 from tests.typing.sample_keyword import SampleKeyword
 
@@ -34,7 +33,10 @@ class TestSummarizer:
         """
         return [kw for kw in keywords if kw.count >= keywords[9].count]
 
-    @pytest.mark.parametrize('samp', get_samples(SAMPLES))
+    @mark.parametrize(
+        'samp',
+        get_samples(SAMPLES),
+        ids=pad_to_longest(get_sample_ids(SAMPLES)))
     def test_get_sentences(self, samp):
         # type: (Sample) -> list[dict]
         """Test `Summarizer.summarize()`
@@ -63,47 +65,51 @@ class TestSummarizer:
                 expected,
                 hint=[index, snip(receiveds[index].text)])
 
-    @pytest.mark.parametrize('keywords,expected', [
-        # short
-        ([
-            kbs(.11),
-            kbs(.08),
-            kbs(.07),
-            kbs(.10),
-            kbs(.09),
-            kbs(.12),
-        ], .07),
-        # no tie
-        ([
-            kbs(.02),
-            kbs(.04),
-            kbs(.07),
-            kbs(.01),
-            kbs(.08),
-            kbs(.05),
-            kbs(.12),
-            kbs(.09),
-            kbs(.11),
-            kbs(.06),
-            kbs(.10),
-            kbs(.03),
-        ], .03),
-        # tied
-        ([
-            kbs(.04),
-            kbs(.01),
-            kbs(.04),
-            kbs(.07),
-            kbs(.04),
-            kbs(.06),
-            kbs(.05),
-            kbs(.08),
-            kbs(.11),
-            kbs(.09),
-            kbs(.12),
-            kbs(.10),
-        ], .04),
-    ])
+    @mark.parametrize(
+        'keywords,expected',
+        [
+            ([
+                kbs(.11),
+                kbs(.08),
+                kbs(.07),
+                kbs(.10),
+                kbs(.09),
+                kbs(.12),
+            ], .07),
+            ([
+                kbs(.02),
+                kbs(.04),
+                kbs(.07),
+                kbs(.01),
+                kbs(.08),
+                kbs(.05),
+                kbs(.12),
+                kbs(.09),
+                kbs(.11),
+                kbs(.06),
+                kbs(.10),
+                kbs(.03),
+            ], .03),
+            ([
+                kbs(.04),
+                kbs(.01),
+                kbs(.04),
+                kbs(.07),
+                kbs(.04),
+                kbs(.06),
+                kbs(.05),
+                kbs(.08),
+                kbs(.11),
+                kbs(.09),
+                kbs(.12),
+                kbs(.10),
+            ], .04),
+        ],
+        ids=pad_to_longest([
+            'all pass (count < 10)',
+            'simple set (count > 10)',
+            'complex (>10 kws ranked <= 10)'
+        ]))
     def test_get_top_keyword_threshold(self, keywords, expected):
         # type: (list[dict], int) - None
         """Test `Summarizer.get_top_keyword_threshold()`
@@ -121,7 +127,10 @@ class TestSummarizer:
             received,
             expected)
 
-    @pytest.mark.parametrize('samp', get_samples(SAMPLES))
+    @mark.parametrize(
+        'samp',
+        get_samples(SAMPLES),
+        get_sample_ids(SAMPLES))
     def test_get_top_keywords(self, samp):
         # type: (Sample) -> None
         """Test `Summarizer.get_top_keywords()`
@@ -155,7 +164,10 @@ class TestSummarizer:
                 received,
                 expected)
 
-    @pytest.mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
+    @mark.parametrize(
+        'samp,sentence',
+        get_sample_sentences(SAMPLES),
+        ids=get_sample_sentence_ids(SAMPLES))
     def test_score_frequency(self, samp, sentence):
         # type: (Sample, dict) -> None
         """Test `Summarizer` sentence scoring by keyword frequency
@@ -189,7 +201,10 @@ class TestSummarizer:
                 received,
                 expected)
 
-    @pytest.mark.parametrize('samp,sentence', get_sample_sentences(SAMPLES))
+    @mark.parametrize(
+        'samp,sentence',
+        get_sample_sentences(SAMPLES),
+        ids=get_sample_sentence_ids(SAMPLES))
     def test_score_sentence(self, samp, sentence):
         # type: (Sample, dict) -> None
         """Test `Summarizer.score_sentence()`
@@ -217,13 +232,22 @@ class TestSummarizer:
             expected,
             hint=[samp.name, snip(text)])
 
-    @pytest.mark.parametrize('samp', get_samples([
-        'empty',
-        'sentence_short',
-        'sentence_medium',
-        'sentence_ideal',
-        'sentence_overlong',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'empty',
+            'sentence_short',
+            'sentence_medium',
+            'sentence_ideal',
+            'sentence_overlong',
+        ]),
+        ids=get_sample_ids([
+            'empty',
+            'sentence_short',
+            'sentence_medium',
+            'sentence_ideal',
+            'sentence_overlong',
+        ]))
     def test_get_sentence_length_score(self, samp):
         # type: (Sample) -> None
         """Test `Summarizer.get_sentence_length_score()`
@@ -243,13 +267,22 @@ class TestSummarizer:
             expected,
             hint=' '.join(words))
 
-    @pytest.mark.parametrize('samp', get_samples([
-        'sentence_1word',
-        'sentence_short',
-        'sentence_medium',
-        'sentence_ideal',
-        'sentence_overlong',
-    ]))
+    @mark.parametrize(
+        'samp',
+        get_samples([
+            'sentence_1word',
+            'sentence_short',
+            'sentence_medium',
+            'sentence_ideal',
+            'sentence_overlong',
+        ]),
+        ids=get_sample_ids([
+            'sentence_1word',
+            'sentence_short',
+            'sentence_medium',
+            'sentence_ideal',
+            'sentence_overlong',
+        ]))
     def test_get_title_score(self, samp):
         # type: (Sample) -> None
         """Test `Parser.get_title_score()`
