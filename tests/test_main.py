@@ -3,21 +3,23 @@ from math import floor
 from pathlib import Path
 from random import randint
 
-import pytest
+from pytest import mark
 
 from oolongt import roughly
-
-from oolongt.main import (
-    score_body_sentences, summarize, get_slice_length, DEFAULT_LENGTH)
+from oolongt.main import (DEFAULT_LENGTH, get_slice_length,
+                          score_body_sentences, summarize)
 from tests.typing.sample import Sample
 from tests.typing.sample_sentence import SampleSentence
 
 from .constants import DATA_PATH, SAMPLES
-from .helpers import (
-    assert_ex, get_samples, snip, check_exception)
+from .helpers import (assert_ex, check_exception, get_sample_ids, get_samples,
+                      pad_to_longest, snip)
 
 
-@pytest.mark.parametrize('samp', get_samples(SAMPLES))
+@mark.parametrize(
+    'samp',
+    get_samples(SAMPLES),
+    ids=pad_to_longest(get_sample_ids(SAMPLES)))
 def test_score_body_sentences(samp):
     """Test main.score_sentences()
 
@@ -82,7 +84,7 @@ def permute_test_summarize():
             yield (sample_name, length)
 
 
-@pytest.mark.parametrize('sample_name,length', permute_test_summarize())
+@mark.parametrize('sample_name,length', permute_test_summarize())
 def test_summarize(sample_name, length):
     """Test specified sample
 
@@ -110,11 +112,20 @@ def test_summarize(sample_name, length):
             hint=[snip(received), i])
 
 
-@pytest.mark.parametrize('nominal,total,expected', [
-    (0, 0, ValueError),
-    (20, 1000, 20),
-    (.1, 1000, 100),
-])
+@mark.parametrize(
+    'nominal,total,expected',
+    [
+        (20, 1000, 20),
+        (1001, 1000, 1000),
+        (.1, 1000, 100),
+        (0, 0, ValueError),
+    ],
+    ids=pad_to_longest([
+        'nominal: >= 1, total: > nominal == nominal',
+        'nominal: >= 1, total: < nominal == total',
+        'nominal: < 1,  total: > 1       == fraction of total',
+        'cannot be sliced',
+    ]))
 def test_get_slice_length(nominal, total, expected):
     """Test main.get_slice_length()
 
