@@ -1,12 +1,10 @@
 """ Helpers for testing """
 from random import shuffle
 
-from pytest import approx
-
 from tests.typing.sample import Sample
 from tests.typing.sample_keyword import SampleKeyword
 
-from .constants import DATA_PATH
+from tests.constants import DATA_PATH
 
 
 def snip(val, max_len=20, list_separator=', ', ellip="..."):
@@ -64,44 +62,6 @@ def randomize_list(src):
     return dupe
 
 
-def get_compare_value(val, rel=0.000001):
-    if isinstance(val, float):
-        return approx(val, rel=rel)
-
-    return val
-
-
-def compare_dict(left, right, keys=[], ignore=[]):
-    # type: (dict, dict, list[any], list[any]) -> bool
-    """Compare `left` as a subset of `right`
-
-    Arguments:
-        left {dict} -- lowest common denominator Dict
-        right {dict} -- Dict that should contain the same key/value pairs
-
-    Keyword Arguments:
-        keys {list[any]} -- keys to compare (Default: left.keys())
-        ignore {list[any]} - keys to ignore (Default: [])
-
-    >>> compare_dict({1: 1}, {1: 1})
-    True
-    >>> compare_dict({1: 1, 2: 2}, {1: 1})
-    False
-    >>> compare_dict({1: 1, 2: 2}, {1: 1}, keys=[1])
-    True
-    """
-    keys = [key for key in (keys or left.keys()) if key not in ignore]
-
-    for key in keys:
-        left_val = left[key]
-        right_val = get_compare_value(right.get(key, None))
-
-        if (left_val != right_val):
-            break
-
-    return (left_val == right_val)
-
-
 def assert_ex(msg, received, expected, hint=None):
     # type: (str, any, any, any) -> str
     """Generate detailed AssertionError messages
@@ -155,6 +115,11 @@ def get_samples(sample_names):
         yield get_sample(sample_name)
 
 
+def get_sample_ids(sample_names):
+    # TODO: more detail?
+    return sample_names
+
+
 def get_sample_sentences(sample_names):
     # type (list[str]) -> Iterable[tuple[Sample, SampleSentence]]
     """Get Sample, each sentence from Sample
@@ -170,6 +135,17 @@ def get_sample_sentences(sample_names):
 
         for sentence in samp.sentences:
             yield samp, sentence
+
+
+def get_sample_sentence_ids(sample_names):
+    ids = []
+    for sample_name in sample_names:
+        samp = get_sample(sample_name)
+
+        for sentence in samp.sentences:
+            ids.append('{0}: {1}'.format(samp.name, sentence.id))
+
+    return ids
 
 
 def check_exception(catch, expected):
@@ -197,3 +173,11 @@ def check_exception(catch, expected):
         pass
 
     return catch
+
+
+def pad_to_longest(strs):
+    pad_len = max([len(x) for x in strs])
+    pad_str = ' ' * pad_len
+    padded = [(x + pad_str)[:pad_len] for x in strs]
+
+    return padded
