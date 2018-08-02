@@ -130,7 +130,7 @@ class TestSummarizer:
     @mark.parametrize(
         'samp',
         get_samples(SAMPLES),
-        get_sample_ids(SAMPLES))
+        ids=get_sample_ids(SAMPLES))
     def test_get_top_keywords(self, samp):
         # type: (Sample) -> None
         """Test `Summarizer.get_top_keywords()`
