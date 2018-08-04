@@ -24,7 +24,7 @@ def score_body_sentences(body, title,
         list[ScoredSentence] -- List of sentences with scoring and metadata
     """
     summarizer = Summarizer()
-    sentences = summarizer.get_sentences(body, title, source, category)
+    sentences = summarizer.get_all_sentences(body, title, source, category)
 
     return sentences
 

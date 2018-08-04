@@ -5,7 +5,9 @@ from pytest import mark
 
 from oolongt import roughly
 from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.summarizer import Summarizer, pluck_keyword_words
+from oolongt.summarizer import (Summarizer, get_top_keyword_threshold,
+                                pluck_keyword_words, score_by_dbs,
+                                score_by_sbs)
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_ids,
                            get_sample_sentence_ids, get_sample_sentences,
@@ -16,6 +18,105 @@ from tests.typing.sample_keyword import SampleKeyword
 
 def kbs(score):
     return SampleKeyword.by_score(score)
+
+
+@mark.parametrize(
+    'keywords,expected',
+    [
+        ([
+            kbs(.11),
+            kbs(.08),
+            kbs(.07),
+            kbs(.10),
+            kbs(.09),
+            kbs(.12),
+        ], .07),
+        ([
+            kbs(.02),
+            kbs(.04),
+            kbs(.07),
+            kbs(.01),
+            kbs(.08),
+            kbs(.05),
+            kbs(.12),
+            kbs(.09),
+            kbs(.11),
+            kbs(.06),
+            kbs(.10),
+            kbs(.03),
+        ], .03),
+        ([
+            kbs(.04),
+            kbs(.01),
+            kbs(.04),
+            kbs(.07),
+            kbs(.04),
+            kbs(.06),
+            kbs(.05),
+            kbs(.08),
+            kbs(.11),
+            kbs(.09),
+            kbs(.12),
+            kbs(.10),
+        ], .04),
+    ],
+    ids=pad_to_longest([
+        'all pass (count < 10)',
+        'simple set (count > 10)',
+        'complex (>10 kws ranked <= 10)'
+    ]))
+def test_get_top_keyword_threshold(keywords, expected):
+    # type: (list[dict], int) - None
+    """Test `Summarizer.get_top_keyword_threshold()`
+
+    Arguments:
+        keywords {list[dict]} -- Dicts with 'count' key
+        expected {int} -- minimum count
+    """
+    received = get_top_keyword_threshold(keywords)
+
+    assert (received == expected), assert_ex(
+        'top keyword frequency >=',
+        received,
+        expected)
+
+
+@mark.parametrize(
+    'samp,sentence',
+    get_sample_sentences(SAMPLES),
+    ids=get_sample_sentence_ids(SAMPLES))
+def test_score_frequency(samp, sentence):
+    # type: (Sample, dict) -> None
+    """Test `Summarizer` sentence scoring by keyword frequency
+
+    Arguments:
+        samp {Sample} -- sample data
+        sentence {dict} -- individual sentence from sample
+    """
+    summ = Summarizer()
+    words = summ.parser.get_all_words(sentence.text)
+    top_keywords = summ.get_top_keywords(samp.body, None, None)
+    top_keyword_list = pluck_keyword_words(top_keywords)
+
+    params = (
+        (
+            'density score',
+            sentence.dbs_score,
+            score_by_dbs(words, top_keywords, top_keyword_list),
+        ),
+        (
+            'summation score',
+            sentence.sbs_score,
+            score_by_sbs(words, top_keywords, top_keyword_list),
+        ), )
+
+    for desc, expected, received in params:
+        result = roughly.eq(received, expected, COMPOSITE_TOLERANCE)
+
+        assert result, assert_ex(
+            desc,
+            received,
+            expected)
 
 
 class TestSummarizer:
@@ -37,7 +138,7 @@ class TestSummarizer:
         'samp',
         get_samples(SAMPLES),
         ids=pad_to_longest(get_sample_ids(SAMPLES)))
-    def test_get_sentences(self, samp):
+    def test_get_all_sentences(self, samp):
         # type: (Sample) -> list[dict]
         """Test `Summarizer.summarize()`
 
@@ -48,7 +149,8 @@ class TestSummarizer:
         sentences = samp.sentences  # type: list[SampleSentence]
 
         expecteds = sorted(sentences, key=lambda sent: sent.index)
-        receiveds = summ.get_sentences(samp.body, samp.title, None, None)
+        receiveds = summ.get_all_sentences(
+            samp.body, samp.title, None, None)
 
         assert (len(receiveds) == len(expecteds)), assert_ex(
             'summary result count',
@@ -64,68 +166,6 @@ class TestSummarizer:
                 received,
                 expected,
                 hint=[index, snip(receiveds[index].text)])
-
-    @mark.parametrize(
-        'keywords,expected',
-        [
-            ([
-                kbs(.11),
-                kbs(.08),
-                kbs(.07),
-                kbs(.10),
-                kbs(.09),
-                kbs(.12),
-            ], .07),
-            ([
-                kbs(.02),
-                kbs(.04),
-                kbs(.07),
-                kbs(.01),
-                kbs(.08),
-                kbs(.05),
-                kbs(.12),
-                kbs(.09),
-                kbs(.11),
-                kbs(.06),
-                kbs(.10),
-                kbs(.03),
-            ], .03),
-            ([
-                kbs(.04),
-                kbs(.01),
-                kbs(.04),
-                kbs(.07),
-                kbs(.04),
-                kbs(.06),
-                kbs(.05),
-                kbs(.08),
-                kbs(.11),
-                kbs(.09),
-                kbs(.12),
-                kbs(.10),
-            ], .04),
-        ],
-        ids=pad_to_longest([
-            'all pass (count < 10)',
-            'simple set (count > 10)',
-            'complex (>10 kws ranked <= 10)'
-        ]))
-    def test_get_top_keyword_threshold(self, keywords, expected):
-        # type: (list[dict], int) - None
-        """Test `Summarizer.get_top_keyword_threshold()`
-
-        Arguments:
-            keywords {list[dict]} -- Dicts with 'count' key
-            expected {int} -- minimum count
-        """
-        summ = Summarizer()
-
-        received = summ.get_top_keyword_threshold(keywords)
-
-        assert (received == expected), assert_ex(
-            'top keyword frequency >=',
-            received,
-            expected)
 
     @mark.parametrize(
         'samp',
@@ -168,46 +208,9 @@ class TestSummarizer:
         'samp,sentence',
         get_sample_sentences(SAMPLES),
         ids=get_sample_sentence_ids(SAMPLES))
-    def test_score_frequency(self, samp, sentence):
+    def test_get_sentence(self, samp, sentence):
         # type: (Sample, dict) -> None
-        """Test `Summarizer` sentence scoring by keyword frequency
-
-        Arguments:
-            samp {Sample} -- sample data
-            sentence {dict} -- individual sentence from sample
-        """
-        summ = Summarizer()
-        words = summ.parser.get_all_words(sentence.text)
-        top_keywords = summ.get_top_keywords(samp.body, None, None)
-        top_keyword_list = pluck_keyword_words(top_keywords)
-
-        params = (
-            (
-                'density score',
-                sentence.dbs_score,
-                summ.score_dbs(words, top_keywords, top_keyword_list),
-            ),
-            (
-                'summation score',
-                sentence.sbs_score,
-                summ.score_sbs(words, top_keywords, top_keyword_list),
-            ), )
-
-        for desc, expected, received in params:
-            result = roughly.eq(received, expected, COMPOSITE_TOLERANCE)
-
-            assert result, assert_ex(
-                desc,
-                received,
-                expected)
-
-    @mark.parametrize(
-        'samp,sentence',
-        get_sample_sentences(SAMPLES),
-        ids=get_sample_sentence_ids(SAMPLES))
-    def test_score_sentence(self, samp, sentence):
-        # type: (Sample, dict) -> None
-        """Test `Summarizer.score_sentence()`
+        """Test `Summarizer.get_sentence()`
 
         Arguments:
             samp {Sample} -- sample data
@@ -222,7 +225,7 @@ class TestSummarizer:
         of = len(samp.sentences)
 
         expected = sentence.total_score
-        received = summ.get_scored_sentence(
+        received = summ.get_sentence(
             text, index, of,
             title_words, top_keywords, top_keyword_list).total_score
 
@@ -248,9 +251,9 @@ class TestSummarizer:
             'sentence_ideal',
             'sentence_overlong',
         ]))
-    def test_get_sentence_length_score(self, samp):
+    def test_score_by_length(self, samp):
         # type: (Sample) -> None
-        """Test `Summarizer.get_sentence_length_score()`
+        """Test `Summarizer.score_by_length()`
 
         Arguments:
             samp {Sample} -- sample data
@@ -259,7 +262,7 @@ class TestSummarizer:
         words = samp.compare_words
 
         expected = samp.length_score
-        received = summ.score_sentence_length(words)
+        received = summ.score_by_length(words)
 
         assert roughly.eq(received, expected), assert_ex(
             'sentence score',
@@ -283,7 +286,7 @@ class TestSummarizer:
             'sentence_ideal',
             'sentence_overlong',
         ]))
-    def test_get_title_score(self, samp):
+    def test_score_by_title(self, samp):
         # type: (Sample) -> None
         """Test `Parser.get_title_score()`
 
@@ -295,7 +298,7 @@ class TestSummarizer:
         sentence_words = samp.compare_words
 
         expected = samp.title_score
-        received = summ.score_title(title_words, sentence_words)
+        received = summ.score_by_title(title_words, sentence_words)
 
         assert roughly.eq(received, expected), assert_ex(
             'title score',

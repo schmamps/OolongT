@@ -37,7 +37,7 @@ def generate():
         summ = Summarizer()
 
         for samp in get_samples():
-            receiveds = summ.get_sentences(
+            receiveds = summ.get_all_sentences(
                 samp.body, samp.title, None, None)
             ranks = [
                 sent.index for sent in sorted(receiveds, reverse=True)]
