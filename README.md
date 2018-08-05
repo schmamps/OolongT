@@ -55,20 +55,22 @@ using the named argument `root`.
 #### Configuration File
 
 * `meta/name`: for reference only
-* `nltk_language`: pass to NLTK tokenizer as named argument `language='…'`
+* `nltk_language`: name of language passed to NLTK
 * `ideal`: "ideal" sentence length, ostensibly 20 in English
-* `stop_words`:
-  [words not important to content](https://en.wikipedia.org/wiki/Stop_words),
-e.g. articles, pronouns
+* `stop_words/nltk`: initialize the [stop word] list(https://en.wikipedia.org/wiki/Stop_words) from NLTK (`true`, default) or with an empty list (`false`)
+* `stop_words/user`: list of stop words appended to the initial list
 
 ```js
 {
   "meta": {
-    "name": "German"
+    "name": "Deutsch"
   },
-  "nltk_language": "german",
+  "nltk_language": "deutsch",
   "ideal": 20,
-  "stop_words": ["ein", "das", "die", "der", …]
+  "stop_words": {
+    "nltk": true,
+    "user": ["doch"]
+  }
 }
 ```
 
@@ -97,31 +99,24 @@ OolongT can reduce content to either a fixed number of sentences:
 
 By default, OolongT sorts top sentences by their order of appearance.
 
-If you wish to override the sort, the following keys are available:
+For greater control over the quantity and order of sentences,
+use the Summarizer class directly.
+The `Summarizer.get_all_sentences` method parses content
+and returns a list of `ScoredSentence` objects
+with the following sortable properties:
 
-* **`order`**: order of appearance in the text (default)
-* `title_score`: frequency of words in the title
-  appearing in the sentence
-* `keyword_score`: frequency of the most common keywords (significant words)
-  of the overall text appearing in the sentence
-* `position_score`: score of the sentence based on
-  its location in the overall text
-* `length_score`: closeness of the sentence to an ideal length
-* `total_score`: overall score of the sentence
-* `text`: text of the sentence
-
-```py
->>> from oolongt import summarize
-...
->>> summarize(title, text, length=3, sort_key='text')
-['2nd most…', 'most important sentence', 'third most…']
-```
-
-If you wish to sort in descending order, pass `reverse=True`
+* `total_score`: composite of other sentence scores (default)
+* `index`: order of appearance in content
+* `of`: total number of sentences in content
+* `title_score`: score by keywords appearing in content title
+* `length_score`: score by word count relative to `ideal` configuration
+* `dbs_score`: score by keyword density
+* `sbs_score`: score by summation
+* `position_score`: score by position of sentence in content
+* `keyword_score`: score by top keywords in content
 
 ```py
->>> from oolongt import summarize
-...
->>> summarize(title, text, length=3, sort_key='text', reverse=True)
-['third most…', 'most important sentence', '2nd most…' ]
+>>> from oolongt.summarizer import Summarizer
+>>> Summarizer().get_all_sentences(body, title)
+[ScoredSentence, ScoredSentence, ...]
 ```

@@ -4,10 +4,9 @@ from pathlib import Path
 
 from nltk.corpus import stopwords
 
-from oolongt.constants import (
-    BUILTIN, DEFAULT_LANG,
-    DEFAULT_CUSTOM_STOPS, DEFAULT_INITIAL_STOPS,
-    DEFAULT_IDEAL_LENGTH, DEFAULT_NLTK_LANGUAGE,)
+from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_LANG,
+                               DEFAULT_NLTK_LANGUAGE, DEFAULT_NLTK_STOPS,
+                               DEFAULT_USER_STOPS)
 from oolongt.simple_io import load_json
 from oolongt.typing.repr_able import ReprAble
 
@@ -27,54 +26,35 @@ def get_config_paths(root, lang):
     return root_path.joinpath(lang + '.json'), root_path
 
 
-def get_stop_word_key(stop_cfg, key, nltk_language, default_val=[]):
-    # type: (any, str) -> list[str]
-    """Get stop words from specified key
-
-    Returns:
-        list[str] -- list of stop words
-    """
-    spec = stop_cfg.get(key, default_val)
-
-    if spec == 'nltk':
-        spec = stopwords.words(nltk_language)
-
-    return list(spec)
-
-
-def get_stop_words(lang_spec, nltk_language, defaults):
+def get_stop_words(lang_spec, nltk_language):
     # type: (dict, str) -> set
     """List stop words based on language configuration
 
     Returns:
         list[str] -- list of stop words
     """
-    stop_cfg = defaults.copy()
+    stop_cfg = {'nltk': DEFAULT_NLTK_STOPS, 'user': DEFAULT_USER_STOPS, }
     stop_cfg.update(lang_spec.get('stop_words', {}))
+    use_nltk = bool(stop_cfg['nltk'])
+    use_user = isinstance(stop_cfg['user'], list)
 
-    initial = get_stop_word_key(
-        stop_cfg, 'initial', nltk_language, 'nltk')  # type: list
-    custom = get_stop_word_key(
-        stop_cfg, 'custom', nltk_language)           # type: list
+    nltk = stopwords.words(nltk_language) if use_nltk else []
+    user = [str(word) for word in stop_cfg['user']] if use_user else []
 
-    return set(initial + custom)
+    return set(nltk + user)
 
 
 def parse_config(path):
     # type: (str) -> tuple[int, str, list[str]]
-    DEFAULT_STOP_WORDS = {
-        'initial': DEFAULT_INITIAL_STOPS,
-        'custom': DEFAULT_CUSTOM_STOPS, }
-
     try:
         lang_spec = load_json(path)
 
         ideal = lang_spec.get(
-            'ideal', DEFAULT_IDEAL_LENGTH)                 # type: int
+            'ideal', DEFAULT_IDEAL_LENGTH)           # type: int
         nltk_language = lang_spec.get(
-            'nltk_language', DEFAULT_NLTK_LANGUAGE)        # type: str
+            'nltk_language', DEFAULT_NLTK_LANGUAGE)  # type: str
         stop_words = get_stop_words(
-            lang_spec, nltk_language, DEFAULT_STOP_WORDS)  # type: list[str]
+            lang_spec, nltk_language)                # type: list[str]
 
     except (KeyError, JSONDecodeError):
         raise ValueError('invalid config file: {!r}'.format(path))

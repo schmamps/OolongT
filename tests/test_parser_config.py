@@ -2,11 +2,11 @@ from pathlib import Path
 
 from pytest import mark
 
-from oolongt.constants import DEFAULT_LANG, BUILTIN
-from oolongt.typing.parser_config import (
-    ParserConfig, get_config_paths, get_stop_word_key, get_stop_words,
-    load_language, parse_config,
-    DEFAULT_INITIAL_STOPS, DEFAULT_CUSTOM_STOPS)
+from oolongt.constants import (BUILTIN, DEFAULT_LANG, DEFAULT_NLTK_STOPS,
+                               DEFAULT_USER_STOPS)
+from oolongt.typing.parser_config import (ParserConfig, get_config_paths,
+                                          get_stop_words, load_language,
+                                          parse_config)
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
 BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
@@ -14,10 +14,10 @@ TEST_LANG_NAME = 'valid'
 TEST_LANG_JSON = BASE_LANG_PATH.joinpath(TEST_LANG_NAME + '.json')
 TEST_LANG_EXPECTED = (2, 'valid', 2)
 DEFAULT_LANG_EXPECTED = (20, 'english', 398)
-TEST_DEFAULT_INITIAL = ['foo']
-TEST_DEFAULT_CUSTOM = ['bar']
+TEST_DEFAULT_INITIAL = False
+TEST_DEFAULT_CUSTOM = ['foo', 'bar']
 TEST_DEFAULT_STOPS = {
-    'initial': TEST_DEFAULT_INITIAL,
+    'nltk': TEST_DEFAULT_INITIAL,
     'custom': TEST_DEFAULT_CUSTOM, }
 
 
@@ -46,12 +46,8 @@ def compare_loaded_language(received, expected):
 
 @mark.parametrize(
     'root,lang,expected_path',
-    [
-        (BASE_LANG_PATH, TEST_LANG_NAME, TEST_LANG_JSON),
-    ],
-    ids=[
-        'test path'
-    ])
+    [(BASE_LANG_PATH, TEST_LANG_NAME, TEST_LANG_JSON), ],
+    ids=['test path', ])
 def test_get_config_paths(root, lang, expected_path):
     expected = (expected_path, BASE_LANG_PATH)
     received = get_config_paths(root, lang)
@@ -63,57 +59,46 @@ def test_get_config_paths(root, lang, expected_path):
 
 
 @mark.parametrize(
-    'stop_cfg,key,nltk_language,default_val,min_len,max_len',
+    'spec,expected',
     [
-        ({'foo': ['bar']}, 'foo', None, ['baz', 'quux'], 1, 1),
-        ({}, 'foo', None, ['baz', 'quux'], 2, 2),
-        ({'foo': 'nltk'}, 'foo', None, None, 100, 99999),
-        ({}, 'foo', None, 'nltk', 100, 99999),
+        ({}, -1,),
+        ({'nltk': False}, 0),
+        ({'nltk': True}, -10),
+        ({'user': []}, -10),
+        ({'user': ['foo']}, -10),
+        ({'nltk': False, 'user': []}, 0),
+        ({'nltk': False, 'user': ['foo']}, 1),
+        ({'nltk': True, 'user': []}, -10),
+        ({'nltk': True, 'user': ['foo']}, -10),
     ],
     ids=pad_to_longest([
-        'value at key "foo"',
-        'return default',
-        'NLTK (explicit)',
-        'NLTK (implicit)',
+        'nltk: default, user: default',
+        'nltk: False,   user: default',
+        'nltk: True,    user: default',
+        'nltk: default, user: 0',
+        'nltk: default, user: 1',
+        'nltk: False,   user: 0',
+        'nltk: False,   user: 1',
+        'nltk: True,    user: 0',
+        'nltk: True,    user: 1',
     ]))
-def test_get_stop_word_key(stop_cfg, key, nltk_language, default_val,
-                           min_len, max_len):
-    received = len(
-        get_stop_word_key(stop_cfg, key, nltk_language, default_val))
+def test_get_stop_words(spec, expected):
+    lang_spec = {'stop_words': spec}
+    nltk_language = 'english'
+    user = spec.get('user', [])
 
-    assert(min_len <= received <= max_len), assert_ex(
-        'stop word key',
-        received,
-        ' to '.join([min_len, max_len]))
+    received = list(get_stop_words(lang_spec, nltk_language))
+    missing = len([x for x in user if x not in received]) if user else 0
+    test = (missing == 0)
 
+    if test:
+        if (expected < 0):
+            test = (len(received) > abs(expected))
 
-@mark.parametrize(
-    'spec,defaults,expected',
-    [
-        ({'initial': [], 'custom': []}, TEST_DEFAULT_STOPS, [],),
-        (
-            {'initial': ['baz'], 'custom': ['quux', 'quuz']},
-            TEST_DEFAULT_STOPS,
-            ['baz', 'quux', 'quuz'],
-        ),
-        ({'initial': []}, TEST_DEFAULT_STOPS, TEST_DEFAULT_CUSTOM,),
-        ({'custom': []},  TEST_DEFAULT_STOPS, TEST_DEFAULT_INITIAL,),
-        ({}, TEST_DEFAULT_STOPS, TEST_DEFAULT_INITIAL + TEST_DEFAULT_CUSTOM,),
-    ],
-    ids=pad_to_longest([
-        'initial: exp., custom: exp. == (empty)',
-        'initial: exp., custom: exp. == (populated)',
-        'initial: exp., custom: def. == (populated)',
-        'initial: def., custom: exp. == (populated)',
-        'initial: def., custom: def. == (populated)',
-    ]))
-def test_get_stop_words(spec, defaults, expected):
-    expected = sorted(
-        expected)
-    received = sorted(list(
-        get_stop_words({'stop_words': spec}, None, defaults)))
+        else:
+            test = (len(received) == expected)
 
-    assert (received == expected), assert_ex(
+    assert test, assert_ex(
         'get stop words',
         received,
         expected)

@@ -5,8 +5,8 @@
 	"ideal": 20,
 	"nltk_language": "english",
 	"stop_words": {
-		"initial": [],
-		"custom": [
+		"nltk": false,
+		"user": [
 			"-",
 			",",
 			".",

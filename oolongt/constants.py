@@ -12,8 +12,8 @@ BUILTIN = Path(__file__).parent.joinpath('lang')
 DEFAULT_LANG = 'en'
 DEFAULT_IDEAL_LENGTH = 20
 DEFAULT_NLTK_LANGUAGE = 'english'
-DEFAULT_INITIAL_STOPS = 'nltk'
-DEFAULT_CUSTOM_STOPS = []
+DEFAULT_NLTK_STOPS = True
+DEFAULT_USER_STOPS = []
 
 # scored keyword
 KEYWORD_SCORE_K = 1.5

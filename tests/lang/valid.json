@@ -5,7 +5,7 @@
 	"nltk_language": "valid",
 	"ideal": 2,
 	"stop_words": {
-		"initial": [],
-		"custom": ["foo", "bar"]
+		"nltk": false,
+		"user": ["foo", "bar"]
 	}
 }
