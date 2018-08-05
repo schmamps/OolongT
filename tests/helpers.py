@@ -116,8 +116,7 @@ def get_samples(sample_names):
 
 
 def get_sample_ids(sample_names):
-    # TODO: more detail?
-    return pad_to_longest(sample_names)
+    return pad_to_longest(['src: {}'.format(x) for x in sample_names])
 
 
 def get_sample_sentences(sample_names):
@@ -143,7 +142,7 @@ def get_sample_sentence_ids(sample_names):
         samp = get_sample(sample_name)
 
         for sentence in samp.sentences:
-            ids.append('{0}: {1}'.format(samp.name, sentence.id))
+            ids.append('src: {}, sent: {}'.format(samp.name, sentence.id))
 
     return pad_to_longest(ids)
 
