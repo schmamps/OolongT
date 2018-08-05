@@ -7,7 +7,7 @@ from oolongt import roughly
 
 def auto_id(index, of):
     pad = len(str(of))
-    template = 'sentence {{0:{0}d}} of {{1}}'.format(pad)
+    template = '{{0:{0}d}} of {{1}}'.format(pad)
     return template.format(index + 1, of)
 
 
