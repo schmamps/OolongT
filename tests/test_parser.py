@@ -42,19 +42,19 @@ class TestParser:
         # type: (list[dict], int) -> tuple[list[str], dict[str, float]]
         """Reduce getKeywords() for counting
 
-        TODO: update this docstring
+        Extract word and score properties of keyword list
 
         Arguments:
-            keywords {list[dict]} -- keywords
+            keywords {list[ScoredKeyword]} -- keywords
 
         Returns:
-            tuple[list[str], dict[str, float]] - usable data
+            list[str], dict[str, float] - usable data
         """
         scores = {}
         words = []
 
         for kw in keywords:
-            word = kw.word
+            word = str(kw)
             scores[word] = kw.score
             words.append(word)
 
