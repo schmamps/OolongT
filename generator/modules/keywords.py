@@ -18,7 +18,7 @@ def dictify(keyword):
     return kw_dict
 
 
-def get_mean_keywords(samp):
+def get_median_keywords(samp):
     p = Parser()
     samples = [p.get_keywords(samp.body) for _ in range(SAMPLING_SIZE)]
 
