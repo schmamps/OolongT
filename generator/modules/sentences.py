@@ -1,52 +1,91 @@
+from collections import OrderedDict
+
 from oolongt.summarizer import Summarizer
 
-from generator.util import get_samples, json as json_util
+from generator.util import console, get_samples, json as json_util, math
 
 
-def jsonify(sent, rank):
-    data = {
-        'text': sent.text,
-        'index': sent.index,
-        'of': sent.of,
-        'title_score': sent.title_score,
-        'length_score': sent.length_score,
-        'dbs_score': sent.dbs_score,
-        'sbs_score': sent.sbs_score,
-        'position_score': sent.position_score,
-        'keyword_score': sent.keyword_score,
-        'total_score': sent.total_score,
-        'rank': rank, }
+SAMPLE_SIZE = 25
 
-    pairs = ',\n\t\t\t'.join([
-        json_util.kv_pair(data, 'index', 'd'),
-        json_util.kv_pair(data, 'sbs_score', '.12f'),
-        json_util.kv_pair(data, 'dbs_score', '.12f'),
-        json_util.kv_pair(data, 'title_score', '.12f'),
-        json_util.kv_pair(data, 'length_score', '.12f'),
-        json_util.kv_pair(data, 'position_score', '.2f'),
-        json_util.kv_pair(data, 'keyword_score', '.12f'),
-        json_util.kv_pair(data, 'total_score', '.12f'),
-        json_util.kv_pair(data, 'text'),
-        json_util.kv_pair(data, 'rank', 'd'), ])
 
-    return '\t\t{\n\t\t\t' + pairs + '\n\t\t}'
+def dictify(received, rank):
+    sent_dict = OrderedDict()
+
+    sent_dict['index'] = received.index
+    sent_dict['sbs_score'] = received.sbs_score
+    sent_dict['dbs_score'] = received.dbs_score
+    sent_dict['title_score'] = received.title_score
+    sent_dict['length_score'] = received.length_score
+    sent_dict['position_score'] = received.position_score
+    sent_dict['keyword_score'] = received.keyword_score
+    sent_dict['total_score'] = received.total_score
+    sent_dict['text'] = received.text
+    sent_dict['rank'] = rank
+
+    return sent_dict
+
+
+def get_median_sentence(all_samples, sent_idx):
+    samples = [s[sent_idx] for s in all_samples]
+
+    sbs_score = math.median([s.sbs_score for s in samples])
+    dbs_score = math.median([s.dbs_score for s in samples])
+    title_score = math.median([s.title_score for s in samples])
+    length_score = math.median([s.length_score for s in samples])
+    keyword_score = math.median([s.keyword_score for s in samples])
+    total_score = math.median([s.total_score for s in samples])
+
+    samples[0].sbs_score = sbs_score
+    samples[0].dbs_score = dbs_score
+    samples[0].title_score = title_score
+    samples[0].length_score = length_score
+    samples[0].keyword_score = keyword_score
+    samples[0].total_score = total_score
+
+    return samples[0]
+
+
+def get_median_sentences(samp):
+    summ = Summarizer()
+    all_samples = [
+        summ.get_all_sentences(samp.body, samp.title, None, None)
+        for _ in range(SAMPLE_SIZE)]
+
+    mean = all_samples[0].copy()
+    for sent_idx in range(len(mean)):
+        mean[sent_idx] = get_median_sentence(all_samples, sent_idx)
+
+    return mean
 
 
 def generate():
+    console.group('Sentences')
     for samp in get_samples():
-        summ = Summarizer()
+        console.group(samp.name)
 
-        for samp in get_samples():
-            receiveds = summ.get_all_sentences(
-                samp.body, samp.title, None, None)
+        file_comps = [samp.name, 'sentences']
+        file_path = json_util.get_output_path(file_comps)
+
+        try:
+            receiveds = get_median_sentences(samp)
             ranks = [
                 sent.index for sent in sorted(receiveds, reverse=True)]
 
-            with json_util.create(samp.name, 'sentences') as file:
-                file.write(json_util.open('sentences', '['))
+            data = OrderedDict()
+            data['sentences'] = [
+                dictify(sent, ranks.index(idx))
+                for idx, sent in enumerate(receiveds)]
 
-                file.write(',\n'.join([
-                    jsonify(sent, ranks.index(idx))
-                    for idx, sent in enumerate(receiveds)]))
+            json_util.write(file_path, data)
 
-                file.write(json_util.close(']'))
+            console.success('saved to: {}'.format(file_path))
+
+        except Exception as e:
+            console.error(e)
+            console.info('deleting: {!r}'.format(file_path))
+
+            json_util.cleanup(file_path)
+
+        console.group_end()
+
+    console.group_end()

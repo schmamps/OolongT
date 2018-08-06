@@ -1,46 +1,62 @@
+from collections import OrderedDict
+
 from oolongt.summarizer import Summarizer
 from oolongt.parser import Parser
 
-from generator.util import get_samples, json as json_util
+from generator.util import console, get_samples, json as json_util, math
 
 
-def jsonify(keyword):
-    data = {
-        'score': keyword.score,
-        'count': keyword.count,
-        'word': keyword.word, }
+SAMPLING_SIZE = 10
 
-    pairs = [
-        json_util.kv_pair(data, 'score', '.12f'),
-        json_util.kv_pair(data, 'count', '2d'),
-        json_util.kv_pair(data, 'word'), ]
 
-    return '\t\t{' + ', '.join(pairs) + '}'
+def dictify(keyword):
+    kw_dict = OrderedDict()
+    kw_dict['score'] = keyword.score
+    kw_dict['count'] = keyword.count
+    kw_dict['word'] = keyword.word
+
+    return kw_dict
+
+
+def get_mean_keywords(samp):
+    p = Parser()
+    samples = [p.get_keywords(samp.body) for _ in range(SAMPLING_SIZE)]
+
+    mean = samples[0].copy()
+    for kw_idx in range(len(mean)):
+        mean[kw_idx].score = math.median([s[kw_idx].score for s in samples])
+
+    return mean
 
 
 def generate():
-    p = Parser()
+    console.group('Keywords')
 
     for samp in get_samples():
-        receiveds = p.get_keywords(samp.body)
-        keywords = sorted(receiveds, reverse=True)
-        keyword_count = sum([kw.count for kw in keywords])
+        console.group(samp.name)
 
-        with json_util.create(samp.name, 'keywords') as file:
-            file.write('{\n')
-            file.write('\t"keyword_count": {0:d},\n'.format(keyword_count))
-            file.write('\t"keywords": [\n')
-            file.write(',\n'.join([jsonify(kw) for kw in keywords]))
-            file.write(json_util.close(']'))
+        file_comps = [samp.name, 'keywords']
+        file_path = json_util.get_output_path(file_comps)
 
-        # basic_words = [kw.word for kw in samp.keywords]
-        # stem_words = [kw.word for kw in keywords]
+        try:
+            received = get_mean_keywords(samp)
+            keywords = sorted(received, reverse=True)
+            keyword_count = sum([kw.count for kw in keywords])
 
-        # if len(basic_words):
-        #     for word in sorted(list(set(basic_words + stem_words))):
-        #         if word not in basic_words and len(basic_words) > 0:
-        #             print('unique stem: ' + word)
+            data = OrderedDict()
+            data['keyword_count'] = keyword_count
+            data['keywords'] = [dictify(kw) for kw in keywords]
 
-        #         if word not in stem_words:
-        #             print('unique basic: ' + word)
-        print('')
+            json_util.write(file_path, data, 'keywords')
+
+            console.success('saved to: {}'.format(file_path))
+
+        except Exception as e:
+            console.error(e)
+            console.info('deleting: {!r}'.format(file_path))
+
+            json_util.cleanup(file_path)
+
+        console.group_end()
+
+    console.group_end()
