@@ -11,23 +11,37 @@
 		{
 			"index": 0,
 			"id": "(the only one)",
-			"sbs_score": 0.000000000000,
-			"dbs_score": 0.000000000000,
-			"title_score": 0.000000000000,
-			"length_score": 0.050000000000,
+			"sbs_score": 0.0,
+			"dbs_score": 0.0,
+			"title_score": 0.0,
+			"length_score": 0.05,
 			"position_score": 0.15,
-			"keyword_score": 0.000000000000,
-			"total_score": 0.043750000000,
+			"keyword_score": 0.0,
+			"total_score": 0.04375,
 			"text": "Whatever!",
 			"rank": 0
 		}
 	],
-	"words": ["Whatever!"],
-	"compare_words": ["whatever"],
-	"compare_title": ["puppies", "and", "kittens", "dance"],
-	"split_words": ["whatever", "!"],
+	"words": [
+		"Whatever!"
+	],
+	"compare_words": [
+		"whatever"
+	],
+	"compare_title": [
+		"puppies",
+		"and",
+		"kittens",
+		"dance"
+	],
+	"split_words": [
+		"whatever",
+		"!"
+	],
 	"length_score": 0.0,
 	"title_score": 0.0,
 	"remove_punctuations": "Whatever",
-	"remove_stop_words": ["!"]
+	"remove_stop_words": [
+		"!"
+	]
 }

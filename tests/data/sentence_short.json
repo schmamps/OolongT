@@ -7,27 +7,39 @@
 	"title": "A short paragraph here yet a longer title",
 	"keyword_count": 3,
 	"keywords": [
-		{"word": "paragraph", "count": 1, "total_score": 0.50000000},
-		{"word": "contains", "count": 1, "total_score": 0.50000000},
-		{"word": "sentence", "count": 1, "total_score": 0.50000000}
+		{"score": 0.5, "count": 1, "word": "paragraph"},
+		{"score": 0.5, "count": 1, "word": "sentence"},
+		{"score": 0.5, "count": 1, "word": "contains"}
 	],
 	"sentences": [
 		{
 			"index": 0,
 			"id": "(the only one)",
-			"sbs_score": 0.300000000000,
-			"dbs_score": 0.390625000000,
-			"title_score": 0.250000000000,
-			"length_score": 0.250000000000,
+			"sbs_score": 0.30000000000000004,
+			"dbs_score": 0.390625,
+			"title_score": 0.25,
+			"length_score": 0.25,
 			"position_score": 0.15,
-			"keyword_score": 3.453125000000,
-			"total_score": 1.889062500000,
+			"keyword_score": 3.453125,
+			"total_score": 1.8890625,
 			"text": "This paragraph contains one sentence.",
 			"rank": 0
 		}
 	],
-	"words": ["This", "paragraph", "contains", "one", "sentence."],
-	"compare_words": ["this", "paragraph", "contains", "one", "sentence"],
+	"words": [
+		"This",
+		"paragraph",
+		"contains",
+		"one",
+		"sentence."
+	],
+	"compare_words": [
+		"this",
+		"paragraph",
+		"contains",
+		"one",
+		"sentence"
+	],
 	"compare_title": [
 		"a",
 		"short",
@@ -40,5 +52,7 @@
 	],
 	"length_score": 0.25,
 	"title_score": 0.25,
-	"split_sentences": ["This paragraph contains one sentence."]
+	"split_sentences": [
+		"This paragraph contains one sentence."
+	]
 }

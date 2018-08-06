@@ -11,18 +11,20 @@
 		{
 			"index": 0,
 			"id": "(the only one)",
-			"sbs_score": 0.000000000000,
-			"dbs_score": 0.000000000000,
-			"title_score": 0.000000000000,
-			"length_score": 0.100000000000,
+			"sbs_score": 0.0,
+			"dbs_score": 0.0,
+			"title_score": 0.0,
+			"length_score": 0.1,
 			"position_score": 0.15,
-			"keyword_score": 0.000000000000,
-			"total_score": 0.050000000000,
+			"keyword_score": 0.0,
+			"total_score": 0.05,
 			"text": "Or whatever!",
 			"rank": 0
 		}
 	],
 	"length_score": 0.0,
 	"title_score": 0.0,
-	"remove_stop_words": ["!"]
+	"remove_stop_words": [
+		"!"
+	]
 }

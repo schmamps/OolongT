@@ -7,25 +7,25 @@
 	"title": "Kittens Frolic with Tiny Puppies?",
 	"keyword_count": 7,
 	"keywords": [
-		{"score": 0.214285714286, "count":  1, "word": "puppies"},
-		{"score": 0.214285714286, "count":  1, "word": "kittens"},
-		{"score": 0.214285714286, "count":  1, "word": "happily"},
-		{"score": 0.214285714286, "count":  1, "word": "fluffy"},
-		{"score": 0.214285714286, "count":  1, "word": "woods"},
-		{"score": 0.214285714286, "count":  1, "word": "fuzzy"},
-		{"score": 0.214285714286, "count":  1, "word": "dance"}
+		{"score": 0.21428571428571427, "count": 1, "word": "puppies"},
+		{"score": 0.21428571428571427, "count": 1, "word": "kittens"},
+		{"score": 0.21428571428571427, "count": 1, "word": "happily"},
+		{"score": 0.21428571428571427, "count": 1, "word": "fluffy"},
+		{"score": 0.21428571428571427, "count": 1, "word": "woods"},
+		{"score": 0.21428571428571427, "count": 1, "word": "fuzzy"},
+		{"score": 0.21428571428571427, "count": 1, "word": "dance"}
 	],
 	"sentences": [
 		{
 			"index": 0,
 			"id": "(the only one)",
-			"sbs_score": 0.150000000000,
-			"dbs_score": 0.225286989796,
-			"title_score": 0.500000000000,
-			"length_score": 0.500000000000,
+			"sbs_score": 0.15,
+			"dbs_score": 0.22528698979591835,
+			"title_score": 0.5,
+			"length_score": 0.5,
 			"position_score": 0.15,
-			"keyword_score": 1.876434948980,
-			"total_score": 1.225717474490,
+			"keyword_score": 1.8764349489795917,
+			"total_score": 1.2257174744897958,
 			"text": "Fuzzy kittens and fluffy puppies dance happily in the woods.",
 			"rank": 0
 		}
@@ -75,5 +75,5 @@
 		"."
 	],
 	"length_score": 0.5,
-	"title_score":  0.5
+	"title_score": 0.5
 }
