@@ -18,15 +18,15 @@
 			"position_score": 0.15,
 			"keyword_score": 0.0,
 			"total_score": 0.04375,
-			"text": "Whatever!",
+			"text": "You!",
 			"rank": 0
 		}
 	],
 	"words": [
-		"Whatever!"
+		"You!"
 	],
 	"compare_words": [
-		"whatever"
+		"you"
 	],
 	"compare_title": [
 		"puppies",
@@ -35,12 +35,12 @@
 		"dance"
 	],
 	"split_words": [
-		"whatever",
+		"you",
 		"!"
 	],
 	"length_score": 0.0,
 	"title_score": 0.0,
-	"remove_punctuations": "Whatever",
+	"remove_punctuations": "You",
 	"remove_stop_words": [
 		"!"
 	]

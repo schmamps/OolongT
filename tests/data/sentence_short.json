@@ -1,10 +1,11 @@
 {
 	"meta": {
 		"description": "A short sentence",
-		"license": false
+		"license": false,
+		"comments": "the string 'a' is intentional"
 	},
 	"lang": "en",
-	"title": "A short paragraph here yet a longer title",
+	"title": "A short paragraph here but a longer title",
 	"keyword_count": 3,
 	"keywords": [
 		{"score": 0.5, "count": 1, "word": "paragraph"},
@@ -22,7 +23,7 @@
 			"position_score": 0.15,
 			"keyword_score": 3.453125,
 			"total_score": 1.8890625,
-			"text": "This paragraph contains one sentence.",
+			"text": "This paragraph contains a sentence.",
 			"rank": 0
 		}
 	],
@@ -30,14 +31,14 @@
 		"This",
 		"paragraph",
 		"contains",
-		"one",
+		"a",
 		"sentence."
 	],
 	"compare_words": [
 		"this",
 		"paragraph",
 		"contains",
-		"one",
+		"a",
 		"sentence"
 	],
 	"compare_title": [
@@ -45,7 +46,7 @@
 		"short",
 		"paragraph",
 		"here",
-		"yet",
+		"but",
 		"a",
 		"longer",
 		"title"
@@ -53,6 +54,6 @@
 	"length_score": 0.25,
 	"title_score": 0.25,
 	"split_sentences": [
-		"This paragraph contains one sentence."
+		"This paragraph contains a sentence."
 	]
 }
