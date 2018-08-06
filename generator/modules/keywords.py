@@ -39,7 +39,7 @@ def generate():
         file_path = json_util.get_output_path(file_comps)
 
         try:
-            received = get_mean_keywords(samp)
+            received = get_median_keywords(samp)
             keywords = sorted(received, reverse=True)
             keyword_count = sum([kw.count for kw in keywords])
 
