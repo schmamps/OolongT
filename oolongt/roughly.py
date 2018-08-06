@@ -1,5 +1,5 @@
 """Compare floating point values"""
-from .constants import DEFAULT_TOLERANCE
+from oolongt.constants import DEFAULT_TOLERANCE
 
 
 def eq(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
