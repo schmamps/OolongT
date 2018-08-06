@@ -3,8 +3,9 @@ from math import floor
 from pytest import approx
 from time import time
 
+from generator.util import json, console
+
 from oolongt.summarizer import Summarizer
-from oolongt.simple_io import load_json
 
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (
@@ -45,3 +46,23 @@ def report(title, *data):
         '\ndifference: {0:.3f}x'.format(
             by_speed[-1]['time'] / by_speed[0]['time']))
     print('')
+
+
+def compare_lists():
+    summ = Summarizer()
+    nltk_words = sorted(list(set([
+        summ.parser.remove_punctuations(w)
+        for w in stopwords.words(summ.parser.language)])))
+    user_words = sorted(list(set(
+        json.read('./.champs/en-old.json')['stop_words']['user'])))
+
+    console.group('NLTK Uniques')
+    console.ul(sorted([w for w in nltk_words if w not in user_words]))
+    console.group_end()
+
+    console.group('User Uniques')
+    console.ul(sorted([w for w in user_words if w not in nltk_words]))
+    console.group_end()
+
+
+compare_lists()
