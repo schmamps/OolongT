@@ -4,8 +4,8 @@ from pathlib import Path
 DEFAULT_LENGTH = 5
 
 # approximation
-DEFAULT_TOLERANCE = 0.0000001  # simple floats
-COMPOSITE_TOLERANCE = 0.00000011   # composite scores
+DEFAULT_TOLERANCE = 0.0000000001    # simple floats
+COMPOSITE_TOLERANCE = 0.0000000001  # composite scores
 
 # parser
 BUILTIN = Path(__file__).parent.joinpath('lang')
