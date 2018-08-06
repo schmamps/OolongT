@@ -1,2 +1,2 @@
-from .util import json
-from .modules import keywords, sentences
+from generator.util import json
+from generator.modules import keywords, merge, sentences
