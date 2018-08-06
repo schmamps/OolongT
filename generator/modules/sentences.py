@@ -5,7 +5,7 @@ from oolongt.summarizer import Summarizer
 from generator.util import console, get_samples, json as json_util, math
 
 
-SAMPLE_SIZE = 25
+SAMPLING_SIZE = 25
 
 
 def dictify(received, rank):
@@ -49,7 +49,7 @@ def get_median_sentences(samp):
     summ = Summarizer()
     all_samples = [
         summ.get_all_sentences(samp.body, samp.title, None, None)
-        for _ in range(SAMPLE_SIZE)]
+        for _ in range(SAMPLING_SIZE)]
 
     mean = all_samples[0].copy()
     for sent_idx in range(len(mean)):
