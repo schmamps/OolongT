@@ -8,12 +8,11 @@ from pytest import mark
 from oolongt import roughly
 from oolongt.main import (DEFAULT_LENGTH, get_slice_length,
                           score_body_sentences, summarize)
+from tests.constants import DATA_PATH, SAMPLES
+from tests.helpers import (assert_ex, check_exception, get_sample_ids,
+                           get_samples, pad_to_longest, snip)
 from tests.typing.sample import Sample
 from tests.typing.sample_sentence import SampleSentence
-
-from .constants import DATA_PATH, SAMPLES
-from .helpers import (assert_ex, check_exception, get_sample_ids, get_samples,
-                      pad_to_longest, snip)
 
 
 @mark.parametrize(
