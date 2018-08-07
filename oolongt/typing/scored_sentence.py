@@ -5,6 +5,29 @@ from oolongt.constants import COMPOSITE_TOLERANCE
 from oolongt.typing.repr_able import ReprAble
 
 
+def calc_decile(index, of):
+    # (int, int) -> int
+    """Get decile of `index` relative to `of`
+
+    Raises:
+        ValueError -- `index` out of range
+
+    Returns:
+        int -- decile of index (range: 1 to 10)
+    """
+    try:
+        decile = int(ceil((float(index) + 1) / of * 10))
+
+        if 1 <= decile <= 10:
+            return decile
+
+    except ZeroDivisionError:
+        pass
+
+    raise ValueError(
+        'Invalid index/of ({0}/{1})'.format(index, of))
+
+
 # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
 # Sentence Extraction Based Single Document Summarization.
 # International Institute of Information Technology, Hyderabad, India, 5.
@@ -20,18 +43,10 @@ def score_position(index, of):
         float -- score
     """
     POS_SCORES = (.17, .23, .14, .08, .05, .04, .06, .04, .04, .15)
+    score_index = calc_decile(index, of) - 1
 
-    try:
-        score_index = ceil((index + 1) / of * 10) - 1
-
-        if score_index in range(len(POS_SCORES)):
-            return POS_SCORES[score_index]
-
-    except ZeroDivisionError:
-        pass
-
-    raise ValueError(
-        'Invalid index/sentence count ({0}/{1})'.format(index, of))
+    if score_index in range(len(POS_SCORES)):
+        return POS_SCORES[score_index]
 
 
 def score_keyword_frequency(dbs_score, sbs_score):
@@ -60,7 +75,7 @@ class ScoredSentence(ReprAble):
             title_score, length_score,
             dbs_score, sbs_score, keyword_score,
             position_score, total_score):
-        self.text = str(text)
+        self.text = text
         self.index = int(index)
         self.of = int(of)
         self.title_score = float(title_score)
