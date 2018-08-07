@@ -1,3 +1,3 @@
--r oolongt/requirements.txt
+-r oolongt/requirements/requirements.txt
 -r tests/requirements/requirements.txt
--r generator/requirements.txt
+-r generator/requirements/requirements.txt
