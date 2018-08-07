@@ -24,13 +24,13 @@ class Parser:
             ValueError: missing/invalid configuration file
         """
         config = ParserConfig(root, lang)
+        isl = config.ideal_sentence_length
+        language = config.nltk_language
+        stop_words = config.stop_words
 
-        self.ideal_sentence_length = \
-            config.ideal_sentence_length  # type: int
-        self.language = \
-            config.nltk_language          # type: str
-        self.stop_words = \
-            config.stop_words             # type: list[str]
+        self.ideal_sentence_length = isl  # type: int
+        self.language = language          # type: str
+        self.stop_words = stop_words      # type: list[str]
 
     def get_all_words(self, text):
         # type: (str) -> list[str]
