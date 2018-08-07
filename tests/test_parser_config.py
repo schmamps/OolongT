@@ -7,6 +7,7 @@ from oolongt.constants import (BUILTIN, DEFAULT_LANG, DEFAULT_NLTK_STOPS,
 from oolongt.typing.parser_config import (ParserConfig, get_config_paths,
                                           get_stop_words, load_language,
                                           parse_config)
+from tests import FileNotFoundError, PermissionError
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
 BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')

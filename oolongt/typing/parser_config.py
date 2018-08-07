@@ -1,5 +1,4 @@
 """Parser Configuration Reader"""
-from json import JSONDecodeError
 from pathlib import Path
 
 from nltk.corpus import stopwords
@@ -9,6 +8,8 @@ from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_LANG,
                                DEFAULT_USER_STOPS)
 from oolongt.simple_io import load_json
 from oolongt.typing.repr_able import ReprAble
+
+from oolongt.typing import FileNotFoundError, JSONDecodeError, PermissionError
 
 
 def get_config_paths(root, lang):
@@ -85,7 +86,7 @@ def load_language(root=BUILTIN, lang=DEFAULT_LANG):
         # pylint: disable=no-member
         cfg_path.resolve().relative_to(root_path.resolve())
 
-    except ValueError:
+    except (ValueError, OSError):
         raise PermissionError('directory traversal in lang: ' + lang)
 
     # pylint: disable=no-member
