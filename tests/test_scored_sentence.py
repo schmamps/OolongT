@@ -1,7 +1,7 @@
 from pytest import mark
 
 from oolongt import roughly
-from oolongt.typing.scored_sentence import (ScoredSentence,
+from oolongt.typing.scored_sentence import (ScoredSentence, calc_decile,
                                             score_keyword_frequency,
                                             score_position, score_total)
 
@@ -9,6 +9,54 @@ from .constants import SAMPLES
 from .helpers import (assert_ex, check_exception, get_sample_ids,
                       get_sample_sentence_ids, get_sample_sentences,
                       get_samples, pad_to_longest)
+
+
+@mark.parametrize(
+    'index,of,expected',
+    [
+        (0, 10, 1),
+        (9, 100, 1),
+        (1, 10, 2),
+        (2, 10, 3),
+        (3, 10, 4),
+        (4, 10, 5),
+        (5, 10, 6),
+        (6, 10, 7),
+        (7, 10, 8),
+        (8, 10, 9),
+        (9, 10, 10),
+        (-1, 100, ValueError),
+        (10, 10, ValueError),
+        (10, 0, ValueError),
+    ],
+    ids=[
+        'index:  0, of:  10 (  1)',
+        'index:  1, of:  10 (  2)',
+        'index:  2, of:  10 (  3)',
+        'index:  3, of:  10 (  4)',
+        'index:  4, of:  10 (  5)',
+        'index:  5, of:  10 (  6)',
+        'index:  6, of:  10 (  7)',
+        'index:  7, of:  10 (  8)',
+        'index:  8, of:  10 (  9)',
+        'index:  9, of:  10 ( 10)',
+        'index:  9, of: 100 (  1)',
+        'index: -1, of: 100 (err)',
+        'index: 10, of:  10 (err)',
+        'index: 10, of:   0 (err)',
+    ])
+def test_calc_decile(index, of, expected):
+    try:
+        received = calc_decile(index, of)
+
+    except ValueError as e:
+        received = check_exception(e, expected)
+
+    assert (received == expected), assert_ex(
+        'calculate decile',
+        received,
+        expected,
+        hint='/'.join([str(index), str(of)]))
 
 
 @mark.parametrize(
