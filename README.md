@@ -17,9 +17,9 @@ TextTeaser links:
 1. Download the repository from:
    <https://github.com/schmamps/OolongT.git>
 1. `cd` to the project directory
+1. Setup a virtualenv in `.venv` and activate (if necessary/desired)
 1. Install the required packages:
    `pip install -r requirements.txt`
-1. Setup a virtualenv (if necessary/desired)
 1. Run `python setup.py`
 1. Follow the prompts to download NLTK data
 
