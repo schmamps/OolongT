@@ -1,13 +1,4 @@
-import sys
-
-
-if sys.version_info[0] < 3:
-    sys.path.append('..')
-    PermissionError = IOError
-    FileNotFoundError = IOError
-    JSONDecodeError = ValueError
-
-else:
-    PermissionError = PermissionError
-    FileNotFoundError = FileNotFoundError  # pylint: disable=undefined-variable
-    from json import JSONDecodeError       # pylint: disable=no-name-in-module
+from .parser_config import ParserConfig
+from .repr_able import ReprAble
+from .scored_keyword import ScoredKeyword
+from .scored_sentence import ScoredSentence

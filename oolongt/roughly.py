@@ -2,7 +2,12 @@
 from oolongt.constants import DEFAULT_TOLERANCE
 
 
-def eq(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
+def eq(
+        a: float,
+        b: float,
+        rel_tol: float = DEFAULT_TOLERANCE,
+        abs_tol: float = 0.0
+        ) -> bool:
     """Test `a`(-ish) == `b`(-ish)
 
     Arguments:
@@ -16,11 +21,15 @@ def eq(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     Returns:
         bool -- equivalent
     """
-    # type: (float, float, float, float) -> bool
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
-def ne(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
+def ne(
+        a: float,
+        b: float,
+        rel_tol: float = DEFAULT_TOLERANCE,
+        abs_tol: float = 0.0
+        ) -> bool:
     """Test `a`(-ish) != `b`(-ish)
 
     Arguments:
@@ -34,11 +43,15 @@ def ne(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     Returns:
         bool -- not equivalent
     """
-    # type: (float, float, float, float) -> bool
     return not eq(a, b, rel_tol, abs_tol)
 
 
-def lt(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
+def lt(
+        a: float,
+        b: float,
+        rel_tol: float = DEFAULT_TOLERANCE,
+        abs_tol: float = 0.0
+        ) -> bool:
     """Test `a`(-ish) < `b`(-ish)
 
     Arguments:
@@ -52,11 +65,15 @@ def lt(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     Returns:
         bool -- `a` is less than `b`
     """
-    # type: (float, float, float, float) -> bool
     return a < b and not eq(a, b, rel_tol, abs_tol)
 
 
-def gt(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
+def gt(
+        a: float,
+        b: float,
+        rel_tol: float = DEFAULT_TOLERANCE,
+        abs_tol: float = 0.0
+        ) -> bool:
     """Test `a`(-ish) > `b`(-ish)
 
     Arguments:
@@ -70,11 +87,15 @@ def gt(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     Returns:
         bool -- `a` is greater than `b`
     """
-    # type: (float, float, float, float) -> bool
     return a > b and not eq(a, b, rel_tol, abs_tol)
 
 
-def ge(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
+def ge(
+        a: float,
+        b: float,
+        rel_tol: float = DEFAULT_TOLERANCE,
+        abs_tol: float = 0.0
+        ) -> bool:
     """Test `a`(-ish) >= `b`(-ish)
 
     Arguments:
@@ -88,11 +109,15 @@ def ge(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     Returns:
         bool -- `a` is greater than/equal to `b`
     """
-    # type: (float, float, float, float) -> bool
     return not lt(a, b, rel_tol, abs_tol)
 
 
-def le(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
+def le(
+        a: float,
+        b: float,
+        rel_tol: float = DEFAULT_TOLERANCE,
+        abs_tol: float = 0.0
+        ) -> bool:
     """Test `a`(-ish) <= `b`(-ish)
 
     Arguments:
@@ -106,5 +131,4 @@ def le(a, b, rel_tol=DEFAULT_TOLERANCE, abs_tol=0.0):
     Returns:
         bool -- `a` is less than/equal to `b`
     """
-    # type: (float, float, float, float) -> bool
     return not gt(a, b, rel_tol, abs_tol)

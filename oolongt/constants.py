@@ -1,3 +1,4 @@
+from typing import List
 from pathlib import Path
 
 # summarizer
@@ -13,7 +14,7 @@ DEFAULT_LANG = 'en'
 DEFAULT_IDEAL_LENGTH = 20
 DEFAULT_NLTK_LANGUAGE = 'english'
 DEFAULT_NLTK_STOPS = True
-DEFAULT_USER_STOPS = []
+DEFAULT_USER_STOPS = []   # type: List[str]
 
 # scored keyword
 KEYWORD_SCORE_K = 1.5

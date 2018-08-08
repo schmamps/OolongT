@@ -1,16 +1,27 @@
 """Text summarizer"""
-from .constants import BUILTIN, DEFAULT_LANG
-from .parser import Parser
-from .typing.scored_sentence import ScoredSentence
+import typing
+
+from oolongt.constants import BUILTIN, DEFAULT_LANG
+from oolongt.parser import Parser
+from oolongt.typedefs.scored_keyword import ScoredKeyword
+from oolongt.typedefs.scored_sentence import ScoredSentence
 
 
-def pluck_keyword_words(keyword_list):
-    # type: (list[dict]) -> list[str]
+def pluck_keyword_words(
+        keyword_list: typing.List[ScoredKeyword]
+        ) -> typing.List[str]:
+    """List every word property in `keyword_list`
+
+    Arguments:
+        keyword_list {typing.List[ScoredKeyword]} -- list of scored keywords
+
+    Returns:
+        typing.List[str] -- all words in keyword list
+    """
     return [kw.word for kw in keyword_list]
 
 
-def get_top_keyword_threshold(keywords):
-    # type: (list[ScoredKeyword]) -> int
+def get_top_keyword_threshold(keywords: typing.List[ScoredKeyword]) -> int:
     """Get minimum frequency for top `keywords`
 
     Arguments:
@@ -28,8 +39,11 @@ def get_top_keyword_threshold(keywords):
     return tenth.score
 
 
-def score_by_dbs(words, top_keywords, top_keyword_list):
-    # type: (list[str], list[ScoredKeyword], list[str]) -> float
+def score_by_dbs(
+        words: typing.List[str],
+        top_keywords: typing.List[ScoredKeyword],
+        top_keyword_list: typing.List[str]
+        ) -> float:
     """Score sentence (`words`) by keyword density
 
     Arguments:
@@ -42,8 +56,8 @@ def score_by_dbs(words, top_keywords, top_keyword_list):
     """
     k = len(list(set(words) & set(top_keyword_list))) + 1
     summ = 0.0
-    first_word = {}
-    second_word = {}
+    first_word = {}   # type: typing.Dict
+    second_word = {}  # type: typing.Dict
 
     for i, word in enumerate(words):
         if word in top_keyword_list:
@@ -67,8 +81,15 @@ def score_by_dbs(words, top_keywords, top_keyword_list):
     return dbs
 
 
-def score_by_sbs(words, top_keywords, top_keyword_list):
-    # type: (list[str], list[ScoredKeyword], list[str]) -> float
+def _float_len(val_list: typing.List) -> float:
+    return float(len(val_list))
+
+
+def score_by_sbs(
+        words: typing.List[str],
+        top_keywords: typing.List[ScoredKeyword],
+        top_keyword_list: typing.List[str]
+        ) -> float:
     """Score sentence (`words`) by summation
 
     Arguments:
@@ -96,13 +117,16 @@ def score_by_sbs(words, top_keywords, top_keyword_list):
 
 
 class Summarizer:
-    def __init__(self, root=BUILTIN, lang=DEFAULT_LANG):
-        # type: (str, str) -> None
+    def __init__(self, root: str = BUILTIN, lang: str = DEFAULT_LANG) -> None:
         self.parser = Parser(root, lang)
 
-    def get_all_sentences(self, body, title,
-                          source=None, category=None):
-        # type: (str, str, any, any) -> list[ScoredSentence]
+    def get_all_sentences(
+            self,
+            body: str,
+            title: str,
+            source=None,
+            category=None
+            ) -> typing.List[ScoredSentence]:
         """List and score all sentences in `text`
 
         Arguments:
@@ -128,8 +152,12 @@ class Summarizer:
 
         return scored_sentences
 
-    def get_top_keywords(self, text, source, category):
-        # type: (str, any, any) -> list[dict]
+    def get_top_keywords(
+            self,
+            text: str,
+            source: typing.Any,
+            category: typing.Any
+            ) -> typing.List[ScoredKeyword]:
         """List 1st-10th ranked keywords in `text`
 
         Arguments:
@@ -146,21 +174,27 @@ class Summarizer:
 
         return top_keywords
 
-    def get_sentence(self, text, index, of,
-                     title_words, top_keywords, top_keyword_list):
-        # type: (str, int, int, list, list, list[str], int) -> ScoredSentence
+    def get_sentence(
+            self,
+            text: str,
+            index: int,
+            of: int,
+            title_words: typing.List[str],
+            top_keywords: typing.List[ScoredKeyword],
+            top_keyword_list: typing.List[str]
+            ) -> ScoredSentence:
         """Score sentence (`text`) on several factors
 
         Arguments:
-            idx {int} -- zero-based position of sentence in overall text
             text {str} -- text of sentence
+            index {int} -- index of sentence in overall text (zero based)
+            of {int} -- len() of sentences in `text`
             title_words {list[str]} -- words in title
-            top_keywords {list[dict]} -- top keywords in content body
+            top_keywords {list[ScoredKeyword]} -- top keywords in content body
             top_keyword_list {list[str]} -- values of 'word' in top_keywords
-            num_sents {int} -- number of sentences in overall text
 
         Returns:
-            dict -- {total_score: float, sentence: str, index: int}
+            ScoredSentence -- scored sentence
         """
         words = self.parser.get_all_words(text)
 
@@ -175,9 +209,8 @@ class Summarizer:
 
         return scored
 
-    def score_by_length(self, words):
-        # type: list[str] -> float
-        """Score sentence (`words`) based on actual word count vs. ideal
+    def score_by_length(self, words: typing.List[str]) -> float:
+        """Score sentence by its count of `words` vs. ideal
 
         Arguments:
             words {list[str]} -- list of words in the sentence
@@ -191,8 +224,11 @@ class Summarizer:
 
         return score
 
-    def score_by_title(self, title_words, sentence_words):
-        # type: (list[str], list[str]) -> float
+    def score_by_title(
+            self,
+            title_words: typing.List[str],
+            sentence_words: typing.List[str]
+            ) -> float:
         """Score `sentence_words` by matches with `title_words`
 
         Arguments:
@@ -209,6 +245,6 @@ class Summarizer:
             for word in sentence_keywords
             if word in title_keywords]
 
-        score = float(len(matched_keywords)) / (len(title_keywords) * 1.0)
+        score = _float_len(matched_keywords) / _float_len(title_keywords)
 
         return score

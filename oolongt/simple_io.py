@@ -1,12 +1,10 @@
 """Quick and dirty file readers"""
+import typing
 from io import open as io_open
-from json import loads
-
-from oolongt import PYTHON_2
+from json import loads, JSONDecodeError
 
 
-def load_json(path):
-    # type: (str) -> dict
+def load_json(path: str) -> typing.Dict:
     """Load JSON from file at `path`
 
     Arguments:
@@ -15,14 +13,20 @@ def load_json(path):
     Returns:
             dict -- data in file
     """
-    contents = read_file(path)
+    try:
+        contents = read_file(path)
+
+    except IOError:
+        raise JSONDecodeError('I/O error reading file', path, 0)
 
     return loads(contents)
 
 
-def _get_contents(path):
-    # (str) -> str
+def _get_contents(path: str) -> str:
     """Read file at `path` into string
+
+    Arguments:
+            path {str} -- path to file
 
     Returns:
         str -- contents of file
@@ -31,11 +35,10 @@ def _get_contents(path):
         contents = fp.read()
         fp.close()
 
-        return contents
+    return contents
 
 
-def read_file(path):
-    # type: (str) -> str
+def read_file(path: str) -> str:
     """Load text from file at `path`
 
     Arguments:
@@ -45,8 +48,5 @@ def read_file(path):
             str -- text in file
     """
     contents = _get_contents(path)
-
-    if PYTHON_2:
-        contents = contents.encode('ascii', 'ignore').decode('ascii')
 
     return contents

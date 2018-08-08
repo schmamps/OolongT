@@ -1,66 +1,9 @@
+"""Sentence string and score data"""
 from math import ceil
 
 from oolongt import roughly
 from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.typing.repr_able import ReprAble
-
-
-def calc_decile(index, of):
-    # (int, int) -> int
-    """Get decile of `index` relative to `of`
-
-    Raises:
-        ValueError -- `index` out of range
-
-    Returns:
-        int -- decile of index (range: 1 to 10)
-    """
-    try:
-        decile = int(ceil((float(index) + 1) / of * 10))
-
-        if 1 <= decile <= 10:
-            return decile
-
-    except ZeroDivisionError:
-        pass
-
-    raise ValueError(
-        'Invalid index/of ({0}/{1})'.format(index, of))
-
-
-# Jagadeesh, J., Pingali, P., & Varma, V. (2005).
-# Sentence Extraction Based Single Document Summarization.
-# International Institute of Information Technology, Hyderabad, India, 5.
-def score_position(index, of):
-    # type: (int, int) -> float
-    """Score sentences[`index`] where len(sentences) = `sentence_count`
-
-    Arguments:
-        index {int} -- index of sentence in list
-        sentence_count {int} -- length of sentence list
-
-    Returns:
-        float -- score
-    """
-    POS_SCORES = (.17, .23, .14, .08, .05, .04, .06, .04, .04, .15)
-    score_index = calc_decile(index, of) - 1
-
-    if score_index in range(len(POS_SCORES)):
-        return POS_SCORES[score_index]
-
-
-def score_keyword_frequency(dbs_score, sbs_score):
-    K = 5.0
-
-    return K * (sbs_score + dbs_score)
-
-
-def score_total(title_score, keyword_score, length_score, position_score):
-    return (
-        title_score * 1.5 +
-        keyword_score * 2.0 +
-        length_score * 0.5 +
-        position_score * 1.0) / 4.0
+from oolongt.typedefs import ReprAble
 
 
 class ScoredSentence(ReprAble):
@@ -71,11 +14,19 @@ class ScoredSentence(ReprAble):
         'position_score', 'keyword_score', 'total_score', ]
 
     def _init_(
-            self, text, index, of,
-            title_score, length_score,
-            dbs_score, sbs_score, keyword_score,
-            position_score, total_score):
-        self.text = text
+            self,
+            text: str,
+            index: int,
+            of: int,
+            title_score: float,
+            length_score: float,
+            dbs_score: float,
+            sbs_score: float,
+            keyword_score: float,
+            position_score: float,
+            total_score: float
+            ) -> None:
+        self.text = str(text)
         self.index = int(index)
         self.of = int(of)
         self.title_score = float(title_score)
@@ -87,10 +38,15 @@ class ScoredSentence(ReprAble):
         self.total_score = float(total_score)
 
     def __init__(
-            self, text, index, of,
-            title_score, length_score,
-            dbs_score, sbs_score):
-        # (str, int, int, float, float, float, float) -> None
+            self,
+            text: str,
+            index: int,
+            of: int,
+            title_score: float,
+            length_score: float,
+            dbs_score: float,
+            sbs_score: float
+            ) -> None:
         position_score = score_position(
             index, of)
         keyword_score = score_keyword_frequency(
@@ -104,10 +60,10 @@ class ScoredSentence(ReprAble):
             dbs_score, sbs_score, keyword_score,
             position_score, total_score)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self._repr_(
             self.text,
             self.index,
@@ -117,23 +73,106 @@ class ScoredSentence(ReprAble):
             self.dbs_score,
             self.sbs_score)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return roughly.eq(
             self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return roughly.lt(
             self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         return roughly.gt(
             self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not (self == other)
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         return not (self < other)
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         return not (self > other)
+
+
+def calc_decile(index: int, of: int) -> int:
+    """Get decile of `index` relative to `of`
+
+    Raises:
+        IndexError -- `index` out of range
+
+    Returns:
+        int -- decile of index (range: 1 to 10)
+    """
+    try:
+        decile = int(ceil((float(index) + 1) / of * 10))
+
+        if 1 <= decile <= 10:
+            return decile
+
+    except ZeroDivisionError:
+        pass
+
+    raise IndexError(
+        'Invalid index/of ({0}/{1})'.format(index, of))
+
+
+# Jagadeesh, J., Pingali, P., & Varma, V. (2005).
+# Sentence Extraction Based Single Document Summarization.
+# International Institute of Information Technology, Hyderabad, India, 5.
+def score_position(index: int, of: int) -> float:
+    """Score sentences[`index`] where len(sentences) = `sentence_count`
+
+    Arguments:
+        index {int} -- index of sentence in list
+        sentence_count {int} -- length of sentence list
+
+    Raises:
+        IndexError -- invalid `index` for range(`of`)
+
+    Returns:
+        float -- score
+    """
+    POS_SCORES = (.17, .23, .14, .08, .05, .04, .06, .04, .04, .15)
+    score_index = calc_decile(index, of) - 1
+
+    return POS_SCORES[score_index]
+
+
+def score_keyword_frequency(dbs_score: float, sbs_score: float) -> float:
+    """Score keyword frequency
+
+    Arguments:
+        dbs_score {float} -- DBS score
+        sbs_score {float} -- SBS score
+
+    Returns:
+        float -- keyword frequency score
+    """
+    K = 5.0
+
+    return K * (sbs_score + dbs_score)
+
+
+def score_total(
+        title_score: float,
+        keyword_score: float,
+        length_score: float,
+        position_score: float
+        ) -> float:
+    """Calculate total score as composite of other scores
+
+    Arguments:
+        title_score {float} -- title score
+        keyword_score {float} -- keyword frequency score
+        length_score {float} -- sentence length score
+        position_score {float} -- sentence position score
+
+    Returns:
+        float -- overall score
+    """
+    return (
+        title_score * 1.5 +
+        keyword_score * 2.0 +
+        length_score * 0.5 +
+        position_score * 1.0) / 4.0

@@ -1,4 +1,6 @@
 """Parser Configuration Reader"""
+import typing
+from json import JSONDecodeError
 from pathlib import Path
 
 from nltk.corpus import stopwords
@@ -7,13 +9,12 @@ from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_LANG,
                                DEFAULT_NLTK_LANGUAGE, DEFAULT_NLTK_STOPS,
                                DEFAULT_USER_STOPS)
 from oolongt.simple_io import load_json
-from oolongt.typing.repr_able import ReprAble
+from oolongt.typedefs import ReprAble
 
-from oolongt.typing import FileNotFoundError, JSONDecodeError, PermissionError
+CFG_TUPLE = typing.Tuple[int, str, typing.List[str]]
 
 
-def get_config_paths(root, lang):
-    # type: (str, str) -> str
+def get_config_paths(root: str, lang: str) -> typing.Tuple[Path, Path]:
     """Get path to language config
 
     Arguments:
@@ -21,18 +22,17 @@ def get_config_paths(root, lang):
         lang {str} -- basename of config
 
     Returns:
-        Path -- pathlib.Path to file
+        Tuple[Path, Path] -- pathlib.Path to file
     """
     root_path = Path(root)
     return root_path.joinpath(lang + '.json'), root_path
 
 
-def get_stop_words(lang_spec, nltk_language):
-    # type: (dict, str) -> set
+def get_stop_words(lang_spec: dict, nltk_language: str) -> set:
     """List stop words based on language configuration
 
     Returns:
-        list[str] -- list of stop words
+        set -- list of stop words
     """
     stop_cfg = {'nltk': DEFAULT_NLTK_STOPS, 'user': DEFAULT_USER_STOPS, }
     stop_cfg.update(lang_spec.get('stop_words', {}))
@@ -45,8 +45,19 @@ def get_stop_words(lang_spec, nltk_language):
     return set(nltk + user)
 
 
-def parse_config(path):
-    # type: (str) -> tuple[int, str, list[str]]
+def parse_config(path: str) -> CFG_TUPLE:
+    """Load defaults, override with loaded data
+
+    Arguments:
+        path {Path} -- path to config file
+
+    Raises:
+        ValueError -- unable to read file
+
+    Returns:
+        typing.Tuple[int, str, typing.List[str]] --
+            ideal length, NLTK language, stop words
+    """
     try:
         lang_spec = load_json(path)
 
@@ -55,16 +66,15 @@ def parse_config(path):
         nltk_language = lang_spec.get(
             'nltk_language', DEFAULT_NLTK_LANGUAGE)  # type: str
         stop_words = get_stop_words(
-            lang_spec, nltk_language)                # type: list[str]
+            lang_spec, nltk_language)                # type: typing.Set[str]
 
-    except (KeyError, JSONDecodeError):
+    except (JSONDecodeError):
         raise ValueError('invalid config file: {!r}'.format(path))
 
     return int(ideal), str(nltk_language), list(stop_words)
 
 
-def load_language(root=BUILTIN, lang=DEFAULT_LANG):
-    # type: (str, str) -> tuple[int, str, list[str]]
+def load_language(root: str = BUILTIN, lang: str = DEFAULT_LANG) -> CFG_TUPLE:
     """Get class initialization data from `root`/`lang`.json
 
     Arguments:
@@ -74,11 +84,12 @@ def load_language(root=BUILTIN, lang=DEFAULT_LANG):
             (default: {parser.DEFAULT_LANG})
 
     Raises:
-        PermissionError -- Directory traversal via lang
-        FileNotFoundError -- Language file(s) not found
+        PermissionError -- directory traversal via lang
+        JSONDecodeError -- unable to load JSON from file
 
     Returns:
-        dict -- class initialization data
+        typing.Tuple[int, str, typing.List[str]] --
+            ideal length, NLTK language, stop words
     """
     cfg_path, root_path = get_config_paths(root, lang)
 
@@ -89,19 +100,15 @@ def load_language(root=BUILTIN, lang=DEFAULT_LANG):
     except (ValueError, OSError):
         raise PermissionError('directory traversal in lang: ' + lang)
 
-    # pylint: disable=no-member
-    if not cfg_path.exists():
-        raise FileNotFoundError(cfg_path)
-
     config = parse_config(str(cfg_path.absolute()))
 
     return config
 
 
 class ParserConfig(ReprAble):
-    def __init__(self, root, lang):
+    def __init__(self, root: str, lang: str) -> None:
         ideal, nltk_language, stop_words = load_language(root, lang)
 
         self.ideal_sentence_length = ideal  # type: int
         self.nltk_language = nltk_language  # type: str
-        self.stop_words = stop_words        # type: list[str]
+        self.stop_words = stop_words        # type: typing.List[str]

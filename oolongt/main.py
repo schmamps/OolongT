@@ -1,14 +1,21 @@
 """Simple sentence scoring & summarization functions"""
+import typing
+
 from oolongt.constants import BUILTIN, DEFAULT_LANG, DEFAULT_LENGTH
 from oolongt.parser import Parser
 from oolongt.summarizer import Summarizer
+from oolongt.typedefs import ScoredSentence
 
 
-def score_body_sentences(body, title,
-                         root=BUILTIN, lang=DEFAULT_LANG,
-                         source=None, category=None):
-    # type: (str, str, str, str, any, any) -> list[ScoredSentence]
-    """List and score every sentence in `text`
+def score_body_sentences(
+        body: str,
+        title: str,
+        root: str = BUILTIN,
+        lang: str = DEFAULT_LANG,
+        source: typing.Any = None,
+        category: typing.Any = None
+        ) -> typing.List[ScoredSentence]:
+    """List and score every sentence in `body`
 
     Arguments:
         body {str} -- body of content
@@ -21,7 +28,8 @@ def score_body_sentences(body, title,
         category {any} -- unused (default: {None})
 
     Returns:
-        list[ScoredSentence] -- List of sentences with scoring and metadata
+        typing.List[ScoredSentence] --
+            List of sentences with scoring and metadata
     """
     summarizer = Summarizer()
     sentences = summarizer.get_all_sentences(body, title, source, category)
@@ -29,12 +37,11 @@ def score_body_sentences(body, title,
     return sentences
 
 
-def get_slice_length(nominal, of):
-    # type: (float, int) -> int
+def get_slice_length(nominal: typing.Any, of: int) -> int:
     """Calculate actual number of sentences to return
 
     Arguments:
-        nominal {float} -- fraction of total/absolute number to return
+        nominal {float or int} -- fraction of total/absolute number to return
         of {int} -- total number of sentences in body
 
     Raises:
@@ -57,11 +64,15 @@ def get_slice_length(nominal, of):
     return min([int(nominal), of])
 
 
-def get_best_sentences(body, title,
-                       length=DEFAULT_LENGTH,
-                       root=BUILTIN, lang=DEFAULT_LANG,
-                       source=None, category=None):
-    # type: (str, str, int, str, str, any, any) -> list[ScoredSentence]
+def get_best_sentences(
+        body: str,
+        title: str,
+        length: typing.Any = DEFAULT_LENGTH,
+        root: str = BUILTIN,
+        lang: str = DEFAULT_LANG,
+        source: typing.Any = None,
+        category: typing.Any = None
+        ) -> typing.List[ScoredSentence]:
     """Get best sentences from `body` in score order, qty: `length`
 
     Arguments:
@@ -87,11 +98,15 @@ def get_best_sentences(body, title,
     return sorted(sentences, reverse=True)[:slice_length]
 
 
-def summarize(body, title,
-              length=DEFAULT_LENGTH,
-              root=BUILTIN, lang=DEFAULT_LANG,
-              source=None, category=None):
-    # type: (str, str, int, str, str, any, any) -> list[str]
+def summarize(
+        body: str,
+        title: str,
+        length: typing.Any = DEFAULT_LENGTH,
+        root: typing.Any = BUILTIN,
+        lang: str = DEFAULT_LANG,
+        source: typing.Any = None,
+        category: typing.Any = None
+        ) -> typing.List[str]:
     """Get `length` best sentences from `body` in content order
 
     if `length` < 1:
