@@ -1,5 +1,2 @@
-import sys
-
-
-if sys.version_info[0] < 3:
-    sys.path.append('..')
+from .sample_keyword import SampleKeyword
+from .sample_sentence import SampleSentence

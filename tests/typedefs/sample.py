@@ -1,13 +1,12 @@
 """Load sample data"""
+import typing
 from pathlib import Path
 
 from oolongt import simple_io
-from tests.typing.sample_keyword import SampleKeyword
-from tests.typing.sample_sentence import SampleSentence
+from tests.typedefs import SampleKeyword, SampleSentence
 
 
-def join_sentences(sentence_list):
-    # type: (list[dict]) -> str
+def join_sentences(sentence_list: typing.List[typing.Dict]) -> str:
     """Create text from sentence list
 
     Arguments:
@@ -19,7 +18,7 @@ def join_sentences(sentence_list):
     return '\n  '.join([sent['text'] for sent in sentence_list])
 
 
-def load_config(root, name):
+def load_config(root: Path, name: str) -> typing.Dict:
     """Load initialization data for Sample
 
     Arguments:
@@ -27,7 +26,7 @@ def load_config(root, name):
         name {str} -- basename of config
 
     Returns:
-        dict -- initialization data
+        typing.Dict -- initialization data
     """
     path = str(root.joinpath(name + '.json'))
     config = simple_io.load_json(path)
@@ -48,15 +47,14 @@ def load_config(root, name):
 
 
 class Sample(object):
-    def __init__(self, root, name):
-        # type: (str, str) -> None
+    def __init__(self, root: Path, name: str) -> None:
         config = load_config(root, name)
         config.update({'name': name})
 
         self._data = config
         self._keys = config.keys()
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> typing.Any:
         if name in self._keys:
             return self._data[name]
 

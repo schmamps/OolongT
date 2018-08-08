@@ -1,6 +1,8 @@
 """Mock ScoredSentence"""
+import typing
+
 from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.typing.scored_sentence import ScoredSentence
+from oolongt.typedefs import ScoredSentence
 
 from oolongt import roughly
 
@@ -12,8 +14,20 @@ def auto_id(index, of):
 
 
 class SampleSentence(ScoredSentence):
-    def __init__(self, data_dict, of):
-        # type: (dict, int) -> None
+    def __init__(
+            self,
+            data_dict: typing.Dict,
+            of: int
+            ) -> None:
+        """Initialize
+
+        Arguments:
+            data_dict {typing.Dict} -- JSON data
+            of {int} -- total number of sentences
+
+        Returns:
+            SampleSentence -- sample sentence
+        """
         text = data_dict.get('text', '')
         index = data_dict.get('index', 0)
         title_score = data_dict.get('title_score', 0)
@@ -30,10 +44,9 @@ class SampleSentence(ScoredSentence):
             title_score, length_score,
             dbs_score, sbs_score, keyword_score,
             position_score, total_score)
-        self.id = data_dict.get('id', auto_id(index, of))
+        self.id = data_dict.get('id', auto_id(index, of))  # type: str
 
-    def __eq__(self, other):
-        # type: (SampleSentence, ScoredSentence) -> bool
+    def __eq__(self, other) -> bool:
         if (self.text != other.text):
             return False
 
@@ -72,7 +85,7 @@ class SampleSentence(ScoredSentence):
 
         return True
 
-    def equals(self, other):
+    def equals(self, other) -> bool:
         """Compare SampleSentence to ScoredSentence in correct order
 
         Arguments:
@@ -81,5 +94,4 @@ class SampleSentence(ScoredSentence):
         Returns:
             bool -- all properties match
         """
-        # type: (SampleSentence, ScoredSentence) -> bool
         return self == other
