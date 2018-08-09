@@ -34,62 +34,62 @@ def _float_len(val_list: typing.Sized) -> float:
 
 
 def get_top_keyword_threshold(
-        keywords: typing.Sequence[ScoredKeyword]
+        kws: typing.Sequence[ScoredKeyword]
         ) -> float:
-    """Get minimum frequency for top `keywords`
+    """Get minimum frequency for top `kws`
 
     Arguments:
-        keywords {list[ScoredKeyword]} -- list of scored keywords
+        keywords {typing.List[ScoredKeyword]} -- list of scored keywords
 
     Returns:
         int -- minimum frequency
     """
-    if (len(keywords) == 0):
+    if (len(kws) == 0):
         return 0
 
     limit = TOP_KEYWORD_MIN_RANK
     minimum = sorted(
-        keywords, reverse=True)[:limit].pop()  # type: ScoredKeyword
+        kws, reverse=True)[:limit].pop()  # type: ScoredKeyword
 
     return minimum.score
 
 
 def score_by_dbs(
-        sentence_word_list: typing.List[str],
-        top_keywords: typing.Sequence[ScoredKeyword],
-        top_keyword_list: typing.List[str]
+        sentence_words: typing.List[str],
+        top_kws: typing.Sequence[ScoredKeyword],
+        top_kw_words: typing.List[str]
         ) -> float:
     """Score sentence (`sentence_word_list`) by keyword density
 
     Arguments:
-        sentence_word_list {typing.List[str]} --
+        sentence_words {typing.List[str]} --
             sequential list of words in sentence
-        top_keywords {typing.List[dict]} --
+        top_kws {typing.List[dict]} --
             top keywords in content body
-        top_keyword_list {typing.List[str]} --
+        top_kw_words {typing.List[str]} --
             values of 'word' in top_keywords
 
     Returns:
         float  -- density based score
     """
-    k = len(list(set(sentence_word_list) & set(top_keyword_list))) + 1
+    k = len(list(set(sentence_words) & set(top_kw_words))) + 1
     summ = 0.0
     first_word = {}   # type: typing.Dict[str, float]
     second_word = {}  # type: typing.Dict[str, float]
 
-    for i, word in enumerate(sentence_word_list):
-        if word in top_keyword_list:
-            index = top_keyword_list.index(word)
+    for i, word in enumerate(sentence_words):
+        if word in top_kw_words:
+            index = top_kw_words.index(word)
 
             if first_word == {}:
                 first_word = {
                     'i': i,
-                    'score': top_keywords[index].score}
+                    'score': top_kws[index].score}
             else:
                 second_word = first_word
                 first_word = {
                     'i': i,
-                    'score': top_keywords[index].score}
+                    'score': top_kws[index].score}
                 distance = first_word['i'] - second_word['i']
 
                 summ += (first_word['score'] * second_word['score']) / (distance ** 2)  # nopep8
@@ -100,32 +100,33 @@ def score_by_dbs(
 
 
 def score_by_sbs(
-        words: typing.List[str],
-        top_keywords: typing.Sequence[ScoredKeyword],
-        top_keyword_list: typing.List[str]
+        sentence_words: typing.List[str],
+        top_kws: typing.Sequence[ScoredKeyword],
+        top_kw_words: typing.List[str]
         ) -> float:
     """Score sentence (`words`) by summation
 
     Arguments:
-        words {list[str]} -- sequential list of words in sentence
-        top_keywords {list[dict]} -- top keywords in content body
-        top_keyword_list {list[str]} -- values of 'word' in top_keywords
+        sentence_words {typing.List[str]} --
+            sequential list of words in sentence
+        top_kws {typing.Sequence[ScoredKeyword]} -- top keywords in body
+        top_kw_words {typing.List[str]} -- values of 'word' in top_keywords
 
     Returns:
         float -- score
     """
     summ = 0.0
 
-    if len(words) == summ:
+    if len(sentence_words) == summ:
         return summ
 
-    for word in [x for x in words if x in top_keyword_list]:
-        index = top_keyword_list.index(word)
-        score = top_keywords[index].score
+    for word in [x for x in sentence_words if x in top_kw_words]:
+        index = top_kw_words.index(word)
+        score = top_kws[index].score
 
         summ += score
 
-    sbs = 1.0 / len(words) * summ
+    sbs = 1.0 / len(sentence_words) * summ
 
     return sbs
 
@@ -152,50 +153,50 @@ class Summarizer:
         Returns:
             list[ScoredSentence] -- list of scored sentences
         """
-        sentences = self.parser.split_sentences(body)
-        title_words = self.parser.get_keyword_strings(title)
-        top_keywords = self.get_top_keywords(body, source, category)
-        top_keyword_list = pluck_keyword_words(top_keywords)
-        of = len(sentences)
+        sentence_words = self.parser.split_sentences(body)
+        title_kw_words = self.parser.get_keyword_strings(title)
+        top_kws = self.get_top_keywords(body, source, category)
+        top_kw_words = pluck_keyword_words(top_kws)
+        of = len(sentence_words)
 
         scored_sentences = [
             self.get_sentence(
                 text, idx, of,
-                title_words, top_keywords, top_keyword_list)
-            for idx, text in enumerate(sentences)]
+                title_kw_words, top_kws, top_kw_words)
+            for idx, text in enumerate(sentence_words)]
 
         return scored_sentences
 
     def get_top_keywords(
             self,
-            text: str,
+            body: str,
             source: typing.Any,
             category: typing.Any
             ) -> typing.List[ScoredKeyword]:
         """List 1st-10th ranked keywords in `text`
 
         Arguments:
-            text {str} -- body of content
+            body {str} -- body of content
             source {any} -- unused
             category {any} -- unused
 
         Returns:
             list[ScoredKeyword] -- most frequent keywords
         """
-        keywords = self.parser.get_keywords(text)
+        keywords = self.parser.get_keywords(body)
         minimum = get_top_keyword_threshold(keywords)
-        top_keywords = [kw for kw in keywords if kw.score >= minimum]
+        top_kws = [kw for kw in keywords if kw.score >= minimum]
 
-        return top_keywords
+        return top_kws
 
     def get_sentence(
             self,
             text: str,
             index: int,
             of: int,
-            title_words: typing.List[str],
-            top_keywords: typing.Sequence[ScoredKeyword],
-            top_keyword_list: typing.List[str]
+            title_kw_words: typing.List[str],
+            top_kws: typing.Sequence[ScoredKeyword],
+            top_kw_words: typing.List[str]
             ) -> ScoredSentence:
         """Score sentence (`text`) on several factors
 
@@ -203,21 +204,21 @@ class Summarizer:
             text {str} -- text of sentence
             index {int} -- index of sentence in overall text (zero based)
             of {int} -- len() of sentences in `text`
-            title_words {list[str]} -- words in title
-            top_keywords {list[ScoredKeyword]} -- top keywords in content body
-            top_keyword_list {list[str]} -- values of 'word' in top_keywords
+            title_kw_words {typing.List[str]} -- key words in title
+            top_kws {typing.List[ScoredKeyword]} -- top keywords in body
+            top_kw_words {typing.List[str]} -- values of 'word' in top_keywords
 
         Returns:
             ScoredSentence -- scored sentence
         """
-        sentence_word_list = self.parser.get_all_words(text)
+        sentence_words = self.parser.get_all_words(text)
 
-        title_score = self.score_by_title(title_words, sentence_word_list)
-        length_score = self.score_by_length(sentence_word_list)
+        title_score = self.score_by_title(title_kw_words, sentence_words)
+        length_score = self.score_by_length(sentence_words)
         dbs_score = score_by_dbs(
-            sentence_word_list, top_keywords, top_keyword_list)
+            sentence_words, top_kws, top_kw_words)
         sbs_score = score_by_sbs(
-            sentence_word_list, top_keywords, top_keyword_list)
+            sentence_words, top_kws, top_kw_words)
 
         scored = ScoredSentence(
                 text, index, of,
@@ -225,42 +226,42 @@ class Summarizer:
 
         return scored
 
-    def score_by_length(self, sentence_word_list: typing.List[str]) -> float:
+    def score_by_length(self, sentence_words: typing.List[str]) -> float:
         """Score sentence by its count of `sentence_word_list` vs. ideal
 
         Arguments:
-            sentence_word_list {typing.List[str]} --
+            sentence_words {typing.List[str]} --
                 list of words in the sentence
 
         Returns:
             float -- score
         """
         ideal = float(self.parser.ideal_sentence_length)
-        score = ideal - abs(ideal - len(sentence_word_list))
+        score = ideal - abs(ideal - len(sentence_words))
         score /= ideal
 
         return score
 
     def score_by_title(
             self,
-            title_words: typing.List[str],
-            sentence_word_list: typing.List[str]
+            title_kw_words: typing.List[str],
+            sentence_words: typing.List[str]
             ) -> float:
         """Score `sentence_word_list` by matches with `title_words`
 
         Arguments:
-            title {str} -- title of the text content
-            text {str} -- body of content
+            title_kw_words {typing.List[str]} -- key words in title
+            sentence_words {typing.List[str]} --
+                list of words in the sentence
 
         Returns:
             float -- score
         """
-        sentence_keywords = self.parser.remove_stop_words(sentence_word_list)
-        matched_keywords = [
+        matched_kw_words = [
             word
-            for word in sentence_keywords
-            if word in title_words]
+            for word in sentence_words
+            if word in title_kw_words]
 
-        score = _float_len(matched_keywords) / _float_len(title_words)
+        score = _float_len(matched_kw_words) / _float_len(title_kw_words)
 
         return score
