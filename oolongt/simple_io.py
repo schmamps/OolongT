@@ -8,7 +8,7 @@ def load_json(path: typing.Any) -> typing.Dict:
     """Load JSON from file at `path`
 
     Arguments:
-            path {str} -- path to file
+            path {typing.Any} -- path to file
 
     Returns:
             dict -- data in file
@@ -26,7 +26,7 @@ def _get_contents(path: typing.Any) -> str:
     """Read file at `path` into string
 
     Arguments:
-            path {str} -- path to file
+            path {typing.Any} -- path to file
 
     Returns:
         str -- contents of file
@@ -42,11 +42,15 @@ def read_file(path: typing.Any) -> str:
     """Load text from file at `path`
 
     Arguments:
-            path {str} -- path to file
+            path {typing.Any} -- path to file
 
     Returns:
             str -- text in file
     """
-    contents = _get_contents(path)
+    try:
+        contents = _get_contents(path)
+
+    except (IOError, NotADirectoryError) as e:
+        raise IOError(str(e))
 
     return contents

@@ -37,11 +37,11 @@ def score_body_sentences(
     return sentences
 
 
-def get_slice_length(nominal: typing.Any, of: int) -> int:
+def get_slice_length(nominal: float, of: int) -> int:
     """Calculate actual number of sentences to return
 
     Arguments:
-        nominal {float or int} -- fraction of total/absolute number to return
+        nominal {float} -- fraction of total/absolute number to return
         of {int} -- total number of sentences in body
 
     Raises:
@@ -67,7 +67,7 @@ def get_slice_length(nominal: typing.Any, of: int) -> int:
 def get_best_sentences(
         body: str,
         title: str,
-        length: typing.Any = DEFAULT_LENGTH,
+        length: float = DEFAULT_LENGTH,
         root: str = BUILTIN,
         lang: str = DEFAULT_LANG,
         source: typing.Any = None,
@@ -80,7 +80,7 @@ def get_best_sentences(
         title {str} -- title of content
 
     Keyword Arguments:
-        length {int or float} -- # of sentences (default: {DEFAULT_LENGTH})
+        length {float} -- # of sentences (default: {DEFAULT_LENGTH})
         root {str} -- root directory of language data
             (default: {Parser.BUILTIN})
         lang {str} -- basename of language file
@@ -119,7 +119,7 @@ def summarize(
         title {str} -- title of content
 
     Keyword Arguments:
-        length {int or float < 1} -- sentences to return (int) or
+        length {float} -- sentences to return (int) or
             fraction of total (float) (default: {5})
         root {str} -- root directory of language data
             (default: {parser.BUILTIN})
