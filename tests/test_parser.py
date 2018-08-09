@@ -5,7 +5,8 @@ import typing
 from pytest import mark
 
 from oolongt import roughly
-from oolongt.parser import DEFAULT_LANG, Parser
+from oolongt.parser import (DEFAULT_LANG, Parser, remove_punctuations,
+                            split_words)
 from oolongt.simple_io import load_json
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from tests.constants import SAMPLES
@@ -13,6 +14,64 @@ from tests.helpers import (assert_ex, get_sample_ids, get_samples,
                            pad_to_longest)
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_keyword import SampleKeyword
+
+
+@mark.parametrize(
+    'samp',
+    get_samples([
+        'empty',
+        'sentence_1word',
+        'sentence_medium',
+    ]),
+    ids=pad_to_longest([
+        'empty string',
+        'one word',
+        'medium sentence',
+    ]))
+def test_split_words(samp: Sample) -> None:
+    """Test oolongt.parser.split_words()
+
+    Arguments:
+        samp {Sample} -- sample data
+    """
+    p = Parser()
+    text = samp.body
+
+    expected = samp.split_words
+    received = split_words(text, p.language)
+
+    assert (received == expected), assert_ex(
+        'word split',
+        expected,
+        received,
+        hint=samp.name)
+
+
+@mark.parametrize(
+    'samp',
+    get_samples([
+        'empty',
+        'sentence_1word',
+        'sentence_list',
+    ]),
+    ids=pad_to_longest([
+        'empty string',
+        'one word',
+        'list of sentences',
+    ]))
+def test_remove_punctuations(samp: Sample) -> None:
+    """Test oolongt.parser.remove_punctuations()
+
+    Arguments:
+        samp {Sample} -- sample data
+    """
+    expected = samp.remove_punctuations
+    received = remove_punctuations(samp.body)
+
+    assert (received == expected), assert_ex(
+        'punctuation removal',
+        repr(received),
+        repr(expected))
 
 
 class TestParser:
@@ -194,64 +253,6 @@ class TestParser:
         get_samples([
             'empty',
             'sentence_1word',
-            'sentence_medium',
-        ]),
-        ids=pad_to_longest([
-            'empty string',
-            'one word',
-            'medium sentence',
-        ]))
-    def test_split_words(self, samp: Sample) -> None:
-        """Test Parser.split_words()
-
-        Arguments:
-            samp {Sample} -- sample data
-        """
-        p = Parser(lang=samp.lang)
-        text = samp.body
-
-        expected = samp.split_words
-        received = p.split_words(text)
-
-        assert (received == expected), assert_ex(
-            'word split',
-            expected,
-            received,
-            hint=samp.name)
-
-    @mark.parametrize(
-        'samp',
-        get_samples([
-            'empty',
-            'sentence_1word',
-            'sentence_list',
-        ]),
-        ids=pad_to_longest([
-            'empty string',
-            'one word',
-            'list of sentences',
-        ]))
-    def test_remove_punctuations(self, samp: Sample) -> None:
-        """Test Parser.remove_punctuations()
-
-        Arguments:
-            samp {Sample} -- sample data
-        """
-        p = Parser(lang=samp.lang)
-
-        expected = samp.remove_punctuations
-        received = p.remove_punctuations(samp.body)
-
-        assert (received == expected), assert_ex(
-            'punctuation removal',
-            repr(received),
-            repr(expected))
-
-    @mark.parametrize(
-        'samp',
-        get_samples([
-            'empty',
-            'sentence_1word',
             'sentence_2words',
             'sentence_list',
         ]),
@@ -268,7 +269,7 @@ class TestParser:
             samp {Sample} -- sample data
         """
         p = Parser(lang=samp.lang)
-        words = p.split_words(samp.body)
+        words = split_words(samp.body, p.language)
 
         expected = samp.remove_stop_words
         received = p.remove_stop_words(words)
