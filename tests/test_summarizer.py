@@ -153,7 +153,7 @@ class TestSummarizer:
         keywords should be pre-sorted by frequency
 
         Arguments:
-            keywords {list[dict]} -- list of keyword Dicts
+            keywords {typing.List[SampleKeyword]} -- list of `SampleKeyword`s
 
         Returns:
             list[SampleKeyword] -- the ten highest rated keywords

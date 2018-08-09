@@ -124,7 +124,7 @@ def get_sample_sentences(
     """Get Sample, each sentence from Sample
 
     Arguments:
-        sample_names {list[str]} -- names of samples
+        sample_names {typing.List[str]} -- names of samples
 
     Returns:
         typing.Iterable[Sample] -- Iterator of Samples

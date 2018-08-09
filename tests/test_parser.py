@@ -107,7 +107,7 @@ class TestParser:
         Extract word and score properties of keyword list
 
         Arguments:
-            keywords {list[ScoredKeyword]} -- keywords
+            keywords {typing.List[ScoredKeyword]} -- keywords
 
         Returns:
             typing.Tuple[typing.List[str], typing.Dict[str, float]] --
