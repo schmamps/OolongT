@@ -83,10 +83,10 @@ class Parser:
         Returns:
             typing.List[str] -- words in text, minus stop words
         """
-        all_strings = self.get_all_words(text)
-        keyword_strings = self.remove_stop_words(all_strings)
+        all_strs = self.get_all_words(text)
+        kw_strs = self.remove_stop_words(all_strs)
 
-        return keyword_strings
+        return kw_strs
 
     def get_keywords(self, text: str) -> typing.List[ScoredKeyword]:
         """List scored keywords in `text`
@@ -100,12 +100,12 @@ class Parser:
         all_kw_strs = self.get_keyword_strings(text)
         unique_kw_strs = list(set(all_kw_strs))
 
-        scored_kws = [
+        keywords = [
             ScoredKeyword(word, all_kw_strs.count(word), len(all_kw_strs))
             for word
             in unique_kw_strs]
 
-        return scored_kws
+        return keywords
 
     def split_sentences(self, text: str) -> typing.List[str]:
         """List sentences in `text` via tokenizer sequentially
