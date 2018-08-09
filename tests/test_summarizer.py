@@ -6,9 +6,9 @@ from pytest import mark
 
 from oolongt import roughly
 from oolongt.constants import COMPOSITE_TOLERANCE, TOP_KEYWORD_MIN_RANK
-from oolongt.summarizer import (Summarizer, get_top_keyword_threshold,
-                                pluck_keyword_words, score_by_dbs,
-                                score_by_sbs)
+from oolongt.summarizer import (Summarizer, _float_len,
+                                get_top_keyword_threshold, pluck_keyword_words,
+                                score_by_dbs, score_by_sbs)
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_ids,
                            get_sample_sentence_ids, get_sample_sentences,
@@ -89,6 +89,19 @@ def test_get_top_keyword_threshold(
 
     assert (received == expected), assert_ex(
         'top keyword frequency >=',
+        received,
+        expected)
+
+
+@mark.parametrize(
+    'item_list,expected',
+    [([], 0.0), ([1], 1.0), (range(10), 10.0), (range(10000), 10000.0)],
+    ids=pad_to_longest(['    0', '    1', '   10', '10000']))
+def test_float_len(item_list, expected):
+    received = _float_len(item_list)
+
+    assert (received == expected), assert_ex(
+        'float length',
         received,
         expected)
 
