@@ -3,7 +3,7 @@ from math import ceil
 
 from oolongt import roughly
 from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.typedefs import ReprAble
+from oolongt.typedefs.repr_able import ReprAble
 
 
 class ScoredSentence(ReprAble):

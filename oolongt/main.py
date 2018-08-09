@@ -4,7 +4,7 @@ import typing
 from oolongt.constants import BUILTIN, DEFAULT_LANG, DEFAULT_LENGTH
 from oolongt.parser import Parser
 from oolongt.summarizer import Summarizer
-from oolongt.typedefs import ScoredSentence
+from oolongt.typedefs.scored_sentence import ScoredSentence
 
 
 def score_body_sentences(
@@ -82,7 +82,7 @@ def get_best_sentences(
     Keyword Arguments:
         length {int or float} -- # of sentences (default: {DEFAULT_LENGTH})
         root {str} -- root directory of language data
-            (default: {parser.BUILTIN})
+            (default: {Parser.BUILTIN})
         lang {str} -- basename of language file
             (default: {parser.DEFAULT_LANG})
         source {any} -- unused (default: {None})
@@ -101,8 +101,8 @@ def get_best_sentences(
 def summarize(
         body: str,
         title: str,
-        length: typing.Any = DEFAULT_LENGTH,
-        root: typing.Any = BUILTIN,
+        length: float = DEFAULT_LENGTH,
+        root: str = BUILTIN,
         lang: str = DEFAULT_LANG,
         source: typing.Any = None,
         category: typing.Any = None

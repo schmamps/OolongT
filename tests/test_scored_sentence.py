@@ -1,14 +1,17 @@
+import typing
+
 from pytest import mark
 
 from oolongt import roughly
-from oolongt.typing.scored_sentence import (ScoredSentence, calc_decile,
-                                            score_keyword_frequency,
-                                            score_position, score_total)
-
-from .constants import SAMPLES
-from .helpers import (assert_ex, check_exception, get_sample_ids,
-                      get_sample_sentence_ids, get_sample_sentences,
-                      get_samples, pad_to_longest)
+from oolongt.typedefs.scored_sentence import (calc_decile,
+                                              score_keyword_frequency,
+                                              score_position, score_total)
+from tests.constants import SAMPLES
+from tests.helpers import (assert_ex, check_exception, get_sample_ids,
+                           get_sample_sentence_ids, get_sample_sentences,
+                           get_samples, pad_to_longest)
+from tests.typedefs.sample import Sample
+from tests.typedefs.sample_sentence import SampleSentence
 
 
 @mark.parametrize(
@@ -25,9 +28,9 @@ from .helpers import (assert_ex, check_exception, get_sample_ids,
         (7, 10, 8),
         (8, 10, 9),
         (9, 10, 10),
-        (-1, 100, ValueError),
-        (10, 10, ValueError),
-        (10, 0, ValueError),
+        (-1, 100, IndexError),
+        (10, 10, IndexError),
+        (10, 0, IndexError),
     ],
     ids=[
         'index:  0, of:  10 (  1)',
@@ -45,11 +48,11 @@ from .helpers import (assert_ex, check_exception, get_sample_ids,
         'index: 10, of:  10 (err)',
         'index: 10, of:   0 (err)',
     ])
-def test_calc_decile(index, of, expected):
+def test_calc_decile(index: int, of: int, expected: typing.Any) -> None:
     try:
         received = calc_decile(index, of)
 
-    except ValueError as e:
+    except Exception as e:
         received = check_exception(e, expected)
 
     assert (received == expected), assert_ex(
@@ -66,8 +69,8 @@ def test_calc_decile(index, of, expected):
         (99,  .17),
         (100, .23),
         (999, .15),
-        (-1,  ValueError),
-        (1000, ValueError),
+        (-1,  IndexError),
+        (1000, IndexError),
     ],
     ids=[
         'first decile, first sentence  (   0 of 1000)',
@@ -77,14 +80,14 @@ def test_calc_decile(index, of, expected):
         'index out of range: low       (  -1 of 1000)',
         'index out of range: high      (1000 of 1000)',
     ])
-def test_score_position(index, expected):
+def test_score_position(index: int, expected: typing.Any) -> None:
     of = 1000
 
     try:
         received = score_position(index, of)
         test = roughly.eq(received, expected)
 
-    except ValueError as e:
+    except Exception as e:
         received = check_exception(e, expected)
         test = (received == expected)
 
@@ -99,8 +102,10 @@ def test_score_position(index, expected):
     'sample,sentence',
     get_sample_sentences(SAMPLES),
     ids=get_sample_sentence_ids(SAMPLES))
-def test_score_keyword_frequency(sample, sentence):
-    # type: (ScoredSentence) -> None
+def test_score_keyword_frequency(
+        sample: Sample,
+        sentence: SampleSentence
+        ) -> None:
     expected = sentence.keyword_score
     received = score_keyword_frequency(sentence.dbs_score, sentence.sbs_score)
 
@@ -114,8 +119,7 @@ def test_score_keyword_frequency(sample, sentence):
     'sample,sentence',
     get_sample_sentences(SAMPLES),
     ids=get_sample_sentence_ids(SAMPLES))
-def test_score_total(sample, sentence):
-    # type: (ScoredSentence) -> None
+def test_score_total(sample: Sample, sentence: SampleSentence) -> None:
     expected = sentence.total_score
     received = score_total(
         sentence.title_score, sentence.keyword_score,

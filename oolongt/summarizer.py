@@ -1,14 +1,14 @@
 """Text summarizer"""
 import typing
 
-from oolongt.constants import BUILTIN, DEFAULT_LANG
+from oolongt.constants import BUILTIN, DEFAULT_LANG, TOP_KEYWORD_MIN_RANK
 from oolongt.parser import Parser
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from oolongt.typedefs.scored_sentence import ScoredSentence
 
 
 def pluck_keyword_words(
-        keyword_list: typing.List[ScoredKeyword]
+        keyword_list: typing.Sequence[ScoredKeyword]
         ) -> typing.List[str]:
     """List every word property in `keyword_list`
 
@@ -21,7 +21,9 @@ def pluck_keyword_words(
     return [kw.word for kw in keyword_list]
 
 
-def get_top_keyword_threshold(keywords: typing.List[ScoredKeyword]) -> int:
+def get_top_keyword_threshold(
+        keywords: typing.Sequence[ScoredKeyword]
+        ) -> float:
     """Get minimum frequency for top `keywords`
 
     Arguments:
@@ -33,15 +35,16 @@ def get_top_keyword_threshold(keywords: typing.List[ScoredKeyword]) -> int:
     if (len(keywords) == 0):
         return 0
 
-    tenth = sorted(
-        keywords, reverse=True)[:10].pop()  # type: ScoredKeyword
+    limit = TOP_KEYWORD_MIN_RANK
+    minimum = sorted(
+        keywords, reverse=True)[:limit].pop()  # type: ScoredKeyword
 
-    return tenth.score
+    return minimum.score
 
 
 def score_by_dbs(
         words: typing.List[str],
-        top_keywords: typing.List[ScoredKeyword],
+        top_keywords: typing.Sequence[ScoredKeyword],
         top_keyword_list: typing.List[str]
         ) -> float:
     """Score sentence (`words`) by keyword density
@@ -87,7 +90,7 @@ def _float_len(val_list: typing.List) -> float:
 
 def score_by_sbs(
         words: typing.List[str],
-        top_keywords: typing.List[ScoredKeyword],
+        top_keywords: typing.Sequence[ScoredKeyword],
         top_keyword_list: typing.List[str]
         ) -> float:
     """Score sentence (`words`) by summation
@@ -180,7 +183,7 @@ class Summarizer:
             index: int,
             of: int,
             title_words: typing.List[str],
-            top_keywords: typing.List[ScoredKeyword],
+            top_keywords: typing.Sequence[ScoredKeyword],
             top_keyword_list: typing.List[str]
             ) -> ScoredSentence:
         """Score sentence (`text`) on several factors

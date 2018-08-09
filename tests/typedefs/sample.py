@@ -3,7 +3,8 @@ import typing
 from pathlib import Path
 
 from oolongt import simple_io
-from tests.typedefs import SampleKeyword, SampleSentence
+from tests.typedefs.sample_keyword import SampleKeyword
+from tests.typedefs.sample_sentence import SampleSentence
 
 
 def join_sentences(sentence_list: typing.List[typing.Dict]) -> str:
@@ -22,8 +23,8 @@ def load_config(root: Path, name: str) -> typing.Dict:
     """Load initialization data for Sample
 
     Arguments:
-        root {str} -- root directory
-        name {str} -- basename of config
+        root {str} -- root directory of language config
+        lang {str} -- basename of language config
 
     Returns:
         typing.Dict -- initialization data

@@ -1,10 +1,9 @@
 """Mock ScoredSentence"""
 import typing
 
-from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.typedefs import ScoredSentence
-
 from oolongt import roughly
+from oolongt.constants import COMPOSITE_TOLERANCE
+from oolongt.typedefs.scored_sentence import ScoredSentence
 
 
 def auto_id(index, of):

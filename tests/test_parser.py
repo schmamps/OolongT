@@ -1,16 +1,18 @@
 """ Test class for Parser """
 import os.path as path
+import typing
 
 from pytest import mark
 
 from oolongt import roughly
-
 from oolongt.parser import DEFAULT_LANG, Parser
 from oolongt.simple_io import load_json
+from oolongt.typedefs.scored_keyword import ScoredKeyword
 from tests.constants import SAMPLES
-from tests.helpers import (
-    assert_ex, get_samples, get_sample_ids, pad_to_longest)
-from tests.typing.sample import Sample
+from tests.helpers import (assert_ex, get_sample_ids, get_samples,
+                           pad_to_longest)
+from tests.typedefs.sample import Sample
+from tests.typedefs.sample_keyword import SampleKeyword
 
 
 class TestParser:
@@ -24,8 +26,7 @@ class TestParser:
             'one ',
             'a long sentence',
         ]))
-    def test_get_all_words(self, samp):
-        # type: (Sample) -> None
+    def test_get_all_words(self, samp: Sample) -> None:
         """Test Parser.get_all_words()
 
         Arguments:
@@ -38,8 +39,10 @@ class TestParser:
             assert (received in expected), assert_ex(
                 'all words', received, None)
 
-    def _count_keywords(self, keywords):
-        # type: (list[dict], int) -> tuple[list[str], dict[str, float]]
+    def _count_keywords(
+            self,
+            keywords: typing.List[ScoredKeyword]
+            ) -> typing.Tuple[typing.List[str], typing.Dict[str, float]]:
         """Reduce getKeywords() for counting
 
         Extract word and score properties of keyword list
@@ -48,7 +51,8 @@ class TestParser:
             keywords {list[ScoredKeyword]} -- keywords
 
         Returns:
-            list[str], dict[str, float] - usable data
+            typing.Tuple[typing.List[str], typing.Dict[str, float]] --
+                return of Parser.get_keywords()
         """
         scores = {}
         words = []
@@ -60,27 +64,33 @@ class TestParser:
 
         return words, scores
 
-    def _get_sample_keyword_data(self, samp):
-        # type: (Sample) -> list[dict]
+    def _get_sample_keyword_data(
+            self,
+            samp: Sample
+            ) -> typing.Tuple[typing.List[str], typing.Dict[str, float]]:
         """Get sample data in Parser.get_keywords() pattern
 
         Arguments:
             samp {Sample} -- sample data
 
         Returns:
-            tuple[list[dict], int] -- return of Parser.get_keywords()
+            typing.Tuple[typing.List[str], typing.Dict[str, float]] --
+                return of Parser.get_keywords()
         """
         return self._count_keywords(samp.keywords)
 
-    def _get_keyword_result(self, text):
-        # type: (text) -> list[dict]
+    def _get_keyword_result(
+            self,
+            text: str
+            ) -> typing.Tuple[typing.List[str], typing.Dict[str, float]]:
         """Get keywords from Parser
 
         Arguments:
             text {str} -- body of content
 
         Returns:
-            tuple[list[dict], int] -- return of Parser.get_keywords()
+            typing.Tuple[typing.List[str], typing.Dict[str, float]] --
+                return of Parser.get_keywords()
         """
         p = Parser()
         keywords = p.get_keywords(text)
@@ -97,8 +107,7 @@ class TestParser:
             'empty string',
             'Snark essay'
         ]))
-    def test_get_keywords(self, samp):
-        # type: (Sample) -> None
+    def test_get_keywords(self, samp: Sample) -> None:
         """Test Parser.get_keywords()
 
         Arguments:
@@ -121,14 +130,16 @@ class TestParser:
                 expected,
                 hint=word)
 
-    def _get_expected_keywords(self, keywords):
-        # type: (list[dict]) -> list[str]
+    def _get_expected_keywords(
+            self,
+            keywords: typing.List[SampleKeyword]
+            ) -> typing.List[str]:
         """Get list of expected keywords in text
 
         Returns:
             list[str] - list of keywords repeated by #occurrences in text
         """
-        expected = []
+        expected = []  # type: typing.List[str]
         for kw in keywords:
             expected += [kw.word] * kw.count
 
@@ -138,8 +149,7 @@ class TestParser:
         'samp',
         get_samples(['essay_snark'] + SAMPLES),
         ids=get_sample_ids(['essay_snark'] + SAMPLES))
-    def test_get_keyword_list(self, samp):
-        # type: (Sample) -> None
+    def test_get_keyword_list(self, samp: Sample) -> None:
         """Test Parser.get_keyword_list()
 
         Arguments:
@@ -157,8 +167,7 @@ class TestParser:
         'samp',
         get_samples(['sentence_short', 'sentence_list', ] + SAMPLES),
         ids=get_sample_ids(['sentence_short', 'sentence_list', ] + SAMPLES))
-    def test_split_sentences(self, samp):
-        # type: (Sample) -> None
+    def test_split_sentences(self, samp: Sample) -> None:
         """Test Parser.split_sentences()
 
         Arguments:
@@ -192,8 +201,7 @@ class TestParser:
             'one word',
             'medium sentence',
         ]))
-    def test_split_words(self, samp):
-        # type: (Sample) -> None
+    def test_split_words(self, samp: Sample) -> None:
         """Test Parser.split_words()
 
         Arguments:
@@ -223,8 +231,7 @@ class TestParser:
             'one word',
             'list of sentences',
         ]))
-    def test_remove_punctuations(self, samp):
-        # type: (Sample) -> None
+    def test_remove_punctuations(self, samp: Sample) -> None:
         """Test Parser.remove_punctuations()
 
         Arguments:
@@ -254,8 +261,7 @@ class TestParser:
             'two words',
             'list of sentences',
         ]))
-    def test_remove_stop_words(self, samp):
-        # type: (Sample) -> None
+    def test_remove_stop_words(self, samp: Sample) -> None:
         """Test Parser.remove_stop_words()
 
         Arguments:

@@ -5,8 +5,9 @@ from re import sub
 import nltk.data
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from oolongt.typedefs import ScoredKeyword, ScoredSentence, ParserConfig
-from oolongt.typedefs.parser_config import BUILTIN, DEFAULT_LANG
+from oolongt.typedefs.parser_config import BUILTIN, DEFAULT_LANG, ParserConfig
+from oolongt.typedefs.scored_keyword import ScoredKeyword
+from oolongt.typedefs.scored_sentence import ScoredSentence
 
 
 class Parser:

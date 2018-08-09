@@ -1,14 +1,19 @@
+import typing
+
 from pytest import mark
 
-from oolongt.typing.scored_keyword import (
-    score_keyword,
-    compare_length, compare_score, compare_word, compare_keywords,
-    KEYWORD_SCORE_K, ScoredKeyword)
+from oolongt.typedefs.scored_keyword import (KEYWORD_SCORE_K, ScoredKeyword,
+                                             compare_keywords, compare_length,
+                                             compare_score, compare_word,
+                                             score_keyword)
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
 
-def set_test(a_params, b_params, *args):
-    # type: (tuple[str, int, int], tuple[str, int, int], any)
+def set_test(
+        a_params: typing.Tuple[str, int, int],
+        b_params: typing.Tuple[str, int, int],
+        *args: typing.Any
+        ) -> typing.Tuple:
     word_a, count_a, of_a = a_params
     word_b, count_b, of_b = b_params
 
@@ -21,7 +26,16 @@ def set_test(a_params, b_params, *args):
     return tuple(items)
 
 
-def get_value_tests():
+def get_value_tests() -> typing.List[typing.Tuple]:
+    """Get tests for comparing ScoredKeyword values
+
+    Returns:
+        typing.List[typing.Tuple] --
+            [0]: `a: ScoredKeyword`
+            [1]: `b: ScoredKeyword`
+            [2]: `a lt b`
+            [3]: `a == b`
+    """
     return [
         set_test(('foo', 1, 1), ('foo', 1, 1), False, True),
         set_test(('foo', 1, 1), ('foo', 2, 2), False, True),
@@ -32,7 +46,12 @@ def get_value_tests():
     ]
 
 
-def get_value_ids():
+def get_value_ids() -> typing.List[str]:
+    """Get IDs for `get_value_tests()`
+
+    Returns:
+        typing.List[str] -- test IDS
+    """
     return [
         '(word: a=b, count: a=b, of: a=b, score: a=b) == eq',
         '(word: a=b, count: a<b, of: a<b, score: a=b) == eq',
@@ -57,8 +76,7 @@ def get_value_ids():
         '1 of   10',
         '1 of 0(!)',
     ])
-def test_score_keyword(count, of, expected):
-    # type: (int, int, any) -> None
+def test_score_keyword(count: int, of: int, expected: float) -> None:
     try:
         received = score_keyword(count, of)
 
@@ -69,7 +87,7 @@ def test_score_keyword(count, of, expected):
         'score keyword',
         received,
         expected,
-        hint=' of '.join([count, of]))
+        hint='{} of {}'.format(count, of))
 
 
 @mark.parametrize(
@@ -90,7 +108,11 @@ def test_score_keyword(count, of, expected):
         '(word: eq, score: a>b) == +',
         '(word: ne, score: a>b) == +',
     ])
-def test_compare_score(a, b, expected):
+def test_compare_score(
+        a: ScoredKeyword,
+        b: ScoredKeyword,
+        expected: int
+        ) -> None:
     received = compare_score(a, b)
 
     assert (received == expected), assert_ex(
@@ -113,7 +135,11 @@ def test_compare_score(a, b, expected):
         '(word: ne, len: a<b) == -',
         '(word: ne, len: a>b) == +',
     ])
-def test_compare_length(a, b, expected):
+def test_compare_length(
+        a: ScoredKeyword,
+        b: ScoredKeyword,
+        expected: int
+        ) -> None:
     received = compare_length(a, b)
 
     assert (received == expected), assert_ex(
@@ -135,7 +161,11 @@ def test_compare_length(a, b, expected):
         '(a gt b) == +',
         '(a lt b) == -',
     ])
-def test_compare_word(a, b, expected):
+def test_compare_word(
+        a: ScoredKeyword,
+        b: ScoredKeyword,
+        expected: int
+        ) -> None:
     received = compare_word(a, b)
 
     assert (received == expected), assert_ex(
@@ -158,7 +188,11 @@ def test_compare_word(a, b, expected):
         '(score: a=b, len: a=b, str: a=b)[:] == (0) * 3',
         '(score: a>b, len: a>b, str: a>b)[:] == (+) * 3',
     ])
-def test_compare_keywords(a, b, expected):
+def test_compare_keywords(
+        a: ScoredKeyword,
+        b: ScoredKeyword,
+        expected: typing.Tuple[int, int, int]
+        ) -> None:
     received = compare_keywords(a, b)
 
     assert (received == expected), assert_ex(
@@ -181,7 +215,12 @@ class TestScoredKeyword:
             'bar',
             'unvalidated',
         ]))
-    def test_str(self, keyword, _, expected):
+    def test_str(
+            self,
+            keyword: ScoredKeyword,
+            _: ScoredKeyword,
+            expected: str
+            ) -> None:
         received = str(keyword)
 
         assert (received == expected), assert_ex(
@@ -194,7 +233,13 @@ class TestScoredKeyword:
         'a,b,_,expected',
         get_value_tests(),
         ids=get_value_ids())
-    def test_eq(self, a, b, _, expected):
+    def test_eq(
+            self,
+            a: ScoredKeyword,
+            b: ScoredKeyword,
+            _: bool,
+            expected: bool
+            ) -> None:
         received = (a == b)
 
         assert (received == expected), assert_ex(
@@ -207,7 +252,13 @@ class TestScoredKeyword:
         'a,b,expected,_',
         get_value_tests(),
         ids=get_value_ids())
-    def test_lt(self, a, b, expected, _):
+    def test_lt(
+            self,
+            a: ScoredKeyword,
+            b: ScoredKeyword,
+            expected: bool,
+            _: bool
+            ) -> None:
         received = (a < b)
 
         assert (received == expected), assert_ex(
@@ -220,7 +271,13 @@ class TestScoredKeyword:
         'a,b,lt,eq',
         get_value_tests(),
         ids=get_value_ids())
-    def test_gt(self, a, b, lt, eq):
+    def test_gt(
+            self,
+            a: ScoredKeyword,
+            b: ScoredKeyword,
+            lt: bool,
+            eq: bool
+            ) -> None:
         expected = not (lt or eq)
         received = (a > b)
 

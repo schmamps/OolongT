@@ -4,7 +4,7 @@ from math import ceil
 
 from oolongt import roughly
 from oolongt.constants import KEYWORD_SCORE_K
-from oolongt.typedefs import ReprAble
+from oolongt.typedefs.repr_able import ReprAble
 
 
 class ScoredKeyword(ReprAble):

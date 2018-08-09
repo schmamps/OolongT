@@ -4,7 +4,7 @@ from io import open as io_open
 from json import loads, JSONDecodeError
 
 
-def load_json(path: str) -> typing.Dict:
+def load_json(path: typing.Any) -> typing.Dict:
     """Load JSON from file at `path`
 
     Arguments:
@@ -22,7 +22,7 @@ def load_json(path: str) -> typing.Dict:
     return loads(contents)
 
 
-def _get_contents(path: str) -> str:
+def _get_contents(path: typing.Any) -> str:
     """Read file at `path` into string
 
     Arguments:
@@ -38,7 +38,7 @@ def _get_contents(path: str) -> str:
     return contents
 
 
-def read_file(path: str) -> str:
+def read_file(path: typing.Any) -> str:
     """Load text from file at `path`
 
     Arguments:

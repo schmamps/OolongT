@@ -1,13 +1,14 @@
+import typing
+from json import JSONDecodeError
 from pathlib import Path
 
 from pytest import mark
 
 from oolongt.constants import (BUILTIN, DEFAULT_LANG, DEFAULT_NLTK_STOPS,
                                DEFAULT_USER_STOPS)
-from oolongt.typing.parser_config import (ParserConfig, get_config_paths,
-                                          get_stop_words, load_language,
-                                          parse_config)
-from tests import FileNotFoundError, PermissionError
+from oolongt.typedefs.parser_config import (ParserConfig, get_config_paths,
+                                            get_stop_words, load_language,
+                                            parse_config)
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
 BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
@@ -22,8 +23,10 @@ TEST_DEFAULT_STOPS = {
     'custom': TEST_DEFAULT_CUSTOM, }
 
 
-def compare_loaded_language(received, expected):
-    # type: (dict, dict) -> bool
+def compare_loaded_language(
+        received: typing.Tuple[int, str, typing.List],
+        expected: typing.Tuple[int, str, int]
+        ) -> bool:
     """Compare loaded language data to expected
 
     Arguments:
@@ -49,7 +52,14 @@ def compare_loaded_language(received, expected):
     'root,lang,expected_path',
     [(BASE_LANG_PATH, TEST_LANG_NAME, TEST_LANG_JSON), ],
     ids=['test path', ])
-def test_get_config_paths(root, lang, expected_path):
+def test_get_config_paths(root: str, lang: str, expected_path: Path) -> None:
+    """Get config paths
+
+    Arguments:
+        root {str} -- root directory of language config
+        lang {str} -- basename of language config
+        expected_path {Path} -- self explanatory
+    """
     expected = (expected_path, BASE_LANG_PATH)
     received = get_config_paths(root, lang)
 
@@ -83,7 +93,13 @@ def test_get_config_paths(root, lang, expected_path):
         'nltk: True,    user: 0',
         'nltk: True,    user: 1',
     ]))
-def test_get_stop_words(spec, expected):
+def test_get_stop_words(spec: typing.Dict, expected: int) -> None:
+    """Get stop words
+
+    Arguments:
+        spec {typing.Dict} -- nominal configuration
+        expected {int} -- number of expected words (-ish)
+    """
     lang_spec = {'stop_words': spec}
     nltk_language = 'english'
     user = spec.get('user', [])
@@ -112,7 +128,7 @@ def test_get_stop_words(spec, expected):
         ({'root': BUILTIN}, DEFAULT_LANG_EXPECTED),
         ({'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH}, TEST_LANG_EXPECTED),
         ({'lang': 'malformed', 'root': BASE_LANG_PATH}, ValueError),
-        ({'lang': 'INVALID', 'root': BASE_LANG_PATH}, FileNotFoundError),
+        ({'lang': 'INVALID', 'root': BASE_LANG_PATH}, ValueError),
     ],
     ids=pad_to_longest([
         'root: def., lang: def.      == default lang',
@@ -122,16 +138,22 @@ def test_get_stop_words(spec, expected):
         'root: exp., lang: MALFORMED == (error)',
         'root: exp., lang: INVALID   == (error)',
     ]))
-def test_parse_config(path_dict, expected):
+def test_parse_config(path_dict: typing.Dict, expected: typing.Any) -> None:
+    """Parse a nominal configuration
+
+    Arguments:
+        path_dict {typing.Dict} -- arguments for Parser initialization
+        expected {typing.Any} -- language config or exception
+    """
     path_kwargs = {'root': BUILTIN, 'lang': DEFAULT_LANG}
     path_kwargs.update(path_dict)
     cfg_path, _ = get_config_paths(**path_kwargs)
 
     try:
-        ideal, nltk_language, stop_words = parse_config(cfg_path)
+        ideal, nltk_language, stop_words = parse_config(str(cfg_path))
         received = (ideal, nltk_language, len(stop_words))
 
-    except (ValueError, FileNotFoundError) as e:
+    except Exception as e:
         received = check_exception(e, expected)
 
     assert (received == expected), assert_ex(
@@ -154,8 +176,10 @@ def test_parse_config(path_dict, expected):
         'valid: no, file not found',
         'valid: no, parse error',
     ]))
-def test_load_language(kwargs, expected):
-    # type: (dict, dict) -> None
+def test_load_language(
+        kwargs: typing.Dict,
+        expected: typing.Tuple[int, str, int]
+        ) -> None:
     """Test Parser.load_language()
 
     Arguments:
@@ -180,7 +204,20 @@ class TestParserConfig(object):
         [(BUILTIN, DEFAULT_LANG, DEFAULT_LANG_EXPECTED), ],
         ids=pad_to_longest(['defaults', ])
     )
-    def test_init(self, root, lang, expected):
+    def test_init(
+            self,
+            root: str,
+            lang: str,
+            expected: typing.Tuple[int, str, int]
+            ) -> None:
+        """Test initialization
+
+        Arguments:
+        root {str} -- root directory of language config
+        lang {str} -- basename of language config
+            expected {typing.Tuple[int, str, int]} --
+                [ideal words, NLTK language, stop word count]
+        """
         config = ParserConfig(root, lang)
         received = (
             config.ideal_sentence_length,

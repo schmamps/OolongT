@@ -1,4 +1,5 @@
 """Test for OoolongT exports"""
+import typing
 from math import floor
 from pathlib import Path
 from random import randint
@@ -11,15 +12,15 @@ from oolongt.main import (DEFAULT_LENGTH, get_slice_length,
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_ids,
                            get_samples, pad_to_longest, snip)
-from tests.typing.sample import Sample
-from tests.typing.sample_sentence import SampleSentence
+from tests.typedefs.sample import Sample
+from tests.typedefs.sample_sentence import SampleSentence
 
 
 @mark.parametrize(
     'samp',
     get_samples(SAMPLES),
     ids=pad_to_longest(get_sample_ids(SAMPLES)))
-def test_score_body_sentences(samp):
+def test_score_body_sentences(samp: Sample) -> None:
     """Test main.score_sentences()
 
     Arguments:
@@ -36,14 +37,13 @@ def test_score_body_sentences(samp):
             hint=snip(sentence.text))
 
 
-def _get_best_sentences(samp, length):
+def _get_best_sentences(samp: Sample, length: int):
     ranked = sorted(samp.sentences, reverse=True)
 
     return sorted(ranked[:length], key=lambda sent: sent.index)
 
 
-def _get_expected_sentences(samp, length):
-    # type: (Sample, int) -> list[str]
+def _get_expected_sentences(samp: Sample, length: int) -> typing.List[str]:
     """Get text of top ranked sentences
 
     Arguments:
@@ -58,8 +58,11 @@ def _get_expected_sentences(samp, length):
     return [sent.text for sent in best_sentences]
 
 
-def _get_received_sentences(title, text, length):
-    # type: (str, str, int) -> list[str]
+def _get_received_sentences(
+        title: str,
+        text: str,
+        length: int
+        ) -> typing.List[str]:
     """Summarize with correct keyword arguments
 
     Arguments:
@@ -75,8 +78,7 @@ def _get_received_sentences(title, text, length):
     return scored_sentences
 
 
-def permute_test_summarize():
-    # type () -> Iterable[tuple[str, int]]
+def permute_test_summarize() -> typing.Iterable[typing.Tuple[str, int]]:
     """Generate parameters for test_summarize() """
     for sample_name in SAMPLES:
         for length in range(1, 8, 2):
@@ -84,7 +86,7 @@ def permute_test_summarize():
 
 
 @mark.parametrize('sample_name,length', permute_test_summarize())
-def test_summarize(sample_name, length):
+def test_summarize(sample_name: str, length: int) -> None:
     """Test specified sample
 
     Arguments:
@@ -125,13 +127,16 @@ def test_summarize(sample_name, length):
         'nominal: < 1,  total: > 1       == fraction of total',
         'cannot be sliced',
     ]))
-def test_get_slice_length(nominal, total, expected):
+def test_get_slice_length(
+        nominal: typing.Any,
+        total: int,
+        expected: typing.Any) -> None:
     """Test main.get_slice_length()
 
     Arguments:
-        nominal {float} -- exact number (int) or percentage (float: 0-1)
+        nominal {float} -- exact number (int) or percentage (0 < nominal < 1)
         total {int} -- number of items to slice from
-        expected {int} -- expected number of items to slice
+        expected {typing.Any} -- expected Exception/number of items
     """
     received = None
 

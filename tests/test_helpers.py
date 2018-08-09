@@ -1,3 +1,4 @@
+import typing
 from pytest import mark
 
 from tests import helpers
@@ -21,7 +22,7 @@ from tests import helpers
         'args: max_len,       == "in" (truncated)',
         'args: max_len, ellip == "in" (truncated creatively)',
     ]))
-def test_snip(text, kwargs, expected):
+def test_snip(text: str, kwargs: typing.Dict, expected: str) -> None:
     received = helpers.snip(text, **kwargs)
 
     assert (received == expected), helpers.assert_ex(
@@ -40,7 +41,7 @@ def test_snip(text, kwargs, expected):
         'can be randomized',
         'cannot be randomized',
     ]))
-def test_randomize_list(src, expected):
+def test_randomize_list(src: typing.List[int], expected: bool) -> None:
     received = helpers.randomize_list(src)
 
     assert src != received or not expected, helpers.assert_ex(

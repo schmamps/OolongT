@@ -9,7 +9,7 @@ from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_LANG,
                                DEFAULT_NLTK_LANGUAGE, DEFAULT_NLTK_STOPS,
                                DEFAULT_USER_STOPS)
 from oolongt.simple_io import load_json
-from oolongt.typedefs import ReprAble
+from oolongt.typedefs.repr_able import ReprAble
 
 CFG_TUPLE = typing.Tuple[int, str, typing.List[str]]
 
@@ -18,8 +18,8 @@ def get_config_paths(root: str, lang: str) -> typing.Tuple[Path, Path]:
     """Get path to language config
 
     Arguments:
-        root {str} -- root directory
-        lang {str} -- basename of config
+        root {str} -- root directory of language config
+        lang {str} -- basename of language config
 
     Returns:
         Tuple[Path, Path] -- pathlib.Path to file
@@ -34,7 +34,9 @@ def get_stop_words(lang_spec: dict, nltk_language: str) -> set:
     Returns:
         set -- list of stop words
     """
-    stop_cfg = {'nltk': DEFAULT_NLTK_STOPS, 'user': DEFAULT_USER_STOPS, }
+    stop_cfg = {
+        'nltk': DEFAULT_NLTK_STOPS,
+        'user': DEFAULT_USER_STOPS, }  # type: typing.Dict[str, typing.Any]
     stop_cfg.update(lang_spec.get('stop_words', {}))
     use_nltk = bool(stop_cfg['nltk'])
     use_user = isinstance(stop_cfg['user'], list)
