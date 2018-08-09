@@ -10,6 +10,34 @@ from oolongt.typedefs.scored_keyword import ScoredKeyword
 from oolongt.typedefs.scored_sentence import ScoredSentence
 
 
+def remove_punctuations(text: str) -> str:
+    """Remove non-space, non-alphanumeric characters from `text`
+
+    Arguments:
+        text {str} -- ex: 'It\'s 4:00am, you say?'
+
+    Returns:
+        str -- ex: 'Its 400am you say'
+    """
+    unpunct = ''.join(t for t in text if t.isalnum() or t.isspace())
+
+    return unpunct
+
+
+def split_words(text: str, language: str) -> typing.List[str]:
+    """List constituent words of `text` via tokenizer sequentially
+
+    Arguments:
+        sentence {str} -- text to split
+
+    Returns:
+        typing.List[str] -- words in text
+    """
+    split = word_tokenize(text.lower(), language=language)
+
+    return split
+
+
 class Parser:
     def __init__(self, root: str = BUILTIN, lang: str = DEFAULT_LANG) -> None:
         """Initialize class with `root`/`lang`.json
@@ -41,8 +69,8 @@ class Parser:
         Returns:
             typing.List[str] -- words in text
         """
-        bare = self.remove_punctuations(text)
-        split = self.split_words(bare)
+        bare = remove_punctuations(text)
+        split = split_words(bare, self.language)
 
         return split
 
@@ -69,15 +97,15 @@ class Parser:
         Returns:
             typing.List[ScoredKeyword] -- list of keywords, scored
         """
-        all_keywords = self.get_keyword_strings(text)
-        unique_words = list(set(all_keywords))
+        all_kw_strs = self.get_keyword_strings(text)
+        unique_kw_strs = list(set(all_kw_strs))
 
-        scored_keywords = [
-            ScoredKeyword(word, all_keywords.count(word), len(all_keywords))
+        scored_kws = [
+            ScoredKeyword(word, all_kw_strs.count(word), len(all_kw_strs))
             for word
-            in unique_words]
+            in unique_kw_strs]
 
-        return scored_keywords
+        return scored_kws
 
     def split_sentences(self, text: str) -> typing.List[str]:
         """List sentences in `text` via tokenizer sequentially
@@ -91,32 +119,6 @@ class Parser:
         normalized = sub('\\s+', ' ', text)
 
         return sent_tokenize(normalized, language=self.language)
-
-    def split_words(self, text: str) -> typing.List[str]:
-        """List constituent words of `text` via tokenizer sequentially
-
-        Arguments:
-            sentence {str} -- text to split
-
-        Returns:
-            typing.List[str] -- words in text
-        """
-        split = word_tokenize(text.lower())
-
-        return split
-
-    def remove_punctuations(self, text: str) -> str:
-        """Remove non-space, non-alphanumeric characters from `text`
-
-        Arguments:
-            text {str} -- ex: 'It\'s 4:00am, you say?'
-
-        Returns:
-            str -- ex: 'Its 400am you say'
-        """
-        unpunct = ''.join(t for t in text if t.isalnum() or t.isspace())
-
-        return unpunct
 
     def remove_stop_words(self, words: typing.List[str]) -> typing.List[str]:
         """Filter stop words from `words`
