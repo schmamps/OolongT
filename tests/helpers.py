@@ -180,7 +180,7 @@ def check_exception(catch: Exception, expected: typing.Any) -> typing.Any:
     return catch
 
 
-def pad_to_longest(strs: typing.List[str]) -> typing.List[str]:
+def pad_to_longest(vals: typing.List[typing.Any]) -> typing.List[str]:
     """Pad all strings to length of longest in list
 
     Arguments:
@@ -189,6 +189,7 @@ def pad_to_longest(strs: typing.List[str]) -> typing.List[str]:
     Returns:
         typing.List[str] -- list of strings
     """
+    strs = [str(x) for x in vals]
     pad_len = max([len(x) for x in strs])
     pad_str = ' ' * pad_len
     padded = [(x + pad_str)[:pad_len] for x in strs]
