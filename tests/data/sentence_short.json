@@ -41,16 +41,6 @@
 		"a",
 		"sentence"
 	],
-	"compare_title": [
-		"a",
-		"short",
-		"paragraph",
-		"here",
-		"but",
-		"a",
-		"longer",
-		"title"
-	],
 	"length_score": 0.25,
 	"title_score": 0.25,
 	"split_sentences": [
