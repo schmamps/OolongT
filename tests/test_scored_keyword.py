@@ -6,7 +6,28 @@ from oolongt.typedefs.scored_keyword import (KEYWORD_SCORE_K, ScoredKeyword,
                                              compare_keywords, compare_length,
                                              compare_score, compare_word,
                                              score_keyword)
-from tests.helpers import assert_ex, check_exception, pad_to_longest
+from tests.helpers import assert_ex, check_exception, index_of, pad_to_longest
+
+
+def hint_keyword(keyword: ScoredKeyword) -> str:
+    """Cast `ScoredKeyword` to lightly-detailed string
+
+    Arguments:
+        keyword {ScoredKeyword} -- keyword
+
+    Returns:
+        str -- word and score
+    """
+    return '{!r}: {}'.format(keyword.word, keyword.score)
+
+
+def hint_keywords(*args: ScoredKeyword) -> str:
+    """Cast list of `ScoredKeyword`s as lightly-detailed strings
+
+    Returns:
+        str -- keyword details
+    """
+    return '/'.join([hint_keyword(x) for x in args])
 
 
 def set_test(
@@ -87,7 +108,7 @@ def test_score_keyword(count: int, of: int, expected: float) -> None:
         'score keyword',
         received,
         expected,
-        hint='{} of {}'.format(count, of))
+        hint=index_of(count, of))
 
 
 @mark.parametrize(
@@ -119,7 +140,7 @@ def test_compare_score(
         'compare keyword score',
         received,
         expected,
-        hint=[a, b])
+        hint=hint_keywords(a, b))
 
 
 @mark.parametrize(
@@ -146,7 +167,7 @@ def test_compare_length(
         'compare keyword length',
         received,
         expected,
-        hint=[a, b])
+        hint=hint_keywords(a, b))
 
 
 @mark.parametrize(
@@ -172,7 +193,7 @@ def test_compare_word(
         'compare keyword word',
         received,
         expected,
-        hint=[a, b])
+        hint=hint_keywords(a, b))
 
 
 # trip all factors (individual factors tested separately)
@@ -199,7 +220,7 @@ def test_compare_keywords(
         'compare keywords',
         received,
         expected,
-        hint=[a, b])
+        hint=hint_keywords(a, b))
 
 
 class TestScoredKeyword:
@@ -246,7 +267,7 @@ class TestScoredKeyword:
             'keyword equality',
             received,
             expected,
-            hint=[a, b])
+            hint=hint_keywords(a, b))
 
     @mark.parametrize(
         'a,b,expected,_',
@@ -265,7 +286,7 @@ class TestScoredKeyword:
             'keyword lt',
             received,
             expected,
-            hint=[a, b])
+            hint=hint_keywords(a, b))
 
     @mark.parametrize(
         'a,b,lt,eq',
@@ -285,4 +306,4 @@ class TestScoredKeyword:
             'keyword gt',
             received,
             expected,
-            hint=[a, b])
+            hint=hint_keywords(a, b))

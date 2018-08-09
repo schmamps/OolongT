@@ -9,7 +9,7 @@ from oolongt.typedefs.scored_sentence import (calc_decile,
 from tests.constants import SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_ids,
                            get_sample_sentence_ids, get_sample_sentences,
-                           get_samples, pad_to_longest)
+                           get_samples, index_of, pad_to_longest)
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_sentence import SampleSentence
 
@@ -59,7 +59,7 @@ def test_calc_decile(index: int, of: int, expected: typing.Any) -> None:
         'calculate decile',
         received,
         expected,
-        hint='/'.join([str(index), str(of)]))
+        hint=index_of(index, of))
 
 
 @mark.parametrize(
@@ -95,7 +95,7 @@ def test_score_position(index: int, expected: typing.Any) -> None:
         'sentence position score',
         received,
         expected,
-        hint=' of '.join([str(index), str(of)]))
+        hint=index_of(index, of))
 
 
 @mark.parametrize(

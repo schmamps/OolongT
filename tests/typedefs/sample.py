@@ -7,11 +7,14 @@ from tests.typedefs.sample_keyword import SampleKeyword
 from tests.typedefs.sample_sentence import SampleSentence
 
 
-def join_sentences(sentence_list: typing.List[typing.Dict]) -> str:
+def join_sentences(
+        sentence_list: typing.List[typing.Dict[str, typing.Any]]
+        ) -> str:
     """Create text from sentence list
 
     Arguments:
-        sentence_list {list[dict]} -- loaded sentences
+        sentence_list {typing.List[typing.Dict[str, typing.Any]]} --
+            loaded sentences
 
     Returns:
         str -- text
@@ -19,7 +22,7 @@ def join_sentences(sentence_list: typing.List[typing.Dict]) -> str:
     return '\n  '.join([sent['text'] for sent in sentence_list])
 
 
-def load_config(root: Path, name: str) -> typing.Dict:
+def load_config(root: Path, name: str) -> typing.Dict[str, typing.Any]:
     """Load initialization data for Sample
 
     Arguments:
@@ -27,9 +30,9 @@ def load_config(root: Path, name: str) -> typing.Dict:
         lang {str} -- basename of language config
 
     Returns:
-        typing.Dict -- initialization data
+        typing.Dict[str, typing.Any] -- initialization data
     """
-    path = str(root.joinpath(name + '.json'))
+    path = root.joinpath(name + '.json')
     config = simple_io.load_json(path)
 
     text = config.pop('text', False)
@@ -38,7 +41,7 @@ def load_config(root: Path, name: str) -> typing.Dict:
     keywords = config.pop('keywords', [])
     kw_of = config.get('keyword_count', 0)
 
-    config['body'] = text if text is not False else join_sentences(sentences)
+    config['body'] = text or join_sentences(sentences)
     config['sentences'] = [
         SampleSentence(data_dict, sent_of) for data_dict in sentences]
     config['keywords'] = [

@@ -93,11 +93,14 @@ def test_get_config_paths(root: str, lang: str, expected_path: Path) -> None:
         'nltk: True,    user: 0',
         'nltk: True,    user: 1',
     ]))
-def test_get_stop_words(spec: typing.Dict, expected: int) -> None:
+def test_get_stop_words(
+        spec: typing.Dict[str, typing.Any],
+        expected: int
+        ) -> None:
     """Get stop words
 
     Arguments:
-        spec {typing.Dict} -- nominal configuration
+        spec {typing.Dict[str, typing.Any]} -- nominal configuration
         expected {int} -- number of expected words (-ish)
     """
     lang_spec = {'stop_words': spec}
@@ -138,11 +141,15 @@ def test_get_stop_words(spec: typing.Dict, expected: int) -> None:
         'root: exp., lang: MALFORMED == (error)',
         'root: exp., lang: INVALID   == (error)',
     ]))
-def test_parse_config(path_dict: typing.Dict, expected: typing.Any) -> None:
+def test_parse_config(
+        path_dict: typing.Dict[str, typing.Any],
+        expected: typing.Any
+        ) -> None:
     """Parse a nominal configuration
 
     Arguments:
-        path_dict {typing.Dict} -- arguments for Parser initialization
+        path_dict {typing.Dict[str, typing.Any]} --
+            arguments for Parser initialization
         expected {typing.Any} -- language config or exception
     """
     path_kwargs = {'root': BUILTIN, 'lang': DEFAULT_LANG}
@@ -177,14 +184,14 @@ def test_parse_config(path_dict: typing.Dict, expected: typing.Any) -> None:
         'valid: no, parse error',
     ]))
 def test_load_language(
-        kwargs: typing.Dict,
+        kwargs: typing.Dict[str, typing.Any],
         expected: typing.Tuple[int, str, int]
         ) -> None:
     """Test Parser.load_language()
 
     Arguments:
-        kwargs {dict} -- kwargs passed to Parser
-        expected {dict} -- expected data
+        kwargs {typing.Dict[str, typing.Any]} -- kwargs passed to Parser
+        expected {typing.Tuple[int, str, int]} -- expected data
     """
     test = False
 

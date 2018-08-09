@@ -15,13 +15,13 @@ def auto_id(index, of):
 class SampleSentence(ScoredSentence):
     def __init__(
             self,
-            data_dict: typing.Dict,
+            data_dict: typing.Dict[str, typing.Any],
             of: int
             ) -> None:
         """Initialize
 
         Arguments:
-            data_dict {typing.Dict} -- JSON data
+            data_dict {typing.Dict[str, typing.Any]} -- JSON data
             of {int} -- total number of sentences
 
         Returns:

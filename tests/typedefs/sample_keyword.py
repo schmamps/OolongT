@@ -6,11 +6,12 @@ from oolongt.typedefs.scored_keyword import (KEYWORD_SCORE_K, ScoredKeyword,
 
 
 class SampleKeyword(ScoredKeyword):
-    def __init__(self, pairs: typing.Dict, of: int) -> None:
+    def __init__(self, pairs: typing.Dict[str, typing.Any], of: int) -> None:
         """Initialize
 
         Arguments:
-            pairs {typing.Dict} -- `{'word': word, 'count': instances of word}`
+            pairs {typing.Dict[str, typing.Any]} --
+                `{'word': word, 'count': instances of word}`
             of {int} -- total number of words
 
         Returns:

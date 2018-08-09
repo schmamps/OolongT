@@ -102,7 +102,7 @@ def test_score_frequency(samp: Sample, sentence: SampleSentence) -> None:
 
     Arguments:
         samp {Sample} -- sample data
-        sentence {dict} -- individual sentence from sample
+        sentence {SampleSentence} -- individual sentence from sample
     """
     summ = Summarizer()
     words = summ.parser.get_all_words(sentence.text)
@@ -179,7 +179,7 @@ class TestSummarizer:
                 'summary',
                 received,
                 expected,
-                hint=[index, snip(receiveds[index].text)])
+                hint='{!r}: {!r}'.format(index, snip(receiveds[index].text)))
 
     @mark.parametrize(
         'samp',
@@ -230,7 +230,7 @@ class TestSummarizer:
 
         Arguments:
             samp {Sample} -- sample data
-            sentence {dict} -- individual sentence from sample
+            sentence {SampleSentence} -- individual sentence from sample
         """
         summ = Summarizer()
         title_words = samp.title_words
@@ -249,7 +249,7 @@ class TestSummarizer:
             'sentence score',
             received,
             expected,
-            hint=[samp.name, snip(text)])
+            hint='{}: {!r}'.format(samp.name, snip(text)))
 
     @mark.parametrize(
         'samp',
@@ -318,4 +318,4 @@ class TestSummarizer:
             'title score',
             received,
             expected,
-            hint=[title_words, sentence_words])
+            hint='\n'.join(['', repr(title_words), repr(sentence_words)]))

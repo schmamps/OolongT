@@ -150,4 +150,4 @@ def test_get_slice_length(
         'slice length',
         received,
         expected,
-        hint='nominal: ' + str(nominal))
+        hint='nominal: {!r}'.format(nominal))

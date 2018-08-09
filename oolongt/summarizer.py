@@ -59,8 +59,8 @@ def score_by_dbs(
     """
     k = len(list(set(words) & set(top_keyword_list))) + 1
     summ = 0.0
-    first_word = {}   # type: typing.Dict
-    second_word = {}  # type: typing.Dict
+    first_word = {}   # type: typing.Dict[str, float]
+    second_word = {}  # type: typing.Dict[str, float]
 
     for i, word in enumerate(words):
         if word in top_keyword_list:

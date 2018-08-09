@@ -194,3 +194,7 @@ def pad_to_longest(strs: typing.List[str]) -> typing.List[str]:
     padded = [(x + pad_str)[:pad_len] for x in strs]
 
     return padded
+
+
+def index_of(index, of):
+    return '{!r} of {!r}'.format(index, of)

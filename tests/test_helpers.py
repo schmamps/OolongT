@@ -22,7 +22,11 @@ from tests import helpers
         'args: max_len,       == "in" (truncated)',
         'args: max_len, ellip == "in" (truncated creatively)',
     ]))
-def test_snip(text: str, kwargs: typing.Dict, expected: str) -> None:
+def test_snip(
+        text: str,
+        kwargs: typing.Dict[str, typing.Any],
+        expected: str
+        ) -> None:
     received = helpers.snip(text, **kwargs)
 
     assert (received == expected), helpers.assert_ex(
