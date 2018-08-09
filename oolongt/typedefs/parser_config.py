@@ -47,7 +47,7 @@ def get_stop_words(lang_spec: dict, nltk_language: str) -> set:
     return set(nltk + user)
 
 
-def parse_config(path: str) -> CFG_TUPLE:
+def parse_config(path: Path) -> CFG_TUPLE:
     """Load defaults, override with loaded data
 
     Arguments:
@@ -61,7 +61,7 @@ def parse_config(path: str) -> CFG_TUPLE:
             ideal length, NLTK language, stop words
     """
     try:
-        lang_spec = load_json(path)
+        lang_spec = load_json(path.absolute())
 
         ideal = lang_spec.get(
             'ideal', DEFAULT_IDEAL_LENGTH)           # type: int
@@ -70,7 +70,7 @@ def parse_config(path: str) -> CFG_TUPLE:
         stop_words = get_stop_words(
             lang_spec, nltk_language)                # type: typing.Set[str]
 
-    except (JSONDecodeError):
+    except (JSONDecodeError, AttributeError):
         raise ValueError('invalid config file: {!r}'.format(path))
 
     return int(ideal), str(nltk_language), list(stop_words)
@@ -102,7 +102,7 @@ def load_language(root: str = BUILTIN, lang: str = DEFAULT_LANG) -> CFG_TUPLE:
     except (ValueError, OSError):
         raise PermissionError('directory traversal in lang: ' + lang)
 
-    config = parse_config(str(cfg_path.absolute()))
+    config = parse_config(cfg_path)
 
     return config
 

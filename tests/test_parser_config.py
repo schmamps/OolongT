@@ -157,7 +157,7 @@ def test_parse_config(
     cfg_path, _ = get_config_paths(**path_kwargs)
 
     try:
-        ideal, nltk_language, stop_words = parse_config(str(cfg_path))
+        ideal, nltk_language, stop_words = parse_config(cfg_path)
         received = (ideal, nltk_language, len(stop_words))
 
     except Exception as e:
