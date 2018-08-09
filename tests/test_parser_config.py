@@ -6,7 +6,7 @@ from pytest import mark
 
 from oolongt.constants import (BUILTIN, DEFAULT_LANG, DEFAULT_NLTK_STOPS,
                                DEFAULT_USER_STOPS)
-from oolongt.typedefs.parser_config import (ParserConfig, get_config_paths,
+from oolongt.typedefs.parser_config import (ParserConfig, get_config_path,
                                             get_stop_words, load_language,
                                             parse_config)
 from tests.helpers import assert_ex, check_exception, pad_to_longest
@@ -49,22 +49,21 @@ def compare_loaded_language(
 
 
 @mark.parametrize(
-    'root,lang,expected_path',
+    'root,lang,expected',
     [(BASE_LANG_PATH, TEST_LANG_NAME, TEST_LANG_JSON), ],
     ids=['test path', ])
-def test_get_config_paths(root: str, lang: str, expected_path: Path) -> None:
+def test_get_config_path(root: str, lang: str, expected: Path) -> None:
     """Get config paths
 
     Arguments:
         root {str} -- root directory of language config
         lang {str} -- basename of language config
-        expected_path {Path} -- self explanatory
+        expected {Path} -- self explanatory
     """
-    expected = (expected_path, BASE_LANG_PATH)
-    received = get_config_paths(root, lang)
+    received = get_config_path(root, lang)
 
     assert (received == expected), assert_ex(
-        'config paths',
+        'config path',
         received,
         expected)
 
@@ -154,7 +153,7 @@ def test_parse_config(
     """
     path_kwargs = {'root': BUILTIN, 'lang': DEFAULT_LANG}
     path_kwargs.update(path_dict)
-    cfg_path, _ = get_config_paths(**path_kwargs)
+    cfg_path = get_config_path(**path_kwargs)
 
     try:
         ideal, nltk_language, stop_words = parse_config(cfg_path)

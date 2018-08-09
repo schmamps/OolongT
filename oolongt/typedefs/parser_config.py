@@ -14,7 +14,7 @@ from oolongt.typedefs.repr_able import ReprAble
 CFG_TUPLE = typing.Tuple[int, str, typing.List[str]]
 
 
-def get_config_paths(root: str, lang: str) -> typing.Tuple[Path, Path]:
+def get_config_path(root: str, lang: str) -> Path:
     """Get path to language config
 
     Arguments:
@@ -25,7 +25,9 @@ def get_config_paths(root: str, lang: str) -> typing.Tuple[Path, Path]:
         Tuple[Path, Path] -- pathlib.Path to file
     """
     root_path = Path(root)
-    return root_path.joinpath(lang + '.json'), root_path
+    file_name = '{}.json'.format(lang)
+
+    return root_path.joinpath(file_name)
 
 
 def get_stop_words(lang_spec: dict, nltk_language: str) -> set:
@@ -93,7 +95,8 @@ def load_language(root: str = BUILTIN, lang: str = DEFAULT_LANG) -> CFG_TUPLE:
         typing.Tuple[int, str, typing.List[str]] --
             ideal length, NLTK language, stop words
     """
-    cfg_path, root_path = get_config_paths(root, lang)
+    root_path = Path(root)
+    cfg_path = get_config_path(root, lang)
 
     try:
         # pylint: disable=no-member
