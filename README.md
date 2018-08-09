@@ -100,9 +100,7 @@ OolongT can reduce content to either a fixed number of sentences:
 By default, OolongT sorts top sentences by their order of appearance.
 
 For greater control over the quantity and order of sentences,
-use the Summarizer class directly.
-The `Summarizer.get_all_sentences` method parses content
-and returns a list of `ScoredSentence` objects
+use `score_body_sentences`, which returns a list of `ScoredSentence` objects
 with the following sortable properties:
 
 * `total_score`: composite of other sentence scores (default)
@@ -116,7 +114,7 @@ with the following sortable properties:
 * `keyword_score`: score by top keywords in content
 
 ```py
->>> from oolongt.summarizer import Summarizer
->>> Summarizer().get_all_sentences(body, title)
+>>> from oolongt import score_body_sentences
+>>> score_body_sentences(body, title)
 [ScoredSentence, ScoredSentence, ...]
 ```
