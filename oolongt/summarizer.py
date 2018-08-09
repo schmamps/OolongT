@@ -21,6 +21,18 @@ def pluck_keyword_words(
     return [kw.word for kw in keyword_list]
 
 
+def _float_len(val_list: typing.Sized) -> float:
+    """Cast length of sized value as a float
+
+    Arguments:
+        val_list {typing.List[typing.Any]} -- list of items
+
+    Returns:
+        float -- length of list as float
+    """
+    return float(len(val_list))
+
+
 def get_top_keyword_threshold(
         keywords: typing.Sequence[ScoredKeyword]
         ) -> float:
@@ -43,26 +55,29 @@ def get_top_keyword_threshold(
 
 
 def score_by_dbs(
-        words: typing.List[str],
+        sentence_word_list: typing.List[str],
         top_keywords: typing.Sequence[ScoredKeyword],
         top_keyword_list: typing.List[str]
         ) -> float:
-    """Score sentence (`words`) by keyword density
+    """Score sentence (`sentence_word_list`) by keyword density
 
     Arguments:
-        words {list[str]} -- sequential list of words in sentence
-        top_keywords {list[dict]} -- top keywords in content body
-        top_keyword_list {list[str]} -- values of 'word' in top_keywords
+        sentence_word_list {typing.List[str]} --
+            sequential list of words in sentence
+        top_keywords {typing.List[dict]} --
+            top keywords in content body
+        top_keyword_list {typing.List[str]} --
+            values of 'word' in top_keywords
 
     Returns:
         float  -- density based score
     """
-    k = len(list(set(words) & set(top_keyword_list))) + 1
+    k = len(list(set(sentence_word_list) & set(top_keyword_list))) + 1
     summ = 0.0
     first_word = {}   # type: typing.Dict[str, float]
     second_word = {}  # type: typing.Dict[str, float]
 
-    for i, word in enumerate(words):
+    for i, word in enumerate(sentence_word_list):
         if word in top_keyword_list:
             index = top_keyword_list.index(word)
 
@@ -82,18 +97,6 @@ def score_by_dbs(
     dbs = (1.0 / k * (k + 1.0)) * summ
 
     return dbs
-
-
-def _float_len(val_list: typing.Sized) -> float:
-    """Cast length of sized value as a float
-
-    Arguments:
-        val_list {typing.List[typing.Any]} -- list of items
-
-    Returns:
-        float -- length of list as float
-    """
-    return float(len(val_list))
 
 
 def score_by_sbs(
@@ -207,12 +210,14 @@ class Summarizer:
         Returns:
             ScoredSentence -- scored sentence
         """
-        words = self.parser.get_all_words(text)
+        sentence_word_list = self.parser.get_all_words(text)
 
-        title_score = self.score_by_title(title_words, words)
-        length_score = self.score_by_length(words)
-        dbs_score = score_by_dbs(words, top_keywords, top_keyword_list)
-        sbs_score = score_by_sbs(words, top_keywords, top_keyword_list)
+        title_score = self.score_by_title(title_words, sentence_word_list)
+        length_score = self.score_by_length(sentence_word_list)
+        dbs_score = score_by_dbs(
+            sentence_word_list, top_keywords, top_keyword_list)
+        sbs_score = score_by_sbs(
+            sentence_word_list, top_keywords, top_keyword_list)
 
         scored = ScoredSentence(
                 text, index, of,
@@ -220,17 +225,18 @@ class Summarizer:
 
         return scored
 
-    def score_by_length(self, words: typing.List[str]) -> float:
-        """Score sentence by its count of `words` vs. ideal
+    def score_by_length(self, sentence_word_list: typing.List[str]) -> float:
+        """Score sentence by its count of `sentence_word_list` vs. ideal
 
         Arguments:
-            words {list[str]} -- list of words in the sentence
+            sentence_word_list {typing.List[str]} --
+                list of words in the sentence
 
         Returns:
             float -- score
         """
         ideal = float(self.parser.ideal_sentence_length)
-        score = ideal - abs(ideal - len(words))
+        score = ideal - abs(ideal - len(sentence_word_list))
         score /= ideal
 
         return score
@@ -238,9 +244,9 @@ class Summarizer:
     def score_by_title(
             self,
             title_words: typing.List[str],
-            sentence_words: typing.List[str]
+            sentence_word_list: typing.List[str]
             ) -> float:
-        """Score `sentence_words` by matches with `title_words`
+        """Score `sentence_word_list` by matches with `title_words`
 
         Arguments:
             title {str} -- title of the text content
@@ -249,13 +255,12 @@ class Summarizer:
         Returns:
             float -- score
         """
-        title_keywords = self.parser.remove_stop_words(title_words)
-        sentence_keywords = self.parser.remove_stop_words(sentence_words)
+        sentence_keywords = self.parser.remove_stop_words(sentence_word_list)
         matched_keywords = [
             word
             for word in sentence_keywords
-            if word in title_keywords]
+            if word in title_words]
 
-        score = _float_len(matched_keywords) / _float_len(title_keywords)
+        score = _float_len(matched_keywords) / _float_len(title_words)
 
         return score
