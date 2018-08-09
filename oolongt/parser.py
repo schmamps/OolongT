@@ -129,6 +129,17 @@ class Parser:
         Returns:
             typing.List[str] -- words not matching a stop word
         """
-        filtered = [word for word in words if word not in self.stop_words]
+        filtered = [word for word in words if not self.is_stop_word(word)]
 
         return filtered
+
+    def is_stop_word(self, word: str) -> bool:
+        """Verify word is not in self.stop_words
+
+        Arguments:
+            word {str} -- word
+
+        Returns:
+            bool -- word not in stop words
+        """
+        return word in self.stop_words
