@@ -287,7 +287,7 @@ class TestSummarizer:
             samp {Sample} -- sample data
         """
         summ = Summarizer(lang=samp.lang)
-        words = samp.compare_words
+        words = summ.parser.get_all_words(samp.sentences[0].text)
 
         expected = samp.length_score
         received = summ.score_by_length(words)
@@ -315,14 +315,14 @@ class TestSummarizer:
             'sentence_overlong',
         ]))
     def test_score_by_title(self, samp: Sample) -> None:
-        """Test `Parser.get_title_score()`
+        """Test `Parser.score_by_title()`
 
         Arguments:
             samp {Sample} -- sample data
         """
         summ = Summarizer(lang=samp.lang)
-        title_words = samp.compare_title
-        sentence_words = samp.compare_words
+        title_words = summ.parser.get_keyword_strings(samp.title)
+        sentence_words = summ.parser.get_all_words(samp.sentences[0].text)
 
         expected = samp.title_score
         received = summ.score_by_title(title_words, sentence_words)
