@@ -36,7 +36,7 @@ def load_config(root: Path, name: str) -> typing.Dict[str, typing.Any]:
     config = simple_io.load_json(path)
 
     text = config.pop('text', False)
-    sentences = config.pop('sentences', [])
+    sentences = config.pop('sentences', [{'text': ''}])
     sent_of = len(sentences)
     keywords = config.pop('keywords', [])
     kw_of = config.get('keyword_count', 0)
