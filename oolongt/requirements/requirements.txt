@@ -1,2 +1,3 @@
-nltk
-pathlib
+nltk==3.3
+pathlib==1.0.1
+mypy==0.620
