@@ -4,18 +4,18 @@ from pathlib import Path
 
 from pytest import mark
 
-from oolongt.constants import (BUILTIN, DEFAULT_LANG, DEFAULT_NLTK_STOPS,
+from oolongt.constants import (BUILTIN, DEFAULT_IDIOM, DEFAULT_NLTK_STOPS,
                                DEFAULT_USER_STOPS)
 from oolongt.typedefs.parser_config import (ParserConfig, get_config_path,
-                                            get_stop_words, load_language,
+                                            get_stop_words, load_idiom,
                                             parse_config)
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
-BASE_LANG_PATH = Path(__file__).parent.joinpath('lang')
-TEST_LANG_NAME = 'valid'
-TEST_LANG_JSON = BASE_LANG_PATH.joinpath(TEST_LANG_NAME + '.json')
-TEST_LANG_EXPECTED = (2, 'valid', 2)
-DEFAULT_LANG_EXPECTED = (20, 'english', 201)
+BASE_IDIOM_PATH = Path(__file__).parent.joinpath('idioms')
+TEST_IDIOM_NAME = 'valid'
+TEST_IDIOM_JSON = BASE_IDIOM_PATH.joinpath(TEST_IDIOM_NAME + '.json')
+TEST_IDIOM_EXPECTED = (2, 'valid', 2)
+DEFAULT_IDIOM_EXPECTED = (20, 'english', 201)
 TEST_DEFAULT_INITIAL = False
 TEST_DEFAULT_CUSTOM = ['foo', 'bar']
 TEST_DEFAULT_STOPS = {
@@ -23,11 +23,11 @@ TEST_DEFAULT_STOPS = {
     'custom': TEST_DEFAULT_CUSTOM, }
 
 
-def compare_loaded_language(
+def compare_loaded_idiom(
         received: typing.Tuple[int, str, typing.List],
         expected: typing.Tuple[int, str, int]
         ) -> bool:
-    """Compare loaded language data to expected
+    """Compare loaded idiom data to expected
 
     Arguments:
         received {dict} -- received data
@@ -36,10 +36,10 @@ def compare_loaded_language(
     Raises:
         ValueError -- Wrong data
     """
-    # ideal_sentence_length, nltk_language
+    # ideal_sentence_length, idiom
     for i in range(2):
         if (received[i] != expected[i]):
-            raise ValueError('wrong language data loaded')
+            raise ValueError('wrong idiom data loaded')
 
     # stop_words
     if len(received[2]) != expected[2]:
@@ -49,18 +49,18 @@ def compare_loaded_language(
 
 
 @mark.parametrize(
-    'root,lang,expected',
-    [(BASE_LANG_PATH, TEST_LANG_NAME, TEST_LANG_JSON), ],
+    'root,idiom,expected',
+    [(BASE_IDIOM_PATH, TEST_IDIOM_NAME, TEST_IDIOM_JSON), ],
     ids=['test path', ])
-def test_get_config_path(root: str, lang: str, expected: Path) -> None:
+def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
     """Get config paths
 
     Arguments:
-        root {str} -- root directory of language config
-        lang {str} -- basename of language config
+        root {str} -- root directory of idiom config
+        idiom {str} -- basename of idiom config
         expected {Path} -- self explanatory
     """
-    received = get_config_path(root, lang)
+    received = get_config_path(root, idiom)
 
     assert (received == expected), assert_ex(
         'config path',
@@ -102,11 +102,11 @@ def test_get_stop_words(
         spec {typing.Dict[str, typing.Any]} -- nominal configuration
         expected {int} -- number of expected words (-ish)
     """
-    lang_spec = {'stop_words': spec}
-    nltk_language = 'english'
+    idiom_spec = {'stop_words': spec}
+    language = 'english'
     user = spec.get('user', [])
 
-    received = list(get_stop_words(lang_spec, nltk_language))
+    received = list(get_stop_words(idiom_spec, language))
     missing = len([x for x in user if x not in received]) if user else 0
     test = (missing == 0)
 
@@ -125,20 +125,23 @@ def test_get_stop_words(
 
 @mark.parametrize(
     'path_dict,expected', [
-        ({}, DEFAULT_LANG_EXPECTED),
-        ({'lang': 'en'}, DEFAULT_LANG_EXPECTED),
-        ({'root': BUILTIN}, DEFAULT_LANG_EXPECTED),
-        ({'lang': TEST_LANG_NAME, 'root': BASE_LANG_PATH}, TEST_LANG_EXPECTED),
-        ({'lang': 'malformed', 'root': BASE_LANG_PATH}, ValueError),
-        ({'lang': 'INVALID', 'root': BASE_LANG_PATH}, ValueError),
+        ({}, DEFAULT_IDIOM_EXPECTED),
+        ({'idiom': 'default'}, DEFAULT_IDIOM_EXPECTED),
+        ({'root': BUILTIN}, DEFAULT_IDIOM_EXPECTED),
+        ({
+            'idiom': TEST_IDIOM_NAME,
+            'root': BASE_IDIOM_PATH
+        }, TEST_IDIOM_EXPECTED),
+        ({'idiom': 'malformed', 'root': BASE_IDIOM_PATH}, ValueError),
+        ({'idiom': 'INVALID', 'root': BASE_IDIOM_PATH}, ValueError),
     ],
     ids=pad_to_longest([
-        'root: def., lang: def.      == default lang',
-        'root: def., lang: exp.      == default lang',
-        'root: exp., lang: def.      == default lang',
-        'root: exp., lang: exp.      == default lang',
-        'root: exp., lang: MALFORMED == (error)',
-        'root: exp., lang: INVALID   == (error)',
+        'root: def., idiom: def.      == default idiom',
+        'root: def., idiom: exp.      == default idiom',
+        'root: exp., idiom: def.      == default idiom',
+        'root: exp., idiom: exp.      == default idiom',
+        'root: exp., idiom: MALFORMED == (error)',
+        'root: exp., idiom: INVALID   == (error)',
     ]))
 def test_parse_config(
         path_dict: typing.Dict[str, typing.Any],
@@ -149,15 +152,15 @@ def test_parse_config(
     Arguments:
         path_dict {typing.Dict[str, typing.Any]} --
             arguments for Parser initialization
-        expected {typing.Any} -- language config or exception
+        expected {typing.Any} -- idiom config or exception
     """
-    path_kwargs = {'root': BUILTIN, 'lang': DEFAULT_LANG}
+    path_kwargs = {'root': BUILTIN, 'idiom': DEFAULT_IDIOM}
     path_kwargs.update(path_dict)
     cfg_path = get_config_path(**path_kwargs)
 
     try:
-        ideal, nltk_language, stop_words = parse_config(cfg_path)
-        received = (ideal, nltk_language, len(stop_words))
+        ideal, language, stop_words = parse_config(cfg_path)
+        received = (ideal, language, len(stop_words))
 
     except Exception as e:
         received = check_exception(e, expected)
@@ -171,10 +174,10 @@ def test_parse_config(
 @mark.parametrize(
     'kwargs,expected',
     [
-        ({}, DEFAULT_LANG_EXPECTED),
-        [{'lang': '../../../etc'}, PermissionError],
+        ({}, DEFAULT_IDIOM_EXPECTED),
+        [{'idiom': '../../../etc'}, PermissionError],
         [{'root': Path(__file__)}, FileNotFoundError],
-        [{'lang': 'malformed', 'root': BASE_LANG_PATH}, ValueError],
+        [{'idiom': 'malformed', 'root': BASE_IDIOM_PATH}, ValueError],
     ],
     ids=pad_to_longest([
         'valid: yes',
@@ -182,11 +185,11 @@ def test_parse_config(
         'valid: no, file not found',
         'valid: no, parse error',
     ]))
-def test_load_language(
+def test_load_idiom(
         kwargs: typing.Dict[str, typing.Any],
         expected: typing.Tuple[int, str, int]
         ) -> None:
-    """Test Parser.load_language()
+    """Test `oolongt.parser.load_idiom()`
 
     Arguments:
         kwargs {typing.Dict[str, typing.Any]} -- kwargs passed to Parser
@@ -195,8 +198,8 @@ def test_load_language(
     test = False
 
     try:
-        received = load_language(**kwargs)
-        test = compare_loaded_language(received, expected)
+        received = load_idiom(**kwargs)
+        test = compare_loaded_idiom(received, expected)
 
     except (PermissionError, FileNotFoundError, ValueError) as e:
         test = check_exception(e, expected) is not None
@@ -206,28 +209,28 @@ def test_load_language(
 
 class TestParserConfig(object):
     @mark.parametrize(
-        'root,lang,expected',
-        [(BUILTIN, DEFAULT_LANG, DEFAULT_LANG_EXPECTED), ],
+        'root,idiom,expected',
+        [(BUILTIN, DEFAULT_IDIOM, DEFAULT_IDIOM_EXPECTED), ],
         ids=pad_to_longest(['defaults', ])
     )
     def test_init(
             self,
             root: str,
-            lang: str,
+            idiom: str,
             expected: typing.Tuple[int, str, int]
             ) -> None:
         """Test initialization
 
         Arguments:
-        root {str} -- root directory of language config
-        lang {str} -- basename of language config
+        root {str} -- root directory of idiom config
+        idiom {str} -- basename of idiom config
             expected {typing.Tuple[int, str, int]} --
                 [ideal words, NLTK language, stop word count]
         """
-        config = ParserConfig(root, lang)
+        config = ParserConfig(root, idiom)
         received = (
             config.ideal_sentence_length,
-            config.nltk_language,
+            config.language,
             len(config.stop_words))
 
         assert (received == expected), assert_ex(

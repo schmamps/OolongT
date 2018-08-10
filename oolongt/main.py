@@ -1,7 +1,7 @@
 """Simple sentence scoring & summarization functions"""
 import typing
 
-from oolongt.constants import BUILTIN, DEFAULT_LANG, DEFAULT_LENGTH
+from oolongt.constants import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
 from oolongt.parser import Parser
 from oolongt.summarizer import Summarizer
 from oolongt.typedefs.scored_sentence import ScoredSentence
@@ -11,9 +11,10 @@ def score_body_sentences(
         body: str,
         title: str,
         root: str = BUILTIN,
-        lang: str = DEFAULT_LANG,
+        idiom: str = DEFAULT_IDIOM,
         source: typing.Any = None,
-        category: typing.Any = None
+        category: typing.Any = None,
+        length: typing.Any = None
         ) -> typing.List[ScoredSentence]:
     """List and score every sentence in `body`
 
@@ -22,8 +23,8 @@ def score_body_sentences(
         title {str} -- title of content
 
     Keyword Arguments:
-        root {str} -- root directory of language config
-        lang {str} -- basename of language config
+        root {str} -- root directory of idiom config
+        idiom {str} -- basename of idiom config
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
@@ -69,7 +70,7 @@ def get_best_sentences(
         title: str,
         length: float = DEFAULT_LENGTH,
         root: str = BUILTIN,
-        lang: str = DEFAULT_LANG,
+        idiom: str = DEFAULT_IDIOM,
         source: typing.Any = None,
         category: typing.Any = None
         ) -> typing.List[ScoredSentence]:
@@ -81,10 +82,10 @@ def get_best_sentences(
 
     Keyword Arguments:
         length {float} -- # of sentences (default: {DEFAULT_LENGTH})
-        root {str} -- root directory of language data
+        root {str} -- root directory of idiom data
             (default: {Parser.BUILTIN})
-        lang {str} -- basename of language file
-            (default: {parser.DEFAULT_LANG})
+        idiom {str} -- basename of idiom file
+            (default: {parser.DEFAULT_IDIOM})
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
@@ -92,7 +93,7 @@ def get_best_sentences(
         list[ScoredSentence] -- best sentences from source text
     """
     sentences = score_body_sentences(
-        body, title, root, lang, source, category)
+        body, title, root, idiom, source, category)
     slice_length = get_slice_length(length, len(sentences))
 
     return sorted(sentences, reverse=True)[:slice_length]
@@ -103,7 +104,7 @@ def summarize(
         title: str,
         length: float = DEFAULT_LENGTH,
         root: str = BUILTIN,
-        lang: str = DEFAULT_LANG,
+        idiom: str = DEFAULT_IDIOM,
         source: typing.Any = None,
         category: typing.Any = None
         ) -> typing.List[str]:
@@ -121,10 +122,10 @@ def summarize(
     Keyword Arguments:
         length {float} -- sentences to return (int) or
             fraction of total (float) (default: {5})
-        root {str} -- root directory of language data
+        root {str} -- root directory of idiom data
             (default: {parser.BUILTIN})
-        lang {str} -- basename of language file
-            (default: {parser.DEFAULT_LANG})
+        idiom {str} -- basename of idiom file
+            (default: {parser.DEFAULT_IDIOM})
         source {any} -- unused (default: {None})
         category {any} -- unused (default: {None})
 
@@ -132,6 +133,6 @@ def summarize(
         list[str] -- top sentences in content order
     """
     sentences = get_best_sentences(
-        title, body, length, root, lang, source, category)
+        title, body, length, root, idiom, source, category)
 
     return [s.text for s in sorted(sentences, key=lambda x: x.index)]

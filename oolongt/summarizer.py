@@ -1,7 +1,7 @@
 """Text summarizer"""
 import typing
 
-from oolongt.constants import BUILTIN, DEFAULT_LANG, TOP_KEYWORD_MIN_RANK
+from oolongt.constants import BUILTIN, DEFAULT_IDIOM, TOP_KEYWORD_MIN_RANK
 from oolongt.parser import Parser
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from oolongt.typedefs.scored_sentence import ScoredSentence
@@ -132,8 +132,12 @@ def score_by_sbs(
 
 
 class Summarizer:
-    def __init__(self, root: str = BUILTIN, lang: str = DEFAULT_LANG) -> None:
-        self.parser = Parser(root, lang)
+    def __init__(
+            self,
+            root: str = BUILTIN,
+            idiom: str = DEFAULT_IDIOM
+            ) -> None:
+        self.parser = Parser(root, idiom)
 
     def get_all_sentences(
             self,

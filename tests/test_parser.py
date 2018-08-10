@@ -5,7 +5,7 @@ import typing
 from pytest import mark
 
 from oolongt import roughly
-from oolongt.parser import DEFAULT_LANG, Parser, remove_punctuations
+from oolongt.parser import DEFAULT_IDIOM, Parser, remove_punctuations
 from oolongt.simple_io import load_json
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from tests.constants import SAMPLES
@@ -76,7 +76,7 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(lang=samp.lang)
+        p = Parser(idiom=samp.idiom)
 
         expected = sorted(self._get_expected_keywords(samp.keywords))
         received = sorted(p.get_key_stems(samp.body))
@@ -200,7 +200,7 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(lang=samp.lang)
+        p = Parser(idiom=samp.idiom)
         expected = None
 
         try:

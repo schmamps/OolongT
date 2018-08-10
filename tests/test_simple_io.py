@@ -8,17 +8,17 @@ from oolongt import parser, simple_io
 from tests.helpers import assert_ex
 
 
-def get_json_path(lang: str) -> Path:
-    """Get path to test language config
+def get_json_path(idiom: str) -> Path:
+    """Get path to test idiom config
 
     Arguments:
-        lang {str} -- language
+        idiom {str} -- idiom
 
     Returns:
-        str -- path to language config JSON file
+        str -- path to idiom config JSON file
     """
     return Path(__file__).parent.joinpath(
-        'lang', lang + '.json')
+        'idioms', idiom + '.json')
 
 
 @mark.parametrize(
@@ -32,7 +32,7 @@ def test_load_json(path: typing.Any) -> None:
             'name': 'Valid Language Config'
         },
         'ideal': 2,
-        'nltk_language': 'valid',
+        'language': 'valid',
         'stop_words': {'nltk': False, 'user': ['foo', 'bar']}}
     received = simple_io.load_json(path)
 

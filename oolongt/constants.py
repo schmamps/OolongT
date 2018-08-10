@@ -10,10 +10,10 @@ DEFAULT_TOLERANCE = 0.0000000001    # simple floats
 COMPOSITE_TOLERANCE = 0.0000000001  # composite scores
 
 # parser
-BUILTIN = str(Path(__file__).parent.joinpath('lang'))
-DEFAULT_LANG = 'en'
+BUILTIN = str(Path(__file__).parent.joinpath('idioms'))
+DEFAULT_IDIOM = 'default'
 DEFAULT_IDEAL_LENGTH = 20
-DEFAULT_NLTK_LANGUAGE = 'english'
+DEFAULT_LANGUAGE = 'english'
 DEFAULT_NLTK_STOPS = True
 DEFAULT_USER_STOPS = []   # type: List[str]
 

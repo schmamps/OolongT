@@ -286,7 +286,7 @@ class TestSummarizer:
         Arguments:
             samp {Sample} -- sample data
         """
-        summ = Summarizer(lang=samp.lang)
+        summ = Summarizer(idiom=samp.idiom)
         words = summ.parser.get_all_words(samp.sentences[0].text)
 
         expected = samp.length_score
@@ -320,7 +320,7 @@ class TestSummarizer:
         Arguments:
             samp {Sample} -- sample data
         """
-        summ = Summarizer(lang=samp.lang)
+        summ = Summarizer(idiom=samp.idiom)
         title_words = summ.parser.get_key_words(samp.title)
         sentence_words = summ.parser.get_all_words(samp.sentences[0].text)
 

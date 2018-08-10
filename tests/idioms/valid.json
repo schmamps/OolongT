@@ -2,7 +2,7 @@
 	"meta": {
 		"name": "Valid Language Config"
 	},
-	"nltk_language": "valid",
+	"language": "valid",
 	"ideal": 2,
 	"stop_words": {
 		"nltk": false,

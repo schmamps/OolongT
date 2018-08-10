@@ -6,7 +6,7 @@ import nltk.data
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from oolongt.typedefs.parser_config import BUILTIN, DEFAULT_LANG, ParserConfig
+from oolongt.typedefs.parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from oolongt.typedefs.scored_sentence import ScoredSentence
 
@@ -26,21 +26,25 @@ def remove_punctuations(text: str) -> str:
 
 
 class Parser:
-    def __init__(self, root: str = BUILTIN, lang: str = DEFAULT_LANG) -> None:
-        """Initialize class with `root`/`lang`.json
+    def __init__(
+            self,
+            root: str = BUILTIN,
+            idiom: str = DEFAULT_IDIOM
+            ) -> None:
+        """Initialize class with `root`/`idiom`.json
 
         Keyword Arguments:
-            root {str} -- root directory of language data
+            root {str} -- root directory of idiom data
                 (default: {parser.BUILTIN})
-            lang {str} -- basename of language file
-                (default: {parser.DEFAULT_LANG})
+            idiom {str} -- basename of idiom file
+                (default: {parser.DEFAULT_IDIOM})
 
         Raises:
             ValueError: missing/invalid configuration file
         """
-        config = ParserConfig(root, lang)
+        config = ParserConfig(root, idiom)
         isl = config.ideal_sentence_length
-        language = config.nltk_language
+        language = config.language
         stop_words = config.stop_words
 
         self.ideal_sentence_length = isl  # type: int

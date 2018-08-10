@@ -26,8 +26,8 @@ def load_config(root: Path, name: str) -> typing.Dict[str, typing.Any]:
     """Load initialization data for Sample
 
     Arguments:
-        root {str} -- root directory of language config
-        lang {str} -- basename of language config
+        root {str} -- root directory of idiom config
+        idiom {str} -- basename of idiom config
 
     Returns:
         typing.Dict[str, typing.Any] -- initialization data

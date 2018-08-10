@@ -5,33 +5,31 @@ from pathlib import Path
 
 from nltk.corpus import stopwords
 
-from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_LANG,
-                               DEFAULT_NLTK_LANGUAGE, DEFAULT_NLTK_STOPS,
+from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_IDIOM,
+                               DEFAULT_LANGUAGE, DEFAULT_NLTK_STOPS,
                                DEFAULT_USER_STOPS)
 from oolongt.simple_io import load_json
 from oolongt.typedefs.repr_able import ReprAble
 
-CFG_TUPLE = typing.Tuple[int, str, typing.List[str]]
 
-
-def get_config_path(root: str, lang: str) -> Path:
-    """Get path to language config
+def get_config_path(root: str, idiom: str) -> Path:
+    """Get path to idiom config
 
     Arguments:
-        root {str} -- root directory of language config
-        lang {str} -- basename of language config
+        root {str} -- root directory of idiom config
+        idiom {str} -- basename of idiom config
 
     Returns:
         Tuple[Path, Path] -- pathlib.Path to file
     """
     root_path = Path(root)
-    file_name = '{}.json'.format(lang)
+    file_name = '{}.json'.format(idiom)
 
     return root_path.joinpath(file_name)
 
 
-def get_stop_words(lang_spec: dict, nltk_language: str) -> set:
-    """List stop words based on language configuration
+def get_stop_words(idiom_spec: dict, language: str) -> set:
+    """List stop words based on idiom configuration
 
     Returns:
         set -- list of stop words
@@ -39,17 +37,17 @@ def get_stop_words(lang_spec: dict, nltk_language: str) -> set:
     stop_cfg = {
         'nltk': DEFAULT_NLTK_STOPS,
         'user': DEFAULT_USER_STOPS, }  # type: typing.Dict[str, typing.Any]
-    stop_cfg.update(lang_spec.get('stop_words', {}))
+    stop_cfg.update(idiom_spec.get('stop_words', {}))
     use_nltk = bool(stop_cfg['nltk'])
     use_user = isinstance(stop_cfg['user'], list)
 
-    nltk = stopwords.words(nltk_language) if use_nltk else []
+    nltk = stopwords.words(language) if use_nltk else []
     user = [str(word) for word in stop_cfg['user']] if use_user else []
 
     return set(nltk + user)
 
 
-def parse_config(path: Path) -> CFG_TUPLE:
+def parse_config(path: Path) -> typing.Tuple[int, str, typing.List[str]]:
     """Load defaults, override with loaded data
 
     Arguments:
@@ -63,32 +61,35 @@ def parse_config(path: Path) -> CFG_TUPLE:
             ideal length, NLTK language, stop words
     """
     try:
-        lang_spec = load_json(path.absolute())
+        idiom_spec = load_json(path.absolute())
 
-        ideal = lang_spec.get(
+        ideal = idiom_spec.get(
             'ideal', DEFAULT_IDEAL_LENGTH)           # type: int
-        nltk_language = lang_spec.get(
-            'nltk_language', DEFAULT_NLTK_LANGUAGE)  # type: str
+        language = idiom_spec.get(
+            'language', DEFAULT_LANGUAGE)  # type: str
         stop_words = get_stop_words(
-            lang_spec, nltk_language)                # type: typing.Set[str]
+            idiom_spec, language)                # type: typing.Set[str]
 
     except (JSONDecodeError, AttributeError):
         raise ValueError('invalid config file: {!r}'.format(path))
 
-    return int(ideal), str(nltk_language), list(stop_words)
+    return int(ideal), str(language), list(stop_words)
 
 
-def load_language(root: str = BUILTIN, lang: str = DEFAULT_LANG) -> CFG_TUPLE:
-    """Get class initialization data from `root`/`lang`.json
+def load_idiom(
+        root: str = BUILTIN,
+        idiom: str = DEFAULT_IDIOM
+        ) -> typing.Tuple[int, str, typing.List[str]]:
+    """Get class initialization data from `root`/`idiom`.json
 
     Arguments:
-        root {str} -- root directory of language data
+        root {str} -- root directory of idiom data
             (default: {parser.BUILTIN})
-        lang {str} -- basename of language file
-            (default: {parser.DEFAULT_LANG})
+        idiom {str} -- basename of idiom file
+            (default: {parser.DEFAULT_IDIOM})
 
     Raises:
-        PermissionError -- directory traversal via lang
+        PermissionError -- directory traversal via idiom
         JSONDecodeError -- unable to load JSON from file
 
     Returns:
@@ -96,14 +97,14 @@ def load_language(root: str = BUILTIN, lang: str = DEFAULT_LANG) -> CFG_TUPLE:
             ideal length, NLTK language, stop words
     """
     root_path = Path(root)
-    cfg_path = get_config_path(root, lang)
+    cfg_path = get_config_path(root, idiom)
 
     try:
         # pylint: disable=no-member
         cfg_path.resolve().relative_to(root_path.resolve())
 
     except (ValueError, OSError):
-        raise PermissionError('directory traversal in lang: ' + lang)
+        raise PermissionError('directory traversal in idiom: ' + idiom)
 
     config = parse_config(cfg_path)
 
@@ -111,9 +112,9 @@ def load_language(root: str = BUILTIN, lang: str = DEFAULT_LANG) -> CFG_TUPLE:
 
 
 class ParserConfig(ReprAble):
-    def __init__(self, root: str, lang: str) -> None:
-        ideal, nltk_language, stop_words = load_language(root, lang)
+    def __init__(self, root: str, idiom: str) -> None:
+        ideal, language, stop_words = load_idiom(root, idiom)
 
         self.ideal_sentence_length = ideal  # type: int
-        self.nltk_language = nltk_language  # type: str
+        self.language = language            # type: str
         self.stop_words = stop_words        # type: typing.List[str]

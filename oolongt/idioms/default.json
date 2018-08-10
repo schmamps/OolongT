@@ -1,9 +1,9 @@
 {
 	"meta": {
-		"name": "English"
+		"name": "English (default)"
 	},
 	"ideal": 20,
-	"nltk_language": "english",
+	"language": "english",
 	"stop_words": {
 		"nltk": true,
 		"user": [
