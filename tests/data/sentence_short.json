@@ -9,8 +9,8 @@
 	"keyword_count": 3,
 	"keywords": [
 		{"score": 0.5, "count": 1, "word": "paragraph"},
-		{"score": 0.5, "count": 1, "word": "sentence"},
-		{"score": 0.5, "count": 1, "word": "contains"}
+		{"score": 0.5, "count": 1, "word": "sentenc"},
+		{"score": 0.5, "count": 1, "word": "contain"}
 	],
 	"sentences": [
 		{

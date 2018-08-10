@@ -7,19 +7,19 @@
 	"title": "Puppies, Kittens Dance Happily!",
 	"keyword_count": 13,
 	"keywords": [
-		{"score": 0.11538461538461539, "count": 1, "word": "accordions"},
-		{"score": 0.11538461538461539, "count": 1, "word": "puppies"},
-		{"score": 0.11538461538461539, "count": 1, "word": "kittens"},
-		{"score": 0.11538461538461539, "count": 1, "word": "happily"},
-		{"score": 0.11538461538461539, "count": 1, "word": "fiddles"},
-		{"score": 0.11538461538461539, "count": 1, "word": "fluffy"},
-		{"score": 0.11538461538461539, "count": 1, "word": "banjos"},
-		{"score": 0.11538461538461539, "count": 1, "word": "woods"},
+		{"score": 0.11538461538461539, "count": 1, "word": "accordion"},
+		{"score": 0.11538461538461539, "count": 1, "word": "happili"},
+		{"score": 0.11538461538461539, "count": 1, "word": "kitten"},
+		{"score": 0.11538461538461539, "count": 1, "word": "fluffi"},
 		{"score": 0.11538461538461539, "count": 1, "word": "sound"},
-		{"score": 0.11538461538461539, "count": 1, "word": "merry"},
-		{"score": 0.11538461538461539, "count": 1, "word": "horns"},
-		{"score": 0.11538461538461539, "count": 1, "word": "fuzzy"},
-		{"score": 0.11538461538461539, "count": 1, "word": "dance"}
+		{"score": 0.11538461538461539, "count": 1, "word": "puppi"},
+		{"score": 0.11538461538461539, "count": 1, "word": "merri"},
+		{"score": 0.11538461538461539, "count": 1, "word": "fuzzi"},
+		{"score": 0.11538461538461539, "count": 1, "word": "fiddl"},
+		{"score": 0.11538461538461539, "count": 1, "word": "banjo"},
+		{"score": 0.11538461538461539, "count": 1, "word": "wood"},
+		{"score": 0.11538461538461539, "count": 1, "word": "horn"},
+		{"score": 0.11538461538461539, "count": 1, "word": "danc"}
 	],
 	"sentences": [
 		{
@@ -27,11 +27,11 @@
 			"id": "(the only one)",
 			"sbs_score": 0.07500000000000001,
 			"dbs_score": 0.11372041420118345,
-			"title_score": 1.0,
+			"title_score": 0.0,
 			"length_score": 1.0,
 			"position_score": 0.15,
 			"keyword_score": 0.9436020710059173,
-			"total_score": 1.0093010355029588,
+			"total_score": 0.6343010355029587,
 			"text": "Fuzzy kittens and fluffy puppies dance happily in the woods to the merry sound of accordions, fiddles, banjos, and horns.",
 			"rank": 0
 		}
