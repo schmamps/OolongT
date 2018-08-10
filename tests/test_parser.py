@@ -5,8 +5,7 @@ import typing
 from pytest import mark
 
 from oolongt import roughly
-from oolongt.parser import (DEFAULT_LANG, Parser, remove_punctuations,
-                            split_words)
+from oolongt.parser import DEFAULT_LANG, Parser, remove_punctuations
 from oolongt.simple_io import load_json
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from tests.constants import SAMPLES
@@ -14,37 +13,6 @@ from tests.helpers import (assert_ex, get_sample_ids, get_samples,
                            pad_to_longest)
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_keyword import SampleKeyword
-
-
-@mark.parametrize(
-    'samp',
-    get_samples([
-        'empty',
-        'sentence_1word',
-        'sentence_medium',
-    ]),
-    ids=pad_to_longest([
-        'empty string',
-        'one word',
-        'medium sentence',
-    ]))
-def test_split_words(samp: Sample) -> None:
-    """Test oolongt.parser.split_words()
-
-    Arguments:
-        samp {Sample} -- sample data
-    """
-    p = Parser()
-    text = samp.body
-
-    expected = samp.split_words
-    received = split_words(text, p.language)
-
-    assert (received == expected), assert_ex(
-        'word split',
-        expected,
-        received,
-        hint=samp.name)
 
 
 @mark.parametrize(
@@ -97,6 +65,24 @@ class TestParser:
         for received in p.get_all_words(samp.body):
             assert (received in expected), assert_ex(
                 'all words', received, None)
+
+    @mark.parametrize(
+        'samp',
+        get_samples(['essay_snark'] + SAMPLES),
+        ids=get_sample_ids(['essay_snark'] + SAMPLES))
+    def test_get_key_stems(self, samp: Sample) -> None:
+        """Test Parser.get_key_stems()
+
+        Arguments:
+            samp {Sample} -- sample data
+        """
+        p = Parser(lang=samp.lang)
+
+        expected = sorted(self._get_expected_keywords(samp.keywords))
+        received = sorted(p.get_key_stems(samp.body))
+
+        assert (received == expected), assert_ex(
+            'keyword list', expected, received)
 
     def _count_keywords(
             self,
@@ -206,24 +192,6 @@ class TestParser:
 
     @mark.parametrize(
         'samp',
-        get_samples(['essay_snark'] + SAMPLES),
-        ids=get_sample_ids(['essay_snark'] + SAMPLES))
-    def test_get_keyword_list(self, samp: Sample) -> None:
-        """Test Parser.get_keyword_list()
-
-        Arguments:
-            samp {Sample} -- sample data
-        """
-        p = Parser(lang=samp.lang)
-
-        expected = sorted(self._get_expected_keywords(samp.keywords))
-        received = sorted(p.get_keyword_strings(samp.body))
-
-        assert (received == expected), assert_ex(
-            'keyword list', expected, received)
-
-    @mark.parametrize(
-        'samp',
         get_samples(['sentence_short', 'sentence_list', ] + SAMPLES),
         ids=get_sample_ids(['sentence_short', 'sentence_list', ] + SAMPLES))
     def test_split_sentences(self, samp: Sample) -> None:
@@ -253,29 +221,27 @@ class TestParser:
         get_samples([
             'empty',
             'sentence_1word',
-            'sentence_2words',
-            'sentence_list',
+            'sentence_medium',
         ]),
         ids=pad_to_longest([
             'empty string',
             'one word',
-            'two words',
-            'list of sentences',
+            'medium sentence',
         ]))
-    def test_remove_stop_words(self, samp: Sample) -> None:
-        """Test Parser.remove_stop_words()
+    def test_split_words(self, samp: Sample) -> None:
+        """Test Parser.split_words()
 
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(lang=samp.lang)
-        words = split_words(samp.body, p.language)
+        p = Parser()
+        text = samp.body
 
-        expected = samp.remove_stop_words
-        received = p.remove_stop_words(words)
+        expected = samp.split_words
+        received = p.split_words(text)
 
         assert (received == expected), assert_ex(
-            'remove stop words',
-            received,
+            'word split',
             expected,
+            received,
             hint=samp.name)
