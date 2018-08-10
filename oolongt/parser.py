@@ -25,20 +25,6 @@ def remove_punctuations(text: str) -> str:
     return unpunct
 
 
-def split_words(text: str, language: str) -> typing.Iterator[str]:
-    """List constituent words of `text` via tokenizer sequentially
-
-    Arguments:
-        sentence {str} -- text to split
-
-    Returns:
-        typing.List[str] -- words in text
-    """
-    split = word_tokenize(text.lower(), language=language)
-
-    return split
-
-
 class Parser:
     def __init__(self, root: str = BUILTIN, lang: str = DEFAULT_LANG) -> None:
         """Initialize class with `root`/`lang`.json
@@ -68,14 +54,13 @@ class Parser:
             stop_words=True,
             stem=False,
             ) -> typing.List[str]:
-        bare = remove_punctuations(text).lower()
-        words = split_words(bare, self.language)
+        words = self.split_words(text)
 
         if not stop_words:
-            words = self.filter_stop_words(words)
+            words = filter(self.is_not_stop_word, words)
 
         if stem:
-            words = self.stem(words)
+            words = map(self._stemmer.stem, words)
 
         return list(words)
 
@@ -155,33 +140,19 @@ class Parser:
 
         return sent_tokenize(normalized, language=self.language)
 
-    def filter_stop_words(
-            self,
-            words: typing.Iterator[str]
-            ) -> typing.Iterator[str]:
-        """Filter `words` not in `self.stop_words`
+    def split_words(self, text: str) -> typing.Iterator[str]:
+        """List constituent words of `text` via tokenizer sequentially
 
         Arguments:
-            words {typing.Iterator[str]} -- word list
+            sentence {str} -- text to split
 
         Returns:
-            typing.Iterator[str] -- filter() of words
+            typing.List[str] -- words in text
         """
-        return filter(self.is_not_stop_word, words)
+        bare = remove_punctuations(text).lower()
+        split = word_tokenize(bare.lower(), language=self.language)
 
-    def stem(
-            self,
-            words: typing.Iterator[str]
-            ) -> typing.Iterator[str]:
-        """Map words with stemmer
-
-        Arguments:
-            words {typing.Iterator[str]} -- word list
-
-        Returns:
-            typing.Iterator[str] -- stem list
-        """
-        return map(self._stemmer.stem, words)
+        return split
 
     def is_not_stop_word(self, word: str) -> bool:
         """Verify word is not in self.stop_words
