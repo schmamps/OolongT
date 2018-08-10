@@ -118,7 +118,7 @@ def test_score_frequency(samp: Sample, sentence: SampleSentence) -> None:
         sentence {SampleSentence} -- individual sentence from sample
     """
     summ = Summarizer()
-    words = summ.parser.get_all_words(sentence.text)
+    words = summ.parser.get_all_stems(sentence.text)
     top_keywords = summ.get_top_keywords(samp.body, None, None)
     top_keyword_list = pluck_keyword_words(top_keywords)
 
@@ -321,7 +321,7 @@ class TestSummarizer:
             samp {Sample} -- sample data
         """
         summ = Summarizer(lang=samp.lang)
-        title_words = summ.parser.get_keyword_strings(samp.title)
+        title_words = summ.parser.get_key_words(samp.title)
         sentence_words = summ.parser.get_all_words(samp.sentences[0].text)
 
         expected = samp.title_score
