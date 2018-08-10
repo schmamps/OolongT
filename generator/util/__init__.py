@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from tests import helpers  # circular dependency hack
-from tests.typing.sample import Sample
+from tests.typedefs.sample import Sample
 
 
 def get_sample_paths():
