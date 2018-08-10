@@ -153,17 +153,17 @@ class Summarizer:
         Returns:
             list[ScoredSentence] -- list of scored sentences
         """
-        sentence_words = self.parser.split_sentences(body)
-        title_kw_words = self.parser.get_keyword_strings(title)
+        sentences = self.parser.split_sentences(body)
+        title_kw_words = self.parser.get_key_words(title)
         top_kws = self.get_top_keywords(body, source, category)
-        top_kw_words = pluck_keyword_words(top_kws)
-        of = len(sentence_words)
+        top_kw_stems = pluck_keyword_words(top_kws)
+        of = len(sentences)
 
         scored_sentences = [
             self.get_sentence(
                 text, idx, of,
-                title_kw_words, top_kws, top_kw_words)
-            for idx, text in enumerate(sentence_words)]
+                title_kw_words, top_kws, top_kw_stems)
+            for idx, text in enumerate(sentences)]
 
         return scored_sentences
 
@@ -196,7 +196,7 @@ class Summarizer:
             of: int,
             title_kw_words: typing.List[str],
             top_kws: typing.Sequence[ScoredKeyword],
-            top_kw_words: typing.List[str]
+            top_kw_stems: typing.List[str]
             ) -> ScoredSentence:
         """Score sentence (`text`) on several factors
 
@@ -206,19 +206,19 @@ class Summarizer:
             of {int} -- len() of sentences in `text`
             title_kw_words {typing.List[str]} -- key words in title
             top_kws {typing.List[ScoredKeyword]} -- top keywords in body
-            top_kw_words {typing.List[str]} -- values of 'word' in top_keywords
+            top_kw_stems {typing.List[str]} -- values of 'word' in top_keywords
 
         Returns:
             ScoredSentence -- scored sentence
         """
-        sentence_words = self.parser.get_all_words(text)
+        sentence_stems = self.parser.get_all_stems(text)
 
-        title_score = self.score_by_title(title_kw_words, sentence_words)
-        length_score = self.score_by_length(sentence_words)
+        title_score = self.score_by_title(title_kw_words, sentence_stems)
+        length_score = self.score_by_length(sentence_stems)
         dbs_score = score_by_dbs(
-            sentence_words, top_kws, top_kw_words)
+            sentence_stems, top_kws, top_kw_stems)
         sbs_score = score_by_sbs(
-            sentence_words, top_kws, top_kw_words)
+            sentence_stems, top_kws, top_kw_stems)
 
         scored = ScoredSentence(
                 text, index, of,
