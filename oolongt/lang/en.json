@@ -6,6 +6,30 @@
 	"nltk_language": "english",
 	"stop_words": {
 		"nltk": true,
-		"user": []
+		"user": [
+			"arent",
+			"couldnt",
+			"didnt",
+			"doesnt",
+			"dont",
+			"hadnt",
+			"hasnt",
+			"havent",
+			"isnt",
+			"its",
+			"mightnt",
+			"mustnt",
+			"neednt",
+			"shant",
+			"shes",
+			"shouldve",
+			"shouldnt",
+			"thatll",
+			"wasnt",
+			"werent",
+			"wont",
+			"wouldnt",
+			"youd"
+		]
 	}
 }
