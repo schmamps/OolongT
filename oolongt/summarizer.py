@@ -261,6 +261,9 @@ class Summarizer:
         Returns:
             float -- score
         """
+        if len(title_kw_words) == 0:
+            return 0.0
+
         matched_kw_words = [
             word
             for word in sentence_words
