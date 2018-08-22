@@ -4,3 +4,4 @@ python-magic==0.4.15
 beautifulsoup4==4.6.1
 PyPDF2==1.26.0
 docx2txt==0.7
+kinda==0.9.9
