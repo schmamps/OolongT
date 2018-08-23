@@ -1,7 +1,8 @@
 """Sentence string and score data"""
 from math import ceil
 
-from oolongt import roughly
+import kinda
+
 from oolongt.constants import COMPOSITE_TOLERANCE
 from oolongt.typedefs.repr_able import ReprAble
 
@@ -74,15 +75,15 @@ class ScoredSentence(ReprAble):
             self.sbs_score)
 
     def __eq__(self, other) -> bool:
-        return roughly.eq(
+        return kinda.eq(
             self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
     def __lt__(self, other) -> bool:
-        return roughly.lt(
+        return kinda.lt(
             self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
     def __gt__(self, other) -> bool:
-        return roughly.gt(
+        return kinda.gt(
             self.total_score, other.total_score, rel_tol=COMPOSITE_TOLERANCE)
 
     def __ne__(self, other) -> bool:
