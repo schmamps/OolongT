@@ -1,15 +1,14 @@
 import typing
 
+import kinda
 from pytest import mark
 
-from oolongt import roughly
 from oolongt.typedefs.scored_sentence import (calc_decile,
                                               score_keyword_frequency,
                                               score_position, score_total)
 from tests.constants import SAMPLES
-from tests.helpers import (assert_ex, check_exception, get_sample_ids,
-                           get_sample_sentence_ids, get_sample_sentences,
-                           get_samples, index_of, pad_to_longest)
+from tests.helpers import (assert_ex, check_exception, get_sample_sentence_ids,
+                           get_sample_sentences, index_of)
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_sentence import SampleSentence
 
@@ -85,7 +84,7 @@ def test_score_position(index: int, expected: typing.Any) -> None:
 
     try:
         received = score_position(index, of)
-        test = roughly.eq(received, expected)
+        test = kinda.eq(received, expected)
 
     except Exception as e:
         received = check_exception(e, expected)
@@ -109,7 +108,7 @@ def test_score_keyword_frequency(
     expected = sentence.keyword_score
     received = score_keyword_frequency(sentence.dbs_score, sentence.sbs_score)
 
-    assert roughly.eq(received, expected), assert_ex(
+    assert kinda.eq(received, expected), assert_ex(
         'keyword frequency score',
         received,
         expected)
@@ -125,7 +124,7 @@ def test_score_total(sample: Sample, sentence: SampleSentence) -> None:
         sentence.title_score, sentence.keyword_score,
         sentence.length_score, sentence.position_score)
 
-    assert roughly.eq(received, expected), assert_ex(
+    assert kinda.eq(received, expected), assert_ex(
         'keyword frequency score',
         received,
         expected)
