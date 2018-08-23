@@ -1,19 +1,14 @@
 """Test for OoolongT exports"""
 import typing
-from math import floor
-from pathlib import Path
-from random import randint
 
+import kinda
 from pytest import mark
 
-from oolongt import roughly
-from oolongt.main import (DEFAULT_LENGTH, get_slice_length,
-                          score_body_sentences, summarize)
+from oolongt.main import get_slice_length, score_body_sentences, summarize
 from tests.constants import DATA_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_ids,
                            get_samples, pad_to_longest, snip)
 from tests.typedefs.sample import Sample
-from tests.typedefs.sample_sentence import SampleSentence
 
 
 @mark.parametrize(
@@ -30,7 +25,7 @@ def test_score_body_sentences(samp: Sample) -> None:
         expected = samp.sentences[i].total_score
         received = sentence.total_score
 
-        assert roughly.eq(received, expected), assert_ex(
+        assert kinda.eq(received, expected), assert_ex(
             'sentence score',
             received,
             expected,
