@@ -1,12 +1,10 @@
 """ Test class for Parser """
-import os.path as path
 import typing
 
+import kinda
 from pytest import mark
 
-from oolongt import roughly
-from oolongt.parser import DEFAULT_IDIOM, Parser, remove_punctuations
-from oolongt.simple_io import load_json
+from oolongt.parser import Parser, remove_punctuations
 from oolongt.typedefs.scored_keyword import ScoredKeyword
 from tests.constants import SAMPLES
 from tests.helpers import (assert_ex, get_sample_ids, get_samples,
@@ -169,7 +167,7 @@ class TestParser:
 
             expected = exp_scores[word]
             received = rcv_scores[word]
-            assert roughly.eq(received, expected), assert_ex(
+            assert kinda.eq(received, expected), assert_ex(
                 'bad keyword score',
                 received,
                 expected,
