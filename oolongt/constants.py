@@ -6,8 +6,7 @@ DEFAULT_LENGTH = 5
 TOP_KEYWORD_MIN_RANK = 10
 
 # approximation
-DEFAULT_TOLERANCE = 0.0000000001    # simple floats
-COMPOSITE_TOLERANCE = 0.0000000001  # composite scores
+COMPOSITE_TOLERANCE = 0.000000000001  # composite scores
 
 # parser
 BUILTIN = str(Path(__file__).parent.joinpath('idioms'))
