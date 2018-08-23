@@ -1,7 +1,8 @@
 """Mock ScoredSentence"""
 import typing
 
-from oolongt import roughly
+import kinda
+
 from oolongt.constants import COMPOSITE_TOLERANCE
 from oolongt.typedefs.scored_sentence import ScoredSentence
 
@@ -55,31 +56,31 @@ class SampleSentence(ScoredSentence):
         if (self.of != other.of):
             return False
 
-        if roughly.ne(self.title_score, other.title_score,
-                      rel_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(self.title_score, other.title_score,
+                    abs_tol=COMPOSITE_TOLERANCE):
                 return False
 
-        if roughly.ne(self.length_score, other.length_score,
-                      rel_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(self.length_score, other.length_score,
+                    abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if roughly.ne(self.dbs_score, other.dbs_score,
-                      rel_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(self.dbs_score, other.dbs_score,
+                    abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if roughly.ne(self.sbs_score, other.sbs_score,
-                      rel_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(self.sbs_score, other.sbs_score,
+                    abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if roughly.ne(self.position_score, other.position_score):
+        if kinda.ne(self.position_score, other.position_score):
             return False
 
-        if roughly.ne(self.keyword_score, other.keyword_score,
-                      rel_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(self.keyword_score, other.keyword_score,
+                    abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if roughly.ne(self.total_score, other.total_score,
-                      rel_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(self.total_score, other.total_score,
+                    abs_tol=COMPOSITE_TOLERANCE):
             return False
 
         return True
