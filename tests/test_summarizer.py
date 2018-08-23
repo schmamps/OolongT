@@ -1,18 +1,17 @@
 """ Test class for Summarizer """
 import typing
-from math import floor
 
+import kinda
 from pytest import mark
 
-from oolongt import roughly
 from oolongt.constants import COMPOSITE_TOLERANCE, TOP_KEYWORD_MIN_RANK
 from oolongt.summarizer import (Summarizer, _float_len,
                                 get_top_keyword_threshold, pluck_keyword_words,
                                 score_by_dbs, score_by_sbs)
-from tests.constants import DATA_PATH, SAMPLES
-from tests.helpers import (assert_ex, check_exception, get_sample_ids,
-                           get_sample_sentence_ids, get_sample_sentences,
-                           get_samples, pad_to_longest, randomize_list, snip)
+from tests.constants import SAMPLES
+from tests.helpers import (assert_ex, get_sample_ids, get_sample_sentence_ids,
+                           get_sample_sentences, get_samples, pad_to_longest,
+                           snip)
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_keyword import SampleKeyword
 from tests.typedefs.sample_sentence import SampleSentence
@@ -135,7 +134,7 @@ def test_score_frequency(samp: Sample, sentence: SampleSentence) -> None:
         ), )
 
     for desc, expected, received in params:
-        result = roughly.eq(received, expected, COMPOSITE_TOLERANCE)
+        result = kinda.eq(received, expected, COMPOSITE_TOLERANCE)
 
         assert result, assert_ex(
             desc,
@@ -258,7 +257,7 @@ class TestSummarizer:
             text, index, of,
             title_words, top_keywords, top_keyword_list).total_score
 
-        assert roughly.eq(received, expected), assert_ex(
+        assert kinda.eq(received, expected), assert_ex(
             'sentence score',
             received,
             expected,
@@ -292,7 +291,7 @@ class TestSummarizer:
         expected = samp.length_score
         received = summ.score_by_length(words)
 
-        assert roughly.eq(received, expected), assert_ex(
+        assert kinda.eq(received, expected), assert_ex(
             'sentence score',
             received,
             expected,
@@ -327,7 +326,7 @@ class TestSummarizer:
         expected = samp.title_score
         received = summ.score_by_title(title_words, sentence_words)
 
-        assert roughly.eq(received, expected), assert_ex(
+        assert kinda.eq(received, expected), assert_ex(
             'title score',
             received,
             expected,
