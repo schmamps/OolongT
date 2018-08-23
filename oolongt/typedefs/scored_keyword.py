@@ -1,8 +1,8 @@
 """Keyword string and score data"""
 import typing
-from math import ceil
 
-from oolongt import roughly
+import kinda
+
 from oolongt.constants import KEYWORD_SCORE_K
 from oolongt.typedefs.repr_able import ReprAble
 
@@ -73,7 +73,7 @@ def compare_score(a: ScoredKeyword, b: ScoredKeyword) -> int:
     Returns:
         int -- `a lt b`: -1, `a eq b`: 0, `a gt b`: 1
     """
-    if roughly.eq(a.score, b.score):
+    if kinda.eq(a.score, b.score):
         return 0
 
     if (a.score < b.score):
