@@ -20,7 +20,7 @@ parts/
 sdist/
 var/
 .installed.cfg
-**/.egg*
+**/*egg*/
 **/*env*/
 **/generated_data/
 
