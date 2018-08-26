@@ -18,4 +18,12 @@ def load(path: str) -> typing.Dict[str, typing.Any]:
 
 
 def parse(path: str) -> Content:
+    """Get content of document at `path`
+
+    Arguments:
+        path {str} -- path to document
+
+    Returns:
+        Content -- text properties of document
+    """
     return Content(load, path)

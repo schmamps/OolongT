@@ -1,3 +1,4 @@
+"""Apply oolongt to files"""
 import typing
 from os.path import abspath
 from pathlib import Path
@@ -9,6 +10,17 @@ from oolongt.typedefs import Content, ScoredSentence
 
 
 def load_file(path: str) -> Content:
+    """Get text contents of the file at `path`
+
+    Arguments:
+        path {str} -- path to document
+
+    Raises:
+        ValueError -- unable to read file
+
+    Returns:
+        Content -- contents of file
+    """
     ext = Path(path).suffix
 
     try:
@@ -27,18 +39,34 @@ def load_file(path: str) -> Content:
 
         return func(path)
 
-    except (OSError) as e:
+    except (OSError) as e:  # pylint: disable=invalid-name
         raise ValueError('Unable to read {!r} ({})'.format(abspath(path), e))
 
 
-def prep_args(
+def prep_args(  # pylint: disable=too-many-arguments
         path: str,
         root: typing.Any,
         idiom: typing.Any,
         source: typing.Any,
         category: typing.Any,
-        length: typing.Any = None
-        ) -> typing.Dict[str, typing.Any]:
+        length: typing.Any = None) -> typing.Dict[str, typing.Any]:
+    """Prepare arguments for passing to oolongt.text
+
+    Arguments:
+        path {str} -- path to document
+        root {typing.Any} -- root of idiom directory
+        idiom {typing.Any} -- name of idiom
+        source {typing.Any} -- unused
+        category {typing.Any} -- unused
+
+    Keyword Arguments:
+        length {typing.Any} --
+            num/pct of sentences to return
+            if applicable (default: {None})
+
+    Returns:
+        typing.Dict[str, typing.Any] -- keyword arguments for string functions
+    """
     content = load_file(path)
 
     nominal_args = {
@@ -61,8 +89,7 @@ def score_body_sentences(
         root: typing.Any = BUILTIN,
         idiom: typing.Any = DEFAULT_IDIOM,
         source: typing.Any = None,
-        category: typing.Any = None
-        ) -> typing.List[ScoredSentence]:
+        category: typing.Any = None) -> typing.List[ScoredSentence]:
     """List and score every sentence in `body`
 
     Arguments:
@@ -84,14 +111,13 @@ def score_body_sentences(
     return main.score_body_sentences(**kwargs)
 
 
-def summarize(
+def summarize(  # pylint: disable=too-many-arguments
         path: str,
         length: float = DEFAULT_LENGTH,
         root: typing.Any = BUILTIN,
         idiom: typing.Any = DEFAULT_IDIOM,
         source: typing.Any = None,
-        category: typing.Any = None
-        ) -> typing.List[str]:
+        category: typing.Any = None) -> typing.List[str]:
     """Get `length` best sentences from `body` in content order
 
     if `length` < 1:
