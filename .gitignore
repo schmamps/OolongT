@@ -19,11 +19,10 @@ lib64/
 parts/
 sdist/
 var/
-*.egg-info/
 .installed.cfg
-*.egg
-.venv/
-generator/output/
+**/.egg*
+**/*env*/
+**/generated_data/
 
 # Installer logs
 pip-log.txt
