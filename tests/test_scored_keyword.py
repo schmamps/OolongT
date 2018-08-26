@@ -2,10 +2,10 @@ import typing
 
 from pytest import mark
 
-from oolongt.typedefs.scored_keyword import (KEYWORD_SCORE_K, ScoredKeyword,
-                                             compare_keywords, compare_length,
-                                             compare_score, compare_word,
-                                             score_keyword)
+from src.oolongt.typedefs import ScoredKeyword
+from src.oolongt.typedefs.scored_keyword import (compare_keywords,
+                                                 compare_length, compare_score,
+                                                 compare_word, score_keyword)
 from tests.helpers import assert_ex, check_exception, index_of, pad_to_longest
 
 
