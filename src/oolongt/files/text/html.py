@@ -14,11 +14,16 @@ def get_doc(path: str) -> BeautifulSoup:
     return doc
 
 
+def get_keywords(doc: BeautifulSoup) -> typing.List[str]:
+    # TODO:
+    return []
+
+
 def load(path: str) -> typing.Tuple:
     doc = get_doc(path)
     body = doc.get_text('\n')
     title = doc.title.string
-    keywords = []  # type: typing.List[str]
+    keywords = get_keywords(doc)
 
     return body, title, keywords
 

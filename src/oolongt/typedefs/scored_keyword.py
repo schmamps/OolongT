@@ -3,8 +3,8 @@ import typing
 
 import kinda
 
-from oolongt.constants import KEYWORD_SCORE_K
-from oolongt.typedefs.repr_able import ReprAble
+from ..constants import KEYWORD_SCORE_K
+from .repr_able import ReprAble
 
 
 class ScoredKeyword(ReprAble):

@@ -5,11 +5,11 @@ from pathlib import Path
 
 from nltk.corpus import stopwords
 
-from oolongt.constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_IDIOM,
-                               DEFAULT_LANGUAGE, DEFAULT_NLTK_STOPS,
-                               DEFAULT_USER_STOPS)
-from oolongt.simple_io import load_json
-from oolongt.typedefs.repr_able import ReprAble
+from ..constants import (BUILTIN, DEFAULT_IDEAL_LENGTH, DEFAULT_IDIOM,
+                         DEFAULT_LANGUAGE, DEFAULT_NLTK_STOPS,
+                         DEFAULT_USER_STOPS)
+from ..simple_io import load_json
+from .repr_able import ReprAble
 
 
 def get_config_path(root: str, idiom: str) -> Path:

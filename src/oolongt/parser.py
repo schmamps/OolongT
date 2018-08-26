@@ -2,13 +2,11 @@
 import typing
 from re import sub
 
-import nltk.data
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from oolongt.typedefs.parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
-from oolongt.typedefs.scored_keyword import ScoredKeyword
-from oolongt.typedefs.scored_sentence import ScoredSentence
+from .typedefs.parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
+from .typedefs.scored_keyword import ScoredKeyword
 
 
 def remove_punctuations(text: str) -> str:

@@ -1,10 +1,9 @@
 """Simple sentence scoring & summarization functions"""
 import typing
 
-from oolongt.constants import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
-from oolongt.parser import Parser
-from oolongt.summarizer import Summarizer
-from oolongt.typedefs.scored_sentence import ScoredSentence
+from .. import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
+from ..summarizer import Summarizer
+from ..typedefs import ScoredSentence
 
 
 def score_body_sentences(
@@ -133,6 +132,6 @@ def summarize(
         list[str] -- top sentences in content order
     """
     sentences = get_best_sentences(
-        title, body, length, root, idiom, source, category)
+        body, title, length, root, idiom, source, category)
 
     return [s.text for s in sorted(sentences, key=lambda x: x.index)]

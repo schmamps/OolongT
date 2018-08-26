@@ -22,15 +22,15 @@ def get_body(pdf: PdfFileReader) -> str:
 def get_title(pdf: PdfFileReader) -> typing.Any:
     info = pdf.getDocumentInfo()
 
-    return info.title or False
+    return info.title
 
 
-def get_keywords(pdf: PdfFileReader) -> typing.List[str]:
+def get_keywords(pdf: PdfFileReader) -> str:
     # TODO
-    return []
+    return ''
 
 
-def load(path: str) -> typing.Tuple:
+def load(path: str) -> typing.Dict[str, typing.Any]:
     with open(path, 'rb') as fp:
         pdf = PdfFileReader(fp)
 
@@ -38,7 +38,7 @@ def load(path: str) -> typing.Tuple:
         title = get_title(pdf)
         keywords = get_keywords(pdf)
 
-    return body, title, keywords
+    return {'body': body, 'title': title, 'keywords': keywords}
 
 
 def parse(path: str) -> Content:

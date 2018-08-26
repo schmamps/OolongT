@@ -5,12 +5,16 @@ from oolongt.simple_io import read_file
 from oolongt.typedefs import Content
 
 
-def load(path: str) -> typing.Tuple:
-    body = read_file(path)
-    title = False
-    keywords = []  # type: typing.List[str]
+def load(path: str) -> typing.Dict[str, typing.Any]:
+    """Read contents of text file as body of content
 
-    return body, title, keywords
+    Arguments:
+        path {str} -- path to file
+
+    Returns:
+        typing.Dict[str, typing.Any] -- {'body': ...}
+    """
+    return {'body': read_file(path)}
 
 
 def parse(path: str) -> Content:

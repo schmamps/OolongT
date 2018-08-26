@@ -3,8 +3,8 @@ from math import ceil
 
 import kinda
 
-from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.typedefs.repr_able import ReprAble
+from ..constants import COMPOSITE_TOLERANCE
+from .repr_able import ReprAble
 
 
 class ScoredSentence(ReprAble):

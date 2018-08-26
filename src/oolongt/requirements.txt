@@ -1,6 +1,5 @@
 nltk==3.3
 pathlib==1.0.1
-python-magic==0.4.15
 beautifulsoup4==4.6.1
 PyPDF2==1.26.0
 docx2txt==0.7

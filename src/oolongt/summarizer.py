@@ -1,10 +1,10 @@
 """Text summarizer"""
 import typing
 
-from oolongt.constants import BUILTIN, DEFAULT_IDIOM, TOP_KEYWORD_MIN_RANK
-from oolongt.parser import Parser
-from oolongt.typedefs.scored_keyword import ScoredKeyword
-from oolongt.typedefs.scored_sentence import ScoredSentence
+from .constants import BUILTIN, DEFAULT_IDIOM, TOP_KEYWORD_MIN_RANK
+from .parser import Parser
+from .typedefs.scored_keyword import ScoredKeyword
+from .typedefs.scored_sentence import ScoredSentence
 
 
 def pluck_keyword_words(
@@ -92,7 +92,7 @@ def score_by_dbs(
                     'score': top_kws[index].score}
                 distance = first_word['i'] - second_word['i']
 
-                summ += (first_word['score'] * second_word['score']) / (distance ** 2)  # nopep8
+                summ += (first_word['score'] * second_word['score']) / (distance ** 2)  # noqa
 
     dbs = (1.0 / k * (k + 1.0)) * summ
 

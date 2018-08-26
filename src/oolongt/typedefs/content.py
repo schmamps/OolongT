@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 from unicodedata import normalize
 
-from oolongt.typedefs.repr_able import ReprAble
+from .repr_able import ReprAble
 
 
 def strip_strs(str_list: typing.List[str]) -> typing.List[str]:
@@ -67,7 +67,7 @@ def get_keywords(doc_data: typing.Dict[str, typing.Any]):
     Returns:
         typing.List[str] -- list of keywords
     """
-    kw_spec = doc_data.get('keywords', '')
+    kw_spec = doc_data.get('keywords') or ''
     kws = kw_spec if isinstance(kw_spec, list) else kw_spec.split(',')
 
     return strip_strs(kws)
