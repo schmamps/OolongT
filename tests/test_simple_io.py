@@ -4,7 +4,8 @@ from pathlib import Path
 
 from pytest import mark
 
-from oolongt import parser, simple_io
+from src.oolongt import simple_io
+from tests.constants import IDIOM_PATH
 from tests.helpers import assert_ex
 
 
@@ -17,8 +18,7 @@ def get_json_path(idiom: str) -> Path:
     Returns:
         str -- path to idiom config JSON file
     """
-    return Path(__file__).parent.joinpath(
-        'idioms', idiom + '.json')
+    return IDIOM_PATH.joinpath(idiom + '.json')
 
 
 @mark.parametrize(
