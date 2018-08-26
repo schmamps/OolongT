@@ -4,8 +4,8 @@ import typing
 import kinda
 from pytest import mark
 
-from oolongt.parser import Parser, remove_punctuations
-from oolongt.typedefs.scored_keyword import ScoredKeyword
+from src.oolongt.parser import Parser, remove_punctuations
+from src.oolongt.typedefs.scored_keyword import ScoredKeyword
 from tests.constants import SAMPLES
 from tests.helpers import (assert_ex, get_sample_ids, get_samples,
                            pad_to_longest)
