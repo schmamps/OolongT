@@ -3,9 +3,9 @@ import typing
 import kinda
 from pytest import mark
 
-from oolongt.typedefs.scored_sentence import (calc_decile,
-                                              score_keyword_frequency,
-                                              score_position, score_total)
+from src.oolongt.typedefs.scored_sentence import (calc_decile,
+                                                  score_keyword_frequency,
+                                                  score_position, score_total)
 from tests.constants import SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_sentence_ids,
                            get_sample_sentences, index_of)
