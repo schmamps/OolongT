@@ -1,19 +1,18 @@
 import typing
-from json import JSONDecodeError
 from pathlib import Path
 
 from pytest import mark
 
-from oolongt.constants import (BUILTIN, DEFAULT_IDIOM, DEFAULT_NLTK_STOPS,
-                               DEFAULT_USER_STOPS)
-from oolongt.typedefs.parser_config import (ParserConfig, get_config_path,
-                                            get_stop_words, load_idiom,
-                                            parse_config)
+from src.oolongt import BUILTIN, DEFAULT_IDIOM
+from src.oolongt.typedefs import ParserConfig
+from src.oolongt.typedefs.parser_config import (get_config_path,
+                                                get_stop_words, load_idiom,
+                                                parse_config)
+from tests.constants import IDIOM_PATH
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
-BASE_IDIOM_PATH = Path(__file__).parent.joinpath('idioms')
 TEST_IDIOM_NAME = 'valid'
-TEST_IDIOM_JSON = BASE_IDIOM_PATH.joinpath(TEST_IDIOM_NAME + '.json')
+TEST_IDIOM_JSON = IDIOM_PATH.joinpath(TEST_IDIOM_NAME + '.json')
 TEST_IDIOM_EXPECTED = (2, 'valid', 2)
 DEFAULT_IDIOM_EXPECTED = (20, 'english', 201)
 TEST_DEFAULT_INITIAL = False
@@ -50,7 +49,7 @@ def compare_loaded_idiom(
 
 @mark.parametrize(
     'root,idiom,expected',
-    [(BASE_IDIOM_PATH, TEST_IDIOM_NAME, TEST_IDIOM_JSON), ],
+    [(IDIOM_PATH, TEST_IDIOM_NAME, TEST_IDIOM_JSON), ],
     ids=['test path', ])
 def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
     """Get config paths
@@ -130,10 +129,10 @@ def test_get_stop_words(
         ({'root': BUILTIN}, DEFAULT_IDIOM_EXPECTED),
         ({
             'idiom': TEST_IDIOM_NAME,
-            'root': BASE_IDIOM_PATH
+            'root': IDIOM_PATH
         }, TEST_IDIOM_EXPECTED),
-        ({'idiom': 'malformed', 'root': BASE_IDIOM_PATH}, ValueError),
-        ({'idiom': 'INVALID', 'root': BASE_IDIOM_PATH}, ValueError),
+        ({'idiom': 'malformed', 'root': IDIOM_PATH}, ValueError),
+        ({'idiom': 'INVALID', 'root': IDIOM_PATH}, ValueError),
     ],
     ids=pad_to_longest([
         'root: def., idiom: def.      == default idiom',
@@ -177,7 +176,7 @@ def test_parse_config(
         ({}, DEFAULT_IDIOM_EXPECTED),
         [{'idiom': '../../../etc'}, PermissionError],
         [{'root': Path(__file__)}, FileNotFoundError],
-        [{'idiom': 'malformed', 'root': BASE_IDIOM_PATH}, ValueError],
+        [{'idiom': 'malformed', 'root': IDIOM_PATH}, ValueError],
     ],
     ids=pad_to_longest([
         'valid: yes',
