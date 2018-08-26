@@ -1,7 +1,7 @@
 import typing
 from pytest import mark
 
-from tests import helpers
+from tests.helpers import assert_ex, pad_to_longest, snip
 
 
 @mark.parametrize(
@@ -14,7 +14,7 @@ from tests import helpers
         ('1234567890', {'max_len': 9}, '123456...'),
         ('1234567890', {'max_len': 9, 'ellip': '!'}, '12345678!'),
     ],
-    ids=helpers.pad_to_longest([
+    ids=pad_to_longest([
         'args: none           == "in"',
         'args: none           == "in" (truncated)',
         'args: none           == [in] (joined by comma)',
@@ -27,29 +27,9 @@ def test_snip(
         kwargs: typing.Dict[str, typing.Any],
         expected: str
         ) -> None:
-    received = helpers.snip(text, **kwargs)
+    received = snip(text, **kwargs)
 
-    assert (received == expected), helpers.assert_ex(
+    assert (received == expected), assert_ex(
         'snip',
         received,
         expected)
-
-
-@mark.parametrize(
-    'src,expected',
-    [
-        ([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], True),
-        ([], False),
-    ],
-    ids=helpers.pad_to_longest([
-        'can be randomized',
-        'cannot be randomized',
-    ]))
-def test_randomize_list(src: typing.List[int], expected: bool) -> None:
-    received = helpers.randomize_list(src)
-
-    assert src != received or not expected, helpers.assert_ex(
-        'randomize_list',
-        received,
-        src
-    )
