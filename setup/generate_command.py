@@ -1,24 +1,18 @@
-"""Generate Data"""
-import typing  # noqa
-from pathlib import Path
-from setuptools import Command
-
-from setup.generate import keywords, merge, sentences  # noqa
+"""Generate test data"""
+from .generate import keywords, merge, sentences  # noqa
+from .oolongt_task import OolongtTask
 
 
-class GenerateCommand(Command):
-    user_options = []  # type: typing.List[tuple]
+OUTPUT_DIR = 'generated_data'
 
-    """Generate test data"""
-    def initialize_options(self):
-        root = Path(__file__).parent.parent
-        self.input_dir = root.joinpath('tests', 'data', 'text')
-        self.output_dir = root.joinpath('generated_data')
 
-    def finalize_options(self):
-        pass
-
+class GenerateCommand(OolongtTask):
     def run(self):
+        """Generate test data"""
         self.announce('generating test data', level=2)
+
+        input_dir = self.get_project_path('tests', 'data', 'text')
+        output_dir = self.get_project_path(OUTPUT_DIR)
+
         for module in [keywords, sentences, merge]:
-            module.generate(self.input_dir, self.output_dir)
+            module.generate(input_dir, output_dir)
