@@ -2,9 +2,8 @@
 import typing
 from random import shuffle
 
-from tests.constants import DATA_PATH
+from tests.constants import TEXT_PATH
 from tests.typedefs.sample import Sample
-from tests.typedefs.sample_keyword import SampleKeyword
 from tests.typedefs.sample_sentence import SampleSentence
 
 
@@ -12,7 +11,7 @@ def snip(
         val: typing.Any,
         max_len: int = 20,
         list_separator: str = ', ',
-        ellip: str = "..."):
+        ellip: str = '...'):
     """Truncate `val` to specified length
 
     Arguments:
@@ -101,7 +100,7 @@ def get_sample(sample_name: str) -> Sample:
     Returns:
         Sample -- sample data
     """
-    return Sample(DATA_PATH, sample_name)
+    return Sample(TEXT_PATH, sample_name)
 
 
 def get_samples(sample_names: typing.List[str]) -> typing.Iterable[Sample]:
