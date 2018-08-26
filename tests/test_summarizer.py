@@ -4,10 +4,11 @@ import typing
 import kinda
 from pytest import mark
 
-from oolongt.constants import COMPOSITE_TOLERANCE, TOP_KEYWORD_MIN_RANK
-from oolongt.summarizer import (Summarizer, _float_len,
-                                get_top_keyword_threshold, pluck_keyword_words,
-                                score_by_dbs, score_by_sbs)
+from src.oolongt.constants import COMPOSITE_TOLERANCE, TOP_KEYWORD_MIN_RANK
+from src.oolongt.summarizer import (Summarizer, _float_len,
+                                    get_top_keyword_threshold,
+                                    pluck_keyword_words, score_by_dbs,
+                                    score_by_sbs)
 from tests.constants import SAMPLES
 from tests.helpers import (assert_ex, get_sample_ids, get_sample_sentence_ids,
                            get_sample_sentences, get_samples, pad_to_longest,
