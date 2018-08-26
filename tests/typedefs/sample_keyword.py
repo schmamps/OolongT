@@ -1,8 +1,7 @@
 """Mock ScoredKeyword """
 import typing
 
-from oolongt.typedefs.scored_keyword import (KEYWORD_SCORE_K, ScoredKeyword,
-                                             score_keyword)
+from src.oolongt.typedefs.scored_keyword import ScoredKeyword, score_keyword
 
 
 class SampleKeyword(ScoredKeyword):

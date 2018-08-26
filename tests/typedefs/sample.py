@@ -2,7 +2,7 @@
 import typing
 from pathlib import Path
 
-from oolongt import simple_io
+from src.oolongt import simple_io
 from tests.typedefs.sample_keyword import SampleKeyword
 from tests.typedefs.sample_sentence import SampleSentence
 

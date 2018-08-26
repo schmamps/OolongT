@@ -3,8 +3,8 @@ import typing
 
 import kinda
 
-from oolongt.constants import COMPOSITE_TOLERANCE
-from oolongt.typedefs.scored_sentence import ScoredSentence
+from src.oolongt.constants import COMPOSITE_TOLERANCE
+from src.oolongt.typedefs import ScoredSentence
 
 
 def auto_id(index, of):
