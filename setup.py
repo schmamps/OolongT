@@ -1,9 +1,12 @@
 """Setup Script"""
 import setuptools
+
 # pylint: disable=no-name-in-module
+from setup.cleanup_command import CleanupCommand
 from setup.generate_command import GenerateCommand
 from setup.nltk_command import NltkCommand
 from setup.py_test_command import PyTestCommand
+
 # pylint: enable=no-name-in-module
 
 
@@ -36,7 +39,8 @@ setuptools.setup(
     cmdclass={
         'pytest': PyTestCommand,
         'generate': GenerateCommand,
-        'nltk': NltkCommand, },
+        'nltk': NltkCommand,
+        'cleanup': CleanupCommand, },
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
