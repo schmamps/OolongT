@@ -4,8 +4,9 @@ import typing
 import kinda
 from pytest import mark
 
-from oolongt.main import get_slice_length, score_body_sentences, summarize
-from tests.constants import DATA_PATH, SAMPLES
+from src.oolongt import score_body_sentences, summarize
+from src.oolongt.text.text import get_slice_length
+from tests.constants import TEXT_PATH, SAMPLES
 from tests.helpers import (assert_ex, check_exception, get_sample_ids,
                            get_samples, pad_to_longest, snip)
 from tests.typedefs.sample import Sample
@@ -16,7 +17,7 @@ from tests.typedefs.sample import Sample
     get_samples(SAMPLES),
     ids=pad_to_longest(get_sample_ids(SAMPLES)))
 def test_score_body_sentences(samp: Sample) -> None:
-    """Test main.score_sentences()
+    """Test oolongt.score_sentences()
 
     Arguments:
         samp {Sample} -- sample data
@@ -68,7 +69,7 @@ def _get_received_sentences(
     Returns:
         list[str] -- text of sentences in specified order
     """
-    scored_sentences = summarize(title, text, length=length)
+    scored_sentences = summarize(text, title, length=length)
 
     return scored_sentences
 
@@ -88,7 +89,7 @@ def test_summarize(sample_name: str, length: int) -> None:
         sample_name {str} -- name of data source
         length {int} -- number of sentences to return
     """
-    samp = Sample(DATA_PATH, sample_name)
+    samp = Sample(TEXT_PATH, sample_name)
     title = samp.title
     text = samp.body
 
@@ -126,7 +127,7 @@ def test_get_slice_length(
         nominal: typing.Any,
         total: int,
         expected: typing.Any) -> None:
-    """Test main.get_slice_length()
+    """Test oolongt.get_slice_length()
 
     Arguments:
         nominal {float} -- exact number (int) or percentage (0 < nominal < 1)
