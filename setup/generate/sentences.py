@@ -1,16 +1,18 @@
+import typing
 from collections import OrderedDict
+from pathlib import Path
 
-from oolongt.summarizer import Summarizer
-
-from generator.util import console, get_samples, json as json_util, math
-
+from setup.generate import generate_set, get_final_path
+from setup.util import math
+from src.oolongt.summarizer import Summarizer
+from src. oolongt.typedefs import ScoredSentence
+from tests.typedefs import Sample
 
 SAMPLING_SIZE = 25
 
 
 def dictify(received, rank):
     sent_dict = OrderedDict()
-
     sent_dict['index'] = received.index
     sent_dict['sbs_score'] = received.sbs_score
     sent_dict['dbs_score'] = received.dbs_score
@@ -45,7 +47,7 @@ def get_median_sentence(all_samples, sent_idx):
     return samples[0]
 
 
-def get_median_sentences(samp):
+def get_median_sentences(samp: Sample):
     summ = Summarizer()
     all_samples = [
         summ.get_all_sentences(samp.body, samp.title, None, None)
@@ -58,34 +60,35 @@ def get_median_sentences(samp):
     return mean
 
 
-def generate():
-    console.group('Sentences')
-    for samp in get_samples():
-        console.group(samp.name)
+def get_output_path(output_path: Path, sample_name: str) -> Path:
+    return output_path.joinpath('{}.keywords.json'.format(sample_name))
 
-        file_comps = [samp.name, 'sentences']
-        file_path = json_util.get_output_path(file_comps)
 
-        try:
-            receiveds = get_median_sentences(samp)
-            ranks = [
-                sent.index for sent in sorted(receiveds, reverse=True)]
+def get_dict(
+        ranks: typing.List[int],
+        receiveds: typing.List[ScoredSentence]
+        ) -> OrderedDict:
+    data = OrderedDict()  # type: OrderedDict
+    data['sentences'] = [
+        dictify(sent, ranks.index(idx))
+        for idx, sent in enumerate(receiveds)]
 
-            data = OrderedDict()
-            data['sentences'] = [
-                dictify(sent, ranks.index(idx))
-                for idx, sent in enumerate(receiveds)]
+    return data
 
-            json_util.write(file_path, data)
 
-            console.success('saved to: {}'.format(file_path))
+def process_sample(
+        samp: Sample,
+        _: Path,
+        output_path: Path
+        ) -> typing.Tuple[typing.Dict, Path]:
+    receiveds = get_median_sentences(samp)
+    ranks = [sent.index for sent in sorted(receiveds, reverse=True)]
 
-        except Exception as e:
-            console.error(e)
-            console.info('deleting: {!r}'.format(file_path))
+    data = get_dict(ranks, receiveds)
+    file_path = get_final_path(output_path, 'sentences', samp.name)
 
-            json_util.cleanup(file_path)
+    return data, file_path
 
-        console.group_end()
 
-    console.group_end()
+def generate(input_path: Path, output_path: Path) -> bool:
+    return generate_set('sentences', process_sample, input_path, output_path)

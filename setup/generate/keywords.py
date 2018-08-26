@@ -1,16 +1,19 @@
+import typing
 from collections import OrderedDict
+from pathlib import Path
 
-from oolongt.summarizer import Summarizer
-from oolongt.parser import Parser
 
-from generator.util import console, get_samples, json as json_util, math
-
+from src.oolongt.parser import Parser
+from src.oolongt.typedefs import ScoredKeyword
+from setup.generate import generate_set, get_final_path, process_keywords
+from setup.util import math
+from tests.typedefs import Sample
 
 SAMPLING_SIZE = 10
 
 
-def dictify(keyword):
-    kw_dict = OrderedDict()
+def dictify(keyword: ScoredKeyword) -> OrderedDict:
+    kw_dict = OrderedDict()  # type: OrderedDict[str, typing.Any]
     kw_dict['score'] = keyword.score
     kw_dict['count'] = keyword.count
     kw_dict['word'] = keyword.word
@@ -18,7 +21,7 @@ def dictify(keyword):
     return kw_dict
 
 
-def get_median_keywords(samp):
+def get_median_keywords(samp: Sample) -> typing.List[ScoredKeyword]:
     p = Parser()
     samples = [p.get_keywords(samp.body) for _ in range(SAMPLING_SIZE)]
 
@@ -29,34 +32,37 @@ def get_median_keywords(samp):
     return mean
 
 
-def generate():
-    console.group('Keywords')
+def get_output_path(output_path: Path, sample_name: str) -> Path:
+    return output_path.joinpath('{}.keywords.json'.format(sample_name))
 
-    for samp in get_samples():
-        console.group(samp.name)
 
-        file_comps = [samp.name, 'keywords']
-        file_path = json_util.get_output_path(file_comps)
+def get_dict(keyword_count: int, keywords: typing.List[ScoredKeyword]):
+    data = OrderedDict()  # type: OrderedDict[str, typing.Any]
+    data['keyword_count'] = keyword_count
+    data['keywords'] = [dictify(kw) for kw in keywords]
 
-        try:
-            received = get_median_keywords(samp)
-            keywords = sorted(received, reverse=True)
-            keyword_count = sum([kw.count for kw in keywords])
+    return data
 
-            data = OrderedDict()
-            data['keyword_count'] = keyword_count
-            data['keywords'] = [dictify(kw) for kw in keywords]
 
-            json_util.write(file_path, data, 'keywords')
+def process_sample(
+        samp: Sample,
+        _: Path,
+        output_path: Path
+        ) -> typing.Tuple[typing.Dict, Path]:
+    received = get_median_keywords(samp)
+    keywords = sorted(received, reverse=True)
+    keyword_count = sum([kw.count for kw in keywords])
 
-            console.success('saved to: {}'.format(file_path))
+    data = get_dict(keyword_count, keywords)
+    file_path = get_final_path(output_path, 'keywords', samp.name)
 
-        except Exception as e:
-            console.error(e)
-            console.info('deleting: {!r}'.format(file_path))
+    return data, file_path
 
-            json_util.cleanup(file_path)
 
-        console.group_end()
-
-    console.group_end()
+def generate(input_path: Path, output_path: Path) -> bool:
+    return generate_set(
+        'keywords',
+        process_sample,
+        input_path,
+        output_path,
+        post_proc=process_keywords)

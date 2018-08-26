@@ -6,7 +6,7 @@ init()
 GROUP_LEVEL = -1
 
 
-def _print(text, fore=False, style=False):
+def _print(text, *args, fore=False, style=False):
     global GROUP_LEVEL
 
     pad = '  ' * GROUP_LEVEL
@@ -15,15 +15,15 @@ def _print(text, fore=False, style=False):
     reset = Fore.RESET + Style.RESET_ALL
 
     print('{}{}{}{}{}'.format(
-        pad, fore_color, para_style, text, reset))
+        pad, fore_color, para_style, str(text).format(*args), reset))
 
 
-def group(text=''):
+def group(text='', *args):
     global GROUP_LEVEL
     GROUP_LEVEL = max(0, GROUP_LEVEL)
 
     if text:
-        _print(text, style=Style.BRIGHT)
+        _print(text, *args, style=Style.BRIGHT)
 
     GROUP_LEVEL += 1
 
@@ -58,33 +58,33 @@ def list_items(items, ordered=False):
         _print('{} {}'.format(bullets[idx], items[idx]))
 
 
-def log(text):
-    _print(text)
+def log(text, *args):
+    _print(text, *args)
 
 
-def info(text):
-    _print(text, style=Style.DIM)
+def info(text, *args):
+    _print(text, *args, style=Style.DIM)
 
 
-def success(text):
-    _print(text, fore=Fore.GREEN)
+def success(text, *args):
+    _print(text, *args, fore=Fore.GREEN)
 
 
-def warn(text):
-    _print(text, fore=Fore.YELLOW)
+def warn(text, *args):
+    _print(text, *args, fore=Fore.YELLOW)
 
 
-def error(text):
-    _print(text, fore=Fore.RED)
+def error(text, *args):
+    _print(text, *args, fore=Fore.RED)
 
 
 def lf():
     _print('')
 
 
-def ol(items):
-    list_items(items, ordered=True)
+def ol(items, *args):
+    list_items(items, *args, ordered=True)
 
 
-def ul(items):
-    list_items(items, ordered=False)
+def ul(items, *args):
+    list_items(items, *args, ordered=False)

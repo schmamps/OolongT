@@ -1,27 +1,14 @@
+import typing
 from collections import OrderedDict
-from json import load
 from pathlib import Path
-from re import match
 
-from generator.util import console, get_samples, json as json_util, math
-from oolongt.simple_io import load_json
+from setup.generate import generate_set, get_final_path, process_keywords
+from setup.util import json_data
+from src.oolongt.typedefs import ScoredKeyword
+from tests.typedefs import Sample
 
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-
-
-def join_path(subs, *file_comps):
-    file_name = '.'.join(list(file_comps) + ['json'])
-
-    return PROJECT_ROOT.joinpath(subs).joinpath(file_name)
-
-
-def get_sample_path(samp):
-    return join_path('tests/data', samp.name)
-
-
-def get_generated_path(samp, key):
-    return join_path('generator/output', samp.name, key)
 
 
 def get_sentence(generated, original):
@@ -49,7 +36,7 @@ def get_sentence(generated, original):
     return sentence
 
 
-def get_sentences(original, generated):
+def get_sentences(original, generated) -> typing.List[ScoredKeyword]:
     sentence_count = len(generated)
     if len(original) != sentence_count:
         raise ValueError('sentence count mismatch')
@@ -61,48 +48,52 @@ def get_sentences(original, generated):
     return sentences
 
 
-def generate():
-    console.group('Merging')
-    for samp in get_samples():
-        console.group(samp.name)
+def get_dict(
+        samp: Sample,
+        original: OrderedDict,
+        keywords: OrderedDict,
+        sentences: OrderedDict
+        ) -> OrderedDict:
+    data = OrderedDict()  # type: OrderedDict[str, typing.Any]
+    for key in original.keys():
+        key_value = original[key]
 
-        file_comps = [samp.name]
-        file_path = json_util.get_output_path(file_comps, 'merged.json')
+        if key in ['keyword_count', 'keywords']:
+            data[key] = keywords[key]
 
-        try:
-            original = json_util.read(
-                get_sample_path(samp))
-            keywords = json_util.read(
-                get_generated_path(samp, 'keywords'))
-            sentences = json_util.read(
-                get_generated_path(samp, 'sentences'))
+        elif key == 'sentences':
+            if (len(samp.sentences) > 0):
+                data[key] = get_sentences(
+                    original[key], sentences[key])
 
-            data = OrderedDict()
+        else:
+            data[key] = key_value
 
-            for key in original.keys():
-                key_value = original[key]
+    return data
 
-                if key in ['keyword_count', 'keywords']:
-                    data[key] = keywords[key]
 
-                elif key == 'sentences':
-                    if (len(samp.sentences) > 0):
-                        data[key] = get_sentences(
-                            original[key], sentences[key])
+def process_sample(
+        samp: Sample,
+        input_path: Path,
+        output_path: Path
+        ) -> typing.Tuple[typing.Dict, Path]:
+    original = json_data.read(
+        input_path.joinpath(samp.name + '.json'))
+    keywords = json_data.read(
+        get_final_path(output_path, 'keywords', samp.name))
+    sentences = json_data.read(
+        get_final_path(output_path, 'sentences', samp.name))
 
-                else:
-                    data[key] = key_value
+    data = get_dict(samp, original, keywords, sentences)
+    file_path = get_final_path(output_path, 'merge', samp.name)
 
-            json_util.write(file_path, data, kludge='keywords')
+    return data, file_path
 
-            console.success('saved to: {}'.format(file_path))
 
-        except Exception as e:
-            console.error(e)
-            console.info('deleting: {!r}'.format(file_path))
-
-            json_util.cleanup(file_comps)
-
-        console.group_end()
-
-    console.group_end()
+def generate(input_path: Path, output_path: Path) -> bool:
+    return generate_set(
+        'merge',
+        process_sample,
+        input_path,
+        output_path,
+        post_proc=process_keywords)
