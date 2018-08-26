@@ -1,0 +1,8 @@
+#! /usr/bin/env python
+
+from oolongt.cli import get_output  # pylint: disable=no-name-in-module
+
+
+if __name__ == '__main__':
+    sentences = get_output()
+    print(' '.join(sentences))
