@@ -1,3 +1,4 @@
+import abc
 import re
 import typing
 from pathlib import Path
@@ -6,7 +7,7 @@ from unicodedata import normalize
 from .repr_able import ReprAble
 
 
-def strip_strs(str_list: typing.List[str]) -> typing.List[str]:
+def strip_strs(str_list: typing.Iterable[str]) -> typing.List[str]:
     """Strip whitespace around strings
 
     Arguments:
@@ -18,13 +19,13 @@ def strip_strs(str_list: typing.List[str]) -> typing.List[str]:
     return [item.strip() for item in str_list]
 
 
-def get_body(doc_data: typing.Dict[str, typing.Any]) -> str:
+def norm_body(body: typing.Any) -> str:
     """Get content body (empty string if false-y)
 
     Returns:
         str -- content body
     """
-    return str(doc_data.get('body') or '').strip()
+    return str(body) if body else ''
 
 
 def create_title(path: str) -> str:
@@ -45,7 +46,7 @@ def create_title(path: str) -> str:
     return ' '.join(words).title()
 
 
-def get_title(doc_data: typing.Dict[str, typing.Any], path: str) -> str:
+def norm_title(title: typing.Any, path: typing.Union[str, None]) -> str:
     """Get title property from document loader
 
     Arguments:
@@ -55,10 +56,13 @@ def get_title(doc_data: typing.Dict[str, typing.Any], path: str) -> str:
     Returns:
         str -- best-available value for document title
     """
-    return doc_data.get('title') or create_title(path)
+    if title:
+        return str(title)
+
+    return create_title(path) if path else ''
 
 
-def get_keywords(doc_data: typing.Dict[str, typing.Any]):
+def norm_keywords(keywords: typing.Any) -> typing.List[str]:
     """Generate list of keywords from document data
 
     Arguments:
@@ -67,24 +71,115 @@ def get_keywords(doc_data: typing.Dict[str, typing.Any]):
     Returns:
         typing.List[str] -- list of keywords
     """
-    kw_spec = doc_data.get('keywords') or ''
-    kws = kw_spec if isinstance(kw_spec, list) else kw_spec.split(',')
+    spec = keywords or ''  # type: typing.Union[typing.Iterable, str]
+    is_iter = not isinstance(spec, str) and hasattr(spec, '__iter__')
+    kws = set(keywords if is_iter else str(spec).split(','))
 
     return strip_strs(kws)
 
 
 class Content(ReprAble):
-    def __init__(self, load_func: typing.Callable, path: str) -> None:
-        doc_data = load_func(path)
+    @abc.abstractmethod
+    def get_source(self, path: str) -> typing.Any:
+        pass
 
-        self.load_func = load_func.__name__
-        self.path = path
-        self.body = get_body(doc_data)
-        self.title = get_title(doc_data, path)
-        self.keywords = get_keywords(doc_data)
+    def get_body(self, src) -> str:
+        """Extract body (if any) in `src`
 
-    def __repr__(self):
-        return self._repr_(self.load_func, self.path)
+        Arguments:
+            src {typing.Any} -- content source
 
-    def __str__(self):
+        Returns:
+            str -- content
+        """
+        return str(src) if isinstance(src, object) else ''
+
+    def get_title(self, src) -> str:
+        """Extract title (if any) in `src`
+
+        Arguments:
+            src {typing.Any} -- content source
+
+        Returns:
+            str -- title
+        """
+        return '' if isinstance(src, object) else ''
+
+    def get_keywords(self, src) -> typing.Union[str, typing.List[str]]:
+        """Extract keywords (if any) in `src`
+
+        Arguments:
+            src {typing.Any} -- content source
+
+        Returns:
+            typing.List[str] -- document keywords
+        """
+        return [] if isinstance(src, object) else ''
+
+    @property
+    def body(self) -> str:
+        """Get body of content
+
+        Returns:
+            str -- content body
+        """
+        return self._body
+
+    @property
+    def title(self) -> str:
+        """Get title of content
+
+        Returns:
+            str -- content title
+        """
+        return self._title
+
+    @property
+    def keywords(self) -> typing.List[str]:
+        """Get keywords of content
+
+        Returns:
+            str -- content keywords
+        """
+        return self._keywords
+
+    @property
+    def path(self) -> typing.Union[str, None]:
+        return self._path if self._path else None
+
+    def __init__(
+            self,
+            body: typing.Any,
+            title: typing.Any,
+            keywords: typing.Any,
+            path: typing.Union[str, None] = None) -> None:
+        """Initialize
+
+        Arguments:
+            body {typing.Any} -- content body
+            title {typing.Any} -- content title
+            keywords {typing.Any} -- content keywords
+            path {str or None} -- path to content
+
+        Returns:
+            None
+        """
+        self._body = norm_body(body)  # type: str
+        self._title = norm_title(title, path if path else '')  # type: str
+        self._keywords = norm_keywords(keywords)  # type: typing.List[str]
+        self._path = path
+
+    @staticmethod
+    @abc.abstractmethod
+    def supports(_: str, __: str) -> bool:
+        pass
+
+    def __str__(self) -> str:
         return self.body
+
+    def __repr__(self) -> str:
+        return self._repr_(
+            self._body,
+            self._title,
+            self._keywords,
+            path=self._path)
