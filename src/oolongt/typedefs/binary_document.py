@@ -8,4 +8,4 @@ class BinaryDocument(Document):
         return self._get_source(path, True)
 
     def get_stream(self, path: str) -> typing.Any:
-        return self._get_stream(path, True)
+        return self._get_stream(path)

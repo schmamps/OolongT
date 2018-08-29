@@ -6,4 +6,4 @@ class TextDocument(Document):
         return self._get_source(path, False)
 
     def get_stream(self, path: str):
-        return self._get_stream(path, False)
+        return self._get_stream(path)
