@@ -2,18 +2,19 @@ import typing
 
 from bs4 import BeautifulSoup
 
-from .ugly_query import UglyQuery
+from .constants import NONE_STR
+from .typedefs.ugly_query import UglyQuery
 
 
 class UglySoup(BeautifulSoup):
-    def query(self, query: UglyQuery) -> typing.Union[str, None]:
+    def query(self, query: UglyQuery) -> NONE_STR:
         """Execute a single UglyQuery on soup
 
         Arguments:
             query {UglyQuery} -- an UglyQuery
 
         Returns:
-            typing.Union[str, None] -- str if found, None if no match
+            NONE_STR -- str if found, None if no match
         """
         for tag in self(query.tags):
             val = query.test(tag)
@@ -46,3 +47,9 @@ class UglySoup(BeautifulSoup):
                 return result
 
         return default
+
+    def __init__(self, html: str, *args, **kwargs) -> None:
+        init_kwargs = {'features': 'html.parser'}
+        init_kwargs.update(kwargs)
+
+        super().__init__(html, *args, **kwargs)
