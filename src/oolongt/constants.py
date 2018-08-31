@@ -1,5 +1,6 @@
-import typing
 from pathlib import Path
+
+from .typedefs import STR_LIST  # noqa
 
 # summarizer
 DEFAULT_LENGTH = 5
@@ -14,10 +15,7 @@ DEFAULT_IDIOM = 'default'
 DEFAULT_IDEAL_LENGTH = 20
 DEFAULT_LANGUAGE = 'english'
 DEFAULT_NLTK_STOPS = True
-DEFAULT_USER_STOPS = []   # type: typing.List[str]
+DEFAULT_USER_STOPS = []   # type: STR_LIST
 
 # scored keyword
 KEYWORD_SCORE_K = 1.5
-
-# types
-NONE_STR = typing.Union[str, None]
