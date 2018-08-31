@@ -13,7 +13,7 @@ class DocxDocument(BinaryDocument):
 
         body = self.get_body(src.main)
         title = src.properties.get('Title')
-        keywords = src.properties.get('Keywords')
+        keywords = src.properties.get('keywords')
 
         super().__init__(body, title, keywords, path)
 
