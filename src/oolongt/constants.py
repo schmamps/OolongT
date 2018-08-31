@@ -10,7 +10,7 @@ TOP_KEYWORD_MIN_RANK = 10
 COMPOSITE_TOLERANCE = 0.000000000001  # composite scores
 
 # parser
-BUILTIN = str(Path(__file__).parent.joinpath('idioms'))
+BUILTIN = str(Path(__file__).parent.joinpath('idioms'))  # type: str
 DEFAULT_IDIOM = 'default'
 DEFAULT_IDEAL_LENGTH = 20
 DEFAULT_LANGUAGE = 'english'
