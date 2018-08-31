@@ -1,13 +1,16 @@
+"""Base class for content"""
 import abc
 import re
 import typing
 from pathlib import Path
 from unicodedata import normalize
 
-from .repr_able import ReprAble
+from ..pipe import pipe
+from ..typedefs import NONE_STR, STR_LIST
+from ..typedefs.repr_able import ReprAble
 
 
-def strip_strs(str_list: typing.Iterable[str]) -> typing.List[str]:
+def strip_strs(str_list: typing.Iterable[str]) -> STR_LIST:
     """Strip whitespace around strings
 
     Arguments:
@@ -16,7 +19,9 @@ def strip_strs(str_list: typing.Iterable[str]) -> typing.List[str]:
     Returns:
         typing.List[str] -- trimmed strings
     """
-    return [item.strip() for item in str_list]
+    items = [item.strip() for item in str_list]
+
+    return [item for item in items if len(item) > 0]
 
 
 def norm_body(body: typing.Any) -> str:
@@ -25,28 +30,68 @@ def norm_body(body: typing.Any) -> str:
     Returns:
         str -- content body
     """
-    return str(body) if body else ''
+    return str(body).strip() if body else ''
 
 
-def create_title(path: str) -> str:
-    """Auto-generate a content title from filename
+def get_path_stem(path: str) -> str:
+    """Convert a path into a string suitable for titles
 
     Arguments:
-        path {str} -- path to file
+        path {str} -- path to document
 
     Returns:
-        str -- content title
+        str -- filename (minus extension, accents, etc.)
     """
     file_path = Path(path)
-
     stem = normalize(
         'NFKD', file_path.stem).encode('ascii', 'ignore').decode('utf8')
-    words = strip_strs(re.split(r'[,_\-\.\s]+', stem, flags=re.IGNORECASE))
 
-    return ' '.join(words).title()
+    return stem
 
 
-def norm_title(title: typing.Any, path: typing.Union[str, None]) -> str:
+def split_stem(stem: str) -> STR_LIST:
+    """Split string into words on CamelCase and other punctuation
+
+    Arguments:
+        stem {str} -- stem of filename
+
+    Returns:
+        typing.List[str] -- list of words in stem
+    """
+    words = re.split(
+        r'(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|[,\.\-\s]+', stem)
+
+    return words
+
+
+def is_mixed(word: str) -> bool:
+    """Determine if word is mixed/upper case
+
+    Arguments:
+        word {str} -- word
+
+    Returns:
+        bool -- is mixed/upper case
+    """
+    tail = word[1:]
+    return (word == word.upper) or (tail != tail.lower())
+
+
+def entitle(words: typing.List[str]) -> STR_LIST:
+    """Convert string to pretty title case
+
+    Arguments:
+        words {typing.List[str]} -- list of words
+
+    Returns:
+        typing.List[str] -- title-cased words
+    """
+    entitled = [word if is_mixed(word) else word.title() for word in words]
+
+    return entitled
+
+
+def norm_title(title: typing.Any, path: NONE_STR) -> str:
     """Get title property from document loader
 
     Arguments:
@@ -56,13 +101,13 @@ def norm_title(title: typing.Any, path: typing.Union[str, None]) -> str:
     Returns:
         str -- best-available value for document title
     """
-    if title:
-        return str(title)
+    words = title.split() if title else pipe(path, get_path_stem, split_stem)
+    words = pipe(words, strip_strs, entitle)
 
-    return create_title(path) if path else ''
+    return ' '.join(words)
 
 
-def norm_keywords(keywords: typing.Any) -> typing.List[str]:
+def norm_keywords(keywords: typing.Any) -> STR_LIST:
     """Generate list of keywords from document data
 
     Arguments:
@@ -78,10 +123,20 @@ def norm_keywords(keywords: typing.Any) -> typing.List[str]:
     return strip_strs(kws)
 
 
+# pylint: disable=no-self-use,unused-argument
 class Content(ReprAble):
+    """Base class for content"""
     @abc.abstractmethod
-    def get_source(self, path: str) -> typing.Any:
-        pass
+    def get_source(self, path: str):
+        """Get parser for content
+
+        Arguments:
+            path {str} -- path to content
+
+        Returns:
+            typing.Any -- content parser
+        """
+        return path
 
     def get_body(self, src) -> str:
         """Extract body (if any) in `src`
@@ -92,7 +147,7 @@ class Content(ReprAble):
         Returns:
             str -- content
         """
-        return str(src) if isinstance(src, object) else ''
+        return str(src) if src else ''
 
     def get_title(self, src) -> str:
         """Extract title (if any) in `src`
@@ -103,9 +158,9 @@ class Content(ReprAble):
         Returns:
             str -- title
         """
-        return '' if isinstance(src, object) else ''
+        return ''
 
-    def get_keywords(self, src) -> typing.Union[str, typing.List[str]]:
+    def get_keywords(self, src) -> typing.Union[str, STR_LIST]:
         """Extract keywords (if any) in `src`
 
         Arguments:
@@ -114,7 +169,7 @@ class Content(ReprAble):
         Returns:
             typing.List[str] -- document keywords
         """
-        return [] if isinstance(src, object) else ''
+        return []
 
     @property
     def body(self) -> str:
@@ -135,7 +190,7 @@ class Content(ReprAble):
         return self._title
 
     @property
-    def keywords(self) -> typing.List[str]:
+    def keywords(self) -> STR_LIST:
         """Get keywords of content
 
         Returns:
@@ -144,7 +199,12 @@ class Content(ReprAble):
         return self._keywords
 
     @property
-    def path(self) -> typing.Union[str, None]:
+    def path(self) -> NONE_STR:
+        """Get path to document (if any)
+
+        Returns:
+            NONE_STR -- path do document
+        """
         return self._path if self._path else None
 
     def __init__(
@@ -152,7 +212,7 @@ class Content(ReprAble):
             body: typing.Any,
             title: typing.Any,
             keywords: typing.Any,
-            path: typing.Union[str, None] = None) -> None:
+            path: NONE_STR = None) -> None:
         """Initialize
 
         Arguments:
@@ -172,7 +232,16 @@ class Content(ReprAble):
     @staticmethod
     @abc.abstractmethod
     def supports(_: str, __: str) -> bool:
-        pass
+        """Claim support for a given path/extension
+
+        Arguments:
+            _ {str} -- ignored
+            __ {str} -- ignored
+
+        Returns:
+            bool -- False
+        """
+        return False
 
     def __str__(self) -> str:
         return self.body
