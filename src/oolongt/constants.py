@@ -1,6 +1,5 @@
 from pathlib import Path
-
-from .typedefs import STR_LIST  # noqa
+from typing import List  # noqa
 
 # summarizer
 DEFAULT_LENGTH = 5
@@ -16,7 +15,7 @@ DEFAULT_IDIOM = 'default'
 DEFAULT_IDEAL_LENGTH = 20
 DEFAULT_LANGUAGE = 'english'
 DEFAULT_NLTK_STOPS = True
-DEFAULT_USER_STOPS = []   # type: STR_LIST
+DEFAULT_USER_STOPS = []   # type: List[str]
 
 # scored keyword
 KEYWORD_SCORE_K = 1.5
