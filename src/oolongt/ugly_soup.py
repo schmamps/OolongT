@@ -1,12 +1,15 @@
+"""Content query for BeautifulSoup"""
 import typing
 
 from bs4 import BeautifulSoup
 
-from .constants import NONE_STR
+from .typedefs import NONE_STR
 from .typedefs.ugly_query import UglyQuery
 
 
+# pylint: disable=abstract-method
 class UglySoup(BeautifulSoup):
+    """Add query features to BS4"""
     def query(self, query: UglyQuery) -> NONE_STR:
         """Execute a single UglyQuery on soup
 
