@@ -2,6 +2,8 @@
 from PyPDF2 import PdfFileReader
 from PyPDF2.pdf import DocumentInformation
 
+from ..io import get_stream
+from ..typedef import PATH_STR
 from .binary_document import BinaryDocument
 
 
@@ -62,41 +64,19 @@ def get_title(info: DocumentInformation) -> str:
     return ''
 
 
-def get_keywords(info: DocumentInformation) -> str:
-    """Get keywords (if any)
-
-    Arguments:
-        info {DocumentInformation} -- PDF document info
-
-    Returns:
-        str -- document keywords property
-    """
-    try:
-        return info.keywords
-    except AttributeError:
-        pass
-
-    try:
-        return info['/Keywords']
-    except KeyError:
-        pass
-
-    return ''
-
-
 class PdfDocument(BinaryDocument):
     """Parse PDF"""
-    def __init__(self, path: str) -> None:
-        with self.get_stream(path) as stream:
+    def __init__(self, path: PATH_STR) -> None:
+        with get_stream(path) as stream:
             src = PdfFileReader(stream)
             info = src.getDocumentInfo()
 
             body = get_body(src)
             title = get_title(info)
-            keywords = get_keywords(info)
 
-        super().__init__(body, title, keywords, path)
+        self._initialize_document(body, title, path)
 
+    # pylint: disable=unused-argument
     @staticmethod
-    def supports(_: str, ext: str) -> bool:
-        return ext in ['pdf']
+    def supports(path: str, ext: str) -> bool:
+        return ext == 'pdf'

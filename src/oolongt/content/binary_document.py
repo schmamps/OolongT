@@ -1,11 +1,7 @@
-import typing
-
+"""Base class for binary documents"""
 from .document import Document
 
 
 class BinaryDocument(Document):
-    def get_source(self, path: str) -> typing.Any:
-        return self._get_source(path, True)
-
-    def get_stream(self, path: str) -> typing.Any:
-        return self._get_stream(path)
+    """Binary document"""
+    pass

@@ -1,16 +1,17 @@
+"""Plain text document"""
+from ..io import get_contents
 from .text_document import TextDocument
+from ..typedef import PATH_STR
 
 
 class PlainTextDocument(TextDocument):
-    def __init__(self, path: str) -> None:
-        src = self.get_source(path)
+    """Read text file as body of content"""
+    def __init__(self, path: PATH_STR) -> None:
+        body = get_contents(path)
 
-        body = self.get_body(src)
-        title = self.get_title(src)
-        keywords = self.get_keywords(src)
+        self._initialize_document(body, None, path)
 
-        super().__init__(body, title, keywords, path)
-
+    # pylint: disable=unused-argument
     @staticmethod
-    def supports(_: str, __: str) -> bool:
+    def supports(path: str, ext: str) -> bool:
         return True

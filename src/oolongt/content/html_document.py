@@ -1,14 +1,14 @@
 """Parse HTML documents"""
 from bs4.element import Tag
 
-from ..typedefs import NONE_STR
-from ..typedefs.ugly_query import UglyQuery
-from ..ugly_soup import UglySoup
+from ..io import get_contents
+from ..typedef import OPT_STR, PATH_STR
+from ..ugly_soup import UglyQuery, UglySoup
 from .text_document import TextDocument
 
 
 def process(html: str) -> UglySoup:
-    """Parse and filter `html`
+    """Parse and reduce noise in `html`
 
     Arguments:
         html {str} -- document HTML
@@ -29,6 +29,21 @@ def process(html: str) -> UglySoup:
     return soup
 
 
+def get_source(path: PATH_STR) -> UglySoup:
+    """Load HTML from `path`
+
+    Arguments:
+        path {str} -- local/remote path to HTML
+
+    Returns:
+        UglySoup -- BeautifulSoup
+    """
+    html = get_contents(path)
+    src = process(html)
+
+    return src
+
+
 def get_body(src: UglySoup) -> str:
     """Get document body content
 
@@ -38,16 +53,15 @@ def get_body(src: UglySoup) -> str:
     Returns:
         str -- best match for content
     """
-    queries = (
+    body = src.query_sequence(
         UglyQuery('main'),
         UglyQuery('article'),
-        UglyQuery('body'), )
-    body = src.query_sequence(queries)
+        UglyQuery('body'))
 
     return body
 
 
-def get_og_title(tag: Tag) -> NONE_STR:
+def get_og_title(tag: Tag) -> OPT_STR:
     """Get OpenGraph-based title if any, else None
 
     Arguments:
@@ -71,55 +85,30 @@ def get_title(src: UglySoup) -> str:
     Returns:
         str -- title (if any)
     """
-    queries = (
-        UglyQuery('meta', get_og_title),
-        UglyQuery('title'), )
-    title = src.query_sequence(queries)
+    open_graph = UglyQuery('meta', get_og_title)
+    title_tag = UglyQuery('title')
+
+    title = src.query_sequence(open_graph, title_tag)
 
     return title
 
 
 class HtmlDocument(TextDocument):
     """Parse HTML"""
-    def get_source(self, path: str) -> UglySoup:
-        """Load HTML from `path`
-
-        Arguments:
-            path {str} -- local/remote path to HTML
-
-        Returns:
-            UglySoup -- BeautifulSoup
-        """
-        html = super().get_source(path)
-        src = process(html)
-
-        return src
-
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: PATH_STR) -> None:
         """Initialize
 
         Arguments:
             path {str} -- path to HTML
         """
-        src = self.get_source(path)
-
+        src = get_source(path)
         body = get_body(src)
         title = get_title(src)
-        keywords = None
 
-        super().__init__(body, title, keywords, path)
+        self._initialize_document(body, title, path)
 
     @staticmethod
-    def supports(path: NONE_STR, ext: NONE_STR) -> bool:
-        """Register support for given extension (path ignored)
-
-        Arguments:
-            path {str} -- path to document
-            ext {str} -- extension of document
-
-        Returns:
-            bool -- format is supported
-        """
+    def supports(path: OPT_STR, ext: OPT_STR) -> bool:
         path_str = str(path)[:4]
 
         return path_str in ['http', 'ftp:'] or str(ext).startswith('htm')
