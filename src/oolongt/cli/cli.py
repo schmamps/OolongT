@@ -6,7 +6,7 @@ from textwrap import wrap as wrap_text
 from ..constants import DEFAULT_LENGTH
 from ..content import Document
 from ..files import get_document
-from ..typedef import OPT_STR, STR_LIST
+from ..typings import OptionalString, StringList
 
 
 DEFAULT_WRAP = 70
@@ -45,14 +45,14 @@ def get_args():
     return args
 
 
-def get_summary(doc: Document, limit: float, wrap: int) -> STR_LIST:
+def get_summary(doc: Document, limit: float, wrap: int) -> StringList:
     sentences = doc.summarize(limit)
     text = ' '.join(sentences)
 
     return [text] if wrap < 1 else wrap_text(text, width=wrap)
 
 
-def get_output_lines(path: str, ext: OPT_STR, limit: float, wrap: int):
+def get_output_lines(path: str, ext: OptionalString, limit: float, wrap: int):
     doc = get_document(path, ext)
 
     yield doc.title or path
