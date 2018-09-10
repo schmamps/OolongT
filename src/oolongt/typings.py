@@ -1,3 +1,4 @@
+"""Custom type definitions"""
 import pathlib  # noqa: F401
 import typing  # noqa: F401
 
