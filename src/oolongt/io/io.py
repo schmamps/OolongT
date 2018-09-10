@@ -1,6 +1,6 @@
 """Simple I/O helpers"""
 import typing
-from json import loads, JSONDecodeError
+from json import JSONDecodeError, loads
 from pathlib import Path
 from re import findall
 from urllib import request
