@@ -5,6 +5,7 @@ from re import sub
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
+from ..typings import StringList
 from .parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
 from .scored_keyword import ScoredKeyword
 
@@ -24,11 +25,11 @@ def remove_punctuations(text: str) -> str:
 
 
 class Parser:
+    """Parse content for words and keywords"""
     def __init__(
             self,
             root: str = BUILTIN,
-            idiom: str = DEFAULT_IDIOM
-            ) -> None:
+            idiom: str = DEFAULT_IDIOM) -> None:
         """Initialize class with `root`/`idiom`.json
 
         Keyword Arguments:
@@ -47,15 +48,26 @@ class Parser:
 
         self.ideal_sentence_length = isl  # type: int
         self.language = language          # type: str
-        self.stop_words = stop_words      # type: typing.List[str]
+        self.stop_words = stop_words      # type: StringList
         self._stemmer = PorterStemmer(mode=PorterStemmer.MARTIN_EXTENSIONS)
 
     def get_words(
             self,
             text: str,
             stop_words=True,
-            stem=False,
-            ) -> typing.List[str]:
+            stem=False) -> StringList:
+        """List of words from `text`
+
+        Arguments:
+            text {str} -- text
+
+        Keyword Arguments:
+            stop_words {bool} -- remove stop words (default: {True})
+            stem {bool} -- get word stems instead of whole (default: {False})
+
+        Returns:
+            StringList -- list of words
+        """
         words = self.split_words(text)
 
         if not stop_words:
@@ -66,47 +78,47 @@ class Parser:
 
         return list(words)
 
-    def get_all_words(self, text: str) -> typing.List[str]:
+    def get_all_words(self, text: str) -> StringList:
         """List words in `text` sequentially
 
         Arguments:
             text {str} -- text
 
         Returns:
-            typing.List[str] -- words in text
+            StringList -- words in text
         """
         return self.get_words(text)
 
-    def get_all_stems(self, text: str) -> typing.List[str]:
+    def get_all_stems(self, text: str) -> StringList:
         """List all stems in `text` sequentially
 
         Arguments:
             text {str} -- text
 
         Returns:
-            typing.List[str] -- stems in text
+            StringList -- stems in text
         """
         return self.get_words(text, stem=True)
 
-    def get_key_words(self, text: str) -> typing.List[str]:
+    def get_key_words(self, text: str) -> StringList:
         """List all meaningful words in `text`
 
         Arguments:
             text {str} -- text
 
         Returns:
-            typing.List[str] -- words in text, minus stop words
+            StringList -- words in text, minus stop words
         """
         return self.get_words(text, stop_words=False)
 
-    def get_key_stems(self, text: str) -> typing.List[str]:
+    def get_key_stems(self, text: str) -> StringList:
         """List all meaningful stems in `text`
 
         Arguments:
             text {str} -- text
 
         Returns:
-            typing.List[str] -- words in text, minus stop words
+            StringList -- words in text, minus stop words
         """
         return self.get_words(text, stop_words=False, stem=True)
 
@@ -129,14 +141,14 @@ class Parser:
 
         return keywords
 
-    def split_sentences(self, text: str) -> typing.List[str]:
+    def split_sentences(self, text: str) -> StringList:
         """List sentences in `text` via tokenizer sequentially
 
         Arguments:
             text {str} -- body of content
 
         Returns:
-            typing.List[str] -- sentences in text
+            StringList -- sentences in text
         """
         normalized = sub('\\s+', ' ', text)
 
@@ -149,7 +161,7 @@ class Parser:
             sentence {str} -- text to split
 
         Returns:
-            typing.List[str] -- words in text
+            StringList -- words in text
         """
         bare = remove_punctuations(text).lower()
         split = word_tokenize(bare.lower(), language=self.language)

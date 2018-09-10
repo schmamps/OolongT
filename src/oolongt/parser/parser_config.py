@@ -10,6 +10,9 @@ from ..constants import (
     DEFAULT_NLTK_STOPS, DEFAULT_USER_STOPS)
 from ..io import load_json
 from ..repr_able import ReprAble
+from ..typings import StringList
+
+IdiomData = typing.Tuple[int, str, StringList]
 
 
 def get_config_path(root: str, idiom: str) -> Path:
@@ -47,7 +50,7 @@ def get_stop_words(idiom_spec: dict, language: str) -> set:
     return set(nltk + user)
 
 
-def parse_config(path: Path) -> typing.Tuple[int, str, typing.List[str]]:
+def parse_config(path: Path) -> typing.Tuple[int, str, StringList]:
     """Load defaults, override with loaded data
 
     Arguments:
@@ -57,7 +60,7 @@ def parse_config(path: Path) -> typing.Tuple[int, str, typing.List[str]]:
         ValueError -- unable to read file
 
     Returns:
-        typing.Tuple[int, str, typing.List[str]] --
+        typing.Tuple[int, str, StringList] --
             ideal length, NLTK language, stop words
     """
     try:
@@ -78,8 +81,7 @@ def parse_config(path: Path) -> typing.Tuple[int, str, typing.List[str]]:
 
 def load_idiom(
         root: str = BUILTIN,
-        idiom: str = DEFAULT_IDIOM
-        ) -> typing.Tuple[int, str, typing.List[str]]:
+        idiom: str = DEFAULT_IDIOM) -> IdiomData:
     """Get class initialization data from `root`/`idiom`.json
 
     Arguments:
@@ -93,8 +95,8 @@ def load_idiom(
         JSONDecodeError -- unable to load JSON from file
 
     Returns:
-        typing.Tuple[int, str, typing.List[str]] --
-            ideal length, NLTK language, stop words
+        IDIOM_DATA --
+            tuple(ideal length, NLTK language, stop words)
     """
     root_path = Path(root)
     cfg_path = get_config_path(root, idiom)
@@ -111,10 +113,11 @@ def load_idiom(
     return config
 
 
-class ParserConfig(ReprAble):
+class ParserConfig(ReprAble):  # pylint: disable=too-few-public-methods
+    """Parser configuration data"""
     def __init__(self, root: str, idiom: str) -> None:
         ideal, language, stop_words = load_idiom(root, idiom)
 
         self.ideal_sentence_length = ideal  # type: int
         self.language = language            # type: str
-        self.stop_words = stop_words        # type: typing.List[str]
+        self.stop_words = stop_words        # type: StringList
