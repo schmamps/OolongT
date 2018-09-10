@@ -1,7 +1,8 @@
 """Package Constants"""
 # pylint: disable=unused-import
 from pathlib import Path
-from typing import List  # noqa: F401
+
+from .typings import StringList  # noqa: F401
 
 # versioning
 PKG_NAME = 'OolongT'
@@ -24,7 +25,8 @@ DEFAULT_IDIOM = 'default'
 DEFAULT_IDEAL_LENGTH = 20
 DEFAULT_LANGUAGE = 'english'
 DEFAULT_NLTK_STOPS = True
-DEFAULT_USER_STOPS = []   # type: List[str]
+DEFAULT_USER_STOPS = []   # type: StringList
 
 # scored keyword
 KEYWORD_SCORE_K = 1.5
+SENTENCE_SCORE_K = 5.0
