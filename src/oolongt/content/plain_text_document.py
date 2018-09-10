@@ -1,7 +1,7 @@
 """Plain text document"""
 from ..io import get_contents
-from .text_document import TextDocument
 from ..typings import PathOrString
+from .text_document import TextDocument
 
 
 class PlainTextDocument(TextDocument):

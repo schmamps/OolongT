@@ -7,7 +7,7 @@ from ..constants import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
 from ..pipe import pipe
 from ..repr_able import ReprAble
 from ..summarizer import ScoredSentence
-from ..text import summarize, score_body_sentences
+from ..text import score_body_sentences, summarize
 from ..typings import StringList
 
 
