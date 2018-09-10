@@ -3,7 +3,6 @@
 from pathlib import Path
 from typing import List  # noqa: F401
 
-
 # versioning
 PKG_NAME = 'OolongT'
 VERSION_MAJOR = 1
