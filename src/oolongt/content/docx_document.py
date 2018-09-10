@@ -2,13 +2,13 @@
 from docx2txt import DocxFile
 
 from ..io import get_stream
-from ..typedef import PATH_STR
+from ..typings import PathOrString
 from .binary_document import BinaryDocument
 
 
 class DocxDocument(BinaryDocument):
     """Parse Word XML"""
-    def __init__(self, path: PATH_STR) -> None:
+    def __init__(self, path: PathOrString) -> None:
         """Initialize for file at `path`
         Arguments:
             path {str} -- path to document

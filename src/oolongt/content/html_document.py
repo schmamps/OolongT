@@ -2,7 +2,7 @@
 from bs4.element import Tag
 
 from ..io import get_contents
-from ..typedef import OPT_STR, PATH_STR
+from ..typings import OptionalString, PathOrString
 from ..ugly_soup import UglyQuery, UglySoup
 from .text_document import TextDocument
 
@@ -29,7 +29,7 @@ def process(html: str) -> UglySoup:
     return soup
 
 
-def get_source(path: PATH_STR) -> UglySoup:
+def get_source(path: PathOrString) -> UglySoup:
     """Load HTML from `path`
 
     Arguments:
@@ -61,14 +61,14 @@ def get_body(src: UglySoup) -> str:
     return body
 
 
-def get_og_title(tag: Tag) -> OPT_STR:
+def get_og_title(tag: Tag) -> OptionalString:
     """Get OpenGraph-based title if any, else None
 
     Arguments:
         tag {Tag} -- page element
 
     Returns:
-        NONE_STR -- str or None
+        OptionalString -- str or None
     """
     if tag.get('property') == 'og:title':
         return tag.get('content')
@@ -95,7 +95,7 @@ def get_title(src: UglySoup) -> str:
 
 class HtmlDocument(TextDocument):
     """Parse HTML"""
-    def __init__(self, path: PATH_STR) -> None:
+    def __init__(self, path: PathOrString) -> None:
         """Initialize
 
         Arguments:
@@ -108,7 +108,7 @@ class HtmlDocument(TextDocument):
         self._initialize_document(body, title, path)
 
     @staticmethod
-    def supports(path: OPT_STR, ext: OPT_STR) -> bool:
+    def supports(path: OptionalString, ext: OptionalString) -> bool:
         path_str = str(path)[:4]
 
         return path_str in ['http', 'ftp:'] or str(ext).startswith('htm')

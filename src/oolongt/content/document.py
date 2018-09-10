@@ -1,18 +1,18 @@
 import abc
 import typing
 
-from ..typedef import OPT_STR, PATH_STR
+from ..typings import OptionalString, PathOrString
 from .content import Content
 
 
-def norm_path(path: PATH_STR) -> OPT_STR:
+def norm_path(path: PathOrString) -> OptionalString:
     """Cast path as string or None
 
     Arguments:
-        path {PATH_STR} -- str or pathlib.Path to document
+        path {PathOrString} -- str or pathlib.Path to document
 
     Returns:
-        OPT_STR -- path as str, else None
+        OptionalString -- path as str, else None
     """
     if isinstance(path, str):
         return path
@@ -22,11 +22,11 @@ def norm_path(path: PATH_STR) -> OPT_STR:
 
 class Document(Content):
     @property
-    def path(self) -> OPT_STR:
+    def path(self) -> OptionalString:
         """Get path to document (if any)
 
         Returns:
-            OPT_STR -- path do document
+            OptionalString -- path do document
         """
         return self._path
 
@@ -34,7 +34,7 @@ class Document(Content):
             self,
             body: typing.Any,
             title: typing.Any,
-            path: PATH_STR):
+            path: PathOrString):
         self._path = norm_path(path)
         self._initialize_content(body, title)
 
@@ -42,7 +42,7 @@ class Document(Content):
             self,
             body: typing.Any,
             title: typing.Any,
-            path: PATH_STR) -> None:
+            path: PathOrString) -> None:
         self._initialize_document(body, title, path)
 
     def __repr__(self) -> str:

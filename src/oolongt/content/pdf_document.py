@@ -3,7 +3,7 @@ from PyPDF2 import PdfFileReader
 from PyPDF2.pdf import DocumentInformation
 
 from ..io import get_stream
-from ..typedef import PATH_STR
+from ..typings import PathOrString
 from .binary_document import BinaryDocument
 
 
@@ -66,7 +66,7 @@ def get_title(info: DocumentInformation) -> str:
 
 class PdfDocument(BinaryDocument):
     """Parse PDF"""
-    def __init__(self, path: PATH_STR) -> None:
+    def __init__(self, path: PathOrString) -> None:
         with get_stream(path) as stream:
             src = PdfFileReader(stream)
             info = src.getDocumentInfo()

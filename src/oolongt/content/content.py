@@ -3,12 +3,15 @@ import re
 import typing
 from unicodedata import normalize
 
+from ..constants import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
 from ..pipe import pipe
 from ..repr_able import ReprAble
-from ..typedef import STR_LIST
+from ..summarizer import ScoredSentence
+from ..text import summarize, score_body_sentences
+from ..typings import StringList
 
 
-def strip_strs(str_list: typing.Iterable[typing.Any]) -> STR_LIST:
+def strip_strs(str_list: typing.Iterable[typing.Any]) -> StringList:
     """Strip whitespace around strings
 
     Arguments:
@@ -22,7 +25,7 @@ def strip_strs(str_list: typing.Iterable[typing.Any]) -> STR_LIST:
     return [item for item in items if len(item) > 0]
 
 
-def split_strs(text: typing.Any, sep: str = r'\s+') -> STR_LIST:
+def split_strs(text: typing.Any, sep: str = r'\s+') -> StringList:
     """Split `text` by separator `sep`
 
     Arguments:
@@ -32,18 +35,18 @@ def split_strs(text: typing.Any, sep: str = r'\s+') -> STR_LIST:
         sep {str} -- string to split on (default: {' '})
 
     Returns:
-        STR_LIST -- list of split strings
+        StringList -- list of split strings
     """
     subject = str(text) if text and text is not True else ''
 
     return re.split(sep, subject)
 
 
-def join_strs(words: STR_LIST, sep: str = ' ') -> str:
+def join_strs(words: StringList, sep: str = ' ') -> str:
     """Join list `words` by string `sep`
 
     Arguments:
-        words {STR_LIST} -- list of words
+        words {StringList} -- list of words
 
     Returns:
         str -- joined words
@@ -113,6 +116,43 @@ class Content(ReprAble):
             title {typing.Any} -- nominal content title
         """
         self._initialize_content(body, title)
+
+    def score_sentences(
+            self,
+            root: str = BUILTIN,
+            idiom: str = DEFAULT_IDIOM) -> typing.List[ScoredSentence]:
+        """List and score every sentence in `self.body`
+
+        Keyword Arguments:
+            root {str} -- root directory of idiom config
+            idiom {str} -- basename of idiom config
+
+        Returns:
+            typing.List[ScoredSentence] --
+                List of sentences with scoring and metadata
+        """
+        return score_body_sentences(self.body, self.title, root, idiom)
+
+    def summarize(
+            self,
+            limit: float = DEFAULT_LENGTH,
+            root: str = BUILTIN,
+            idiom: str = DEFAULT_IDIOM) -> StringList:
+        """Get `limit` best sentences from `body` in content order
+
+        See documentation for oolongt.text.summarize()
+
+        Keyword Arguments:
+            limit {float} -- limit of sentences to return (see text package)
+            root {str} -- root directory of idiom data
+                (default: {parser.BUILTIN})
+            idiom {str} -- basename of idiom file
+                (default: {parser.DEFAULT_IDIOM})
+
+        Returns:
+            StringList -- top sentences in content order
+        """
+        return summarize(self.body, self.title, limit, root, idiom)
 
     def __str__(self) -> str:
         return self.body
