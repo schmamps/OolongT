@@ -1,2 +1,2 @@
 """Initialize files subpackage"""
-from oolongt.files.files import score_body_sentences, summarize  # noqa
+from .files import get_document  # noqa: F401
