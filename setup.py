@@ -6,6 +6,7 @@ from setup.cleanup_command import CleanupCommand
 from setup.generate_command import GenerateCommand
 from setup.nltk_command import NltkCommand
 from setup.py_test_command import PyTestCommand
+from src.oolongt.constants import VERSION
 
 # pylint: enable=no-name-in-module
 
@@ -22,7 +23,7 @@ def readme() -> str:
 
 setuptools.setup(
     name='oolongt',
-    version='1.100.0',
+    version=VERSION,
     author='Andrew Champion',
     author_email='awchampion@gmail.com',
     description='A text summarization library',
