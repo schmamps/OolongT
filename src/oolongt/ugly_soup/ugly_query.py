@@ -1,8 +1,10 @@
+"""Query into UglySoup"""
 import typing
 
 from bs4.element import Tag
 
-from .repr_able import ReprAble
+from ..repr_able import ReprAble
+from ..typings import OptionalString, StringList
 
 
 def get_text(tag: Tag) -> str:
@@ -18,7 +20,7 @@ def get_text(tag: Tag) -> str:
 
 
 def list_tags(
-        tags: typing.Union[str, typing.Sequence[str]]) -> typing.List[str]:
+        tags: typing.Union[str, typing.Sequence[str]]) -> StringList:
     """Expand tag list into formal typing.List of tag strings
 
     Arguments:
@@ -26,7 +28,7 @@ def list_tags(
             list of tags as Sequence of strings or comma-delimited
 
     Returns:
-        typing.List[str] -- [description]
+        StringList -- list of tags
     """
     raw_tags = tags.split(',') if isinstance(tags, str) else list(tags)
     final_tags = [str(tag).strip() for tag in raw_tags]
@@ -34,7 +36,9 @@ def list_tags(
     return final_tags
 
 
+# pylint: disable=too-few-public-methods
 class UglyQuery(ReprAble):
+    """Query data for UglySoup"""
     def __init__(
             self,
             tags: typing.Union[str, typing.Sequence[str]],
@@ -50,13 +54,13 @@ class UglyQuery(ReprAble):
         self.tags = list_tags(tags)
         self._tester = tester
 
-    def test(self, tag: Tag) -> typing.Union[str, None]:
+    def test(self, tag: Tag) -> OptionalString:
         """Process tag, return content if found else None
 
         Arguments:
-            tag {Tag} -- [description]
+            tag {Tag} -- BeautifulSoup Tag object
 
         Returns:
-            typing.Union[str, None] -- [description]
+            OptionalString -- content or None
         """
         return self._tester(tag)

@@ -1,23 +1,21 @@
 """Content query for BeautifulSoup"""
-import typing
-
 from bs4 import BeautifulSoup
 
-from .typedefs import NONE_STR
-from .typedefs.ugly_query import UglyQuery
+from ..typings import OptionalString
+from .ugly_query import UglyQuery
 
 
 # pylint: disable=abstract-method
 class UglySoup(BeautifulSoup):
     """Add query features to BS4"""
-    def query(self, query: UglyQuery) -> NONE_STR:
+    def query(self, query: UglyQuery) -> OptionalString:
         """Execute a single UglyQuery on soup
 
         Arguments:
             query {UglyQuery} -- an UglyQuery
 
         Returns:
-            NONE_STR -- str if found, None if no match
+            OptionalString -- str if found, None if no match
         """
         for tag in self(query.tags):
             val = query.test(tag)
@@ -29,7 +27,7 @@ class UglySoup(BeautifulSoup):
 
     def query_sequence(
             self,
-            queries: typing.Sequence[UglyQuery],
+            *queries: UglyQuery,
             default='') -> str:
         """Find first match in sequence of UglyQuery objects
 
@@ -55,4 +53,4 @@ class UglySoup(BeautifulSoup):
         init_kwargs = {'features': 'html.parser'}
         init_kwargs.update(kwargs)
 
-        super().__init__(html, *args, **kwargs)
+        super().__init__(html, *args, **init_kwargs)
