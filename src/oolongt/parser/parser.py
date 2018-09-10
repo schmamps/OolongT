@@ -5,8 +5,8 @@ from re import sub
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from .typedefs.parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
-from .typedefs.scored_keyword import ScoredKeyword
+from .parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
+from .scored_keyword import ScoredKeyword
 
 
 def remove_punctuations(text: str) -> str:
