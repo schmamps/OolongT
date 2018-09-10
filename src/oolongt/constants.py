@@ -1,5 +1,15 @@
+"""Package Constants"""
+# pylint: disable=unused-import
 from pathlib import Path
-from typing import List  # noqa
+from typing import List  # noqa: F401
+
+
+# versioning
+PKG_NAME = 'OolongT'
+VERSION_MAJOR = 1
+VERSION_MINOR = 100
+VERSION_REV = 0
+VERSION = '{}.{}.{}'.format(VERSION_MAJOR, VERSION_MINOR, VERSION_REV)
 
 # summarizer
 DEFAULT_LENGTH = 5
