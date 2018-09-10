@@ -1,20 +1,34 @@
 """Class REPR helper"""
-import typing
 
 
 class ReprAble:
-    def _un_kwarg(self, kwargs: typing.Dict[str, typing.Any]) -> str:
-        if len(kwargs) == 0:
-            return ''
-
-        return ', ' + ', '.join([
-            '{}={!r}'.format(key, val)
-            for key, val in kwargs.items()])
-
+    """Common class methods"""
     def _repr_(self, *args, **kwargs) -> str:
-        template = '{0}({1}{2})'.format(
-            self.__class__.__name__,
-            ', '.join(['{!r}'] * len(args)),
-            self._un_kwarg(kwargs))
+        """Simplify REPR method
 
-        return template.format(*args)
+        Returns:
+            str -- class REPR
+        """
+        class_name = self.__class__.__name__
+        p_args = [repr(v) for v in args]
+        k_args = ['{}={!r}'.format(k, v) for k, v in kwargs.items()]
+
+        return '{}({})'.format(class_name, ', '.join(p_args + k_args))
+
+    def __lt__(self, other) -> bool:
+        return str(self) < str(other)
+
+    def __eq__(self, other) -> bool:
+        return str(self) == str(other)
+
+    def __gt__(self, other) -> bool:
+        return str(self) > str(other)
+
+    def __ne__(self, other) -> bool:
+        return not self == other
+
+    def __ge__(self, other) -> bool:
+        return not self < other
+
+    def __le__(self, other) -> bool:
+        return not self > other
