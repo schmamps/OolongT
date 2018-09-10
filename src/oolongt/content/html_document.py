@@ -105,7 +105,7 @@ class HtmlDocument(TextDocument):
         body = get_body(src)
         title = get_title(src)
 
-        self._initialize_document(body, title, path)
+        super().__init__(body, title, path)
 
     @staticmethod
     def supports(path: OptionalString, ext: OptionalString) -> bool:

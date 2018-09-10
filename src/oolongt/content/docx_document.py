@@ -19,7 +19,7 @@ class DocxDocument(BinaryDocument):
             body = src.main
             title = src.properties.get('title')
 
-        self._initialize_document(body, title, path)
+        super().__init__(body, title, path)
 
     # pylint: disable=unused-argument
     @staticmethod

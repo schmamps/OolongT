@@ -74,7 +74,7 @@ class PdfDocument(BinaryDocument):
             body = get_body(src)
             title = get_title(info)
 
-        self._initialize_document(body, title, path)
+        super().__init__(body, title, path)
 
     # pylint: disable=unused-argument
     @staticmethod

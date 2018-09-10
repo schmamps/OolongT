@@ -1,3 +1,4 @@
+"""Initialize content subpackage"""
 from .binary_document import BinaryDocument  # noqa: F401
 from .content import Content  # noqa: F401
 from .document import Document  # noqa: F401

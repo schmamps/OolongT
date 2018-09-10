@@ -4,4 +4,6 @@ from .document import Document
 
 class BinaryDocument(Document):
     """Binary document"""
-    pass
+    @staticmethod
+    def supports(path: str, ext: str) -> bool:
+        return False and path == ext

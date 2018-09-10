@@ -15,10 +15,10 @@ def strip_strs(str_list: typing.Iterable[typing.Any]) -> StringList:
     """Strip whitespace around strings
 
     Arguments:
-        str_list {typing.List[str]} -- list of strings
+        str_list {StringList} -- list of strings
 
     Returns:
-        typing.List[str] -- trimmed strings
+        StringList -- trimmed strings
     """
     items = [str(item).strip() for item in str_list]
 
@@ -98,7 +98,7 @@ class Content(ReprAble):
         """
         return self._title
 
-    def _initialize_content(self, body: typing.Any, title: typing.Any):
+    def __init__(self, body: typing.Any, title: typing.Any) -> None:
         """Initialize basic properties
 
         Arguments:
@@ -107,15 +107,6 @@ class Content(ReprAble):
         """
         self._body = norm_text(body)
         self._title = norm_text(title)
-
-    def __init__(self, body: typing.Any, title: typing.Any) -> None:
-        """Initialize basic properties
-
-        Arguments:
-            body {typing.Any} -- nominal content body
-            title {typing.Any} -- nominal content title
-        """
-        self._initialize_content(body, title)
 
     def score_sentences(
             self,

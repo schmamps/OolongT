@@ -1,3 +1,4 @@
+"""Document-based content"""
 import abc
 import typing
 
@@ -21,6 +22,7 @@ def norm_path(path: PathOrString) -> OptionalString:
 
 
 class Document(Content):
+    """Document subclass of Content"""
     @property
     def path(self) -> OptionalString:
         """Get path to document (if any)
@@ -30,20 +32,13 @@ class Document(Content):
         """
         return self._path
 
-    def _initialize_document(
-            self,
-            body: typing.Any,
-            title: typing.Any,
-            path: PathOrString):
-        self._path = norm_path(path)
-        self._initialize_content(body, title)
-
     def __init__(
             self,
             body: typing.Any,
             title: typing.Any,
             path: PathOrString) -> None:
-        self._initialize_document(body, title, path)
+        self._path = norm_path(path)
+        super().__init__(body, title)
 
     def __repr__(self) -> str:
         return self._repr_(

@@ -9,7 +9,7 @@ class PlainTextDocument(TextDocument):
     def __init__(self, path: PathOrString) -> None:
         body = get_contents(path)
 
-        self._initialize_document(body, None, path)
+        super().__init__(body, None, path)
 
     # pylint: disable=unused-argument
     @staticmethod
