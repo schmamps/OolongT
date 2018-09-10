@@ -3,8 +3,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 
-from src.oolongt.parser import Parser
-from src.oolongt.typedefs import ScoredKeyword
+from src.oolongt.parser import Parser, ScoredKeyword
 from setup.generate import generate_set, get_final_path, process_keywords
 from setup.util import math
 from tests.typedefs import Sample

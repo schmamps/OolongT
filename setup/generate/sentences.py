@@ -4,8 +4,7 @@ from pathlib import Path
 
 from setup.generate import generate_set, get_final_path
 from setup.util import math
-from src.oolongt.summarizer import Summarizer
-from src. oolongt.typedefs import ScoredSentence
+from src.oolongt.summarizer import ScoredSentence, Summarizer
 from tests.typedefs import Sample
 
 SAMPLING_SIZE = 25

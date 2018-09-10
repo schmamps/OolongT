@@ -4,7 +4,7 @@ from pathlib import Path
 
 from setup.generate import generate_set, get_final_path, process_keywords
 from setup.util import json_data
-from src.oolongt.typedefs import ScoredKeyword
+from src.oolongt.parser import ScoredKeyword
 from tests.typedefs import Sample
 
 
