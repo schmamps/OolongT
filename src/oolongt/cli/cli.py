@@ -8,7 +8,6 @@ from ..content import Document
 from ..files import get_document
 from ..typings import OptionalString, StringList
 
-
 DEFAULT_WRAP = 70
 
 

@@ -1,7 +1,6 @@
 import pathlib  # noqa: F401
 import typing  # noqa: F401
 
-
 PathOrString = typing.Union[str, pathlib.Path]
 OptionalString = typing.Optional[str]
 StringList = typing.List[str]
