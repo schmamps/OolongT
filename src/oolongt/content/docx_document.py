@@ -9,10 +9,6 @@ from .binary_document import BinaryDocument
 class DocxDocument(BinaryDocument):
     """Parse Word XML"""
     def __init__(self, path: PathOrString) -> None:
-        """Initialize for file at `path`
-        Arguments:
-            path {str} -- path to document
-        """
         with get_stream(path) as stream:
             src = DocxFile(stream)
 
