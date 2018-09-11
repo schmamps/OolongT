@@ -2,9 +2,14 @@
 import typing
 from random import shuffle
 
+from src.oolongt.typings import AnyList, StringList
 from tests.constants import TEXT_PATH
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_sentence import SampleSentence
+
+SampleGenerator = typing.Generator[Sample, None, None]
+SampleSentenceGenerator = typing.Generator[
+    typing.Tuple[Sample, SampleSentence], None, None]
 
 
 def snip(
@@ -43,16 +48,14 @@ def snip(
     return clip + ellip
 
 
-def randomize_list(
-        src: typing.List[typing.Any]
-        ) -> typing.List[typing.Any]:
+def randomize_list(src: AnyList) -> AnyList:
     """Get a reordered copy of `src`
 
     Arguments:
-        src {typing.List[typing.Any]} -- source list
+        src {AnyList} -- source list
 
     Returns:
-        typing.List[typing.Any] --
+        AnyList --
             copy of source list in different order (if possible)
 
     >>> [] == randomize_list([])
@@ -103,7 +106,7 @@ def get_sample(sample_name: str) -> Sample:
     return Sample(TEXT_PATH, sample_name)
 
 
-def get_samples(sample_names: typing.List[str]) -> typing.Iterable[Sample]:
+def get_samples(sample_names: StringList) -> SampleGenerator:
     """Get Samples by name
 
     Returns:
@@ -113,17 +116,25 @@ def get_samples(sample_names: typing.List[str]) -> typing.Iterable[Sample]:
         yield get_sample(sample_name)
 
 
-def get_sample_ids(sample_names: typing.List[str]) -> typing.List[str]:
+def get_sample_ids(sample_names: StringList) -> StringList:
+    """List test IDs from list of samples
+
+    Arguments:
+        sample_names {StringList} -- [description]
+
+    Returns:
+        StringList -- [description]
+    """
+
     return pad_to_longest(['src: {}'.format(x) for x in sample_names])
 
 
 def get_sample_sentences(
-        sample_names: typing.List[str],
-        ) -> typing.Iterable[typing.Tuple[Sample, SampleSentence]]:
+        sample_names: StringList) -> SampleSentenceGenerator:
     """Get Sample, each sentence from Sample
 
     Arguments:
-        sample_names {typing.List[str]} -- names of samples
+        sample_names {StringList} -- names of samples
 
     Returns:
         typing.Iterable[Sample] -- Iterator of Samples
@@ -135,13 +146,11 @@ def get_sample_sentences(
             yield samp, sentence
 
 
-def get_sample_sentence_ids(
-        sample_names: typing.List[str]
-        ) -> typing.List[str]:
+def get_sample_sentence_ids(sample_names: StringList) -> StringList:
     """List friendly names of sample sentences
 
     Returns:
-        typing.List[str] -- IDs of sample sentences
+        StringList -- IDs of sample sentences
     """
     ids = []
     for sample_name in sample_names:
@@ -179,14 +188,14 @@ def check_exception(catch: Exception, expected: typing.Any) -> typing.Any:
     return catch
 
 
-def pad_to_longest(vals: typing.List[typing.Any]) -> typing.List[str]:
+def pad_to_longest(vals: AnyList) -> StringList:
     """Pad all strings to length of longest in list
 
     Arguments:
-        strs {typing.List[str]} -- string list
+        strs {StringList} -- string list
 
     Returns:
-        typing.List[str] -- list of strings
+        StringList -- list of strings
     """
     strs = [str(x) for x in vals]
     pad_len = max([len(x) for x in strs])
@@ -196,5 +205,33 @@ def pad_to_longest(vals: typing.List[typing.Any]) -> typing.List[str]:
     return padded
 
 
-def index_of(index, of):
+def index_of(index: int, of: int):  # pylint: disable=invalid-name
+    """Return '$index of $of'
+
+    Arguments:
+        index {int} -- index
+        of {int} -- count
+
+    Returns:
+        str -- string
+    """
     return '{!r} of {!r}'.format(index, of)
+
+
+# pylint: disable=unused-argument
+def return_true(*args, **kwargs):
+    """Always return True
+
+    Returns:
+        bool -- True
+    """
+    return True
+
+
+def return_false(*args, **kwargs):
+    """Always return False
+
+    Returns:
+        bool -- False
+    """
+    return False
