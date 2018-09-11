@@ -12,16 +12,14 @@ from tests.helpers import assert_ex, pad_to_longest, snip
         (['1234', '6789'], {}, '1234, 6789'),
         (['1234', '7890'], {'list_separator': '56'}, '1234567890'),
         ('1234567890', {'max_len': 9}, '123456...'),
-        ('1234567890', {'max_len': 9, 'ellip': '!'}, '12345678!'),
-    ],
+        ('1234567890', {'max_len': 9, 'ellip': '!'}, '12345678!'), ],
     ids=pad_to_longest([
         'args: none           == "in"',
         'args: none           == "in" (truncated)',
         'args: none           == [in] (joined by comma)',
         'args: list_separator == [in] (joined creatively)',
         'args: max_len,       == "in" (truncated)',
-        'args: max_len, ellip == "in" (truncated creatively)',
-    ]))
+        'args: max_len, ellip == "in" (truncated creatively)', ]))
 def test_snip(
         text: str,
         kwargs: typing.Dict[str, typing.Any],
