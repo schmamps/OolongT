@@ -82,8 +82,6 @@ class TestDocument(TestContent):
             inst.__class__.__name__, body, title, path)
 
         received = repr(inst)
-        if received != expected_str:
-            breakpoint()
 
         return received == expected_str
 

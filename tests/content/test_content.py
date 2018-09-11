@@ -136,9 +136,6 @@ class TestContent:
 
         received = repr(inst)
 
-        if received != expected_str:
-            breakpoint()
-
         return received == expected_str
 
     @param_content_init(Content)
