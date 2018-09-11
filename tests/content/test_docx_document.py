@@ -2,16 +2,22 @@
 from src.oolongt.content import DocxDocument
 from test_binary_document import TestBinaryDocument
 from tests.params.content import (
-    DOC_INIT_EXPECTED, param_document_init, param_supports)
+    DocumentInit, compare_document, param_document_init, param_supports)
+
+STEMS = ['basic']
+EXTENSION = 'docx'
 
 
 class TestDocxDocument(TestBinaryDocument):
-    @param_document_init(DocxDocument, 'docx')
-    def test___init__(self, inst: DocxDocument, expected: DOC_INIT_EXPECTED):
-        assert self.compare_document(inst, expected)
+    """Test DocxDocument subclass"""
+    @param_document_init(DocxDocument, EXTENSION, STEMS)
+    def test___init__(self, inst: DocxDocument, expected: DocumentInit):
+        assert compare_document(inst, expected)
 
-    @param_supports('docx')
+    @param_supports(EXTENSION)
     def test_supports(self, path, ext, expected):
-        received = DocxDocument.supports(path, ext)
+        assert self.supports(DocxDocument, path, ext, expected)
 
-        assert received == expected
+    @param_document_init(DocxDocument, EXTENSION, STEMS)
+    def test___repr__(self, inst: DocxDocument, expected):
+        assert self._test_doc_repr(inst, expected)

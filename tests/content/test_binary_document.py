@@ -1,11 +1,11 @@
 """Test BinaryDocument base content class"""
-from src.oolongt.content import BinaryDocument
+from pytest import mark
+
 from test_document import TestDocument
-from tests.params.content import param_document
 
 
 class TestBinaryDocument(TestDocument):
-    """Test BinaryDocument"""
-    @param_document()
-    def test___repr__(self, params, expected):
-        self._test_repr(BinaryDocument, params, expected)
+    """Test BinaryDocument subclass (but not really)"""
+    @mark.parametrize('path,ext,expected', [('', '', '')], ids=['pass'])
+    def test_supports(self, path, ext, expected):
+        assert path == ext == expected

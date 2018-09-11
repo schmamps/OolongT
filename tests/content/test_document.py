@@ -1,9 +1,14 @@
 """Test Document base content class"""
-from src.oolongt.content.document import Document
+from pathlib import Path
+
+from pytest import mark
+
+from src.oolongt.content.document import Document, norm_path
+from src.oolongt.typings import PathOrString
 from test_content import TestContent
+from tests.helpers import pad_to_longest
 from tests.params.content import (
-    DOC_INIT_EXPECTED, TEST_PATH, compare_document, get_document,
-    param_document, param_supports)
+    TEST_PATH, DocumentInit, get_document, param_document)
 
 EASY = {
     'path': 'dir/filename.ext',
@@ -20,49 +25,88 @@ HARD = {
     'title': 'This Canned SPAM Contains Pate', }
 
 
+@mark.parametrize(
+    'path,expected',
+    [(__file__, __file__), (Path(__file__), __file__)],
+    ids=pad_to_longest(['str', 'Path']))
+def test_norm_path(path: PathOrString, expected: str):
+    """Test path normalization
+
+    Arguments:
+        path {PathOrString} -- path to document
+        expected {str} -- path as string
+    """
+    received = norm_path(path)
+
+    assert received == expected
+
+
+# pylint: disable=no-self-use
 class TestDocument(TestContent):
-    """Test OolongT Document"""
-    def compare_document(self, inst: Document, expected: DOC_INIT_EXPECTED):
-        """Wrap around procedural compare_document
+    """Test Document subclass"""
+    @param_document()
+    def test_path(self, params: DocumentInit, expected: tuple):
+        """Test path property
 
         Arguments:
-            inst {Document} -- instance of Document
-            expected {tuple} -- content body, title
-
-        Returns:
-            bool -- result is expected
+            params {DocumentInit} -- initialization parameters
+            expected {tuple} -- expected values
         """
-        return compare_document(inst, expected, expected[2])
-
-    @param_document()
-    def test_path(self, params, expected):
         expected = TEST_PATH
         received = get_document(Document, params).path
 
         assert received == expected
 
-    def _test_repr(self, cls, params, expected):
-        """Test repr() string of instance
+    @mark.parametrize('inst,expected', [(None, None)], ids=['pass'])
+    def test___init__(self, inst: Document, expected: DocumentInit):
+        """Test initialization
 
         Arguments:
-            params {tuple} -- initialization params
-            expected {tuple} -- expected body, title
+            inst {Document} -- instance of Document
+            expected {DocumentInit} -- expected values
         """
-        body, title = expected
-        expected = '{}({!r}, {!r}, {!r})'.format(
-           cls.__name__, body, title, TEST_PATH)
+        assert inst == expected
 
-        inst = get_document(cls, params)
+    def _test_doc_repr(self, inst: Document, expected: tuple) -> bool:
+        """Test document REPR
+
+        Arguments:
+            inst {Document} -- instance of Document (or subclass)
+            expected {tuple} -- expected properties
+
+        Returns:
+            bool -- instance values are expected
+        """
+        body, title, path = expected
+        expected_str = '{}({!r}, {!r}, {!r})'.format(
+            inst.__class__.__name__, body, title, path)
+
         received = repr(inst)
+        if received != expected_str:
+            breakpoint()
 
-        assert received == expected
+        return received == expected_str
 
-    @param_document()
-    def test___repr__(self, params, expected):
-        self._test_repr(Document, params, expected)
+    def supports(self, cls, path, ext, expected):
+        """Verify support for given `path` or file `ext`
 
-    @param_supports('', always=False)
+        Arguments:
+            path {str} -- path to document
+            ext {str} -- nominal extension of document
+            expected {bool} -- `path` or `ext` are supported
+
+        Returns:
+            bool -- .supports() == `expected`
+        """
+        return cls.supports(path, ext) == expected
+
+    @mark.parametrize('path,ext,expected', [(None, None, None)], ids=['pass'])
     def test_supports(self, path, ext, expected):
-        received = Document.supports(path, ext)
+        """Test support for document at `path` or with extension `ext`
 
-        assert received is False
+        Arguments:
+            path {PathOrString} -- path to document
+            ext {str} -- nominal document extension
+            expected {bool} -- `path` or `ext` are supported
+        """
+        assert path == ext == expected
