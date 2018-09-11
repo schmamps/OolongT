@@ -19,12 +19,14 @@ def get_handlers() -> typing.Generator[typing.Type[Document], None, None]:
     yield HtmlDocument
 
 
-def get_handler(path: str, ext: OptionalString) -> typing.Callable:
+def get_handler(path: str, ext: OptionalString = None) -> typing.Callable:
     """Determine which class to handle document
+
+    TODO: use libmagic and/or MIME type from remote files
 
     Arguments:
         path {str} -- path/URL to document
-        ext {str} -- override default extension
+        ext {str} -- override default extension ([Default: None])
 
     Returns:
         typdefs.Document -- object with body, title, and keywords properties
