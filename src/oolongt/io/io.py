@@ -68,7 +68,7 @@ def get_local_url(path: str) -> str:
     Returns:
         str -- URL to file
     """
-    url = 'file:' + request.pathname2url(path)
+    url = 'file://' + request.pathname2url(path)
 
     return url
 
