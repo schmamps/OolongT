@@ -1,6 +1,8 @@
+"""Command line interface for OolongT"""
 import argparse
 import os
 import sys
+import typing
 from textwrap import wrap as wrap_text
 
 from ..constants import DEFAULT_LENGTH
@@ -45,13 +47,38 @@ def get_args():
 
 
 def get_summary(doc: Document, limit: float, wrap: int) -> StringList:
+    """Get summary of `doc` as StringList of lines
+
+    Arguments:
+        doc {Document} -- document
+        limit {float} -- length of summary
+        wrap {int} -- column wrap
+
+    Returns:
+        StringList -- lines of document
+    """
     sentences = doc.summarize(limit)
     text = ' '.join(sentences)
 
     return [text] if wrap < 1 else wrap_text(text, width=wrap)
 
 
-def get_output_lines(path: str, ext: OptionalString, limit: float, wrap: int):
+def get_output_lines(
+        path: str,
+        ext: OptionalString,
+        limit: float,
+        wrap: int) -> typing.Generator[str, None, None]:
+    """Generate lines of output
+
+    Arguments:
+        path {str} -- path to document
+        ext {OptionalString} -- nominal extension of file
+        limit {float} -- length of summary
+        wrap {int} -- column wrap
+
+    Returns:
+        typing.Generator[str, None, None] -- output lines
+    """
     doc = get_document(path, ext)
 
     yield doc.title or path
@@ -62,6 +89,7 @@ def get_output_lines(path: str, ext: OptionalString, limit: float, wrap: int):
 
 
 def cli():
+    """Collect arguments, pass for summary, output to console"""
     args = get_args()
     limit = float(args.limit)
     wrap = int(args.wrap)
