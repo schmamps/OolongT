@@ -5,12 +5,14 @@ from .. import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
 from ..summarizer import ScoredSentence, Summarizer
 from ..typings import StringList
 
+ScoredSentenceList = typing.List[ScoredSentence]
+
 
 def score_body_sentences(
         body: str,
         title: str,
         root: str = BUILTIN,
-        idiom: str = DEFAULT_IDIOM) -> typing.List[ScoredSentence]:
+        idiom: str = DEFAULT_IDIOM) -> ScoredSentenceList:
     """List and score every sentence in `body`
 
     Arguments:
@@ -31,9 +33,7 @@ def score_body_sentences(
     return sentences
 
 
-def get_slice_length(
-        nominal: float,
-        sentences: typing.List[ScoredSentence]) -> int:
+def get_slice_length(nominal: float, total: int) -> int:
     """Calculate actual number of sentences to return
 
     Arguments:
@@ -47,15 +47,14 @@ def get_slice_length(
         int -- number of sentences to return
     """
     slice_len = nominal
-    of = len(sentences)  # pylint: disable=invalid-name
 
     if nominal <= 0:
         raise ValueError('Invalid summary length: ' + str(nominal))
 
     if nominal < 1:
-        slice_len = nominal * of
+        slice_len = nominal * total
 
-    return round(min(slice_len, of))
+    return round(min(slice_len, total))
 
 
 def get_best_sentences(
@@ -63,7 +62,7 @@ def get_best_sentences(
         title: str,
         limit: float = DEFAULT_LENGTH,
         root: str = BUILTIN,
-        idiom: str = DEFAULT_IDIOM) -> typing.List[ScoredSentence]:
+        idiom: str = DEFAULT_IDIOM) -> ScoredSentenceList:
     """Get best sentences from `body` in score order, qty: `limit`
 
     Arguments:
@@ -81,7 +80,7 @@ def get_best_sentences(
         list[ScoredSentence] -- best sentences from source text
     """
     sentences = score_body_sentences(body, title, root, idiom)
-    slice_len = get_slice_length(limit, sentences)
+    slice_len = get_slice_length(limit, len(sentences))
 
     return sorted(sentences, reverse=True)[:slice_len]
 
