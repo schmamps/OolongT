@@ -28,7 +28,7 @@ CountedKeywords = typing.Tuple[StringList, typing.Dict[str, float]]
         'list of sentences',
     ]))
 def test_remove_punctuations(samp: Sample) -> None:
-    """Test oolongt.parser.remove_punctuations()
+    """Test `remove_punctuations` for Parser
 
     Arguments:
         samp {Sample} -- sample data
@@ -44,7 +44,7 @@ def test_remove_punctuations(samp: Sample) -> None:
 
 # pylint: disable=too-few-public-methods,no-self-use
 class TestParser:
-    """Test Parser class"""
+    """Test `Parser`"""
     @mark.parametrize(
         'samp',
         get_samples([
@@ -56,7 +56,7 @@ class TestParser:
             'a long sentence',
         ]))
     def test_get_all_words(self, samp: Sample) -> None:
-        """Test Parser.get_all_words()
+        """Test `Parser.get_all_words`
 
         Arguments:
             samp {Sample} -- sample data
@@ -73,7 +73,7 @@ class TestParser:
         get_samples(['essay_snark'] + SAMPLES),
         ids=get_sample_ids(['essay_snark'] + SAMPLES))
     def test_get_key_stems(self, samp: Sample) -> None:
-        """Test Parser.get_key_stems()
+        """Test `Parser.get_key_stems`
 
         Arguments:
             samp {Sample} -- sample data
@@ -113,14 +113,14 @@ class TestParser:
     def _get_sample_keyword_data(
             self,
             samp: Sample) -> typing.Tuple[StringList, typing.Dict[str, float]]:
-        """Get sample data in Parser.get_keywords() pattern
+        """Get sample data in `Parser.get_keywords` pattern
 
         Arguments:
             samp {Sample} -- sample data
 
         Returns:
             typing.Tuple[StringList, typing.Dict[str, float]] --
-                return of Parser.get_keywords()
+                return of `Parser.get_keywords`
         """
         return self._count_keywords(samp.keywords)
 
@@ -134,7 +134,7 @@ class TestParser:
 
         Returns:
             typing.Tuple[StringList, typing.Dict[str, float]] --
-                return of Parser.get_keywords()
+                return of `Parser.get_keywords`
         """
         parser = Parser()
         keywords = parser.get_keywords(text)
@@ -152,7 +152,7 @@ class TestParser:
             'Snark essay'
         ]))
     def test_get_keywords(self, samp: Sample) -> None:
-        """Test Parser.get_keywords()
+        """Test `Parser.get_keywords`
 
         Arguments:
             samp {Sample} -- sample data
@@ -177,7 +177,7 @@ class TestParser:
     def _get_expected_keywords(
             self,
             keywords: typing.List[SampleKeyword]) -> StringList:
-        """Get list of expected keywords in text
+        """List expected keywords in text
 
         Returns:
             list[str] - list of keywords repeated by #occurrences in text
@@ -193,7 +193,7 @@ class TestParser:
         get_samples(['sentence_short', 'sentence_list', ] + SAMPLES),
         ids=get_sample_ids(['sentence_short', 'sentence_list', ] + SAMPLES))
     def test_split_sentences(self, samp: Sample) -> None:
-        """Test Parser.split_sentences()
+        """Test `Parser.split_sentences`
 
         Arguments:
             samp {Sample} -- sample data
@@ -227,7 +227,7 @@ class TestParser:
             'medium sentence',
         ]))
     def test_split_words(self, samp: Sample) -> None:
-        """Test Parser.split_words()
+        """Test `Parser.split_words`
 
         Arguments:
             samp {Sample} -- sample data

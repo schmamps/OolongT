@@ -1,4 +1,4 @@
-"""Test ParserConfig"""
+"""Test `ParserConfig`"""
 import typing
 from pathlib import Path
 
@@ -50,7 +50,7 @@ def compare_loaded_idiom(
     [(IDIOM_PATH, TEST_IDIOM_NAME, TEST_IDIOM_JSON), ],
     ids=pad_to_longest(['test path', ]))
 def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
-    """Get config paths
+    """Test `get_config_path` for ParserConfig
 
     Arguments:
         root {str} -- root directory of idiom config
@@ -90,7 +90,7 @@ def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
 def test_get_stop_words(
         spec: typing.Dict[str, typing.Any],
         expected: int) -> None:
-    """Get stop words
+    """Test `get_stop_words` for ParserConfig
 
     Arguments:
         spec {typing.Dict[str, typing.Any]} -- nominal configuration
@@ -177,7 +177,7 @@ def test_parse_config(
 def test_load_idiom(
         kwargs: typing.Dict[str, typing.Any],
         expected: typing.Tuple[int, str, int]) -> None:
-    """Test `oolongt.parser.load_idiom()`
+    """Test `load_idiom` for ParserConfig
 
     Arguments:
         kwargs {typing.Dict[str, typing.Any]} -- kwargs passed to Parser
@@ -199,7 +199,7 @@ def test_load_idiom(
 
 # pylint: disable=too-few-public-methods,no-self-use
 class TestParserConfig:
-    """Test ParserConfig"""
+    """Test `ParserConfig`"""
     @mark.parametrize(
         'root,idiom,expected',
         [(BUILTIN, DEFAULT_IDIOM, DEFAULT_IDIOM_EXPECTED), ],
@@ -209,7 +209,7 @@ class TestParserConfig:
             root: str,
             idiom: str,
             expected: typing.Tuple[int, str, int]) -> None:
-        """Test initialization
+        """Test `ParserConfig` initialization
 
         Arguments:
         root {str} -- root directory of idiom config
