@@ -7,10 +7,6 @@ from tests.constants import TEXT_PATH
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_sentence import SampleSentence
 
-SampleGenerator = typing.Generator[Sample, None, None]
-SampleSentenceGenerator = typing.Generator[
-    typing.Tuple[Sample, SampleSentence], None, None]
-
 
 def snip(
         val: typing.Any,
@@ -104,62 +100,6 @@ def get_sample(sample_name: str) -> Sample:
         Sample -- sample data
     """
     return Sample(TEXT_PATH, sample_name)
-
-
-def get_samples(sample_names: StringList) -> SampleGenerator:
-    """Get Samples by name
-
-    Returns:
-        typing.Iterable[Sample] - iterable of samples
-    """
-    for sample_name in sample_names:
-        yield get_sample(sample_name)
-
-
-def get_sample_ids(sample_names: StringList) -> StringList:
-    """List test IDs from list of samples
-
-    Arguments:
-        sample_names {StringList} -- [description]
-
-    Returns:
-        StringList -- [description]
-    """
-
-    return pad_to_longest(['src: {}'.format(x) for x in sample_names])
-
-
-def get_sample_sentences(
-        sample_names: StringList) -> SampleSentenceGenerator:
-    """Get Sample, each sentence from Sample
-
-    Arguments:
-        sample_names {StringList} -- names of samples
-
-    Returns:
-        typing.Iterable[Sample] -- Iterator of Samples
-    """
-    for sample_name in sample_names:
-        samp = get_sample(sample_name)
-
-        for sentence in samp.sentences:
-            yield samp, sentence
-
-
-def get_sample_sentence_ids(sample_names: StringList) -> StringList:
-    """List friendly names of sample sentences
-
-    Returns:
-        StringList -- IDs of sample sentences
-    """
-    ids = []
-    for sample_name in sample_names:
-        samp = get_sample(sample_name)
-
-        for sentence in samp.sentences:
-            ids.append('src: {}, sent: {}'.format(samp.name, sentence.id))
-
-    return pad_to_longest(ids)
 
 
 def check_exception(catch: Exception, expected: typing.Any) -> typing.Any:
