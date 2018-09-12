@@ -7,9 +7,7 @@ from pytest import mark
 
 from src.oolongt.content import Content, Document
 from src.oolongt.io import load_json
-# pylint: disable=unused-import
-from src.oolongt.typings import StringList  # noqa: F401
-# pylint: enable=unused-import
+from src.oolongt.typings import StringList  # noqa  pylint: disable=unused-import,line-too-long
 from tests.constants import DOC_PATH
 from tests.helpers import pad_to_longest
 
@@ -170,7 +168,7 @@ def get_test_tuples(has_path: bool):
         has_path {bool} -- add document path
 
     Returns:
-        typing.Tuple[typing.List[tuple], typing.List[str]] --
+        typing.Tuple[typing.List[tuple], StringList] --
             test params, test IDs
     """
     params = [get_test(test, has_path) for test in get_tests()]
