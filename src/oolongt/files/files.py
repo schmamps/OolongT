@@ -58,5 +58,5 @@ def get_document(path: str, ext: OptionalString) -> Document:
 
         return doc
 
-    except (OSError) as e:  # pylint: disable=invalid-name
-        raise ValueError('Unable to read {!r} ({})'.format(abspath(path), e))
+    except (OSError) as err:  # pylint: disable=broad-except
+        raise ValueError('Unable to read {!r} ({})'.format(abspath(path), err))
