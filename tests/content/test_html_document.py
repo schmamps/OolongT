@@ -5,7 +5,7 @@ from src.oolongt.content import HtmlDocument
 from src.oolongt.content.content import norm_text
 from src.oolongt.content.html_document import (
     get_body, get_og_title, get_source, get_title, process)
-from src.oolongt.io import get_contents
+from src.oolongt.io import read_file
 from src.oolongt.ugly_soup import UglySoup
 from test_text_document import TestTextDocument
 from tests.helpers import pad_to_longest
@@ -41,7 +41,7 @@ def get_html(stem: str) -> str:
     """
     path = get_path(stem)
 
-    return get_contents(path)
+    return read_file(path)
 
 
 def get_soup(stem: str) -> UglySoup:
