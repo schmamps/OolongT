@@ -69,8 +69,6 @@ def compare_content(content: Content, expected: tuple) -> bool:
     """
     title_comp = expected[1]
     content_match = compare_content_ex(content, expected, title_comp)
-    if not content_match:
-        breakpoint()
 
     return content_match
 
@@ -227,7 +225,7 @@ def get_doc_path(stem: str, ext: str):
     return str(DOC_PATH.joinpath(filename))
 
 
-def get_expected_doc(stem: str, path: str):
+def get_expected_doc(stem: str, path: str) -> typing.Tuple[str, str, str]:
     """Get expected properties for sample named `stem`
 
     Arguments:
@@ -240,8 +238,8 @@ def get_expected_doc(stem: str, path: str):
     json_path = get_doc_path(stem, 'json')
     data = load_json(json_path)
 
-    body = data.get('body')
-    title = data.get('title')
+    body = data.get('body')  # type: str
+    title = data.get('title')  # type: str
 
     return (body, title, path)
 
