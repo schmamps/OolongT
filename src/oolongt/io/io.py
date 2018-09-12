@@ -123,8 +123,10 @@ def read_file(path: PathOrString) -> str:
     try:
         contents = get_contents(path)
 
+    # pylint: disable=broad-except
     except (IOError, NotADirectoryError) as err:
         raise IOError(str(err))
+    # pylint: enable=broad-except
 
     return contents
 
