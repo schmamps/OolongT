@@ -4,9 +4,9 @@ from pathlib import Path
 
 from src.oolongt.io import load_json
 from src.oolongt.typings import DictOfAny
-from tests.typedefs import SampleKeywordList, SampleSentenceList
-from tests.typedefs.sample_keyword import SampleKeyword
-from tests.typedefs.sample_sentence import SampleSentence
+from tests.typings.sample_keyword import SampleKeyword
+from tests.typings.sample_sentence import SampleSentence
+from tests.typings.typings import SampleKeywordList, SampleSentenceList
 
 
 def join_sentences(sentence_list: typing.List[DictOfAny]) -> str:
