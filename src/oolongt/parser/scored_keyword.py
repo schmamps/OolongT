@@ -73,10 +73,10 @@ class ScoredKeyword(ReprAble):
     """Keyword data"""
     __slots__ = ['word', 'count', 'of', 'score']
 
-    def __init__(self, word: str, count: int, of: int) -> None:
+    def __init__(self, word: str, count: int, total: int) -> None:
         self.word = str(word).lower()
         self.count = int(count)
-        self.of = int(of)  # pylint: disable=invalid-name
+        self.of = int(total)  # pylint: disable=invalid-name
         self.score = score_keyword(self.count, self.of)
 
     def __str__(self) -> str:
