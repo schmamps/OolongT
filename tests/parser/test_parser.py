@@ -4,13 +4,16 @@ import typing
 import kinda
 from pytest import mark
 
-from src.oolongt.parser import Parser, remove_punctuations
-from src.oolongt.typedefs.scored_keyword import ScoredKeyword
+from src.oolongt.parser.parser import Parser, remove_punctuations
+from src.oolongt.parser.scored_keyword import ScoredKeyword
+from src.oolongt.typings import StringList
 from tests.constants import SAMPLES
-from tests.helpers import (assert_ex, get_sample_ids, get_samples,
-                           pad_to_longest)
+from tests.helpers import (
+    assert_ex, get_sample_ids, get_samples, pad_to_longest)
 from tests.typedefs.sample import Sample
 from tests.typedefs.sample_keyword import SampleKeyword
+
+CountedKeywords = typing.Tuple[StringList, typing.Dict[str, float]]
 
 
 @mark.parametrize(
@@ -18,8 +21,7 @@ from tests.typedefs.sample_keyword import SampleKeyword
     get_samples([
         'empty',
         'sentence_1word',
-        'sentence_list',
-    ]),
+        'sentence_list', ]),
     ids=pad_to_longest([
         'empty string',
         'one word',
@@ -40,7 +42,9 @@ def test_remove_punctuations(samp: Sample) -> None:
         repr(expected))
 
 
+# pylint: disable=too-few-public-methods,no-self-use
 class TestParser:
+    """Test Parser class"""
     @mark.parametrize(
         'samp',
         get_samples([
@@ -57,10 +61,10 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser()
+        parser = Parser()
 
         expected = samp.compare_words
-        for received in p.get_all_words(samp.body):
+        for received in parser.get_all_words(samp.body):
             assert (received in expected), assert_ex(
                 'all words', received, None)
 
@@ -74,18 +78,17 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(idiom=samp.idiom)
+        parser = Parser(idiom=samp.idiom)
 
         expected = sorted(self._get_expected_keywords(samp.keywords))
-        received = sorted(p.get_key_stems(samp.body))
+        received = sorted(parser.get_key_stems(samp.body))
 
         assert (received == expected), assert_ex(
             'keyword list', expected, received)
 
     def _count_keywords(
             self,
-            keywords: typing.List[ScoredKeyword]
-            ) -> typing.Tuple[typing.List[str], typing.Dict[str, float]]:
+            keywords: typing.List[ScoredKeyword]) -> CountedKeywords:
         """Reduce getKeywords() for counting
 
         Extract word and score properties of keyword list
@@ -94,49 +97,47 @@ class TestParser:
             keywords {typing.List[ScoredKeyword]} -- keywords
 
         Returns:
-            typing.Tuple[typing.List[str], typing.Dict[str, float]] --
+            typing.Tuple[StringList, typing.Dict[str, float]] --
                 return of Parser.get_keywords()
         """
         scores = {}
         words = []
 
-        for kw in keywords:
-            word = str(kw)
-            scores[word] = kw.score
+        for keyword in keywords:
+            word = str(keyword)
+            scores[word] = keyword.score
             words.append(word)
 
         return words, scores
 
     def _get_sample_keyword_data(
             self,
-            samp: Sample
-            ) -> typing.Tuple[typing.List[str], typing.Dict[str, float]]:
+            samp: Sample) -> typing.Tuple[StringList, typing.Dict[str, float]]:
         """Get sample data in Parser.get_keywords() pattern
 
         Arguments:
             samp {Sample} -- sample data
 
         Returns:
-            typing.Tuple[typing.List[str], typing.Dict[str, float]] --
+            typing.Tuple[StringList, typing.Dict[str, float]] --
                 return of Parser.get_keywords()
         """
         return self._count_keywords(samp.keywords)
 
     def _get_keyword_result(
             self,
-            text: str
-            ) -> typing.Tuple[typing.List[str], typing.Dict[str, float]]:
+            text: str) -> typing.Tuple[StringList, typing.Dict[str, float]]:
         """Get keywords from Parser
 
         Arguments:
             text {str} -- body of content
 
         Returns:
-            typing.Tuple[typing.List[str], typing.Dict[str, float]] --
+            typing.Tuple[StringList, typing.Dict[str, float]] --
                 return of Parser.get_keywords()
         """
-        p = Parser()
-        keywords = p.get_keywords(text)
+        parser = Parser()
+        keywords = parser.get_keywords(text)
 
         return self._count_keywords(keywords)
 
@@ -175,16 +176,15 @@ class TestParser:
 
     def _get_expected_keywords(
             self,
-            keywords: typing.List[SampleKeyword]
-            ) -> typing.List[str]:
+            keywords: typing.List[SampleKeyword]) -> StringList:
         """Get list of expected keywords in text
 
         Returns:
             list[str] - list of keywords repeated by #occurrences in text
         """
-        expected = []  # type: typing.List[str]
-        for kw in keywords:
-            expected += [kw.word] * kw.count
+        expected = []  # type: StringList
+        for keyword in keywords:
+            expected += [keyword.word] * keyword.count
 
         return expected
 
@@ -198,7 +198,7 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser(idiom=samp.idiom)
+        parser = Parser(idiom=samp.idiom)
         expected = None
 
         try:
@@ -207,7 +207,7 @@ class TestParser:
         except AttributeError:
             expected = [sent.text for sent in samp.sentences]
 
-        received = p.split_sentences(samp.body)
+        received = parser.split_sentences(samp.body)
 
         assert (received == expected), assert_ex(
             'sentence split',
@@ -232,11 +232,11 @@ class TestParser:
         Arguments:
             samp {Sample} -- sample data
         """
-        p = Parser()
+        parser = Parser()
         text = samp.body
 
         expected = samp.split_words
-        received = p.split_words(text)
+        received = parser.split_words(text)
 
         assert (received == expected), assert_ex(
             'word split',

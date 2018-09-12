@@ -1,13 +1,12 @@
+"""Test ParserConfig"""
 import typing
 from pathlib import Path
 
 from pytest import mark
 
 from src.oolongt import BUILTIN, DEFAULT_IDIOM
-from src.oolongt.typedefs import ParserConfig
-from src.oolongt.typedefs.parser_config import (get_config_path,
-                                                get_stop_words, load_idiom,
-                                                parse_config)
+from src.oolongt.parser.parser_config import (
+    ParserConfig, get_config_path, get_stop_words, load_idiom, parse_config)
 from tests.constants import IDIOM_PATH
 from tests.helpers import assert_ex, check_exception, pad_to_longest
 
@@ -24,8 +23,7 @@ TEST_DEFAULT_STOPS = {
 
 def compare_loaded_idiom(
         received: typing.Tuple[int, str, typing.List],
-        expected: typing.Tuple[int, str, int]
-        ) -> bool:
+        expected: typing.Tuple[int, str, int]) -> bool:
     """Compare loaded idiom data to expected
 
     Arguments:
@@ -37,7 +35,7 @@ def compare_loaded_idiom(
     """
     # ideal_sentence_length, idiom
     for i in range(2):
-        if (received[i] != expected[i]):
+        if received[i] != expected[i]:
             raise ValueError('wrong idiom data loaded')
 
     # stop_words
@@ -50,7 +48,7 @@ def compare_loaded_idiom(
 @mark.parametrize(
     'root,idiom,expected',
     [(IDIOM_PATH, TEST_IDIOM_NAME, TEST_IDIOM_JSON), ],
-    ids=['test path', ])
+    ids=pad_to_longest(['test path', ]))
 def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
     """Get config paths
 
@@ -78,8 +76,7 @@ def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
         ({'nltk': False, 'user': []}, 0),
         ({'nltk': False, 'user': ['foo']}, 1),
         ({'nltk': True, 'user': []}, -10),
-        ({'nltk': True, 'user': ['foo']}, -10),
-    ],
+        ({'nltk': True, 'user': ['foo']}, -10), ],
     ids=pad_to_longest([
         'nltk: default, user: default',
         'nltk: False,   user: default',
@@ -89,12 +86,10 @@ def test_get_config_path(root: str, idiom: str, expected: Path) -> None:
         'nltk: False,   user: 0',
         'nltk: False,   user: 1',
         'nltk: True,    user: 0',
-        'nltk: True,    user: 1',
-    ]))
+        'nltk: True,    user: 1', ]))
 def test_get_stop_words(
         spec: typing.Dict[str, typing.Any],
-        expected: int
-        ) -> None:
+        expected: int) -> None:
     """Get stop words
 
     Arguments:
@@ -110,7 +105,7 @@ def test_get_stop_words(
     test = (missing == 0)
 
     if test:
-        if (expected < 0):
+        if expected < 0:
             test = (len(received) > abs(expected))
 
         else:
@@ -132,20 +127,17 @@ def test_get_stop_words(
             'root': IDIOM_PATH
         }, TEST_IDIOM_EXPECTED),
         ({'idiom': 'malformed', 'root': IDIOM_PATH}, ValueError),
-        ({'idiom': 'INVALID', 'root': IDIOM_PATH}, ValueError),
-    ],
+        ({'idiom': 'INVALID', 'root': IDIOM_PATH}, ValueError), ],
     ids=pad_to_longest([
         'root: def., idiom: def.      == default idiom',
         'root: def., idiom: exp.      == default idiom',
         'root: exp., idiom: def.      == default idiom',
         'root: exp., idiom: exp.      == default idiom',
         'root: exp., idiom: MALFORMED == (error)',
-        'root: exp., idiom: INVALID   == (error)',
-    ]))
+        'root: exp., idiom: INVALID   == (error)', ]))
 def test_parse_config(
         path_dict: typing.Dict[str, typing.Any],
-        expected: typing.Any
-        ) -> None:
+        expected: typing.Any) -> None:
     """Parse a nominal configuration
 
     Arguments:
@@ -161,8 +153,8 @@ def test_parse_config(
         ideal, language, stop_words = parse_config(cfg_path)
         received = (ideal, language, len(stop_words))
 
-    except Exception as e:
-        received = check_exception(e, expected)
+    except Exception as err:  # pylint: disable=broad-except
+        received = check_exception(err, expected)
 
     assert (received == expected), assert_ex(
         'parse config',
@@ -174,20 +166,17 @@ def test_parse_config(
     'kwargs,expected',
     [
         ({}, DEFAULT_IDIOM_EXPECTED),
-        [{'idiom': '../../../etc'}, PermissionError],
-        [{'root': Path(__file__)}, FileNotFoundError],
-        [{'idiom': 'malformed', 'root': IDIOM_PATH}, ValueError],
-    ],
+        ({'idiom': '../../../etc'}, PermissionError),
+        ({'root': Path(__file__)}, FileNotFoundError),
+        ({'idiom': 'malformed', 'root': IDIOM_PATH}, ValueError), ],
     ids=pad_to_longest([
         'valid: yes',
         'valid: no, traversal',
         'valid: no, file not found',
-        'valid: no, parse error',
-    ]))
+        'valid: no, parse error', ]))
 def test_load_idiom(
         kwargs: typing.Dict[str, typing.Any],
-        expected: typing.Tuple[int, str, int]
-        ) -> None:
+        expected: typing.Tuple[int, str, int]) -> None:
     """Test `oolongt.parser.load_idiom()`
 
     Arguments:
@@ -200,24 +189,26 @@ def test_load_idiom(
         received = load_idiom(**kwargs)
         test = compare_loaded_idiom(received, expected)
 
-    except (PermissionError, FileNotFoundError, ValueError) as e:
-        test = check_exception(e, expected) is not None
+    # pylint: disable=broad-except
+    except (PermissionError, FileNotFoundError, ValueError) as err:
+        test = check_exception(err, expected) is not None
+    # pylint: enable=broad-except
 
     assert test, assert_ex('config', received, expected)
 
 
-class TestParserConfig(object):
+# pylint: disable=too-few-public-methods,no-self-use
+class TestParserConfig:
+    """Test ParserConfig"""
     @mark.parametrize(
         'root,idiom,expected',
         [(BUILTIN, DEFAULT_IDIOM, DEFAULT_IDIOM_EXPECTED), ],
-        ids=pad_to_longest(['defaults', ])
-    )
+        ids=pad_to_longest(['defaults', ]))
     def test_init(
             self,
             root: str,
             idiom: str,
-            expected: typing.Tuple[int, str, int]
-            ) -> None:
+            expected: typing.Tuple[int, str, int]) -> None:
         """Test initialization
 
         Arguments:
