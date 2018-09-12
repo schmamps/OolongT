@@ -204,7 +204,7 @@ class TestParserConfig:
         'root,idiom,expected',
         [(BUILTIN, DEFAULT_IDIOM, DEFAULT_IDIOM_EXPECTED), ],
         ids=pad_to_longest(['defaults', ]))
-    def test_init(
+    def test___init__(
             self,
             root: str,
             idiom: str,
