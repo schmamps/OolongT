@@ -8,8 +8,8 @@ from ..repr_able import ReprAble
 
 
 # pylint: disable=invalid-name
-def calc_decile(index: int, of: int) -> int:
-    """Get decile of `index` relative to `of`
+def calc_decile(index: int, total: int) -> int:
+    """Get decile of `index` relative to `total`
 
     Raises:
         IndexError -- `index` out of range
@@ -18,7 +18,7 @@ def calc_decile(index: int, of: int) -> int:
         int -- decile of index (range: 1 to 10)
     """
     calc_idx = float(index)
-    calc_of = float(of)
+    calc_of = float(total)
 
     try:
         decile = int(ceil((float(calc_idx) + 1) / calc_of * 10))
@@ -30,7 +30,7 @@ def calc_decile(index: int, of: int) -> int:
         pass
 
     raise IndexError(
-        'Invalid index/of ({0}/{1})'.format(index, of))
+        'Invalid index/of ({0}/{1})'.format(index, total))
 
 
 # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
@@ -126,23 +126,23 @@ class ScoredSentence(ReprAble):
             self,
             text: str,
             index: int,
-            of: int,
+            total: int,
             title_score: float,
             length_score: float,
             dbs_score: float,
             sbs_score: float) -> None:
         index = round(index)
-        of = round(of)
+        total = round(total)
 
         position_score = score_position(
-            index, of)
+            index, total)
         keyword_score = score_keyword_frequency(
             dbs_score, sbs_score)
         total_score = score_total(
             title_score, keyword_score, length_score, position_score)
 
         self._init_(
-            text, index, of,
+            text, index, total,
             title_score, length_score,
             dbs_score, sbs_score, keyword_score,
             position_score, total_score)
