@@ -11,7 +11,7 @@ from tests.helpers import check_exception, pad_to_longest
 from tests.params.summarizer import (
     SPAM, SPAM_PARAMS, SPAM_RESULT, get_inst_comp, param_comp, param_decile,
     param_sentences)
-from tests.typedefs import Sample, SampleSentence
+from tests.typings import Sample, SampleSentence
 
 
 @param_decile()

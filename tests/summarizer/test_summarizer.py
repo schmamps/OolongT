@@ -14,11 +14,8 @@ from tests.helpers import assert_ex, pad_to_longest, snip
 from tests.params.summarizer import (
     get_sample_ids, get_sample_sentence_ids, get_sample_sentences, get_samples,
     param_threshold)
-from tests.typedefs.sample import Sample
-from tests.typedefs.sample_keyword import SampleKeyword
-from tests.typedefs.sample_sentence import SampleSentence
-
-SampleKeywordList = typing.List[SampleKeyword]
+from tests.typings import (
+    Sample, SampleKeyword, SampleKeywordList, SampleSentence)
 
 
 @mark.parametrize(
