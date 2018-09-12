@@ -119,7 +119,7 @@ def generate_sample(  # pylint: disable=too-many-arguments
         except UnboundLocalError:
             pass
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-except
         raise err
 
     finally:
@@ -160,7 +160,7 @@ def generate_set(  # pylint: disable=too-many-arguments
                 pre_proc,
                 post_proc)
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-except
         raise err
 
     finally:
