@@ -24,7 +24,7 @@ def _float_len(val_list: typing.Sized) -> float:
     """Cast length of sized value as a float
 
     Arguments:
-        val_list {typing.List[typing.Any]} -- list of items
+        val_list {typing.Sized} -- list of items
 
     Returns:
         float -- length of list as float
