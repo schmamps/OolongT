@@ -1,5 +1,5 @@
 """Plain text document"""
-from ..io import get_contents
+from ..io import read_file
 from ..typings import PathOrString
 from .text_document import TextDocument
 
@@ -7,7 +7,7 @@ from .text_document import TextDocument
 class PlainTextDocument(TextDocument):
     """Read text file as body of content"""
     def __init__(self, path: PathOrString) -> None:
-        body = get_contents(path)
+        body = read_file(path)
 
         super().__init__(body, None, path)
 

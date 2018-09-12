@@ -1,2 +1,2 @@
 """Initialize I/O subpackage"""
-from .io import get_contents, get_stream, load_json  # noqa: F401
+from .io import read_file, get_stream, load_json  # noqa: F401

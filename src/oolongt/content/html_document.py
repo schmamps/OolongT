@@ -1,7 +1,7 @@
 """Parse HTML documents"""
 from bs4.element import Tag
 
-from ..io import get_contents
+from ..io import read_file
 from ..typings import OptionalString, PathOrString
 from ..ugly_soup import UglyQuery, UglySoup
 from .text_document import TextDocument
@@ -38,7 +38,7 @@ def get_source(path: PathOrString) -> UglySoup:
     Returns:
         UglySoup -- BeautifulSoup
     """
-    html = get_contents(path)
+    html = read_file(path)
     src = process(html)
 
     return src
