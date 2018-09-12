@@ -1,4 +1,4 @@
-"""Test Document base content class"""
+"""Test `Document` base content class"""
 from pathlib import Path
 
 from pytest import mark
@@ -30,7 +30,7 @@ HARD = {
     [(__file__, __file__), (Path(__file__), __file__)],
     ids=pad_to_longest(['str', 'Path']))
 def test_norm_path(path: PathOrString, expected: str):
-    """Test path normalization
+    """Test `norm_path` path normalization
 
     Arguments:
         path {PathOrString} -- path to document
@@ -43,10 +43,10 @@ def test_norm_path(path: PathOrString, expected: str):
 
 # pylint: disable=no-self-use
 class TestDocument(TestContent):
-    """Test Document subclass"""
+    """Test `Document` content class"""
     @param_document()
     def test_path(self, params: DocumentInit, expected: tuple):
-        """Test path property
+        """Test `Document.path` property
 
         Arguments:
             params {DocumentInit} -- initialization parameters
@@ -59,7 +59,7 @@ class TestDocument(TestContent):
 
     @mark.parametrize('inst,expected', [(None, None)], ids=['pass'])
     def test___init__(self, inst: Document, expected: DocumentInit):
-        """Test initialization
+        """Test `Document` initialization
 
         Arguments:
             inst {Document} -- instance of Document
@@ -68,7 +68,7 @@ class TestDocument(TestContent):
         assert inst == expected
 
     def _test_doc_repr(self, inst: Document, expected: tuple) -> bool:
-        """Test document REPR
+        """Test `Document` REPR
 
         Arguments:
             inst {Document} -- instance of Document (or subclass)
@@ -100,7 +100,7 @@ class TestDocument(TestContent):
 
     @mark.parametrize('path,ext,expected', [(None, None, None)], ids=['pass'])
     def test_supports(self, path, ext, expected):
-        """Test support for document at `path` or with extension `ext`
+        """Test `Document.supports` static method
 
         Arguments:
             path {PathOrString} -- path to document

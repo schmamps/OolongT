@@ -50,7 +50,7 @@ def param_document(
         'ext=foo,handler=def.',
         'ext=php,handler=HTML', ]))
 def test_get_handler(path: str, ext: OptionalString, expected: str):
-    """Test get_handler
+    """Test `get_handler`
 
     Arguments:
         path {str} -- path to document
@@ -77,7 +77,7 @@ def test_get_handler(path: str, ext: OptionalString, expected: str):
         'basic.pdf',
         'basic.php']))
 def test_get_document(path: str, ext: OptionalString, expected: tuple):
-    """Test get_document
+    """Test `get_document`
 
     Arguments:
         path {str} -- path to document

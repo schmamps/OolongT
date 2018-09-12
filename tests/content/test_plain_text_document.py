@@ -1,4 +1,4 @@
-"""Test PlainTextDcoument content class"""
+"""Test `PlainTextDcoument` content class"""
 from src.oolongt.content import PlainTextDocument
 from test_text_document import TestTextDocument
 from tests.params.content import (
@@ -10,7 +10,7 @@ STEMS = ['basic', 'intermed']
 
 
 class TestPlainTextDocument(TestTextDocument):
-    """Test PlainTextDocument subclass"""
+    """Test `PlainTextDocument` content class"""
     @param_document_init(SUBJECT, EXTENSION, STEMS)
     def test___init__(
             self, inst: PlainTextDocument, expected: DocumentInit):

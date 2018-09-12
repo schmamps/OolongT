@@ -1,4 +1,4 @@
-"""Test HtmlDocument content class"""
+"""Test `HtmlDocument` content class"""
 from pytest import mark
 
 from src.oolongt.content import HtmlDocument
@@ -60,7 +60,7 @@ def get_soup(stem: str) -> UglySoup:
 
 @mark.parametrize('stem', BASIC_INTERMED)
 def test_process(stem: str):
-    """Verify that HTML can be processed
+    """Test `process` for HtmlDocument
 
     Arguments:
         stem {str} -- stem of sample path
@@ -75,7 +75,7 @@ def test_process(stem: str):
 
 @mark.parametrize('stem', BASIC_INTERMED)
 def test_get_source(stem: str):
-    """Test get_source
+    """Test `get_source` for HtmlDocument
 
     Arguments:
         stem {str} -- stem of sample path
@@ -91,7 +91,7 @@ def test_get_source(stem: str):
 
 @mark.parametrize('stem', BASIC_INTERMED)
 def test_get_body(stem: str):
-    """Verify body of sample named `stem`
+    """Test `get_body` for HtmlDocument
 
     Arguments:
         stem {str} -- stem of sample path
@@ -115,7 +115,7 @@ def test_get_body(stem: str):
         'not-set',
         'title', ]))
 def test_get_og_title(tag, expected):
-    """Test OpenGraph title
+    """Test `get_og_title` for OpenGraph title from HtmlDocument
 
     Arguments:
         tag {dict} -- dictionary of values
@@ -128,7 +128,7 @@ def test_get_og_title(tag, expected):
 
 @mark.parametrize('stem', BASIC_INTERMED)
 def test_get_title(stem: str):
-    """Test <title> tag
+    """Test `get_title` from <title> tag of HtmlDocument
 
     Arguments:
         stem {str} -- stem of sample path
@@ -142,7 +142,7 @@ def test_get_title(stem: str):
 
 
 class TestHtmlDocument(TestTextDocument):
-    """Test HtmlDocument subclass"""
+    """Test `HtmlDocument` content class"""
     @param_document_init(HtmlDocument, EXTENSION, STEMS)
     def test___init__(self, inst: HtmlDocument, expected: DocumentInit):
         assert compare_document(inst, expected)

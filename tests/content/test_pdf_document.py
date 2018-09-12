@@ -1,4 +1,4 @@
-"""Test PdfDocument content class"""
+"""Test `PdfDocument` content class"""
 from PyPDF2 import PdfFileReader
 from pytest import mark
 
@@ -45,7 +45,7 @@ def get_path(stem: str) -> str:
 
 @parametrize_basic()
 def test_get_page(stem: str, expected: str):
-    """Test get_page function of pdf_document
+    """Test `get_page` for PdfDocument
 
     Arguments:
         stem {str} -- stem of sample path
@@ -61,7 +61,7 @@ def test_get_page(stem: str, expected: str):
 
 @parametrize_basic()
 def test_get_body(stem: str, expected: str):
-    """Test get_body function of pdf_document
+    """Test `get_body` for PdfDocument
 
     Arguments:
         stem {str} -- stem of sample path
@@ -77,7 +77,7 @@ def test_get_body(stem: str, expected: str):
 
 @parametrize_basic('Basic Title')
 def test_get_title(stem: str, expected: str):
-    """Test get_body function of pdf_document
+    """Test `get_title` for PdfDocument
 
     Arguments:
         name {str} -- stem of sample path
@@ -92,7 +92,7 @@ def test_get_title(stem: str, expected: str):
 
 
 class TestPdfDocument(TestBinaryDocument):
-    """Test PdfDocument subclass"""
+    """Test `PdfDocument` content class"""
     @param_document_init(SUBJECT, EXTENSION, STEMS)
     def test___init__(self, inst: PdfDocument, expected: DocumentInit):
         assert compare_document(inst, expected)

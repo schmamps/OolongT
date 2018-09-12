@@ -1,4 +1,4 @@
-"""Test pipelining"""
+"""Test pipe subpackage"""
 import typing
 from pytest import mark
 
@@ -11,7 +11,7 @@ from tests.helpers import pad_to_longest, return_false, return_true
     [(''), (0), (True), (False), (None)],
     ids=pad_to_longest(['empty', 'zero', 'true', 'false', 'none']))
 def test_noop(expected: typing.Any):
-    """Test noop
+    """Test `noop`
 
     Arguments:
         expected {typing.Any} -- expected value (same as input)
@@ -32,11 +32,11 @@ def test_pipe(
         init: typing.Any,
         pipeline: typing.Any,
         expected: typing.Any):
-    """Test pipe
+    """Test `pipe`
 
     Arguments:
         init {typing.Any} -- input value
-        pipeline {typing.Iterable} -- list of callables
+        pipeline {typing.Any} -- (iterable of) callables
         expected {typing.Any} -- expected result
     """
     received = pipe(init, pipeline)

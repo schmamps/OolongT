@@ -46,7 +46,7 @@ def test_is_supported_scheme(path: PathOrString, expected: bool):
     [(PKG_NAME), (VERSION)],
     ids=pad_to_longest(['name', 'version']))
 def test_get_user_agent(val: str):
-    """Test get_user_agent()
+    """Test get_user_agent
 
     Arguments:
         val {str} -- string in user agent
@@ -140,7 +140,7 @@ def _test_read(func: typing.Callable, path: PathOrString, expected) -> bool:
 
 @param_read()
 def test_get_contents(path: PathOrString, expected):
-    """Test get_contents()
+    """Test get_contents
 
     Arguments:
         path {PathOrString} -- path to document

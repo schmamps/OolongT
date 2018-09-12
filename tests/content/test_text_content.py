@@ -1,4 +1,4 @@
-"""Test TextContent content class"""
+"""Test `TextContent` content class"""
 import typing
 
 from pytest import mark
@@ -34,7 +34,7 @@ def get_init(keys: typing.Any):
 
 # pylint: disable=no-self-use
 class TestTextContent(TestContent):
-    """Test TextContent subclass"""
+    """Test `TextContent` content class"""
     @mark.parametrize(
         'kwargs,expected',
         [
@@ -44,7 +44,7 @@ class TestTextContent(TestContent):
             'body-only',
             'body-title', ]))
     def test___init__(self, kwargs: dict, expected: tuple):
-        """Test Content subclass initialization
+        """Test `TextContent` initialization
 
         Arguments:
             kwargs {dict} -- initialization args

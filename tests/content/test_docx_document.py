@@ -1,4 +1,4 @@
-"""Test DocxDocument content class"""
+"""Test `DocxDocument` content class"""
 from src.oolongt.content import DocxDocument
 from test_binary_document import TestBinaryDocument
 from tests.params.content import (
@@ -9,7 +9,7 @@ EXTENSION = 'docx'
 
 
 class TestDocxDocument(TestBinaryDocument):
-    """Test DocxDocument subclass"""
+    """Test `DocxDocument` content class"""
     @param_document_init(DocxDocument, EXTENSION, STEMS)
     def test___init__(self, inst: DocxDocument, expected: DocumentInit):
         assert compare_document(inst, expected)

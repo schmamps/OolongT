@@ -124,7 +124,7 @@ class TestContent:
         assert str(inst) == expected[0]
 
     def _test_repr(self, inst: Content, expected: tuple):
-        """Test repr() string of instance
+        """Test REPR string of instance
 
         Arguments:
             inst {Content} -- initialization params
