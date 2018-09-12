@@ -86,7 +86,7 @@ def test_compare_word(word_a: str, word_b: str, expected: int):
 
 
 @mark.parametrize(
-    'kw_a,kw_b,less,equal,reason',
+    'kw_a,kw_b,is_lt,is_eq,reason',
     [
         (gen_inst(1, 2), gen_inst(1, 1), True, False, 's'),
         (gen_inst(1, 2), gen_inst(1, 2), False, True, 's'),
@@ -110,26 +110,26 @@ def test_compare_word(word_a: str, word_b: str, expected: int):
 def test_compare_keywords(
         kw_a: ScoredKeyword,
         kw_b: ScoredKeyword,
-        less: bool,
-        equal: bool,
+        is_lt: bool,
+        is_eq: bool,
         reason: str):
     """Test compare_keywords in parser subpackage
 
     Arguments:
         kw_a {ScoredKeyword} -- keyword A
         kw_b {ScoredKeyword} -- keyword B
-        less {bool} -- A is Less than B
-        equal {bool} -- A is Equal to B
+        is_lt {bool} -- keyword A is Less Than keyword B
+        is_eq {bool} -- keyword A is EQual to keyword B
     """
     equality = (0, 0, 0)
     received = compare_keywords(kw_a, kw_b)
     assert_msg = 'reason: {}'.format(
         {'s': 'score', 'l': 'length', 'w': 'word'}[reason])
 
-    if less:
+    if is_lt:
         assert received < equality, assert_msg
 
-    elif equal:
+    elif is_eq:
         assert received == equality, assert_msg
 
     else:
