@@ -1,24 +1,34 @@
-"""Mock ScoredSentence"""
+"""Sample ScoredSentence"""
 import typing
 
 import kinda
 
 from src.oolongt.constants import COMPOSITE_TOLERANCE
-from src.oolongt.typedefs import ScoredSentence
+from src.oolongt.summarizer import ScoredSentence
 
 
-def auto_id(index, of):
-    pad = len(str(of))
+def auto_id(index: int, total: int) -> str:
+    """Generate ID property for sentence
+
+    Arguments:
+        index {int} -- sentence index in content
+        total {int} -- total number of sentences in content
+
+    Returns:
+        str -- sentence id
+    """
+    pad = len(str(total))
     template = '{{0:{0}d}} of {{1}}'.format(pad)
-    return template.format(index + 1, of)
+    return template.format(index + 1, total)
 
 
+# pylint: disable=super-init-not-called
 class SampleSentence(ScoredSentence):
+    """Sample ScoredSentence"""
     def __init__(
             self,
             data_dict: typing.Dict[str, typing.Any],
-            of: int
-            ) -> None:
+            total: int) -> None:
         """Initialize
 
         Arguments:
@@ -40,51 +50,76 @@ class SampleSentence(ScoredSentence):
 
         self.rank = data_dict.get('rank', 0)
         self._init_(
-            text, index, of,
+            text, index, total,
             title_score, length_score,
             dbs_score, sbs_score, keyword_score,
             position_score, total_score)
-        self.id = data_dict.get('id', auto_id(index, of))  # type: str
+        self.id = str(data_dict.get('id', auto_id(index, total)))  # noqa  pylint: disable=line-too-long,invalid-name
 
-    def __eq__(self, other) -> bool:
-        if (self.text != other.text):
+    # pylint: disable=too-many-return-statements
+    def __eq__(self, other: ScoredSentence) -> bool:
+        """Compare equality
+
+        Arguments:
+            other {ScoredSentence} -- scored sentence
+
+        Returns:
+            bool -- sentences are equal
+        """
+
+        if self.text != other.text:
             return False
 
-        if (self.index != other.index):
+        if self.index != other.index:
             return False
 
-        if (self.of != other.of):
+        if self.of != other.of:
             return False
 
-        if kinda.ne(self.title_score, other.title_score,
-                    abs_tol=COMPOSITE_TOLERANCE):
-                return False
-
-        if kinda.ne(self.length_score, other.length_score,
-                    abs_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(
+                self.title_score,
+                other.title_score,
+                abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if kinda.ne(self.dbs_score, other.dbs_score,
-                    abs_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(
+                self.length_score,
+                other.length_score,
+                abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if kinda.ne(self.sbs_score, other.sbs_score,
-                    abs_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(
+                self.dbs_score,
+                other.dbs_score,
+                abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if kinda.ne(self.position_score, other.position_score):
+        if kinda.ne(
+                self.sbs_score,
+                other.sbs_score,
+                abs_tol=COMPOSITE_TOLERANCE):
             return False
 
-        if kinda.ne(self.keyword_score, other.keyword_score,
-                    abs_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(
+                self.position_score,
+                other.position_score):
             return False
 
-        if kinda.ne(self.total_score, other.total_score,
-                    abs_tol=COMPOSITE_TOLERANCE):
+        if kinda.ne(
+                self.keyword_score,
+                other.keyword_score,
+                abs_tol=COMPOSITE_TOLERANCE):
+            return False
+
+        if kinda.ne(
+                self.total_score,
+                other.total_score,
+                abs_tol=COMPOSITE_TOLERANCE):
             return False
 
         return True
 
+    # pylint: enable=too-many-return-statements
     def equals(self, other) -> bool:
         """Compare SampleSentence to ScoredSentence in correct order
 

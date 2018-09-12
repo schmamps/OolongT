@@ -2,14 +2,14 @@
 import typing
 from pathlib import Path
 
-from src.oolongt import simple_io
+from src.oolongt.io import load_json
+from src.oolongt.typings import DictOfAny
+from tests.typedefs import SampleKeywordList, SampleSentenceList
 from tests.typedefs.sample_keyword import SampleKeyword
 from tests.typedefs.sample_sentence import SampleSentence
 
 
-def join_sentences(
-        sentence_list: typing.List[typing.Dict[str, typing.Any]]
-        ) -> str:
+def join_sentences(sentence_list: typing.List[DictOfAny]) -> str:
     """Create text from sentence list
 
     Arguments:
@@ -22,7 +22,7 @@ def join_sentences(
     return '\n  '.join([sent['text'] for sent in sentence_list])
 
 
-def load_config(root: Path, name: str) -> typing.Dict[str, typing.Any]:
+def load_config(root: Path, name: str) -> DictOfAny:
     """Load initialization data for Sample
 
     Arguments:
@@ -30,10 +30,10 @@ def load_config(root: Path, name: str) -> typing.Dict[str, typing.Any]:
         idiom {str} -- basename of idiom config
 
     Returns:
-        typing.Dict[str, typing.Any] -- initialization data
+        DictOfAny -- initialization data
     """
     path = root.joinpath(name + '.json')
-    config = simple_io.load_json(path)
+    config = load_json(path)
 
     text = config.pop('text', False)
     sentences = config.pop('sentences', [{'text': ''}])
@@ -50,15 +50,60 @@ def load_config(root: Path, name: str) -> typing.Dict[str, typing.Any]:
     return config
 
 
-class Sample(object):
+class Sample:
+    """Sample content"""
     def __init__(self, root: Path, name: str) -> None:
+        """Initialize Sample
+
+        Arguments:
+            root {Path} -- path to idioms
+            name {str} -- name of idiom
+        """
         config = load_config(root, name)
         config.update({'name': name})
 
         self._data = config
         self._keys = config.keys()
 
+    @property
+    def body(self) -> str:
+        """Get body
+
+        Returns:
+            str -- full text of sample
+        """
+        return self._data['body']
+
+    @property
+    def keywords(self) -> SampleKeywordList:
+        """List keywords
+
+        Returns:
+            SampleKeywordList - sample keywords
+        """
+        return self._data['keywords']
+
+    @property
+    def sentences(self) -> SampleSentenceList:
+        """List sentences
+
+        Returns:
+            SampleSentenceList -- sample sentences
+        """
+        return self._data['sentences']
+
     def __getattr__(self, name: str) -> typing.Any:
+        """Get miscellaneous attributes
+
+        Arguments:
+            name {str} -- attribute name
+
+        Raises:
+            AttributeError -- attribute does not exist
+
+        Returns:
+            typing.Any -- value of attribute
+        """
         if name in self._keys:
             return self._data[name]
 

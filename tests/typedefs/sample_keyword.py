@@ -1,10 +1,12 @@
-"""Mock ScoredKeyword """
+"""Sample ScoredKeyword """
 import typing
 
-from src.oolongt.typedefs.scored_keyword import ScoredKeyword, score_keyword
+from src.oolongt.parser.scored_keyword import ScoredKeyword, score_keyword
 
 
+# pylint: disable=super-init-not-called,too-few-public-methods
 class SampleKeyword(ScoredKeyword):
+    """Sample ScoredKeyword"""
     def __init__(self, pairs: typing.Dict[str, typing.Any], of: int) -> None:
         """Initialize
 
@@ -16,14 +18,13 @@ class SampleKeyword(ScoredKeyword):
         Returns:
             None -- SampleKeyword
         """
-        self.word = pairs.get('word', 'foo')                    # type: str
+        self.word = pairs.get('word', 'spam')                   # type: str
         self.count = pairs.get('count', 1)                      # type: int
         self.of = of                                            # type: int
         self.score = (
             pairs.get('score', score_keyword(self.count, of)))  # type: float
 
     @classmethod
-    # pylint: disable=undefined-variable
     def by_score(cls, score: float, count: int = 1):
         """When you don't need a fancy ScoredKeyword
 
