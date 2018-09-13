@@ -1,6 +1,0 @@
-pycodestyle==2.4.0
-pylint==2.1.1
-pytest==3.7.1
-rope==0.10.7
-pathlib==1.0.1
-mypy==0.620

@@ -2,5 +2,5 @@ nltk==3.3
 pathlib==1.0.1
 beautifulsoup4==4.6.1
 PyPDF2==1.26.0
-docx2txt==0.7
 kinda==0.9.9
+git+https://github.com/schmamps/python-docx2txt.git@v080/pull_request
