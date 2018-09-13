@@ -4,8 +4,7 @@ from random import shuffle
 
 from src.oolongt.typings import AnyList, StringList
 from tests.constants import TEXT_PATH
-from tests.typedefs.sample import Sample
-from tests.typedefs.sample_sentence import SampleSentence
+from tests.typings.sample import Sample
 
 
 def snip(

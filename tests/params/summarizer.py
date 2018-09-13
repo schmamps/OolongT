@@ -7,7 +7,7 @@ from src.oolongt.summarizer import ScoredSentence
 from src.oolongt.typings import StringList, AnyList
 from tests.constants import SAMPLES
 from tests.helpers import pad_to_longest, get_sample
-from tests.typedefs import Sample, SampleKeyword, SampleSentence
+from tests.typings import Sample, SampleKeyword, SampleSentence
 
 SampleGenerator = typing.Generator[Sample, None, None]
 SampleSentenceGenerator = typing.Generator[

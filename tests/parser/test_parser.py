@@ -10,8 +10,8 @@ from src.oolongt.typings import StringList
 from tests.constants import SAMPLES
 from tests.helpers import (
     assert_ex, get_sample_ids, get_samples, pad_to_longest)
-from tests.typedefs.sample import Sample
-from tests.typedefs.sample_keyword import SampleKeyword
+from tests.typings.sample import Sample
+from tests.typings.sample_keyword import SampleKeyword
 
 CountedKeywords = typing.Tuple[StringList, typing.Dict[str, float]]
 

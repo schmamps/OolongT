@@ -11,8 +11,8 @@ from tests.constants import SAMPLES, TEXT_PATH
 from tests.helpers import (
     assert_ex, check_exception, get_sample_ids, get_samples, pad_to_longest,
     snip)
-from tests.typedefs.sample import Sample
-from tests.typedefs.sample_sentence import SampleSentence
+from tests.typings.sample import Sample
+from tests.typings.sample_sentence import SampleSentence
 
 SampleSentenceList = typing.List[SampleSentence]
 
