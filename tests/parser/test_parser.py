@@ -8,8 +8,8 @@ from src.oolongt.parser.parser import Parser, remove_punctuations
 from src.oolongt.parser.scored_keyword import ScoredKeyword
 from src.oolongt.typings import StringList
 from tests.constants import SAMPLES
-from tests.helpers import (
-    assert_ex, get_sample_ids, get_samples, pad_to_longest)
+from tests.helpers import assert_ex, pad_to_longest
+from tests.params.summarizer import get_sample_ids, get_samples
 from tests.typings.sample import Sample
 from tests.typings.sample_keyword import SampleKeyword
 

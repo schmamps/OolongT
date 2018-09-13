@@ -1,4 +1,6 @@
+"""Parser testing params"""
 from pytest import mark
+
 from src.oolongt.parser import ScoredKeyword
 from tests.helpers import pad_to_longest
 

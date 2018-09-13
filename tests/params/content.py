@@ -1,5 +1,4 @@
 """Parametrize content tests"""
-
 import typing
 from re import split
 
@@ -7,7 +6,8 @@ from pytest import mark
 
 from src.oolongt.content import Content, Document
 from src.oolongt.io import load_json
-from src.oolongt.typings import StringList  # noqa  pylint: disable=unused-import,line-too-long
+from src.oolongt.typings import \
+    StringList  # noqa  pylint: disable=unused-import,line-too-long
 from tests.constants import DOC_PATH
 from tests.helpers import pad_to_longest
 
@@ -20,7 +20,7 @@ ContentInit = typing.Tuple[str, str]
 DocumentInit = typing.Tuple[str, str, str]
 
 
-def split_any(val: typing.Any):
+def split_any(val: typing.Any) -> StringList:
     """Split any value into a list of strings
 
     Arguments:

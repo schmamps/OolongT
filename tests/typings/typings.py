@@ -1,3 +1,4 @@
+"""custom types"""
 import typing
 
 from .sample_keyword import SampleKeyword

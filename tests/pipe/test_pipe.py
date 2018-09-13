@@ -1,5 +1,6 @@
 """Test pipe subpackage"""
 import typing
+
 from pytest import mark
 
 from src.oolongt.pipe import noop, pipe

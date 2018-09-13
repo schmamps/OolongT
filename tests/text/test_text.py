@@ -8,9 +8,8 @@ from src.oolongt import score_body_sentences, summarize
 from src.oolongt.text.text import get_slice_length
 from src.oolongt.typings import StringList
 from tests.constants import SAMPLES, TEXT_PATH
-from tests.helpers import (
-    assert_ex, check_exception, get_sample_ids, get_samples, pad_to_longest,
-    snip)
+from tests.helpers import assert_ex, check_exception, pad_to_longest, snip
+from tests.params.summarizer import get_sample_ids, get_samples
 from tests.typings.sample import Sample
 from tests.typings.sample_sentence import SampleSentence
 

@@ -4,9 +4,9 @@ import typing
 from pytest import mark
 
 from src.oolongt.summarizer import ScoredSentence
-from src.oolongt.typings import StringList, AnyList
+from src.oolongt.typings import AnyList, StringList
 from tests.constants import SAMPLES
-from tests.helpers import pad_to_longest, get_sample
+from tests.helpers import get_sample, pad_to_longest
 from tests.typings import Sample, SampleKeyword, SampleSentence
 
 SampleGenerator = typing.Generator[Sample, None, None]

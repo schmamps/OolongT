@@ -4,7 +4,7 @@ import typing
 from pytest import mark
 
 from src.oolongt.content.content import norm_text
-from src.oolongt.typings import StringList, OptionalString
+from src.oolongt.typings import OptionalString, StringList
 from src.oolongt.ugly_soup.ugly_query import UglyQuery, get_text, list_tags
 from tests.helpers import pad_to_longest, return_false, return_true
 from tests.params.ugly_soup import DOC, SOUP
