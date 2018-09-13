@@ -5,6 +5,7 @@ from re import sub
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
+from ..pipe import pipe
 from ..typings import StringList
 from .parser_config import BUILTIN, DEFAULT_IDIOM, ParserConfig
 from .scored_keyword import ScoredKeyword
@@ -132,7 +133,7 @@ class Parser:
             typing.List[ScoredKeyword] -- list of keywords, scored
         """
         keyword_stems = self.get_key_stems(text)
-        unique_stems = list(set(keyword_stems))
+        unique_stems = pipe(keyword_stems, set, list)
 
         keywords = [
             ScoredKeyword(word, keyword_stems.count(word), len(keyword_stems))
