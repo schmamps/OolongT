@@ -10,7 +10,7 @@ from ..constants import (
     DEFAULT_NLTK_STOPS, DEFAULT_USER_STOPS)
 from ..io import load_json
 from ..repr_able import ReprAble
-from ..typings import StringList
+from ..typings import DictOfAny, StringList
 
 IdiomData = typing.Tuple[int, str, StringList]
 
@@ -31,7 +31,7 @@ def get_config_path(root: str, idiom: str) -> Path:
     return root_path.joinpath(file_name)
 
 
-def get_stop_words(idiom_spec: dict, language: str) -> set:
+def get_stop_words(idiom_spec: DictOfAny, language: str) -> set:
     """List stop words based on idiom configuration
 
     Returns:
@@ -39,7 +39,7 @@ def get_stop_words(idiom_spec: dict, language: str) -> set:
     """
     stop_cfg = {
         'nltk': DEFAULT_NLTK_STOPS,
-        'user': DEFAULT_USER_STOPS, }  # type: typing.Dict[str, typing.Any]
+        'user': DEFAULT_USER_STOPS, }  # type: DictOfAny
     stop_cfg.update(idiom_spec.get('stop_words', {}))
     use_nltk = bool(stop_cfg['nltk'])
     use_user = isinstance(stop_cfg['user'], list)
@@ -67,11 +67,11 @@ def parse_config(path: Path) -> typing.Tuple[int, str, StringList]:
         idiom_spec = load_json(path.absolute())
 
         ideal = idiom_spec.get(
-            'ideal', DEFAULT_IDEAL_LENGTH)           # type: int
+            'ideal', DEFAULT_IDEAL_LENGTH)  # type: int
         language = idiom_spec.get(
-            'language', DEFAULT_LANGUAGE)  # type: str
+            'language', DEFAULT_LANGUAGE)   # type: str
         stop_words = get_stop_words(
-            idiom_spec, language)                # type: typing.Set[str]
+            idiom_spec, language)           # type: typing.Set[str]
 
     except (JSONDecodeError, AttributeError):
         raise ValueError('invalid config file: {!r}'.format(path))
