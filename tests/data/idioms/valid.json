@@ -6,6 +6,6 @@
 	"ideal": 2,
 	"stop_words": {
 		"nltk": false,
-		"user": ["foo", "bar"]
+		"user": ["spam", "eggs"]
 	}
 }
