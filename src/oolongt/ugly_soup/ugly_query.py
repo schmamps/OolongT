@@ -51,8 +51,26 @@ class UglyQuery(ReprAble):
         Keyword Arguments:
             tester {typing.Callable} -- tag tester (default: {get_text})
         """
-        self.tags = list_tags(tags)
+        self._tags = list_tags(tags)
         self._tester = tester
+
+    @property
+    def tags(self) -> StringList:
+        """List query tags
+
+        Returns:
+            StringList -- list of tags
+        """
+        return self._tags
+
+    @property
+    def tester(self) -> typing.Callable:
+        """Get query test function
+
+        Returns:
+            typing.Callable -- test function
+        """
+        return self._tester
 
     def test(self, tag: Tag) -> OptionalString:
         """Process tag, return content if found else None
@@ -64,3 +82,6 @@ class UglyQuery(ReprAble):
             OptionalString -- content or None
         """
         return self._tester(tag)
+
+    def __repr__(self):
+        return self._repr_(self.tags, self._tester)
