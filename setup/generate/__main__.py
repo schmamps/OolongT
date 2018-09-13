@@ -1,3 +1,4 @@
+"""module setup"""
 import os
 import sys
 

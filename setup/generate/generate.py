@@ -5,7 +5,7 @@ from pathlib import Path
 from re import sub, split
 
 from setup.util import console, json_data, PROC_TYPE
-from tests.typedefs import Sample
+from tests.typings import Sample
 
 
 def noop(val: typing.Any) -> typing.Any:

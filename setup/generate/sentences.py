@@ -1,3 +1,4 @@
+"""sentence data generator"""
 import typing
 from collections import OrderedDict
 from pathlib import Path
@@ -5,13 +6,22 @@ from pathlib import Path
 from setup.generate import generate_set, get_final_path
 from setup.util import math
 from src.oolongt.summarizer import ScoredSentence, Summarizer
-from tests.typedefs import Sample
+from tests.typings import Sample
 
 SAMPLING_SIZE = 25
 
 
-def dictify(received, rank):
-    sent_dict = OrderedDict()
+def dictify(received: ScoredSentence, rank: int) -> OrderedDict:
+    """Convert `ScoredSentence` to dict (consistent order)
+
+    Arguments:
+        received {ScoredSentence} -- scored sentence
+        rank {int} -- rank of sentence
+
+    Returns:
+        OrderedDict -- dict of ScoredSentence properies
+    """
+    sent_dict = OrderedDict()  # type: OrderedDict[str, typing.Any]
     sent_dict['index'] = received.index
     sent_dict['sbs_score'] = received.sbs_score
     sent_dict['dbs_score'] = received.dbs_score
@@ -26,7 +36,18 @@ def dictify(received, rank):
     return sent_dict
 
 
-def get_median_sentence(all_samples, sent_idx):
+def get_median_sentence(
+        all_samples: typing.List[ScoredSentence],
+        sent_idx: int) -> ScoredSentence:
+    """Get median scores of specific sentence
+
+    Arguments:
+        all_samples {typing.List[ScoredSentence]} -- every result
+        sent_idx {int} -- index of sentence to average
+
+    Returns:
+        ScoredSentence -- median of each score
+    """
     samples = [s[sent_idx] for s in all_samples]
 
     sbs_score = math.median([s.sbs_score for s in samples])
@@ -46,28 +67,42 @@ def get_median_sentence(all_samples, sent_idx):
     return samples[0]
 
 
-def get_median_sentences(samp: Sample):
+# pylint: disable=consider-using-enumerate
+def get_median_sentences(samp: Sample) -> typing.List[ScoredSentence]:
+    """Get median sentence scores
+
+    Arguments:
+        samp {Sample} -- sample
+
+    Returns:
+        typing.List[ScoredSentence] -- scored sentences
+    """
     summ = Summarizer()
     all_samples = [
-        summ.get_all_sentences(samp.body, samp.title, None, None)
+        summ.get_all_sentences(samp.body, samp.title)
         for _ in range(SAMPLING_SIZE)]
 
-    mean = all_samples[0].copy()
-    for sent_idx in range(len(mean)):
-        mean[sent_idx] = get_median_sentence(all_samples, sent_idx)
+    median = all_samples[0].copy()
+    for sent_idx, _ in enumerate(median):
+        median[sent_idx] = get_median_sentence(all_samples, sent_idx)
 
-    return mean
-
-
-def get_output_path(output_path: Path, sample_name: str) -> Path:
-    return output_path.joinpath('{}.keywords.json'.format(sample_name))
+    return median
 
 
+# pylint: enable=consider-using-enumerate
 def get_dict(
         ranks: typing.List[int],
-        receiveds: typing.List[ScoredSentence]
-        ) -> OrderedDict:
-    data = OrderedDict()  # type: OrderedDict
+        receiveds: typing.List[ScoredSentence]) -> OrderedDict:
+    """Get OrderedDict with sentence data
+
+    Arguments:
+        ranks {typing.List[int]} -- sentence rankings
+        receiveds {typing.List[ScoredSentence]} -- list of sentences
+
+    Returns:
+        OrderedDict -- sentence data
+    """
+    data = OrderedDict()  # type: OrderedDict[str, typing.Any]
     data['sentences'] = [
         dictify(sent, ranks.index(idx))
         for idx, sent in enumerate(receiveds)]
@@ -78,8 +113,17 @@ def get_dict(
 def process_sample(
         samp: Sample,
         _: Path,
-        output_path: Path
-        ) -> typing.Tuple[typing.Dict, Path]:
+        output_path: Path) -> typing.Tuple[typing.Dict, Path]:
+    """Process `samp` for output
+
+    Arguments:
+        samp {Sample} -- sample data
+        _ {Path} -- ignored
+        output_path {Path} -- output directory
+
+    Returns:
+        typing.Tuple[typing.Dict, Path] -- sample data, output path
+    """
     receiveds = get_median_sentences(samp)
     ranks = [sent.index for sent in sorted(receiveds, reverse=True)]
 
@@ -90,4 +134,13 @@ def process_sample(
 
 
 def generate(input_path: Path, output_path: Path) -> bool:
+    """Generate sentence data from `input_path` to `output_path`
+
+    Arguments:
+        input_path {Path} -- path to input files
+        output_path {Path} -- path to output files
+
+    Returns:
+        bool -- success
+    """
     return generate_set('sentences', process_sample, input_path, output_path)
