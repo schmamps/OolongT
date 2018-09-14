@@ -7,7 +7,6 @@ from ..constants import COMPOSITE_TOLERANCE, SENTENCE_SCORE_K
 from ..repr_able import ReprAble
 
 
-# pylint: disable=invalid-name
 def calc_decile(index: int, total: int) -> int:
     """Get decile of `index` relative to `total`
 

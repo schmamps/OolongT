@@ -2,31 +2,23 @@
 import typing
 
 import kinda
-from pytest import mark
 
 from src.oolongt.parser.parser import Parser, remove_punctuations
 from src.oolongt.parser.scored_keyword import ScoredKeyword
 from src.oolongt.typings import StringList
 from tests.constants import SAMPLES
-from tests.helpers import assert_ex, pad_to_longest
-from tests.params.summarizer import get_sample_ids, get_samples
+from tests.helpers import assert_ex
+from tests.params.parser import (
+    param_get_all_words, param_get_keywords, param_remove_punctuations,
+    param_split_sentences, param_split_words)
+from tests.params.summarizer import param_samples
 from tests.typings.sample import Sample
 from tests.typings.sample_keyword import SampleKeyword
 
 CountedKeywords = typing.Tuple[StringList, typing.Dict[str, float]]
 
 
-@mark.parametrize(
-    'samp',
-    get_samples([
-        'empty',
-        'sentence_1word',
-        'sentence_list', ]),
-    ids=pad_to_longest([
-        'empty string',
-        'one word',
-        'list of sentences',
-    ]))
+@param_remove_punctuations()
 def test_remove_punctuations(samp: Sample) -> None:
     """Test `remove_punctuations` for Parser
 
@@ -45,16 +37,7 @@ def test_remove_punctuations(samp: Sample) -> None:
 # pylint: disable=too-few-public-methods,no-self-use
 class TestParser:
     """Test `Parser`"""
-    @mark.parametrize(
-        'samp',
-        get_samples([
-            'sentence_1word',
-            'sentence_overlong',
-        ]),
-        ids=pad_to_longest([
-            'one ',
-            'a long sentence',
-        ]))
+    @param_get_all_words()
     def test_get_all_words(self, samp: Sample) -> None:
         """Test `Parser.get_all_words`
 
@@ -68,10 +51,7 @@ class TestParser:
             assert (received in expected), assert_ex(
                 'all words', received, None)
 
-    @mark.parametrize(
-        'samp',
-        get_samples(['essay_snark'] + SAMPLES),
-        ids=get_sample_ids(['essay_snark'] + SAMPLES))
+    @param_samples(['essay_snark'] + SAMPLES)
     def test_get_key_stems(self, samp: Sample) -> None:
         """Test `Parser.get_key_stems`
 
@@ -141,16 +121,7 @@ class TestParser:
 
         return self._count_keywords(keywords)
 
-    @mark.parametrize(
-        'samp',
-        get_samples([
-            'empty',
-            'essay_snark',
-        ]),
-        ids=pad_to_longest([
-            'empty string',
-            'Snark essay'
-        ]))
+    @param_get_keywords()
     def test_get_keywords(self, samp: Sample) -> None:
         """Test `Parser.get_keywords`
 
@@ -188,10 +159,7 @@ class TestParser:
 
         return expected
 
-    @mark.parametrize(
-        'samp',
-        get_samples(['sentence_short', 'sentence_list', ] + SAMPLES),
-        ids=get_sample_ids(['sentence_short', 'sentence_list', ] + SAMPLES))
+    @param_split_sentences()
     def test_split_sentences(self, samp: Sample) -> None:
         """Test `Parser.split_sentences`
 
@@ -214,18 +182,7 @@ class TestParser:
             received,
             expected)
 
-    @mark.parametrize(
-        'samp',
-        get_samples([
-            'empty',
-            'sentence_1word',
-            'sentence_medium',
-        ]),
-        ids=pad_to_longest([
-            'empty string',
-            'one word',
-            'medium sentence',
-        ]))
+    @param_split_words()
     def test_split_words(self, samp: Sample) -> None:
         """Test `Parser.split_words`
 

@@ -2,9 +2,10 @@
 import typing
 from os import unlink
 from pathlib import Path
-from re import sub, split
+from re import split, sub
 
-from setup.util import console, json_data, PROC_TYPE
+from setup.typings import ProcType
+from setup.util import console, json_data
 from tests.typings import Sample
 
 
@@ -83,8 +84,8 @@ def generate_sample(  # pylint: disable=too-many-arguments
         handler: typing.Callable,
         input_path: Path,
         output_path: Path,
-        pre_proc: PROC_TYPE,
-        post_proc: PROC_TYPE):
+        pre_proc: ProcType,
+        post_proc: ProcType):
     """Generate JSON for a sample
 
     Arguments:
@@ -93,8 +94,8 @@ def generate_sample(  # pylint: disable=too-many-arguments
         handler {typing.Callable} -- data processor
         input_path {Path} -- input path
         output_path {Path} -- output path
-        pre_proc {PROC_TYPE} -- data dict pre-processor
-        post_proc {PROC_TYPE} -- output JSON post-processor
+        pre_proc {ProcType} -- data dict pre-processor
+        post_proc {ProcType} -- output JSON post-processor
 
     Raises:
         Exception -- unhandled error during generation
@@ -131,8 +132,8 @@ def generate_set(  # pylint: disable=too-many-arguments
         handler: typing.Callable,
         input_path: Path,
         output_path: Path,
-        pre_proc: PROC_TYPE = noop,
-        post_proc: PROC_TYPE = noop):
+        pre_proc: ProcType = noop,
+        post_proc: ProcType = noop):
     """Generate data set for the samples
 
     Arguments:
@@ -142,8 +143,8 @@ def generate_set(  # pylint: disable=too-many-arguments
         output_path {Path} -- output path
 
     Keyword Arguments:
-        pre_proc {PROC_TYPE} -- data dict pre-processor (default: {noop})
-        post_proc {PROC_TYPE} -- output JSON post-processor (default: {noop})
+        pre_proc {ProcType} -- data dict pre-processor (default: {noop})
+        post_proc {ProcType} -- output JSON post-processor (default: {noop})
 
     Raises:
         Exception -- unhandled error during generation

@@ -152,7 +152,6 @@ def score_by_sbs(
     return sbs
 
 
-# pylint: disable=invalid-name
 class Summarizer:
     """Parse content for scored sentences"""
     def __init__(
@@ -176,7 +175,7 @@ class Summarizer:
         title_kw_words = self.parser.get_key_words(title)
         top_kws = self.get_top_keywords(body)
         top_kw_stems = pluck_keyword_words(top_kws)
-        of = len(sentences)
+        of = len(sentences)  # pylint: disable=invalid-name
 
         scored_sentences = [
             self.get_sentence(
@@ -201,7 +200,7 @@ class Summarizer:
 
         return top_kws
 
-    def get_sentence(  # pylint: disable=too-many-arguments
+    def get_sentence(  # pylint: disable=too-many-arguments,invalid-name
             self,
             text: str,
             index: int,

@@ -7,6 +7,7 @@ from .oolongt_task import OolongtTask
 
 
 class CleanupCommand(OolongtTask):
+    """Cleanup command"""
     def run(self):
         """Delete intermediate folders"""
         self.announce('deleting intermediate folders', level=2)

@@ -1,15 +1,14 @@
 """Test `PdfDocument` content class"""
 from PyPDF2 import PdfFileReader
-from pytest import mark
 
 from src.oolongt.content import PdfDocument
 from src.oolongt.content.pdf_document import get_body, get_page, get_title
 from src.oolongt.io import get_stream
 from test_binary_document import TestBinaryDocument
-from tests.helpers import pad_to_longest
 from tests.params.content import (
     DocumentInit, compare_document, get_doc_path, param_document_init,
     param_supports)
+from tests.params.helpers import parametrize
 
 STEMS = ['basic']
 SUBJECT = PdfDocument
@@ -25,10 +24,8 @@ def parametrize_basic(expected='Basic body'):
     Returns:
         test params -- test params
     """
-    return mark.parametrize(
-        'stem,expected',
-        [('basic', expected)],
-        ids=pad_to_longest(['basic']))
+    return parametrize(
+        'stem,expected', (('basic', expected), ), ('basic', ))
 
 
 def get_path(stem: str) -> str:

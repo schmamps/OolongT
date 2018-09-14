@@ -1,16 +1,11 @@
 """Test pipe subpackage"""
 import typing
 
-from pytest import mark
-
 from src.oolongt.pipe import noop, pipe
-from tests.helpers import pad_to_longest, return_false, return_true
+from tests.params.pipe import param_noop, param_pipe
 
 
-@mark.parametrize(
-    'expected',
-    [(''), (0), (True), (False), (None)],
-    ids=pad_to_longest(['empty', 'zero', 'true', 'false', 'none']))
+@param_noop()
 def test_noop(expected: typing.Any):
     """Test `noop`
 
@@ -22,13 +17,7 @@ def test_noop(expected: typing.Any):
     assert received == expected
 
 
-@mark.parametrize(
-    'init,pipeline,expected',
-    [
-        (0, return_false, False),
-        (0, (return_false, return_true), True),
-        (0, (noop, (noop, noop), [noop, noop]), 0)],
-    ids=pad_to_longest(['simple', 'tuple', 'complex']))
+@param_pipe()
 def test_pipe(
         init: typing.Any,
         pipeline: typing.Any,

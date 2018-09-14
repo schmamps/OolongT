@@ -1,34 +1,13 @@
 """Test `Document` base content class"""
-from pathlib import Path
-
-from pytest import mark
-
 from src.oolongt.content.document import Document, norm_path
 from src.oolongt.typings import PathOrString
 from test_content import TestContent
-from tests.helpers import pad_to_longest
 from tests.params.content import (
-    TEST_PATH, DocumentInit, get_document, param_document)
-
-EASY = {
-    'path': 'dir/filename.ext',
-    'stem': 'filename',
-    'split': ['filename'],
-    'entitle': ['Filename'],
-    'title': 'Filename', }
-
-HARD = {
-    'path': 'dir/This,canned-SPAM ContainsPaté.webm',
-    'stem': 'This,canned-SPAM ContainsPate',
-    'split': ['This', 'canned', 'SPAM', 'Contains', 'Pate'],
-    'entitle': ['This', 'Canned', 'SPAM', 'Contains', 'Pate'],
-    'title': 'This Canned SPAM Contains Pate', }
+    TEST_PATH, DocumentInit, get_document, param_document, param_norm_path)
+from tests.params.helpers import parametrize
 
 
-@mark.parametrize(
-    'path,expected',
-    [(__file__, __file__), (Path(__file__), __file__)],
-    ids=pad_to_longest(['str', 'Path']))
+@param_norm_path()
 def test_norm_path(path: PathOrString, expected: str):
     """Test `norm_path` path normalization
 
@@ -57,7 +36,7 @@ class TestDocument(TestContent):
 
         assert received == expected
 
-    @mark.parametrize('inst,expected', [(None, None)], ids=['pass'])
+    @parametrize('inst,expected', ((None, None), ), ('pass', ))
     def test___init__(self, inst: Document, expected: DocumentInit):
         """Test `Document` initialization
 
@@ -98,7 +77,7 @@ class TestDocument(TestContent):
         """
         return cls.supports(path, ext) == expected
 
-    @mark.parametrize('path,ext,expected', [(None, None, None)], ids=['pass'])
+    @parametrize('path,ext,expected', ((None, None, None), ), ('pass', ))
     def test_supports(self, path, ext, expected):
         """Test `Document.supports` static method
 

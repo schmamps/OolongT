@@ -1,6 +1,6 @@
 """Custom type definitions"""
 import pathlib  # noqa: F401
-import typing  # noqa: F401
+import typing
 
 PathOrString = typing.Union[str, pathlib.Path]
 OptionalString = typing.Optional[str]

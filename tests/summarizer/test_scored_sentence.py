@@ -2,19 +2,20 @@
 import typing
 
 import kinda
-from pytest import mark
 
 from src.oolongt.summarizer.scored_sentence import (
     ScoredSentence, calc_decile, score_keyword_frequency, score_position,
     score_total)
-from tests.helpers import check_exception, pad_to_longest
+from tests.helpers import check_exception
 from tests.params.summarizer import (
-    SPAM, SPAM_PARAMS, SPAM_RESULT, get_inst_comp, param_comp, param_decile,
+    get_inst_comp, param_calc_decile, param_comp, param_score_position,
+    param_scored_sentence___init__, param_scored_sentence__init_,
+    param_scored_sentence__repr__, param_scored_sentence__str__,
     param_sentences)
 from tests.typings import Sample, SampleSentence
 
 
-@param_decile()
+@param_calc_decile()
 def test_calc_decile(
         index: int,
         total: int,
@@ -36,22 +37,7 @@ def test_calc_decile(
     assert received == expected
 
 
-@mark.parametrize(
-    'index,expected',
-    [
-        (0, .17),
-        (99, .17),
-        (100, .23),
-        (999, .15),
-        (-1, IndexError),
-        (1000, IndexError)],
-    ids=pad_to_longest([
-        '0-of-1000',
-        '99-of-1000',
-        '100-of-1000',
-        '999-of-1000',
-        'neg-of-1000',
-        '1000-of-1000']))
+@param_score_position()
 def test_score_position(index: int, expected: typing.Union[float, Exception]):
     """Test `score_position` in summarizer subpackage
 
@@ -107,12 +93,7 @@ def test_score_total(sample: Sample, sentence: SampleSentence):
 # pylint: disable=no-self-use
 class TestScoredSentence:
     """Test `ScoredSentence`"""
-    @mark.parametrize(
-        'init,expected',
-        [(
-            SPAM_PARAMS,
-            SPAM_RESULT[:-3] + list(float(x) for x in range(8, 11))), ],
-        ids=pad_to_longest([SPAM, ]))
+    @param_scored_sentence__init_()
     def test__init_(self, init: list, expected: list):
         """Test `ScoredSentence` initialization
 
@@ -126,10 +107,7 @@ class TestScoredSentence:
 
         assert received == expected
 
-    @mark.parametrize(
-        'init,expected',
-        [(SPAM_PARAMS, SPAM_RESULT)],
-        ids=pad_to_longest([SPAM, ]))
+    @param_scored_sentence___init__()
     def test___init__(self, init: list, expected: list):
         """Test `ScoredSentence` initialization
 
@@ -142,10 +120,7 @@ class TestScoredSentence:
 
         assert received == expected
 
-    @mark.parametrize(
-        'init,expected',
-        [(SPAM_PARAMS, SPAM)],
-        ids=pad_to_longest([SPAM]))
+    @param_scored_sentence__str__()
     def test___str__(self, init: list, expected: str):
         """Test `ScoredSentence` string cast
 
@@ -158,12 +133,7 @@ class TestScoredSentence:
 
         assert received == expected
 
-    @mark.parametrize(
-        'init,expected',
-        [(
-            SPAM_PARAMS,
-            'ScoredSentence(\'spam\', 1, 3, 4.0, 5.0, 6.0, 7.0)')],
-        ids=pad_to_longest([SPAM]))
+    @param_scored_sentence__repr__()
     def test___repr__(self, init: list, expected: str):
         """Test `ScoredSentence` REPR
 

@@ -2,39 +2,36 @@
 import typing
 
 import kinda
-from pytest import mark
 
 from src.oolongt import score_body_sentences, summarize
 from src.oolongt.text.text import get_slice_length
 from src.oolongt.typings import StringList
 from tests.constants import SAMPLES, TEXT_PATH
-from tests.helpers import assert_ex, check_exception, pad_to_longest, snip
-from tests.params.summarizer import get_sample_ids, get_samples
+from tests.helpers import assert_ex, check_exception, snip
+from tests.params.summarizer import param_samples
+from tests.params.text import param_get_slice_length, param_summarize
 from tests.typings.sample import Sample
 from tests.typings.sample_sentence import SampleSentence
 
 SampleSentenceList = typing.List[SampleSentence]
 
 
-@mark.parametrize(
-    'samp',
-    get_samples(SAMPLES),
-    ids=pad_to_longest(get_sample_ids(SAMPLES)))
+@param_samples()
 def test_score_body_sentences(samp: Sample) -> None:
     """Test `score_body_sentences` for text subpackage
 
     Arguments:
         samp {Sample} -- sample data
     """
-    for i, sentence in enumerate(score_body_sentences(samp.body, samp.title)):
+    for i, sent in enumerate(score_body_sentences(samp.body, samp.title)):
         expected = samp.sentences[i].total_score
-        received = sentence.total_score
+        received = sent.total_score
 
         assert kinda.eq(received, expected), assert_ex(
             'sentence score',
             received,
             expected,
-            hint=snip(sentence.text))
+            hint=snip(sent.text))
 
 
 def _get_best_sentences(
@@ -92,7 +89,7 @@ def permute_test_summarize() -> typing.Iterable[typing.Tuple[str, int]]:
             yield (sample_name, limit)
 
 
-@mark.parametrize('sample_name,limit', permute_test_summarize())
+@param_summarize()
 def test_summarize(sample_name: str, limit: int) -> None:
     """Test `summarize` in text subpackage
 
@@ -120,18 +117,7 @@ def test_summarize(sample_name: str, limit: int) -> None:
             hint=[snip(received), i])
 
 
-@mark.parametrize(
-    'nominal,total,expected',
-    [
-        (20, 1000, 20),
-        (1001, 1000, 1000),
-        (.1, 1000, 100),
-        (0, 0, ValueError)],
-    ids=pad_to_longest([
-        'abs-within_limit',
-        'abs-above_limit',
-        'relative-of_total',
-        'invalid_value']))
+@param_get_slice_length()
 def test_get_slice_length(
         nominal: typing.Any,
         total: int,

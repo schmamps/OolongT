@@ -22,6 +22,20 @@ def auto_id(index: int, total: int) -> str:
     return template.format(index + 1, total)
 
 
+def is_different(sent_a: ScoredSentence, sent_b: ScoredSentence, prop: str):
+    """Compare `prop` of `sent_a` to `sent_b`
+
+    Arguments:
+        sent_a {ScoredSentence} -- sentence A
+        sent_b {ScoredSentence} -- sentence B
+        prop {str} -- name of property
+    """
+    val_a = getattr(sent_a, prop)
+    val_b = getattr(sent_b, prop)
+
+    return kinda.ne(val_a, val_b, COMPOSITE_TOLERANCE)
+
+
 # pylint: disable=super-init-not-called
 class SampleSentence(ScoredSentence):
     """Sample ScoredSentence"""
@@ -76,46 +90,12 @@ class SampleSentence(ScoredSentence):
         if self.of != other.of:
             return False
 
-        if kinda.ne(
-                self.title_score,
-                other.title_score,
-                abs_tol=COMPOSITE_TOLERANCE):
-            return False
+        prop_keys = [
+            'title', 'length', 'dbs', 'sbs', 'position', 'keyword', 'total']
 
-        if kinda.ne(
-                self.length_score,
-                other.length_score,
-                abs_tol=COMPOSITE_TOLERANCE):
-            return False
-
-        if kinda.ne(
-                self.dbs_score,
-                other.dbs_score,
-                abs_tol=COMPOSITE_TOLERANCE):
-            return False
-
-        if kinda.ne(
-                self.sbs_score,
-                other.sbs_score,
-                abs_tol=COMPOSITE_TOLERANCE):
-            return False
-
-        if kinda.ne(
-                self.position_score,
-                other.position_score):
-            return False
-
-        if kinda.ne(
-                self.keyword_score,
-                other.keyword_score,
-                abs_tol=COMPOSITE_TOLERANCE):
-            return False
-
-        if kinda.ne(
-                self.total_score,
-                other.total_score,
-                abs_tol=COMPOSITE_TOLERANCE):
-            return False
+        for key in prop_keys:
+            if is_different(self, other, key + '_score'):
+                return False
 
         return True
 

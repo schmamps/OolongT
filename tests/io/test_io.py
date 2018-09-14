@@ -1,34 +1,19 @@
 """ Simple I/O module tests """
 import typing
-from pathlib import Path
-
-from pytest import mark
 
 from src.oolongt.constants import PKG_NAME, VERSION
 from src.oolongt.io.io import (
     build_request, get_absolute_path, get_contents, get_local_url, get_stream,
     get_user_agent, is_supported_scheme, load_json, read_file)
 from src.oolongt.typings import PathOrString
-from tests.helpers import check_exception, pad_to_longest
-from tests.params.io import param_json, param_read
+from tests.helpers import check_exception
+from tests.params.helpers import parametrize
+from tests.params.io import (
+    param_get_absolute_path, param_get_local_url, param_load_json, param_read,
+    param_scheme)
 
-ABSOLUTE_FILE = str(Path(__file__).absolute())
 
-
-@mark.parametrize(
-    'path,expected',
-    [
-        ('/etc/hosts', False),
-        ('file:///etc/hosts', True),
-        ('ftp://x', True),
-        ('http://x', True),
-        ('https://x', True), ],
-    ids=pad_to_longest([
-        'local',
-        'file:',
-        'ftp:',
-        'http:',
-        'https:', ]))
+@param_scheme()
 def test_is_supported_scheme(path: PathOrString, expected: bool):
     """Test is_supported_scheme
 
@@ -41,10 +26,7 @@ def test_is_supported_scheme(path: PathOrString, expected: bool):
     assert received == expected
 
 
-@mark.parametrize(
-    'val',
-    [(PKG_NAME), (VERSION)],
-    ids=pad_to_longest(['name', 'version']))
+@parametrize('val', ((PKG_NAME), (VERSION), ), ('name', 'version', ))
 def test_get_user_agent(val: str):
     """Test get_user_agent
 
@@ -54,10 +36,7 @@ def test_get_user_agent(val: str):
     assert val in get_user_agent()
 
 
-@mark.parametrize(
-    'path',
-    [('http://localhost/')],
-    ids=['localhost'])
+@parametrize('path', [('http://localhost/', )], ('localhost', ))
 def test_build_request(path: PathOrString):
     """Test build_request
 
@@ -69,10 +48,7 @@ def test_build_request(path: PathOrString):
     assert received.__class__.__name__ == 'Request'
 
 
-@mark.parametrize(
-    'path,expected',
-    [(__file__, ABSOLUTE_FILE), (Path(__file__), ABSOLUTE_FILE)],
-    ids=pad_to_longest(['str', 'Path']))
+@param_get_absolute_path()
 def test_get_absolute_path(path: PathOrString, expected: str):
     """Test get_absolute_path
 
@@ -85,10 +61,7 @@ def test_get_absolute_path(path: PathOrString, expected: str):
     assert received == expected
 
 
-@mark.parametrize(
-    'path,expected',
-    [('/spam/eggs/bacon.ham', 'file:///spam/eggs/bacon.ham')],
-    ids=pad_to_longest(['spam']))
+@param_get_local_url()
 def test_get_local_url(path: PathOrString, expected: str):
     """Test get_local_url
 
@@ -101,16 +74,13 @@ def test_get_local_url(path: PathOrString, expected: str):
     assert received == expected
 
 
-@mark.parametrize(
-    'path,expected',
-    [(__file__, __file__)],
-    ids=pad_to_longest(['__file__']))
+@parametrize('path,expected', ((__file__, __file__), ), ('__file__', ))
 def test_get_stream(path: PathOrString, expected):
     """Test get_stream
 
     Arguments:
         path {PathOrString} -- path to document
-        expected {[type]} -- TODO:
+        expected {[type]} -- stream name
     """
     with get_stream(path) as stream:
         received = stream.fp.name
@@ -160,13 +130,7 @@ def test_read_file(path: PathOrString, expected: str):
     assert _test_read(read_file, path, expected)
 
 
-@mark.parametrize(
-    'path,expected',
-    [
-        param_json('valid.json', True),
-        param_json('valid.FAIL', False),
-        param_json('malformed.json', False), ],
-    ids=pad_to_longest(['valid', 'bad_path', 'malformed']))
+@param_load_json()
 def test_load_json(path: PathOrString, expected) -> None:
     """Test load_json
 

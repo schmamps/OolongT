@@ -1,25 +1,17 @@
 """Test ScoredKeyword"""
 import typing
 
-from pytest import mark
-
 from src.oolongt.constants import KEYWORD_SCORE_K
 from src.oolongt.parser.scored_keyword import (
     ScoredKeyword, compare_keywords, compare_score, compare_word,
     score_keyword)
-from tests.helpers import check_exception, pad_to_longest
-from tests.params.parser import gen_scored_keyword as gen_inst
-from tests.params.parser import parametrize_words
+from tests.helpers import check_exception
+from tests.params.parser import (
+    param_compare_keywords, param_compare_score, param_compare_word,
+    param_score_keyword, parametrize_words)
 
 
-@mark.parametrize(
-    'count,total,expected',
-    [
-        (1, 1, KEYWORD_SCORE_K),
-        (-1, 1, ValueError),
-        (1, 0, ValueError),
-        (2, 1, ValueError), ],
-    ids=pad_to_longest(['normal', 'sub0', 'div0/neg', 'overmax', ]))
+@param_score_keyword()
 def test_score_keyword(
         count: int,
         total: int,
@@ -40,20 +32,7 @@ def test_score_keyword(
     assert received == expected
 
 
-@mark.parametrize(
-    'score_a,score_b,expected',
-    [
-        (0.0, 1.0, -1),
-        (0.999999999999999999, 1.0, 0),
-        (1.000000000000000000, 1.0, 0),
-        (1.000000000000000001, 1.0, 0),
-        (2, 1.0, 1), ],
-    ids=pad_to_longest([
-        'quite_lt',
-        'lt_but_eq',
-        'exact_eq',
-        'gt_but_eq',
-        'quite_gt', ]))
+@param_compare_score()
 def test_compare_score(score_a: float, score_b: float, expected: int):
     """Test compare_score in parser subpackage
 
@@ -67,11 +46,7 @@ def test_compare_score(score_a: float, score_b: float, expected: int):
     assert received == expected
 
 
-@mark.parametrize(
-    'word_a,word_b,expected',
-    [('spal', 'spam', -1), ('spam', 'spam', 0), ('span', 'spam', 1)],
-    ids=pad_to_longest(['lt', 'eq', 'gt'])
-)
+@param_compare_word()
 def test_compare_word(word_a: str, word_b: str, expected: int):
     """Test compare_word in parser subpackage
 
@@ -85,28 +60,7 @@ def test_compare_word(word_a: str, word_b: str, expected: int):
     assert received == expected
 
 
-@mark.parametrize(
-    'kw_a,kw_b,is_lt,is_eq,reason',
-    [
-        (gen_inst(1, 2), gen_inst(1, 1), True, False, 's'),
-        (gen_inst(1, 2), gen_inst(1, 2), False, True, 's'),
-        (gen_inst(1, 2), gen_inst(1, 3), False, False, 's'),
-        (gen_inst(1, 2, 'ham'), gen_inst(1, 2), True, False, 'l'),
-        (gen_inst(1, 2, 'eggs'), gen_inst(1, 2), True, False, 'l'),
-        (gen_inst(1, 2, 'bacon'), gen_inst(1, 2), False, False, 'l'),
-        (gen_inst(1, 2, 'spal'), gen_inst(1, 2), True, False, 'w'),
-        (gen_inst(1, 2, 'spam'), gen_inst(1, 2), False, True, 'w'),
-        (gen_inst(1, 2, 'span'), gen_inst(1, 2), False, False, 'w'), ],
-    ids=pad_to_longest([
-        'score-lt_b',
-        'score-eq_b',
-        'score-gt_b',
-        'length-lt_b',
-        'length-eq_b',
-        'length-gt_b',
-        'string-lt_b',
-        'string-eq_b',
-        'string-gt_b', ]))
+@param_compare_keywords()
 def test_compare_keywords(
         kw_a: ScoredKeyword,
         kw_b: ScoredKeyword,

@@ -1,3 +1,6 @@
+"""Fancy console functions"""
+import typing
+
 from colorama import Fore, Style, init
 
 init()
@@ -6,8 +9,17 @@ init()
 GROUP_LEVEL = -1
 
 
-def _print(text, *args, fore=False, style=False):
-    global GROUP_LEVEL
+def _print(text: str, *args, fore=None, style=None):
+    """Print text (overloaded)
+
+    Arguments:
+        text {str} -- text to print
+
+    Keyword Arguments:
+        fore {bool} -- foreground color (default: {False})
+        style {bool} -- text style (default: {False})
+    """
+    global GROUP_LEVEL  # pylint: disable=global-statement
 
     pad = '  ' * GROUP_LEVEL
     fore_color = fore if fore else ''
@@ -18,73 +30,130 @@ def _print(text, *args, fore=False, style=False):
         pad, fore_color, para_style, str(text).format(*args), reset))
 
 
-def group(text='', *args):
-    global GROUP_LEVEL
+def group(text: str = ''):
+    """Group console output
+
+    Keyword Arguments:
+        text {str} -- group heading (default: {''})
+    """
+    global GROUP_LEVEL  # pylint: disable=global-statement
     GROUP_LEVEL = max(0, GROUP_LEVEL)
 
     if text:
-        _print(text, *args, style=Style.BRIGHT)
+        _print(text, style=Style.BRIGHT)
 
     GROUP_LEVEL += 1
 
 
-def group_end(text=''):
-    global GROUP_LEVEL
+def group_end(text: str = ''):
+    """Ungroup console output
+
+    Keyword Arguments:
+        text {str} -- end of group text (default: {''})
+    """
+    global GROUP_LEVEL  # pylint: disable=global-statement
     group(text)
 
     GROUP_LEVEL -= 2
 
 
-def _format_ordered_bullet(idx, tick_pad):
-    padded = (' ' * tick_pad) + str(idx + 1) + '.'
+def get_bullets(ordered: bool, count: int):
+    """List bullets for items
 
-    return padded[-tick_pad - 1:]
+    Arguments:
+        ordered {bool} -- list style
+        count {int} -- number of items
 
-
-def get_bullets(ordered, count):
+    Returns:
+        typing.List[str] -- list of bullets
+    """
     if ordered:
-        tick_pad = len(str(count))
-        return [_format_ordered_bullet(i, tick_pad) for i in range(count)]
+        template = '{{:>{}s}}.'.format(len(str(count)))
+        return [template.format(str(i + 1)) for i in range(count)]
 
-    else:
-        return ['*'] * count
+    return ['*'] * count
 
 
-def list_items(items, ordered=False):
+def list_items(items: typing.List[typing.Any], *args, ordered=False):
+    """Print `items` to console as list
+
+    Arguments:
+        items {typing.List[typing.Any]} -- item list
+
+    Keyword Arguments:
+        ordered {bool} -- print as ordered list (default: {False})
+    """
     count = len(items)
     bullets = get_bullets(ordered, count)
 
     for idx in range(count):
-        _print('{} {}'.format(bullets[idx], items[idx]))
+        _print('{} {}'.format(bullets[idx], items[idx]), *args)
 
 
-def log(text, *args):
+def log(text: typing.Any, *args):
+    """Print to console
+
+    Arguments:
+        text {typing.Any} -- text
+    """
     _print(text, *args)
 
 
-def info(text, *args):
+def info(text: typing.Any, *args):
+    """Print to console (muted)
+
+    Arguments:
+        text {typing.Any} -- text
+    """
     _print(text, *args, style=Style.DIM)
 
 
-def success(text, *args):
+def success(text: typing.Any, *args):
+    """Print to console (green)
+
+    Arguments:
+        text {typing.Any} -- text
+    """
     _print(text, *args, fore=Fore.GREEN)
 
 
-def warn(text, *args):
+def warn(text: typing.Any, *args):
+    """Print to console (yellow)
+
+    Arguments:
+        text {typing.Any} -- text
+    """
     _print(text, *args, fore=Fore.YELLOW)
 
 
-def error(text, *args):
+def error(text: typing.Any, *args):
+    """Print to console (red)
+
+    Arguments:
+        text {typing.Any} -- text
+    """
     _print(text, *args, fore=Fore.RED)
 
 
+# pylint: disable=invalid-name
 def lf():
+    """Print blank line"""
     _print('')
 
 
-def ol(items, *args):
+def ol(items: typing.List[typing.Any], *args):
+    """Print ordered list
+
+    Arguments:
+        items {typing.List[typing.Any]} -- item list
+    """
     list_items(items, *args, ordered=True)
 
 
-def ul(items, *args):
+def ul(items: typing.List[typing.Any], *args):
+    """Print unordered list
+
+    Arguments:
+        items {typing.List[typing.Any]} -- item list
+    """
     list_items(items, *args, ordered=False)

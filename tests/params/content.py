@@ -1,23 +1,33 @@
 """Parametrize content tests"""
 import typing
-from re import split
-
-from pytest import mark
+from pathlib import Path
 
 from src.oolongt.content import Content, Document
+from src.oolongt.content.content import split_strs, strip_strs
 from src.oolongt.io import load_json
-from src.oolongt.typings import \
-    StringList  # noqa  pylint: disable=unused-import,line-too-long
+from src.oolongt.misc import is_iter_not_str
+from src.oolongt.typings import StringList
 from tests.constants import DOC_PATH
-from tests.helpers import pad_to_longest
+from tests.params.helpers import parametrize
+
+ContentInit = typing.Tuple[str, str]
+DocumentInit = typing.Tuple[str, str, str]
 
 BODY_IDX = 0
 TITLE_IDX = 1
 KW_IDX = 2
 TEST_PATH = '/spam/eggs/bacon.ham'
 
-ContentInit = typing.Tuple[str, str]
-DocumentInit = typing.Tuple[str, str, str]
+EGGS = 'eggs'
+SPAM = 'spam'
+BACON = 'bacon'
+
+JOIN_SPLIT_PARAMS = [
+    ('', False, ['']),
+    ('{} {} {}'.format(SPAM, EGGS, BACON), False, [SPAM, EGGS, BACON]),
+    ('{},{},{}'.format(SPAM, EGGS, BACON), ',', [SPAM, EGGS, BACON]),
+]
+JOIN_SPLIT_IDS = ['empty', 'basic', 'custom']
 
 
 def split_any(val: typing.Any) -> StringList:
@@ -29,10 +39,9 @@ def split_any(val: typing.Any) -> StringList:
     Returns:
         StringList -- list of strings
     """
-    is_iter = not isinstance(val, str) and hasattr(val, '__iter__')
-    val = ','.join([str(ext) for ext in val]) if is_iter else str(val)
+    spec = val if is_iter_not_str(val) else split_strs(val, ',')
 
-    return split(r'\s*,\s*', val.strip())
+    return strip_strs(spec)
 
 
 def compare_content_ex(
@@ -126,20 +135,9 @@ def get_tests() -> typing.Generator[tuple, None, None]:
         typing.Generator[tuple, None, None] --
             [0]: ID, [1]: params, [2]: expected
     """
-    yield (
-        'body-None-simple',
-        ['body', None],
-        ['body', ''])
-
-    yield (
-        'BODY-title-simple',
-        ['BODY', 'title'],
-        ['BODY', 'title'])
-
-    yield (
-        'body-title-complex',
-        [' body\n\t', '  \rTiTLe  '],
-        ['body', 'TiTLe'])
+    yield 'body-None-simple', ['body', None], ['body', '']
+    yield 'BODY-title-simple', ['BODY', 'title'], ['BODY', 'title']
+    yield 'body-title-complex', [' body\n\t', '  \rTiTLe  '], ['body', 'TiTLe']
 
 
 def get_test(test: tuple, has_path: bool) -> typing.Tuple[tuple, tuple]:
@@ -174,7 +172,18 @@ def get_test_tuples(has_path: bool):
     params = [get_test(test, has_path) for test in get_tests()]
     ids = [test[0] for test in get_tests()]
 
-    return params, pad_to_longest(ids)
+    return params, ids
+
+
+def param_strip_strs():
+    """Parametrize `test_strip_strs`"""
+    names = 'str_list,expected'
+    vals = [
+        ([SPAM, ' eggs', 'bacon ', ' spam '], [SPAM, EGGS, BACON, SPAM])
+    ]
+    ids = [SPAM]
+
+    return parametrize(names, vals, ids)
 
 
 def param_content(has_path: bool = False):
@@ -183,9 +192,10 @@ def param_content(has_path: bool = False):
     Keyword Arguments:
         has_path {bool} -- add document path (default: {False})
     """
-    params, ids = get_test_tuples(has_path)
+    names = 'params,expected'
+    vals, ids = get_test_tuples(has_path)
 
-    return mark.parametrize('params,expected', params, ids=ids)
+    return parametrize(names, vals, ids)
 
 
 def param_content_init(cls: Content):
@@ -196,11 +206,25 @@ def param_content_init(cls: Content):
     """
     test_data, ids = get_test_tuples(False)
 
-    params = [
+    names = 'inst,expected'
+    vals = [
         (get_content(cls, test_data[i][0]), test_data[i][1])
-        for i in range(len(test_data))]
+        for i in range(len(test_data))
+    ]
 
-    return mark.parametrize('inst,expected', params, ids=ids)
+    return parametrize(names, vals, ids)
+
+
+def param_text_content_init():
+    """Parametrize TextContent init"""
+    names = 'kwargs,expected'
+    vals = (
+        ({'body': SPAM}, (SPAM, '')),
+        ({'body': EGGS, 'title': BACON}, (EGGS, BACON))
+    )
+    ids = ('body-only', 'body-title',)
+
+    return parametrize(names, vals, ids)
 
 
 def param_document():
@@ -255,8 +279,9 @@ def param_document_init(
     Keyword Arguments:
         stems {typing.Any} -- stems of files for init (default: {'basic'})
     """
-    ids = []
-    params = []
+    names = 'inst,expected'
+    vals = []  # type: typing.List[tuple]
+    ids = []  # type: StringList
 
     for stem in split_any(stems):
         path = get_doc_path(stem, ext)
@@ -264,10 +289,10 @@ def param_document_init(
 
         expected = get_expected_doc(stem, path)
 
-        params.append((inst, expected))
+        vals.append((inst, expected))
         ids.append(stem)
 
-    return mark.parametrize('inst,expected', params, ids=pad_to_longest(ids))
+    return parametrize(names, vals, ids)
 
 
 def permute_schemes(path: str) -> typing.Generator[tuple, None, None]:
@@ -306,14 +331,45 @@ def param_supports(*exts: typing.Any, always: typing.Any = None):
     Keyword Arguments:
         always {typing.Any} -- override default test (default: {None})
     """
+    names = 'path,ext,expected'
     ids = []  # type: StringList
-    params = []  # type: typing.List[typing.Tuple[str, str, bool]]
+    vals = []  # type: typing.List[typing.Tuple[str, str, bool]]
     path = '/spam/eggs/bacon'
     for prefix, formatter in permute_schemes(path):
         for ext in split_any(exts):
             for path_ext, ext_ext, stub, truth in permute_ext(ext, always):
                 ids.append('{}/{}/{}'.format(prefix, stub, ext or None))
-                params.append((formatter.format(path_ext), ext_ext, truth))
+                vals.append((formatter.format(path_ext), ext_ext, truth))
 
-    return mark.parametrize(
-        'path,ext,expected', params, ids=pad_to_longest(ids))
+    return parametrize(names, vals, ids)
+
+
+def param_get_og_title():
+    """Parametrize `test_get_og_title`"""
+    names = 'tag,expected'
+    vals = (
+        ({}, None),
+        ({'property': 'og:title'}, None),
+        ({'property': 'og:title', 'content': 'title'}, 'title'),
+    )
+    ids = ('empty', 'not-set', 'title')
+
+    return parametrize(names, vals, ids)
+
+
+def param_norm_text():
+    """Parametrize `test_norm_text`"""
+    names = 'text,expected'
+    vals = ((None, ''), (SPAM, SPAM), ('   ham ', 'ham'))
+    ids = ('None', SPAM, 'sloppy')
+
+    return parametrize(names, vals, ids)
+
+
+def param_norm_path():
+    """Parametrize `test_norm_path`"""
+    names = 'path,expected'
+    vals = ((__file__, __file__), (Path(__file__), __file__))
+    ids = ('str', 'Path')
+
+    return parametrize(names, vals, ids)

@@ -1,6 +1,4 @@
 """Test `HtmlDocument` content class"""
-from pytest import mark
-
 from src.oolongt.content import HtmlDocument
 from src.oolongt.content.content import norm_text
 from src.oolongt.content.html_document import (
@@ -8,12 +6,12 @@ from src.oolongt.content.html_document import (
 from src.oolongt.io import read_file
 from src.oolongt.ugly_soup import UglySoup
 from test_text_document import TestTextDocument
-from tests.helpers import pad_to_longest
 from tests.params.content import (
     DocumentInit, compare_document, get_doc_path, param_document_init,
-    param_supports)
+    param_get_og_title, param_supports)
+from tests.params.helpers import parametrize
 
-STEMS = ['basic', 'intermed']
+STEMS = ('basic', 'intermed')
 EXTENSION = 'html'
 BASIC_INTERMED = STEMS
 
@@ -58,7 +56,7 @@ def get_soup(stem: str) -> UglySoup:
     return UglySoup(html)
 
 
-@mark.parametrize('stem', BASIC_INTERMED)
+@parametrize('stem', BASIC_INTERMED, BASIC_INTERMED)
 def test_process(stem: str):
     """Test `process` for HtmlDocument
 
@@ -73,7 +71,7 @@ def test_process(stem: str):
     assert isinstance(received, expected)
 
 
-@mark.parametrize('stem', BASIC_INTERMED)
+@parametrize('stem', BASIC_INTERMED, BASIC_INTERMED)
 def test_get_source(stem: str):
     """Test `get_source` for HtmlDocument
 
@@ -89,7 +87,7 @@ def test_get_source(stem: str):
     assert received == expected
 
 
-@mark.parametrize('stem', BASIC_INTERMED)
+@parametrize('stem', BASIC_INTERMED, BASIC_INTERMED)
 def test_get_body(stem: str):
     """Test `get_body` for HtmlDocument
 
@@ -104,16 +102,7 @@ def test_get_body(stem: str):
     assert received == expected
 
 
-@mark.parametrize(
-    'tag,expected',
-    [
-        ({}, None),
-        ({'property': 'og:title'}, None),
-        ({'property': 'og:title', 'content': 'title'}, 'title'), ],
-    ids=pad_to_longest([
-        'empty',
-        'not-set',
-        'title', ]))
+@param_get_og_title()
 def test_get_og_title(tag, expected):
     """Test `get_og_title` for OpenGraph title from HtmlDocument
 
@@ -126,7 +115,7 @@ def test_get_og_title(tag, expected):
     assert received == expected
 
 
-@mark.parametrize('stem', BASIC_INTERMED)
+@parametrize('stem', BASIC_INTERMED, BASIC_INTERMED)
 def test_get_title(stem: str):
     """Test `get_title` from <title> tag of HtmlDocument
 

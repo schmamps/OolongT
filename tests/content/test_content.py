@@ -1,31 +1,14 @@
 """Test Content base content class"""
-from pytest import mark
-
 from src.oolongt.content.content import (
     Content, join_strs, norm_text, split_strs, strip_strs)
 from src.oolongt.typings import OptionalString, StringList
-from tests.helpers import pad_to_longest
 from tests.params.content import (
-    ContentInit, get_content, param_content, param_content_init)
-
-EGGS = 'eggs'
-SPAM = 'spam'
-BACON = 'bacon'
-
-JOIN_SPLIT_PARAMS = [
-    ('', False, ['']),
-    ('{} {} {}'.format(SPAM, EGGS, BACON), False, [SPAM, EGGS, BACON]),
-    ('{},{},{}'.format(SPAM, EGGS, BACON), ',', [SPAM, EGGS, BACON]), ]
-JOIN_SPLIT_IDS = ['empty', 'basic', 'custom']
+    JOIN_SPLIT_IDS, JOIN_SPLIT_PARAMS, ContentInit, get_content, param_content,
+    param_content_init, param_norm_text, param_strip_strs)
+from tests.params.helpers import parametrize
 
 
-@mark.parametrize(
-    'str_list,expected',
-    [(
-        [SPAM, ' eggs', 'bacon ', ' spam '],
-        [SPAM, 'eggs', BACON, SPAM], ), ],
-    ids=pad_to_longest(
-        [SPAM, ]))
+@param_strip_strs()
 def test_strip_strs(str_list: StringList, expected: StringList):
     """Test strip_strs
 
@@ -38,8 +21,7 @@ def test_strip_strs(str_list: StringList, expected: StringList):
     assert received == expected
 
 
-@mark.parametrize(
-    'unsplit,sep,expected', JOIN_SPLIT_PARAMS, ids=JOIN_SPLIT_IDS)
+@parametrize('unsplit,sep,expected', JOIN_SPLIT_PARAMS, JOIN_SPLIT_IDS)
 def test_split_strs(unsplit: str, sep: str, expected: StringList):
     """Test split_strs
 
@@ -53,8 +35,7 @@ def test_split_strs(unsplit: str, sep: str, expected: StringList):
     assert received == expected
 
 
-@mark.parametrize(
-    'expected,sep,str_list', JOIN_SPLIT_PARAMS, ids=JOIN_SPLIT_IDS)
+@parametrize('expected,sep,str_list', JOIN_SPLIT_PARAMS, JOIN_SPLIT_IDS)
 def test_join_strs(expected: str, sep: str, str_list: StringList):
     """Test join_strs
 
@@ -68,10 +49,7 @@ def test_join_strs(expected: str, sep: str, str_list: StringList):
     assert received == expected
 
 
-@mark.parametrize(
-    'text,expected',
-    [(None, ''), (SPAM, SPAM), ('   ham ', 'ham')],
-    ids=pad_to_longest(['None', SPAM, 'sloppy']))
+@param_norm_text()
 def test_norm_text(text: OptionalString, expected: str):
     """Test norm_text
 

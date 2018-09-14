@@ -1,36 +1,15 @@
 """Test UglyQuery"""
 import typing
 
-from pytest import mark
-
 from src.oolongt.content.content import norm_text
 from src.oolongt.typings import OptionalString, StringList
 from src.oolongt.ugly_soup.ugly_query import UglyQuery, get_text, list_tags
-from tests.helpers import pad_to_longest, return_false, return_true
-from tests.params.ugly_soup import DOC, SOUP
-
-BODY_DIV_P = ['body', 'div', 'p']
-TEST_TAGS = [
-    (BODY_DIV_P, BODY_DIV_P, return_true, True),
-    ([' body', ' div ', ' p'], BODY_DIV_P, return_false, False),
-    ('body,div,p', BODY_DIV_P, return_true, True),
-    ('body, div, p', BODY_DIV_P, return_false, False),
-    (' body, div ,  p', BODY_DIV_P, return_true, True), ]
-TEST_IDS = pad_to_longest([
-    'simple-list-true',
-    'sloppy-list-false',
-    'simple-str-true',
-    'comfy-str-false',
-    'sloppy-str-true'])
+from tests.params.helpers import parametrize
+from tests.params.ugly_soup import (
+    SOUP, TEST_IDS, TEST_TAGS, param___repr__, param_get_text, param_test)
 
 
-@mark.parametrize(
-    'tag,expected',
-    [
-        ('header', 'Header'),
-        ('main', DOC['body']),
-        ('footer', 'Footer'), ],
-    ids=pad_to_longest(['header', 'main', 'footer']))
+@param_get_text()
 def test_get_text(tag: str, expected: str):
     """Test `get_text` in ugly_query subpackage
 
@@ -43,7 +22,7 @@ def test_get_text(tag: str, expected: str):
     assert received == expected
 
 
-@mark.parametrize('tag_list,expected,_,__', TEST_TAGS, ids=TEST_IDS)
+@parametrize('tag_list,expected,_,__', TEST_TAGS, TEST_IDS)
 def test_list_tags(tag_list: typing.Any, expected: StringList, _, __):
     """Test `list_tags` in ugly_query subpackage
 
@@ -61,7 +40,7 @@ def test_list_tags(tag_list: typing.Any, expected: StringList, _, __):
 # pylint: disable=no-self-use,protected-access
 class TestUglyQuery:
     """Test UglyQuery"""
-    @mark.parametrize('args', TEST_TAGS, ids=TEST_IDS)
+    @parametrize('args', TEST_TAGS, TEST_IDS)
     def test___init__(self, args: tuple):
         """Test `UglyQuery` initialization
 
@@ -75,7 +54,7 @@ class TestUglyQuery:
 
         assert received == expected
 
-    @mark.parametrize('args', TEST_TAGS, ids=TEST_IDS)
+    @parametrize('args', TEST_TAGS, TEST_IDS)
     def test_tags(self, args: tuple):
         """Test `UglyQuery.tags` property
 
@@ -89,7 +68,7 @@ class TestUglyQuery:
 
         assert received == expected
 
-    @mark.parametrize('args', TEST_TAGS, ids=TEST_IDS)
+    @parametrize('args', TEST_TAGS, TEST_IDS)
     def test_tester(self, args: tuple):
         """Test `UglyQuery.tester` property
 
@@ -103,13 +82,7 @@ class TestUglyQuery:
 
         assert received == expected
 
-    @mark.parametrize(
-        'tags,tester,expected',
-        [
-            ('main', get_text, DOC['body']),
-            ('style', get_text, None),
-            ('input', get_text, None)],
-        ids=pad_to_longest(['main', 'style', 'input']))
+    @param_test()
     def test_test(
             self,
             tags: typing.Any,
@@ -129,10 +102,7 @@ class TestUglyQuery:
 
         assert received == expected
 
-    @mark.parametrize(
-        'args',
-        [('div')],
-        ids=pad_to_longest(['basic']))
+    @param___repr__()
     def test___repr__(self, args):
         """Test `UglyQuery` REPR
 

@@ -1,12 +1,11 @@
 """Parameters for Summarizer testing"""
 import typing
 
-from pytest import mark
-
 from src.oolongt.summarizer import ScoredSentence
 from src.oolongt.typings import AnyList, StringList
 from tests.constants import SAMPLES
-from tests.helpers import get_sample, pad_to_longest
+from tests.helpers import get_sample
+from tests.params.helpers import pad_to_longest, parametrize
 from tests.typings import Sample, SampleKeyword, SampleSentence
 
 SampleGenerator = typing.Generator[Sample, None, None]
@@ -30,20 +29,184 @@ def reverse_kw(score: float) -> SampleKeyword:
     return SampleKeyword.by_score(score)
 
 
+def param_calc_decile():
+    """Parametrize `test_calc_decile`"""
+    names = 'index,total,expected'
+    vals = (
+        (0, 10, 1),
+        (9, 100, 1),
+        (1, 10, 2),
+        (2, 10, 3),
+        (3, 10, 4),
+        (4, 10, 5),
+        (5, 10, 6),
+        (6, 10, 7),
+        (7, 10, 8),
+        (8, 10, 9),
+        (9, 10, 10),
+        (-1, 100, IndexError),
+        (10, 10, IndexError),
+        (10, 0, IndexError),
+    )
+    ids = (
+        '00-of-10)',
+        '01-of-10)',
+        '02-of-10)',
+        '03-of-10)',
+        '04-of-10)',
+        '05-of-10)',
+        '06-of-10)',
+        '07-of-10)',
+        '08-of-10)',
+        '09-of-10)',
+        '09-of-00)',
+        '-1-of-00)',
+        '10-of-10)',
+        '10-of-00)',
+    )
+
+    return parametrize(names, vals, ids)
+
+
+def param_score_position():
+    """Parametrize `test_score_position`"""
+    names = 'index,expected'
+    vals = (
+        (0, .17),
+        (99, .17),
+        (100, .23),
+        (999, .15),
+        (-1, IndexError),
+        (1000, IndexError),
+    )
+    ids = (
+        '0-of-1000',
+        '99-of-1000',
+        '100-of-1000',
+        '999-of-1000',
+        'neg-of-1000',
+        '1000-of-1000',
+    )
+
+    return parametrize(names, vals, ids)
+
+
+def param_scored_sentence__init_():
+    """Parametrize `TestScoredSentence.test__init_`"""
+    names = 'init,expected'
+    vals = ((
+        SPAM_PARAMS,
+        SPAM_RESULT[:-3] + list(float(x) for x in range(8, 11))), )
+    ids = (SPAM, )
+
+    return parametrize(names, vals, ids)
+
+
+def param_scored_sentence___init__():
+    """Parametrize `TestScoredSentence.test___init__`"""
+    names = 'init,expected'
+    vals = ((SPAM_PARAMS, SPAM_RESULT), )
+    ids = (SPAM, )
+
+    return parametrize(names, vals, ids)
+
+
+def param_scored_sentence__str__():
+    """Parametrize `TestScoredSentence.test___str__`"""
+    names = 'init,expected'
+    vals = ((SPAM_PARAMS, SPAM), )
+    ids = (SPAM, )
+
+    return parametrize(names, vals, ids)
+
+
+def param_scored_sentence__repr__():
+    """Parametrize `TestScoredSentence.test___repr___`"""
+    names = 'init,expected'
+    vals = (
+        (SPAM_PARAMS, 'ScoredSentence(\'spam\', 1, 3, 4.0, 5.0, 6.0, 7.0)'),
+    )
+    ids = (SPAM, )
+
+    return parametrize(names, vals, ids)
+
+
+def param_pluck_keyword_words():
+    """Parametrize `test_pluck_keyword_words`"""
+    names = 'keyword_list,expected'
+    vals = (
+        (
+            [
+                SampleKeyword({'word': 'spam'}, 1),
+                SampleKeyword({'word': 'eggs'}, 1),
+                SampleKeyword({'word': 'bacon'}, 1)
+            ],
+            ['bacon', 'eggs', 'spam'],
+        ),
+    )
+    ids = ('spam-eggs', )
+
+    return parametrize(names, vals, ids)
+
+
+def param__float_len():
+    """Parametrize `test__float_len`"""
+    names = 'item_list,expected'
+    vals = (([], 0.0), ([1], 1.0), (range(10), 10.0), (range(10000), 10000.0))
+    ids = ('    0', '    1', '   10', '10000', )
+
+    return parametrize(names, vals, ids)
+
+
+def param_score_by_title():
+    """Parametrize `test_score_by_title`"""
+    names = 'samp'
+    vals = get_samples((
+        'sentence_1word',
+        'sentence_short',
+        'sentence_medium',
+        'sentence_ideal',
+        'sentence_overlong',
+    ))
+    ids = (get_sample_ids((
+        'sentence_1word',
+        'sentence_short',
+        'sentence_medium',
+        'sentence_ideal',
+        'sentence_overlong',
+    )))
+
+    return parametrize(names, vals, ids)
+
+
+# pylint: disable=dangerous-default-value
+def param_samples(sample_names: StringList = SAMPLES):
+    """Parametrize with list of samples"""
+    names = 'samp'
+    vals = get_samples(sample_names)
+    ids = sample_names
+
+    return parametrize(names, vals, ids)
+
+
+# pylint: enable=dangerous-default-value
 def param_threshold():
     """Parametrize for `get_keyword_threshold`"""
-    return mark.parametrize(
-        'keywords,expected',
-        [
-            ([
+    names = 'keywords,expected'
+    vals = (
+        (
+            [
                 reverse_kw(.11),
                 reverse_kw(.08),
                 reverse_kw(.07),
                 reverse_kw(.10),
                 reverse_kw(.09),
                 reverse_kw(.12),
-            ], .07),
-            ([
+            ],
+            .07
+        ),
+        (
+            [
                 reverse_kw(.02),
                 reverse_kw(.04),
                 reverse_kw(.07),
@@ -56,8 +219,11 @@ def param_threshold():
                 reverse_kw(.06),
                 reverse_kw(.10),
                 reverse_kw(.03),
-            ], .03),
-            ([
+            ],
+            .03
+        ),
+        (
+            [
                 reverse_kw(.04),
                 reverse_kw(.01),
                 reverse_kw(.04),
@@ -70,13 +236,13 @@ def param_threshold():
                 reverse_kw(.09),
                 reverse_kw(.12),
                 reverse_kw(.10),
-            ], .04),
-        ],
-        ids=pad_to_longest([
-            'all pass (count < minimum rank)',
-            'simple set (count > minimum rank)',
-            'complex (>MIN_RANK kws ranked <= MIN_RANK)'
-        ]))
+            ],
+            .04
+        ),
+    )
+    ids = ('all_pass', 'simple', 'complex')
+
+    return parametrize(names, vals, ids)
 
 
 def permute_sentences():
@@ -91,18 +257,20 @@ def permute_sentences():
     lt_perm = (ScoredSentence(*lt_params), 0, 0)
     gt_perm = (ScoredSentence(*gt_params), 0, 0)
 
-    return [
+    return (
         (lt_perm, eq_perm, True, False),
         (eq_perm, eq_perm, False, True),
-        (gt_perm, eq_perm, False, False), ]
+        (gt_perm, eq_perm, False, False),
+    )
 
 
 def param_comp():
     """Parametrize `ScoredSentence` comparisons"""
-    return mark.parametrize(
-        'sent_a,sent_b,is_lt,is_eq',
-        permute_sentences(),
-        ids=pad_to_longest(['lt', 'eq', 'gt']))
+    names = 'sent_a,sent_b,is_lt,is_eq'
+    vals = permute_sentences()
+    ids = ('lt', 'eq', 'gt', )
+
+    return parametrize(names, vals, ids)
 
 
 def get_inst_comp(inst: ScoredSentence) -> AnyList:
@@ -124,47 +292,11 @@ def get_inst_comp(inst: ScoredSentence) -> AnyList:
         inst.sbs_score,
         inst.keyword_score,
         inst.position_score,
-        inst.total_score]
+        inst.total_score
+    ]
 
 
-def param_decile():
-    """Parametrize `calc_decile`"""
-    return mark.parametrize(
-        'index,total,expected',
-        [
-            (0, 10, 1),
-            (9, 100, 1),
-            (1, 10, 2),
-            (2, 10, 3),
-            (3, 10, 4),
-            (4, 10, 5),
-            (5, 10, 6),
-            (6, 10, 7),
-            (7, 10, 8),
-            (8, 10, 9),
-            (9, 10, 10),
-            (-1, 100, IndexError),
-            (10, 10, IndexError),
-            (10, 0, IndexError),
-        ],
-        ids=pad_to_longest([
-            '00-of-10)',
-            '01-of-10)',
-            '02-of-10)',
-            '03-of-10)',
-            '04-of-10)',
-            '05-of-10)',
-            '06-of-10)',
-            '07-of-10)',
-            '08-of-10)',
-            '09-of-10)',
-            '09-of-00)',
-            '-1-of-00)',
-            '10-of-10)',
-            '10-of-00)', ]))
-
-
-def get_samples(sample_names: StringList) -> SampleGenerator:
+def get_samples(sample_names: typing.Iterable[str]) -> SampleGenerator:
     """Get Samples by name
 
     Returns:
@@ -174,7 +306,7 @@ def get_samples(sample_names: StringList) -> SampleGenerator:
         yield get_sample(sample_name)
 
 
-def get_sample_ids(sample_names: StringList) -> StringList:
+def get_sample_ids(sample_names: typing.Iterable[str]) -> StringList:
     """List test IDs from list of samples
 
     Arguments:
@@ -183,8 +315,7 @@ def get_sample_ids(sample_names: StringList) -> StringList:
     Returns:
         StringList -- [description]
     """
-
-    return pad_to_longest(['src: {}'.format(x) for x in sample_names])
+    return pad_to_longest(sample_names)
 
 
 def get_sample_sentences(
@@ -204,13 +335,13 @@ def get_sample_sentences(
             yield samp, sentence
 
 
-def get_sample_sentence_ids(sample_names: StringList) -> StringList:
+def get_sample_sentence_ids(sample_names: typing.Iterable[str]) -> StringList:
     """List friendly names of sample sentences
 
     Returns:
         StringList -- IDs of sample sentences
     """
-    ids = []
+    ids = []  # type: StringList
     for sample_name in sample_names:
         samp = get_sample(sample_name)
 
@@ -222,7 +353,25 @@ def get_sample_sentence_ids(sample_names: StringList) -> StringList:
 
 def param_sentences():
     """Parametrize for a `ScoredSentence` and its `Sample`"""
-    return mark.parametrize(
-        'sample,sentence',
-        get_sample_sentences(SAMPLES),
-        ids=get_sample_sentence_ids(SAMPLES))
+    names = 'sample,sentence'
+    vals = get_sample_sentences(SAMPLES)
+    ids = get_sample_sentence_ids(SAMPLES)
+
+    return parametrize(names, vals, ids)
+
+
+def param_score_by_length():
+    """Parametrize `test_score_by_length`"""
+    samples = (
+        'empty',
+        'sentence_short',
+        'sentence_medium',
+        'sentence_ideal',
+        'sentence_overlong',
+    )
+
+    names = 'samp'
+    vals = get_samples(samples)
+    ids = samples
+
+    return parametrize(names, vals, ids)

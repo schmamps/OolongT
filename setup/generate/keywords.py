@@ -3,10 +3,9 @@ import typing
 from collections import OrderedDict
 from pathlib import Path
 
-
-from src.oolongt.parser import Parser, ScoredKeyword
 from setup.generate import generate_set, get_final_path, process_keywords
 from setup.util import math
+from src.oolongt.parser import Parser, ScoredKeyword
 from tests.typings import Sample
 
 SAMPLING_SIZE = 10

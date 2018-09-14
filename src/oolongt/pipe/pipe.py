@@ -1,6 +1,8 @@
 """Pipeline functions"""
 import typing
 
+from ..misc import is_iter_not_str
+
 
 def pipe(data: typing.Any, *pipeline) -> typing.Any:
     """Run `data` through `pipeline` list (left-to-right)
@@ -13,7 +15,7 @@ def pipe(data: typing.Any, *pipeline) -> typing.Any:
         typing.Any -- result of functions
     """
     for segment in pipeline:
-        if hasattr(segment, '__iter__'):
+        if is_iter_not_str(segment):
             data = pipe(data, *segment)
 
         else:

@@ -2,7 +2,7 @@
 import typing
 from random import shuffle
 
-from src.oolongt.typings import AnyList, StringList
+from src.oolongt.typings import AnyList
 from tests.constants import TEXT_PATH
 from tests.typings.sample import Sample
 
@@ -125,23 +125,6 @@ def check_exception(catch: Exception, expected: typing.Any) -> typing.Any:
         pass
 
     return catch
-
-
-def pad_to_longest(vals: AnyList) -> StringList:
-    """Pad all strings to length of longest in list
-
-    Arguments:
-        strs {StringList} -- string list
-
-    Returns:
-        StringList -- list of strings
-    """
-    strs = [str(x) for x in vals]
-    pad_len = max([len(x) for x in strs])
-    pad_str = ' ' * pad_len
-    padded = [(x + pad_str)[:pad_len] for x in strs]
-
-    return padded
 
 
 def index_of(index: int, of: int):  # pylint: disable=invalid-name

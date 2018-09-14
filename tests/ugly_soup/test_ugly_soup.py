@@ -1,25 +1,16 @@
 """Test UglySoup"""
 import typing
 
-from pytest import mark
-
 from src.oolongt.content.content import norm_text
 from src.oolongt.typings import StringList
 from src.oolongt.ugly_soup import UglyQuery
-from tests.helpers import pad_to_longest, return_true
-from tests.params.ugly_soup import DOC, SOUP
+from tests.params.ugly_soup import SOUP, param_query, param_query_sequence
 
 
 # pylint: disable=no-self-use
 class TestUglySoup:
     """Test UglySoup"""
-    @mark.parametrize(
-        'kwargs,expected',
-        [
-            ({'tags': 'div'}, None),
-            ({'tags': 'div, main'}, DOC['body']),
-            ({'tags': 'div, main', 'tester': return_true}, True)],
-        ids=pad_to_longest(['none', 'text', 'func']))
+    @param_query()
     def test_query(self, kwargs: dict, expected: typing.Any):
         """Test `UglyQuery.query`
 
@@ -33,13 +24,7 @@ class TestUglySoup:
 
         assert received == expected
 
-    @mark.parametrize(
-        'tags,kwargs,expected',
-        [
-            (['div'], {}, ''),
-            (['div'], {'default': 'spam'}, 'spam'),
-            (['div', 'main', 'header'], {'default': 'spam'}, DOC['body']), ],
-        ids=pad_to_longest(['use-default', 'set-default', 'find-value']))
+    @param_query_sequence()
     def test_query_sequence(
             self,
             tags: StringList,
