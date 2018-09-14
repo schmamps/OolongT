@@ -58,4 +58,3 @@ docs/_build/
 
 # PyTest
 .pytest_cache
-setup.cfg
