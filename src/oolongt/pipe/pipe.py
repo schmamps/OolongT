@@ -1,25 +1,19 @@
 """Pipeline functions"""
 import typing
 
-from ..misc import is_iter_not_str
 
-
-def pipe(data: typing.Any, *pipeline) -> typing.Any:
+def pipe(data: typing.Any, *pipeline: typing.Callable) -> typing.Any:
     """Run `data` through `pipeline` list (left-to-right)
 
     Arguments:
         data {typing.Any} -- any data
-        funcs {typing.Callable} -- functions to run
+        *pipeline {callable} -- callables to run
 
     Returns:
         typing.Any -- result of functions
     """
-    for segment in pipeline:
-        if is_iter_not_str(segment):
-            data = pipe(data, *segment)
-
-        else:
-            data = segment(data)
+    for call in pipeline:
+        data = call(data)
 
     return data
 
