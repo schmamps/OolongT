@@ -3,14 +3,13 @@ import typing
 
 from src.oolongt.constants import PKG_NAME, VERSION
 from src.oolongt.io.io import (
-    build_request, get_absolute_path, get_contents, get_local_url, get_stream,
-    get_user_agent, is_supported_scheme, load_json, read_file)
+    build_request, get_contents, get_path_url, get_stream, get_user_agent,
+    is_supported_scheme, load_json, read_file)
 from src.oolongt.typings import PathOrString
 from tests.helpers import check_exception
 from tests.params.helpers import parametrize
 from tests.params.io import (
-    param_get_absolute_path, param_get_local_url, param_load_json, param_read,
-    param_scheme)
+    param_get_path_url, param_load_json, param_read, param_scheme)
 
 
 @param_scheme()
@@ -48,28 +47,21 @@ def test_build_request(path: PathOrString):
     assert received.__class__.__name__ == 'Request'
 
 
-@param_get_absolute_path()
-def test_get_absolute_path(path: PathOrString, expected: str):
-    """Test get_absolute_path
+@param_get_path_url()
+def test_get_path_url(path: PathOrString, expected: str):
+    """Test `get_path_url`
 
     Arguments:
         path {PathOrString} -- path to document
         expected {str} -- expected string
     """
-    received = get_absolute_path(path)
+    spec = get_path_url(path)
 
-    assert received == expected
+    try:
+        received = spec.get_full_url()
 
-
-@param_get_local_url()
-def test_get_local_url(path: PathOrString, expected: str):
-    """Test get_local_url
-
-    Arguments:
-        path {PathOrString} -- path to document
-        expected {str} -- expected string
-    """
-    received = get_local_url(path)
+    except AttributeError:
+        received = spec
 
     assert received == expected
 

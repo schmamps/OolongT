@@ -45,21 +45,7 @@ def build_request(path: str):
     return req
 
 
-def get_absolute_path(path: str) -> str:
-    """Get absolute path to file
-
-    Arguments:
-        path {str} -- path to file
-
-    Returns:
-        str -- absolute path to file
-    """
-    abs_path = Path(path).absolute()
-
-    return str(abs_path)
-
-
-def get_local_url(path: str) -> str:
+def get_path_url(path: PathOrString) -> str:
     """Covert local path to URL
 
     Arguments:
@@ -68,9 +54,12 @@ def get_local_url(path: str) -> str:
     Returns:
         str -- URL to file
     """
-    url = 'file://' + request.pathname2url(path)
+    path_str = str(path)
 
-    return url
+    if is_supported_scheme(path_str):
+        return build_request(path_str)
+
+    return Path(path_str).as_uri()
 
 
 def get_stream(path: PathOrString) -> typing.IO[typing.Any]:
@@ -85,15 +74,7 @@ def get_stream(path: PathOrString) -> typing.IO[typing.Any]:
     Returns:
         typing.IO[typing.Any] -- io.TextIO or io.BufferedIOBase
     """
-    path_str = str(path)
-
-    if is_supported_scheme(path_str):
-        pipes = [build_request]
-
-    else:
-        pipes = [get_absolute_path, get_local_url]
-
-    return pipe(path_str, pipes, request.urlopen)
+    return pipe(path, get_path_url, request.urlopen)
 
 
 def get_contents(path: PathOrString, binary=False) -> typing.Any:
