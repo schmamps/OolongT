@@ -35,6 +35,7 @@ def calc_decile(index: int, total: int) -> int:
 # Jagadeesh, J., Pingali, P., & Varma, V. (2005).
 # Sentence Extraction Based Single Document Summarization.
 # International Institute of Information Technology, Hyderabad, India, 5.
+# pylint: disable=invalid-name
 def score_position(index: int, of: int) -> float:
     """Score sentences[`index`] where len(sentences) = `sentence_count`
 
@@ -53,6 +54,7 @@ def score_position(index: int, of: int) -> float:
     return (.17, .23, .14, .08, .05, .04, .06, .04, .04, .15)[score_index]
 
 
+# pylint: enable=invalid-name
 def score_keyword_frequency(dbs_score: float, sbs_score: float) -> float:
     """Score keyword frequency
 
@@ -89,7 +91,7 @@ def score_total(
         position_score * 1.0) / 4.0
 
 
-# pylint: disable=too-many-arguments,too-many-instance-attributes
+# pylint: disable=too-many-arguments,too-many-instance-attributes,invalid-name
 class ScoredSentence(ReprAble):
     """Sentence data for summarization"""
     __slots__ = [
