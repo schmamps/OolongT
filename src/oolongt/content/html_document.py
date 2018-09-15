@@ -17,11 +17,18 @@ def process(html: str) -> UglySoup:
         UglySoup -- BeautifulSoup subclass
     """
     soup = UglySoup(html)
-    ignore_tags = [
+    ignore_tags = (
+        'input',
+        'button',
+        'textarea',
+        'iframe',
         'script',
         'noscript',
         'style',
-        'img', ]
+        'img',
+        'aside',
+        'code',
+    )
 
     for tag in soup(ignore_tags):
         tag.decompose()
