@@ -17,10 +17,10 @@ def param_pipe():
     """Parametrize `test_pipe`"""
     names = 'init,pipeline,expected'
     vals = (
-        (0, return_false, False),
+        (0, (return_false, ), False),
         (0, (return_false, return_true), True),
-        (0, (noop, (noop, noop), [noop, noop]), 0),
+        (0, (return_false, return_true, noop) * 100, True),
     )
-    ids = ('simple', 'tuple', 'complex')
+    ids = ('one', 'two', 'lots')
 
     return parametrize(names, vals, ids)

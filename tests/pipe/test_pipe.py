@@ -20,7 +20,7 @@ def test_noop(expected: typing.Any):
 @param_pipe()
 def test_pipe(
         init: typing.Any,
-        pipeline: typing.Any,
+        pipeline: typing.Iterable,
         expected: typing.Any):
     """Test `pipe`
 
@@ -29,6 +29,6 @@ def test_pipe(
         pipeline {typing.Any} -- (iterable of) callables
         expected {typing.Any} -- expected result
     """
-    received = pipe(init, pipeline)
+    received = pipe(init, *pipeline)
 
     assert received == expected
