@@ -2,6 +2,7 @@
 import typing
 
 from .. import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
+from ..pipe import pipe
 from ..summarizer import ScoredSentence, Summarizer
 from ..typings import StringList
 
@@ -31,6 +32,40 @@ def score_body_sentences(
     sentences = summarizer.get_all_sentences(body, title)
 
     return sentences
+
+
+def sort_sentences_by_score(
+        sentences: ScoredSentenceList) -> ScoredSentenceList:
+    """Sort sentences by score
+
+    Arguments:
+        sentences {ScoredSentenceList} -- list of sentences
+
+    Returns:
+        ScoredSentenceList -- sorted list
+    """
+    return sorted(sentences, reverse=True)
+
+
+def dedupe_sentences(sentences: ScoredSentenceList) -> ScoredSentenceList:
+    """Remove duplicate sentences
+
+    Arguments:
+        sentences {ScoredSentenceList} -- all scored sentences
+        slice_len {int} -- max number of sentences to return
+
+    Returns:
+        ScoredSentenceList -- de-duplicated sentences
+    """
+    texts = []  # type: typing.List[str]
+    unique = []  # type: ScoredSentenceList
+
+    for sent in sentences:
+        if sent.text not in texts:
+            texts.append(sent.text)
+            unique.append(sent)
+
+    return unique
 
 
 def get_slice_length(nominal: float, total: int) -> int:
@@ -63,7 +98,7 @@ def get_best_sentences(
         limit: float = DEFAULT_LENGTH,
         root: str = BUILTIN,
         idiom: str = DEFAULT_IDIOM) -> ScoredSentenceList:
-    """Get best sentences from `body` in score order, qty: `limit`
+    """Get best unique sentences from `body` in score order, qty: `limit`
 
     Arguments:
         body {str} -- body of content
@@ -79,10 +114,13 @@ def get_best_sentences(
     Returns:
         list[ScoredSentence] -- best sentences from source text
     """
-    sentences = score_body_sentences(body, title, root, idiom)
+    sentences = pipe(
+        score_body_sentences(body, title, root, idiom),
+        sort_sentences_by_score,
+        dedupe_sentences)
     slice_len = get_slice_length(limit, len(sentences))
 
-    return sorted(sentences, reverse=True)[:slice_len]
+    return sentences[:slice_len]
 
 
 def summarize(
