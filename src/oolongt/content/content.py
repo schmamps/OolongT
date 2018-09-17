@@ -1,57 +1,12 @@
 """Base class for content"""
 import re
 import typing
-from unicodedata import normalize
 
 from ..constants import BUILTIN, DEFAULT_IDIOM, DEFAULT_LENGTH
-from ..pipe import pipe
 from ..repr_able import ReprAble
 from ..summarizer import ScoredSentence
 from ..text import score_body_sentences, summarize
 from ..typings import StringList
-
-
-def strip_strs(str_list: typing.Iterable[typing.Any]) -> StringList:
-    """Strip whitespace around strings
-
-    Arguments:
-        str_list {StringList} -- list of strings
-
-    Returns:
-        StringList -- trimmed strings
-    """
-    items = [str(item).strip() for item in str_list]
-
-    return [item for item in items if len(item) > 0]
-
-
-def split_strs(text: typing.Any, sep: str = r'\s+') -> StringList:
-    """Split `text` by separator `sep`
-
-    Arguments:
-        text {str} -- text to split
-
-    Keyword Arguments:
-        sep {str} -- string to split on (default: {' '})
-
-    Returns:
-        StringList -- list of split strings
-    """
-    subject = str(text) if text and text is not True else ''
-
-    return re.split(sep, subject)
-
-
-def join_strs(words: StringList, sep: str = ' ') -> str:
-    """Join list `words` by string `sep`
-
-    Arguments:
-        words {StringList} -- list of words
-
-    Returns:
-        str -- joined words
-    """
-    return sep.join(words)
 
 
 def norm_text(spec: typing.Any) -> str:
@@ -60,21 +15,7 @@ def norm_text(spec: typing.Any) -> str:
     Returns:
         str -- input in tidy string
     """
-    norm = pipe(spec, split_strs, strip_strs, join_strs)
-
-    return norm
-
-
-def encode_ascii(text: str) -> str:
-    """Get low-value character representation of string
-
-    Arguments:
-        text {str} -- UTF-8 encoded string
-
-    Returns:
-        str -- string with low value characters
-    """
-    return normalize('NFKD', text).encode('ascii', 'ignore').decode('utf8')
+    return '' if spec is None else re.sub(r'\s+', ' ', str(spec)).strip()
 
 
 # pylint: disable=no-self-use,unused-argument
