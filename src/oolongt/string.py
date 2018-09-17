@@ -41,7 +41,7 @@ def define_split(sep: str):
     Returns:
         typing.Callable -- splitting function
     """
-    def split_string(val: typing.Any) -> typing.List[str]:
+    def split_string(val: typing.Any) -> StringList:
         return re.split(sep, val)
 
     return split_string
