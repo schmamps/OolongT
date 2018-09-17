@@ -8,6 +8,7 @@ from textwrap import wrap as wrap_text
 from ..constants import DEFAULT_LENGTH
 from ..content import Document
 from ..files import get_document
+from ..string import simplify
 from ..typings import OptionalString, StringList
 
 DEFAULT_WRAP = 70
@@ -81,11 +82,11 @@ def get_output_lines(
     """
     doc = get_document(path, ext)
 
-    yield doc.title or path
+    yield simplify(doc.title or path)
     yield ''
 
     for line in get_summary(doc, limit, wrap):
-        yield line
+        yield simplify(line)
 
 
 def cli():
