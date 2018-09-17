@@ -1,6 +1,7 @@
 """Parametrize I/O tests"""
 import typing
 from json import JSONDecodeError
+from pathlib import Path
 
 from tests.constants import DOC_PATH, IDIOM_PATH
 from tests.params.helpers import parametrize
@@ -25,6 +26,19 @@ def param_scheme():
         'http:',
         'https:',
     )
+
+    return parametrize(names, vals, ids)
+
+
+def param_get_path_forms():
+    """Parametrize `test_get_path_forms`"""
+    as_path = Path(__file__)
+    as_str = str(__file__)
+    expected = (as_path, as_str)
+
+    names = 'path,expected'
+    vals = ((as_str, expected), (as_path, expected))
+    ids = ('string', 'path', )
 
     return parametrize(names, vals, ids)
 

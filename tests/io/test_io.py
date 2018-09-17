@@ -3,18 +3,19 @@ import typing
 
 from src.oolongt.constants import PKG_NAME, VERSION
 from src.oolongt.io.io import (
-    build_request, get_contents, get_path_url, get_stream, get_user_agent,
-    is_supported_scheme, load_json, read_file)
+    build_request, get_contents, get_path_forms, get_path_url, get_stream,
+    get_user_agent, is_supported_scheme, load_json, read_file)
 from src.oolongt.typings import PathOrString
 from tests.helpers import check_exception
 from tests.params.helpers import parametrize
 from tests.params.io import (
-    param_get_path_url, param_load_json, param_read, param_scheme)
+    param_get_path_forms, param_get_path_url, param_load_json, param_read,
+    param_scheme)
 
 
 @param_scheme()
 def test_is_supported_scheme(path: PathOrString, expected: bool):
-    """Test is_supported_scheme
+    """Test `is_supported_scheme`
 
     Arguments:
         path {PathOrString} -- path to document
@@ -27,7 +28,7 @@ def test_is_supported_scheme(path: PathOrString, expected: bool):
 
 @parametrize('val', ((PKG_NAME), (VERSION), ), ('name', 'version', ))
 def test_get_user_agent(val: str):
-    """Test get_user_agent
+    """Test `get_user_agent`
 
     Arguments:
         val {str} -- string in user agent
@@ -37,7 +38,7 @@ def test_get_user_agent(val: str):
 
 @parametrize('path', [('http://localhost/', )], ('localhost', ))
 def test_build_request(path: PathOrString):
-    """Test build_request
+    """Test `build_request`
 
     Arguments:
         path {PathOrString} -- path to document
@@ -45,6 +46,19 @@ def test_build_request(path: PathOrString):
     received = build_request(path)
 
     assert received.__class__.__name__ == 'Request'
+
+
+@param_get_path_forms()
+def test_get_path_forms(path: PathOrString, expected: tuple):
+    """Test `get_path_forms`
+
+    Arguments:
+        path {PathOrString} -- [description]
+        expected {tuple} -- [description]
+    """
+    received = get_path_forms(path)
+
+    assert received == expected
 
 
 @param_get_path_url()
@@ -68,7 +82,7 @@ def test_get_path_url(path: PathOrString, expected: str):
 
 @parametrize('path,expected', ((__file__, __file__), ), ('__file__', ))
 def test_get_stream(path: PathOrString, expected):
-    """Test get_stream
+    """Test `get_stream`
 
     Arguments:
         path {PathOrString} -- path to document
@@ -102,7 +116,7 @@ def _test_read(func: typing.Callable, path: PathOrString, expected) -> bool:
 
 @param_read()
 def test_get_contents(path: PathOrString, expected):
-    """Test get_contents
+    """Test `get_contents`
 
     Arguments:
         path {PathOrString} -- path to document
@@ -113,7 +127,7 @@ def test_get_contents(path: PathOrString, expected):
 
 @param_read(IOError, IOError)
 def test_read_file(path: PathOrString, expected: str):
-    """Test read_file
+    """Test `read_file`
 
     Arguments:
         path {PathOrString} -- path to document
@@ -124,7 +138,7 @@ def test_read_file(path: PathOrString, expected: str):
 
 @param_load_json()
 def test_load_json(path: PathOrString, expected) -> None:
-    """Test load_json
+    """Test `load_json`
 
     Arguments:
         path {PathOrString} -- path to document

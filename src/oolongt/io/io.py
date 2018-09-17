@@ -45,6 +45,21 @@ def build_request(path: str):
     return req
 
 
+def get_path_forms(path: PathOrString) -> typing.Tuple[Path, str]:
+    """Get nominal path as instance of pathlib.Path and str
+
+    Arguments:
+        path {PathOrString} -- path to document
+
+    Returns:
+        typing.Tuple[Path, str] -- Path object and path as string
+    """
+    path_str = str(path)
+    path_obj = path if isinstance(path, Path) else Path(path_str)
+
+    return path_obj, path_str
+
+
 def get_path_url(path: PathOrString) -> str:
     """Covert local path to URL
 
@@ -54,12 +69,12 @@ def get_path_url(path: PathOrString) -> str:
     Returns:
         str -- URL to file
     """
-    path_str = str(path)
+    path_obj, path_str = get_path_forms(path)
 
     if is_supported_scheme(path_str):
         return build_request(path_str)
 
-    return Path(path_str).as_uri()
+    return path_obj.absolute().as_uri()
 
 
 def get_stream(path: PathOrString) -> typing.IO[typing.Any]:
