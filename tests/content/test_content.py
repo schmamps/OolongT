@@ -1,52 +1,9 @@
 """Test Content base content class"""
-from src.oolongt.content.content import (
-    Content, join_strs, norm_text, split_strs, strip_strs)
-from src.oolongt.typings import OptionalString, StringList
+from src.oolongt.content.content import Content, norm_text
+from src.oolongt.typings import OptionalString
 from tests.params.content import (
-    JOIN_SPLIT_IDS, JOIN_SPLIT_PARAMS, ContentInit, get_content, param_content,
-    param_content_init, param_norm_text, param_strip_strs)
-from tests.params.helpers import parametrize
-
-
-@param_strip_strs()
-def test_strip_strs(str_list: StringList, expected: StringList):
-    """Test strip_strs
-
-    Arguments:
-        str_list {StringList} -- list of strings
-        expected {StringList} -- stripped strings
-    """
-    received = strip_strs(str_list)
-
-    assert received == expected
-
-
-@parametrize('unsplit,sep,expected', JOIN_SPLIT_PARAMS, JOIN_SPLIT_IDS)
-def test_split_strs(unsplit: str, sep: str, expected: StringList):
-    """Test split_strs
-
-    Arguments:
-        unsplit {str} -- input string
-        sep {str} -- separator regex
-        expected {StringList} -- expected StringList
-    """
-    received = split_strs(unsplit, sep) if sep else split_strs(unsplit)
-
-    assert received == expected
-
-
-@parametrize('expected,sep,str_list', JOIN_SPLIT_PARAMS, JOIN_SPLIT_IDS)
-def test_join_strs(expected: str, sep: str, str_list: StringList):
-    """Test join_strs
-
-    Arguments:
-        expected {str} -- expected string
-        sep {str} -- separator regex
-        str_list {StringList} -- input StringList
-    """
-    received = join_strs(str_list, sep) if sep else join_strs(str_list)
-
-    assert received == expected
+    ContentInit, get_content, param_content, param_content_init,
+    param_norm_text)
 
 
 @param_norm_text()

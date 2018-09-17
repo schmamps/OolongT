@@ -2,11 +2,10 @@
 import typing
 from pathlib import Path
 
+from src.oolongt import string
 from src.oolongt.content import Content, Document
-from src.oolongt.content.content import split_strs, strip_strs
 from src.oolongt.io import load_json
-from src.oolongt.misc import is_iter_not_str
-from src.oolongt.typings import StringList
+from src.oolongt.typings import StringList  # noqa: F401
 from tests.constants import DOC_PATH
 from tests.params.helpers import parametrize
 
@@ -28,20 +27,6 @@ JOIN_SPLIT_PARAMS = [
     ('{},{},{}'.format(SPAM, EGGS, BACON), ',', [SPAM, EGGS, BACON]),
 ]
 JOIN_SPLIT_IDS = ['empty', 'basic', 'custom']
-
-
-def split_any(val: typing.Any) -> StringList:
-    """Split any value into a list of strings
-
-    Arguments:
-        val {typing.Any} -- any value
-
-    Returns:
-        StringList -- list of strings
-    """
-    spec = val if is_iter_not_str(val) else split_strs(val, ',')
-
-    return strip_strs(spec)
 
 
 def compare_content_ex(
@@ -283,7 +268,7 @@ def param_document_init(
     vals = []  # type: typing.List[tuple]
     ids = []  # type: StringList
 
-    for stem in split_any(stems):
+    for stem in string.split(stems):
         path = get_doc_path(stem, ext)
         inst = cls(path)
 
@@ -336,7 +321,7 @@ def param_supports(*exts: typing.Any, always: typing.Any = None):
     vals = []  # type: typing.List[typing.Tuple[str, str, bool]]
     path = '/spam/eggs/bacon'
     for prefix, formatter in permute_schemes(path):
-        for ext in split_any(exts):
+        for ext in string.split(exts):
             for path_ext, ext_ext, stub, truth in permute_ext(ext, always):
                 ids.append('{}/{}/{}'.format(prefix, stub, ext or None))
                 vals.append((formatter.format(path_ext), ext_ext, truth))
