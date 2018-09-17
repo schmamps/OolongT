@@ -34,4 +34,7 @@ def parametrize(
         vals {typing.Iterable} -- parameter values
         ids {StringList} -- test IDs
     """
+    if len(vals) != len(ids):
+        breakpoint()
+
     return mark.parametrize(names, list(vals), ids=pad_to_longest(list(ids)))
