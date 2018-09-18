@@ -9,7 +9,6 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-bin/
 build/
 develop-eggs/
 dist/
@@ -19,11 +18,10 @@ lib64/
 parts/
 sdist/
 var/
-*.egg-info/
 .installed.cfg
-*.egg
-.venv/
-generator/output/
+**/*egg*/
+**/*env*/
+**/generated_data/
 
 # Installer logs
 pip-log.txt
@@ -60,4 +58,3 @@ docs/_build/
 
 # PyTest
 .pytest_cache
-setup.cfg

@@ -1,0 +1,30 @@
+{
+	"meta": {
+		"description": "A poor sentence",
+		"license": false
+	},
+	"idiom": "default",
+	"title": "Puppies and Kittens Dance",
+	"keyword_count": 0,
+	"keywords": [],
+	"sentences": [
+		{
+			"index": 0,
+			"id": "(the only one)",
+			"sbs_score": 0.0,
+			"dbs_score": 0.0,
+			"title_score": 0.0,
+			"length_score": 0.1,
+			"position_score": 0.15,
+			"keyword_score": 0.0,
+			"total_score": 0.05,
+			"text": "Or you!",
+			"rank": 0
+		}
+	],
+	"length_score": 0.0,
+	"title_score": 0.0,
+	"remove_stop_words": [
+		"!"
+	]
+}

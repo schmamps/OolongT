@@ -1,77 +1,60 @@
-import os
+"""Setup Script"""
+import typing
 
-REQUIREMENTS = 'r'
-DOWNLOAD = 'd'
-QUIT = 'Q'
+import setuptools
 
-
-def get_input(msg, options=['y', 'n'], default='n'):
-    display_options = list(options)
-
-    try:
-        default_index = options.index(default)
-        display_options[default_index] = default.upper()
-
-    except ValueError:
-        pass
-
-    prompt = '[' + '/'.join(display_options) + ']'
-    val = input(' '.join([msg, prompt]) + '? ')[:1].lower()
-
-    if val in options:
-        return val
-
-    print('input: ' + default)
-
-    return default
+# pylint: disable=no-name-in-module
+from setup.cleanup_command import CleanupCommand
+from setup.generate_command import GenerateCommand
+from setup.nltk_command import NltkCommand
+from setup.py_test_command import PyTestCommand
+from src.oolongt.constants import VERSION
 
 
-def prompt_requirements():
-    msg = """
-To install the requirements, run `pip install -r requirements.txt`
-or agree to continue at the next prompt. Continue"""
-    if get_input(msg) == 'y':
-        os.system('pip install -r requirements.txt')
+# pylint: enable=no-name-in-module
+def load_file(path) -> typing.List[str]:
+    with open(path, 'r') as stream:
+        lines = [line.strip() for line in stream.readlines()]
 
-    return True
+    return [line for line in lines if line]
 
 
-def prompt_download():
-    msg = """
-Additional files are required to support the NLTK requirement.
-If you agree to continue, the download interface will appear.
-Continue"""
-    if get_input(msg) == 'y':
-        print('\nlook for the download interface window...\n')
-
-        import nltk
-        nltk.download()
-
-    return True
+ALL_REQS = load_file('src/oolongt/requirements.txt')
+DEP_LINKS = [req for req in ALL_REQS if req.startswith('git+')]
 
 
-def menu():
-    msg = 'Install [r]equirements, download [d]ata, or [q]uit'
-    response = get_input(msg, [REQUIREMENTS, DOWNLOAD, QUIT], QUIT)
-
-    if response == QUIT:
-        return False
-
-    if response == REQUIREMENTS:
-        return prompt_requirements()
-
-    if response == DOWNLOAD:
-        return prompt_download()
-
-
-def main():
-    print('\nOolongT Setup' + '-' * 46)
-
-    while menu():
-        print('')
-
-    print('')
-    quit()
-
-
-main()
+setuptools.setup(
+    name='oolongt',
+    version=VERSION,
+    author='Andrew Champion',
+    author_email='awchampion@gmail.com',
+    description='A text summarization library',
+    long_description='\n'.join(load_file('README.md')),
+    long_description_content_type='text/markdown',
+    url='https://github.com/schmamps/OolongT/',
+    packages=setuptools.find_packages(where='src'),
+    package_dir={'': 'src'},
+    keywords=['summarization'],
+    package_data={'': ['idioms/*.json']},
+    scripts=['bin/oolongt'],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
+    cmdclass={
+        'pytest': PyTestCommand,
+        'generate': GenerateCommand,
+        'nltk': NltkCommand,
+        'cleanup': CleanupCommand,
+    },
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+    ],
+    install_requires=[
+        req for req in ALL_REQS if req not in DEP_LINKS
+    ],
+    dependency_links=[req[4:] for req in DEP_LINKS],
+)

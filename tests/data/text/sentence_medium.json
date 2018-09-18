@@ -1,0 +1,71 @@
+{
+	"meta": {
+		"description": "A sentence of medium value",
+		"license": false
+	},
+	"idiom": "default",
+	"title": "Kittens Frolic with Tiny Puppies?",
+	"keyword_count": 7,
+	"keywords": [
+		{"score": 0.21428571428571427, "count": 1, "word": "happili"},
+		{"score": 0.21428571428571427, "count": 1, "word": "kitten"},
+		{"score": 0.21428571428571427, "count": 1, "word": "fluffi"},
+		{"score": 0.21428571428571427, "count": 1, "word": "puppi"},
+		{"score": 0.21428571428571427, "count": 1, "word": "fuzzi"},
+		{"score": 0.21428571428571427, "count": 1, "word": "wood"},
+		{"score": 0.21428571428571427, "count": 1, "word": "danc"}
+	],
+	"sentences": [
+		{
+			"index": 0,
+			"id": "(the only one)",
+			"sbs_score": 0.15,
+			"dbs_score": 0.22528698979591835,
+			"title_score": 0.0,
+			"length_score": 0.5,
+			"position_score": 0.15,
+			"keyword_score": 1.8764349489795917,
+			"total_score": 1.0382174744897958,
+			"text": "Fuzzy kittens and fluffy puppies dance happily in the woods.",
+			"rank": 0
+		}
+	],
+	"words": [
+		"Fuzzy",
+		"kittens",
+		"and",
+		"fluffy",
+		"puppies",
+		"dance",
+		"happily",
+		"in",
+		"the",
+		"woods."
+	],
+	"compare_words": [
+		"fuzzy",
+		"kittens",
+		"and",
+		"fluffy",
+		"puppies",
+		"dance",
+		"happily",
+		"in",
+		"the",
+		"woods"
+	],
+	"split_words": [
+		"fuzzy",
+		"kittens",
+		"and",
+		"fluffy",
+		"puppies",
+		"dance",
+		"happily",
+		"in",
+		"the",
+		"woods"
+	],
+	"length_score": 0.5,
+	"title_score": 0.5
+}

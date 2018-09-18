@@ -1,0 +1,52 @@
+{
+	"meta": {
+		"description": "Boilerplate text",
+		"license": false
+	},
+	"idiom": "default",
+	"title": "Boilerplate Text",
+	"keyword_count": 14,
+	"keywords": [
+		{"score": 0.10714285714285714, "count": 1, "word": "quick"},
+		{"score": 0.10714285714285714, "count": 1, "word": "lorem"},
+		{"score": 0.10714285714285714, "count": 1, "word": "ipsum"},
+		{"score": 0.10714285714285714, "count": 1, "word": "dolor"},
+		{"score": 0.10714285714285714, "count": 1, "word": "brown"},
+		{"score": 0.10714285714285714, "count": 1, "word": "time"},
+		{"score": 0.10714285714285714, "count": 1, "word": "lazi"},
+		{"score": 0.10714285714285714, "count": 1, "word": "jump"},
+		{"score": 0.10714285714285714, "count": 1, "word": "good"},
+		{"score": 0.10714285714285714, "count": 1, "word": "amet"},
+		{"score": 0.10714285714285714, "count": 1, "word": "sit"},
+		{"score": 0.10714285714285714, "count": 1, "word": "men"},
+		{"score": 0.10714285714285714, "count": 1, "word": "fox"},
+		{"score": 0.10714285714285714, "count": 1, "word": "dog"}
+	],
+	"text": "The quick brown\nfox jumps over the lazy dog?   Now is the time for all good men! \n\tLorem ipsum dolor, sit amet.\t",
+	"split_sentences": [
+		"The quick brown fox jumps over the lazy dog?",
+		"Now is the time for all good men!",
+		"Lorem ipsum dolor, sit amet."
+	],
+	"remove_punctuations": "The quick brown\nfox jumps over the lazy dog   Now is the time for all good men \n\tLorem ipsum dolor sit amet\t",
+	"remove_stop_words": [
+		"quick",
+		"brown",
+		"fox",
+		"jumps",
+		"lazy",
+		"dog",
+		"?",
+		"time",
+		"good",
+		"men",
+		"!",
+		"lorem",
+		"ipsum",
+		"dolor",
+		",",
+		"sit",
+		"amet",
+		"."
+	]
+}

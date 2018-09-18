@@ -4,108 +4,119 @@
 
 OolongT is an automatic summarization algorithm
 largely based on the official version of TextTeaser.
-It is written with versatility, testability, simplicity,
-and compatibility in mind.
+It is written with versatility, testability, and simplicity in mind.
 
 TextTeaser links:
 
 * [Python (current)](https://github.com/MojoJolo/textteaser)
 * [Scala (original)](https://github.com/MojoJolo/textteaser)
 
-## Setup
+## Install
 
-1. Download the repository from:
-   <https://github.com/schmamps/OolongT.git>
-1. `cd` to the project directory
-1. Setup a virtualenv in `.venv` and activate (if necessary/desired)
-1. Install the required packages:
-   `pip install -r requirements.txt`
-1. Run `python setup.py`
-1. Follow the prompts to download NLTK data
+For now, this package is most easily installed through git and setuptools.
+
+```sh
+# fetch repo
+git clone https://github.com/schmamps/OolongT.git
+cd OolongT
+# install library
+python setup.py install
+# download NLTK data (follow prompts)
+python setup.py nltk
+```
 
 ## Basic Usage
 
+### Procedural
+
+For a simple summary of strings, call `summarize()`:
+
 ```py
 >>> from oolongt import summarize
-...
->>> summarize(title, text)
-['most important sentence', …, 'slightly less important sentence']
+# ...
+>>> text = """All content text is here.
+This is most important.
+…
+This is fifth most important.
+…
+This is the conclusion."""
+>>> summarize(text, title)
+["This is most important.", …, "This is fifth most important."]
 ```
 
-For a list of *every* sentence in the source text, call
-`score_sentences()` instead.
+### Object Oriented
+
+A few types of content are supported in `oolongt.content`.
+
+Strings are supported with class `Content`.
+
+```py
+>>> from oolongt.content import Content
+# ...
+>>> cont = Content(text, title)
+>>> cont.summarize()
+["This is most important.", …, "This is fifth most important."]
+```
+
+## Working with Files
+
+### Supported Types
+
+The following file formats--local and remote--are also supported:
+
+* Word XML (`DocxDocument`)
+* HTML (`HtmlDocument`)
+* PDF (`PdfDocument`)
+* plain text (`PlainTextDocument`)
+
+### Usage
+
+```py
+# Document is known format
+>>> from oolongt.content import HtmlDocument
+# ...
+>>> doc = HtmlDocument('https://example.com/tldr.html')
+>>> doc.summarize()
+# ...
+# Document is
+```
+
+### Command Line
+
+When installed through setuptools,
+the `oolongt` command is added to your system.
+
+```sh
+# get top two sentences at a given path/URL
+$ oolongt -l 2 https://example.com/tldr
+Title of Document
+
+This is the first of the two best sentences in the document. This is
+the other one.
+```
 
 ## Advanced Usage
 
-### Configuration
+### Command Line
 
-OolongT only knows (and defaults to) English as a language.
-That language code (`lang`) is `'en'`.
-If you wish to add to/override the builtin language(s),
-you may specify an alternate language directory
-using the named argument `root`.
+Arguments:
 
-```py
->>> from oolongt import summarize
-...
->>> summarize(title, text, root='~/languages', lang='de')
-[sentences tokenized by config in ~/languages/de.json]
-```
+* `-h, --help`: help message
+* `-e, --ext`: nominal extension of file (OolongT does no content sniffing and [defaults: `.txt` local, `.htm` remote)
+* `-w, --wrap`  wrap at column number [default: 70]
+* `-l, --limit`: [limit](#limit), i.e. length of summary
 
-#### Configuration File
+### Procedural/Object-Oriented
 
-* `meta/name`: for reference only
-* `nltk_language`: name of language passed to NLTK
-* `ideal`: "ideal" sentence length, ostensibly 20 in English
-* `stop_words/nltk`: initialize the [stop word] list(https://en.wikipedia.org/wiki/Stop_words) from NLTK (`true`, default) or with an empty list (`false`)
-* `stop_words/user`: list of stop words appended to the initial list
+`score_body_sentences()` shadows `summarize()`
+as a procedural function and method.
+It returns a complete list of `ScoredSentence` objects.
+The object has these properties:
 
-```js
-{
-  "meta": {
-    "name": "Deutsch"
-  },
-  "nltk_language": "deutsch",
-  "ideal": 20,
-  "stop_words": {
-    "nltk": true,
-    "user": ["doch"]
-  }
-}
-```
-
-### Length
-
-OolongT can reduce content to either a fixed number of sentences:
-
-```py
->>> from oolongt import summarize
-...
->>> summarize(title, text, length=2)
-['most important sentence', '2nd most…']
-```
-
-…or a specific fraction of the original `if 0 < length < 1`:
-
-```py
->>> from oolongt import summarize
-...
->>> text = ['sentence one', 'sentence two', …, 'sentence six']
->>> summarize(title, text, length=.5)
-['sentence one', 'sentence two', 'sentence three']
-```
-
-### Sorting
-
-By default, OolongT sorts top sentences by their order of appearance.
-
-For greater control over the quantity and order of sentences,
-use `score_body_sentences`, which returns a list of `ScoredSentence` objects
-with the following sortable properties:
-
-* `total_score`: composite of other sentence scores (default)
-* `index`: order of appearance in content
-* `of`: total number of sentences in content
+* `text`: text of the sentence
+* `total_score`: composite of other sentence scores (comparison default)
+* `index`: order of appearance in content (`sentences[index]`)
+* `of`: total number of sentences in content (`len(sentences)`)
 * `title_score`: score by keywords appearing in content title
 * `length_score`: score by word count relative to `ideal` configuration
 * `dbs_score`: score by keyword density
@@ -113,8 +124,79 @@ with the following sortable properties:
 * `position_score`: score by position of sentence in content
 * `keyword_score`: score by top keywords in content
 
+### Keyword Arguments
+
+Both `summarize` and `score_body_sentences`
+take the same keyword arguments and use them (if applicable).
+
+#### `limit`
+
+By default, summaries are five sentences long (`len(summarize(...)) == 5`).
+Use the `limit` argument to specify the number of sentences to return.
+For values greater than or equal to 1,
+this is an absolute number (maximum: all sentences).
+For values between less than 1 but greater than 0,
+it is a percentage (minimum: one sentence).
+
 ```py
->>> from oolongt import score_body_sentences
->>> score_body_sentences(body, title)
-[ScoredSentence, ScoredSentence, ...]
+# ...
+>>> text = ["sentence 1 of 10", …, "sentence 10 of 10"]
+>>> len(summarize(text, title, limit=3))
+3
+>>> len(summarize(text, title, limit=99))
+10
+>>> len(summarize(text, title, limit=.399))
+4
+>>> len(summarize(text, title, limit=.00399))
+1
+>>> len(summarize(text, title, limit=0))
+ValueError
 ```
+
+#### `root` and `idiom`
+
+Specify a [custom idiom](#Idioms) with these arguments:
+
+```py
+>>> ...
+>>> summarize(text, title, root="/etc/idioms")
+# (results from configuration in "/etc/idioms/default.json")
+>>> summarize(text, title, idiom="default")
+# (results from configuration in "./oolongt/idioms/default.json")
+>>> summarize(text, title, root="/etc/idioms", idiom="bsg")
+# (results from configuration in "/etc/idioms/bsg.json")
+```
+
+## Idioms
+
+OolongT uses "idioms" for configuration.
+The default idiom is a generic setup for English,
+largely based on [NLTK](https://www.nltk.org/) data,
+including [stop words](https://en.wikipedia.org/wiki/Stop_words),
+but this will not work for all content.
+
+### Schema
+
+If your content is not in English (but supported by NLTK)
+or has a larger set of stop words,
+you can specify this idiom with a JSON file:
+
+```js
+{
+  "meta": {
+    "name": "Battlestar Galactica Podcast Transcript"
+  },
+  "language": "english",
+  "ideal": 20,
+  "stop_words": {
+    "nltk": true,
+    "user": ["uh", "like", "frak", …]
+  }
+}
+```
+
+* `meta/name`: for reference only
+* `language`: language parameter passed to NLTK
+* `ideal`: "ideal" sentence length, ostensibly 20 in English
+* `stop_words/nltk`: initialize with NLTK (true) or empty list (false)
+* `stop_words/user`: supplemental stop words

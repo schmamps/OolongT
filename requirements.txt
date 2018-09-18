@@ -1,3 +1,13 @@
--r oolongt/requirements/requirements.txt
--r tests/requirements/requirements.txt
--r generator/requirements/requirements.txt
+-r src/oolongt/requirements.txt
+colorama==0.3.9
+flake8==3.5.0
+flake8-quotes==1.0.0
+isort==4.3.4
+mypy==0.620
+pycodestyle==2.3.1
+pylint==2.1.1
+pytest==3.7.1
+rope==0.10.7
+six==1.11.0
+typing==3.6.4
+urllib3==1.21.1

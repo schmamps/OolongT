@@ -1,14 +1,17 @@
 """ Helpers for testing """
+import typing
 from random import shuffle
 
-from tests.typing.sample import Sample
-from tests.typing.sample_keyword import SampleKeyword
+from src.oolongt.typings import AnyList
+from tests.constants import TEXT_PATH
+from tests.typings.sample import Sample
 
-from tests.constants import DATA_PATH
 
-
-def snip(val, max_len=20, list_separator=', ', ellip="..."):
-    # type: (any, int, str, str) -> str
+def snip(
+        val: typing.Any,
+        max_len: int = 20,
+        list_separator: str = ', ',
+        ellip: str = '...'):
     """Truncate `val` to specified length
 
     Arguments:
@@ -40,15 +43,15 @@ def snip(val, max_len=20, list_separator=', ', ellip="..."):
     return clip + ellip
 
 
-def randomize_list(src):
-    # type: (list[any]) -> list[any]
+def randomize_list(src: AnyList) -> AnyList:
     """Get a reordered copy of `src`
 
     Arguments:
-        src {list} -- source list
+        src {AnyList} -- source list
 
     Returns:
-        list -- copy of source list in different order (if possible)
+        AnyList --
+            copy of source list in different order (if possible)
 
     >>> [] == randomize_list([])
     True
@@ -62,37 +65,31 @@ def randomize_list(src):
     return dupe
 
 
-def assert_ex(msg, received, expected, hint=None):
-    # type: (str, any, any, any) -> str
-    """Generate detailed AssertionError messages
+def assert_ex(
+        msg: str,
+        received: typing.Any,
+        expected: typing.Any,
+        hint: typing.Any = None):
+    """Generate detailed assertion messages
 
     Arguments:
         msg {str} -- description of test
-        received {any} -- received value
-        expected {any} -- expected value
+        received {typing.Any} -- received value
+        expected {typing.Any} -- expected value
 
     Keyword Arguments:
-        hint {any} -- add'l detail for description (default: {None})
+        hint {typing.Any} -- add'l detail for description (default: {None})
 
     Returns:
         str -- detailed error message
     """
-    if hint is not None:
-        hint = ' (' + repr(hint) + ')'
-    else:
-        hint = ''
+    hint_str = '' if hint is None else '({!r})'.format(hint)
 
-    res_str = str(received)
-    exp_str = str(expected)
-
-    return '\n'.join([
-        msg + hint,
-        'received > ' + res_str,
-        'expected > ' + exp_str])
+    return '{} {}\nreceived > {}\nexpected > {}'.format(
+        msg, hint_str, received, expected)
 
 
-def get_sample(sample_name):
-    # type: (str) -> Sample
+def get_sample(sample_name: str) -> Sample:
     """Get Sample by name
 
     Arguments:
@@ -101,54 +98,10 @@ def get_sample(sample_name):
     Returns:
         Sample -- sample data
     """
-    return Sample(DATA_PATH, sample_name)
+    return Sample(TEXT_PATH, sample_name)
 
 
-def get_samples(sample_names):
-    # type (list[str]) -> Iterable[Sample]
-    """Get Samples by name
-
-    Returns:
-        Iterator[Sample] - iterable of samples
-    """
-    for sample_name in sample_names:
-        yield get_sample(sample_name)
-
-
-def get_sample_ids(sample_names):
-    return pad_to_longest(['src: {}'.format(x) for x in sample_names])
-
-
-def get_sample_sentences(sample_names):
-    # type (list[str]) -> Iterable[tuple[Sample, SampleSentence]]
-    """Get Sample, each sentence from Sample
-
-    Arguments:
-        sample_names {list[str]} -- names of samples
-
-    Returns:
-        Iterator[Sample] -- Iterator of Samples
-    """
-    for sample_name in sample_names:
-        samp = get_sample(sample_name)
-
-        for sentence in samp.sentences:
-            yield samp, sentence
-
-
-def get_sample_sentence_ids(sample_names):
-    ids = []
-    for sample_name in sample_names:
-        samp = get_sample(sample_name)
-
-        for sentence in samp.sentences:
-            ids.append('src: {}, sent: {}'.format(samp.name, sentence.id))
-
-    return pad_to_longest(ids)
-
-
-def check_exception(catch, expected):
-    # type: (Exception, any) -> any
+def check_exception(catch: Exception, expected: typing.Any) -> typing.Any:
     """Compare caught exception to expected value
 
     Arguments:
@@ -174,9 +127,33 @@ def check_exception(catch, expected):
     return catch
 
 
-def pad_to_longest(strs):
-    pad_len = max([len(x) for x in strs])
-    pad_str = ' ' * pad_len
-    padded = [(x + pad_str)[:pad_len] for x in strs]
+def index_of(index: int, of: int):  # pylint: disable=invalid-name
+    """Return '$index of $of'
 
-    return padded
+    Arguments:
+        index {int} -- index
+        of {int} -- count
+
+    Returns:
+        str -- string
+    """
+    return '{!r} of {!r}'.format(index, of)
+
+
+# pylint: disable=unused-argument
+def return_true(*args, **kwargs):
+    """Always return True
+
+    Returns:
+        bool -- True
+    """
+    return True
+
+
+def return_false(*args, **kwargs):
+    """Always return False
+
+    Returns:
+        bool -- False
+    """
+    return False

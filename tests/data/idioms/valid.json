@@ -1,0 +1,11 @@
+{
+	"meta": {
+		"name": "Valid Language Config"
+	},
+	"language": "valid",
+	"ideal": 2,
+	"stop_words": {
+		"nltk": false,
+		"user": ["spam", "eggs"]
+	}
+}
