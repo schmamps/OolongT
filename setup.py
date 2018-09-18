@@ -4,11 +4,11 @@ import typing
 import setuptools
 
 # pylint: disable=no-name-in-module
-from setup.cleanup_command import CleanupCommand
-from setup.generate_command import GenerateCommand
-from setup.nltk_command import NltkCommand
-from setup.py_test_command import PyTestCommand
 from src.oolongt.constants import VERSION
+from src.setup.cleanup_command import CleanupCommand
+from src.setup.generate_command import GenerateCommand
+from src.setup.nltk_command import NltkCommand
+from src.setup.py_test_command import PyTestCommand
 
 
 # pylint: enable=no-name-in-module
