@@ -7,29 +7,24 @@ from . import it
 from .pipe import pipe
 from .typings import StringList
 
-
-def cast_value(val: typing.Any) -> str:
-    """Cast `val` as str
-
-    Arguments:
-        val {typing.Any} -- any value
-
-    Returns:
-        str -- `val` as str
-    """
-    return str(val)
+AnyOrAnys = typing.Union[
+    typing.Any, typing.List[typing.Any]]
+StringOrStringIterator = typing.Union[
+    str, typing.Iterator[str]]
+StringOrStrings = typing.Union[
+    str, StringList]
 
 
-def cast_list(val: typing.Iterable[typing.Any]) -> typing.Iterable[str]:
-    """Cast members of `val` as string
+def cast(val: AnyOrAnys) -> StringOrStringIterator:
+    """Cast member(s) of `val` as string
 
     Arguments:
-        val {typing.Iterable[typing.Any]} -- iterable of values
+        val {AnyOrAnys} -- value or values
 
     Returns:
-        StringList -- `val` as strings
+        StringOrStringIterator -- `val` as string or strings
     """
-    return map(cast_value, val)
+    return map(str, val) if it.erable(val) else str(val)
 
 
 def define_split(sep: str):
@@ -42,7 +37,7 @@ def define_split(sep: str):
         typing.Callable -- splitting function
     """
     def split_string(val: typing.Any) -> StringList:
-        return re.split(sep, val)
+        return re.split(sep, str(val))
 
     return split_string
 
@@ -62,28 +57,19 @@ def define_join(sep: str):
     return join_string
 
 
-def strip_str(val: str) -> str:
-    """Return `val.strip()`
+def strip(val: StringOrStrings) -> typing.Union[str, typing.Iterator[str]]:
+    """Trim str or strs in `val`
 
     Arguments:
-        val {str} -- string value
+        val {OptionalStringList} -- str or strs
 
     Returns:
-        str -- stripped string
+        typing.Union[str, StringList] -- stripped str or strs
     """
-    return val.strip()
+    if it.erable(val):
+        return (v.strip() for v in val)
 
-
-def strip_strs(strs: StringList) -> typing.Iterable:
-    """Trim items of `strs`
-
-    Arguments:
-        strs {StringList} -- [description]
-
-    Returns:
-        StringList -- [description]
-    """
-    return map(strip_str, strs)
+    return str(val).strip()
 
 
 def filter_empty(strs: StringList) -> typing.Iterable:
@@ -95,7 +81,7 @@ def filter_empty(strs: StringList) -> typing.Iterable:
     Returns:
         StringList -- list of non-empty strings
     """
-    return filter(bool, strs)
+    return (s for s in strs if s)
 
 
 def split(
@@ -117,10 +103,10 @@ def split(
         StringList -- list of strings
     """
     pipeline = []  # type: typing.List[typing.Callable]
-    pipeline.append(cast_list if it.erable(val) else define_split(sep))
+    pipeline.append(cast if it.erable(val) else define_split(sep))
 
     if strip_text:
-        pipeline.append(strip_strs)
+        pipeline.append(strip)
 
     if not allow_empty:
         pipeline.append(filter_empty)
