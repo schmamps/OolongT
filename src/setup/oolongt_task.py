@@ -12,7 +12,7 @@ class OolongtTask(Command):
 
     def initialize_options(self):
         """initialize options"""
-        self.project_root = Path(__file__).parent.parent
+        self.project_root = Path(__file__).parent.parent.parent
 
     def finalize_options(self):
         """dummy"""

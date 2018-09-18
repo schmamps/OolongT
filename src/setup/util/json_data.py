@@ -7,7 +7,7 @@ from json import load as json_load
 from os import makedirs
 from pathlib import Path
 
-from setup.typings import ProcType
+from ..typings import ProcType
 from src.oolongt.pipe import pipe
 
 

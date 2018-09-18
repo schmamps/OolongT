@@ -3,10 +3,11 @@ import typing
 from collections import OrderedDict
 from pathlib import Path
 
-from setup.generate import generate_set, get_final_path
-from setup.util import math
 from src.oolongt.summarizer import ScoredSentence, Summarizer
 from tests.typings import Sample
+
+from ..generate import generate_set, get_final_path
+from ..util import math
 
 SAMPLING_SIZE = 25
 

@@ -1,19 +1,21 @@
 """Pipeline functions"""
 import typing
 
+from . import it
 
-def pipe(data: typing.Any, *pipeline: typing.Callable) -> typing.Any:
+
+def pipe(data: typing.Any, *pipeline) -> typing.Any:
     """Run `data` through `pipeline` list (left-to-right)
 
     Arguments:
         data {typing.Any} -- any data
-        *pipeline {callable} -- callables to run
+        *pipeline {callable(s)} -- callables to run
 
     Returns:
         typing.Any -- result of functions
     """
-    for call in pipeline:
-        data = call(data)
+    for line in pipeline:
+        data = pipe(data, *line) if it.erable(line) else line(data)
 
     return data
 

@@ -3,11 +3,12 @@ import typing
 from collections import OrderedDict
 from pathlib import Path
 
-from setup.generate import generate_set, get_final_path, process_keywords
-from setup.util import json_data
 from tests.typings import Sample
 
-PROJECT_ROOT = Path(__file__).parent.parent.parent
+from ..generate import generate_set, get_final_path, process_keywords
+from ..util import json_data
+
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
 
 def get_sentence(

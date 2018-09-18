@@ -4,9 +4,10 @@ from os import unlink
 from pathlib import Path
 from re import split, sub
 
-from setup.typings import ProcType
-from setup.util import console, json_data
 from tests.typings import Sample
+
+from ..typings import ProcType
+from ..util import console, json_data
 
 
 def noop(val: typing.Any) -> typing.Any:
