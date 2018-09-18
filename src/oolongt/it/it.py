@@ -2,7 +2,7 @@
 import typing
 
 
-def it_erable(val: typing.Any):
+def it_erable(val: typing.Any) -> bool:
     """Determine if `val` is a non-string iterable
 
     Arguments:
@@ -14,7 +14,7 @@ def it_erable(val: typing.Any):
     return not isinstance(val, str) and hasattr(val, '__iter__')
 
 
-def it_erate(val: typing.Any):
+def it_erate(val: typing.Any) -> typing.Tuple[typing.Any]:
     """Cast `val` as an iterable
 
     Arguments:
