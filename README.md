@@ -11,22 +11,25 @@ TextTeaser links:
 * [Python (current)](https://github.com/MojoJolo/textteaser)
 * [Scala (original)](https://github.com/MojoJolo/textteaser)
 
-## Setup
+## Install
 
-1. Download the repository from:
-   <https://github.com/schmamps/OolongT.git>
-1. `cd` to the project directory
-1. Setup a virtualenv in `.venv` and activate (if necessary/desired)
-1. Install the required packages:
-   `pip install -r requirements.txt`
-1. Run `python setup.py`
-1. Follow the prompts to download NLTK data
+For now, this package is most easily installed through git and setuptools.
 
-## Usage
+```sh
+# fetch repo
+git clone https://github.com/schmamps/OolongT.git
+cd OolongT
+# install library
+python setup.py install
+# download NLTK data (follow prompts)
+python setup.py nltk
+```
 
-### Basic
+## Basic Usage
 
-For a simple text summary, call `summarize()`:
+### Procedural
+
+For a simple summary of strings, call `summarize()`:
 
 ```py
 >>> from oolongt import summarize
@@ -41,10 +44,74 @@ This is the conclusion."""
 ["This is most important.", …, "This is fifth most important."]
 ```
 
-*All* sentences, with additional data,
-can be extracted by `score_body_sentences()`.
-This function returns a list of `ScoredSentence` objects
-with the following properties:
+### Object Oriented
+
+A few types of content are supported in `oolongt.content`.
+
+Strings are supported with class `Content`.
+
+```py
+>>> from oolongt.content import Content
+# ...
+>>> cont = Content(text, title)
+>>> cont.summarize()
+["This is most important.", …, "This is fifth most important."]
+```
+
+## Working with Files
+
+### Supported Types
+
+The following file formats--local and remote--are also supported:
+
+* Word XML (`DocxDocument`)
+* HTML (`HtmlDocument`)
+* PDF (`PdfDocument`)
+* plain text (`PlainTextDocument`)
+
+### Usage
+
+```py
+# Document is known format
+>>> from oolongt.content import HtmlDocument
+# ...
+>>> doc = HtmlDocument('https://example.com/tldr.html')
+>>> doc.summarize()
+# ...
+# Document is
+```
+
+### Command Line
+
+When installed through setuptools,
+the `oolongt` command is added to your system.
+
+```sh
+# get top two sentences at a given path/URL
+$ oolongt -l 2 https://example.com/tldr
+Title of Document
+
+This is the first of the two best sentences in the document. This is
+the other one.
+```
+
+## Advanced Usage
+
+### Command Line
+
+Arguments:
+
+* `-h, --help`: help message
+* `-e, --ext`: nominal extension of file (OolongT does no content sniffing and [defaults: `.txt` local, `.htm` remote)
+* `-w, --wrap`  wrap at column number [default: 70]
+* `-l, --limit`: [limit](#limit), i.e. length of summary
+
+### Procedural/Object-Oriented
+
+`score_body_sentences()` shadows `summarize()`
+as a procedural function and method.
+It returns a complete list of `ScoredSentence` objects.
+The object has these properties:
 
 * `text`: text of the sentence
 * `total_score`: composite of other sentence scores (comparison default)
@@ -57,15 +124,15 @@ with the following properties:
 * `position_score`: score by position of sentence in content
 * `keyword_score`: score by top keywords in content
 
-### Advanced
+### Keyword Arguments
 
 Both `summarize` and `score_body_sentences`
 take the same keyword arguments and use them (if applicable).
 
-#### Keyword: `length`
+#### `limit`
 
 By default, summaries are five sentences long (`len(summarize(...)) == 5`).
-Use the `length` argument to specify the number of sentences to return.
+Use the `limit` argument to specify the number of sentences to return.
 For values greater than or equal to 1,
 this is an absolute number (maximum: all sentences).
 For values between less than 1 but greater than 0,
@@ -74,21 +141,21 @@ it is a percentage (minimum: one sentence).
 ```py
 # ...
 >>> text = ["sentence 1 of 10", …, "sentence 10 of 10"]
->>> len(summarize(text, title, length=3))
+>>> len(summarize(text, title, limit=3))
 3
->>> len(summarize(text, title, length=99))
+>>> len(summarize(text, title, limit=99))
 10
->>> len(summarize(text, title, length=.399))
+>>> len(summarize(text, title, limit=.399))
 4
->>> len(summarize(text, title, length=.00399))
+>>> len(summarize(text, title, limit=.00399))
 1
->>> len(summarize(text, title, length=0))
+>>> len(summarize(text, title, limit=0))
 ValueError
 ```
 
-#### Keywords: `root` and `idiom`
+#### `root` and `idiom`
 
-Specify a [custom idiom](#Schema) with these arguments:
+Specify a [custom idiom](#Idioms) with these arguments:
 
 ```py
 >>> ...
@@ -133,18 +200,3 @@ you can specify this idiom with a JSON file:
 * `ideal`: "ideal" sentence length, ostensibly 20 in English
 * `stop_words/nltk`: initialize with NLTK (true) or empty list (false)
 * `stop_words/user`: supplemental stop words
-
-### Programmatic Access
-
-No API is provided to expose the parsing rules,
-but the `parser` property of class `Summarizer` can be manipulated:
-
-```py
->>> summarizer = Summarizer()
-# ...
->>> text_de = "Dies ist eine furchtbare Ahnung. …Jetzt geht's los!"
->>> summarizer.parser.language = "german"
->>> summarizer.parser.stop_words = ["ein", "eine", …]
->>> sentences = summarizer.get_all_sentences(text_de, title_de, length=1)
-["Dies ist eine furchtbare Ahnung."]
-```
