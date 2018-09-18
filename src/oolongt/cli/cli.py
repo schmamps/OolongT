@@ -30,7 +30,7 @@ def get_args():
 
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument(
-        'path', help='path to file')
+        'path', help='path/URL to file')
     parser.add_argument(
         '-e', '--ext', help=ext_help, default=None)
     parser.add_argument(
