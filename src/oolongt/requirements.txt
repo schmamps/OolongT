@@ -3,4 +3,5 @@ pathlib==1.0.1
 beautifulsoup4==4.6.1
 PyPDF2==1.26.0
 kinda==0.9.9
+colorama==0.3.9
 git+https://github.com/schmamps/python-docx2txt.git@v080/pull_request
