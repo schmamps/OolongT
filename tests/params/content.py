@@ -5,7 +5,9 @@ from pathlib import Path
 from src.oolongt import string
 from src.oolongt.content import Content, Document
 from src.oolongt.io import load_json
+# pylint: disable=unused-import
 from src.oolongt.typings import StringList  # noqa: F401
+# pylint: enable=unused-import
 from tests.constants import DOC_PATH
 from tests.params.helpers import parametrize
 
