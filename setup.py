@@ -4,11 +4,12 @@ import typing
 import setuptools
 
 # pylint: disable=no-name-in-module
-from src.oolongt.constants import VERSION
 from src.setup.cleanup_command import CleanupCommand
 from src.setup.generate_command import GenerateCommand
 from src.setup.nltk_command import NltkCommand
 from src.setup.py_test_command import PyTestCommand
+
+VERSION = '1.100.1'  # also in package
 
 
 # pylint: enable=no-name-in-module
@@ -21,7 +22,6 @@ def load_file(path) -> typing.List[str]:
 
 ALL_REQS = load_file('src/oolongt/requirements.txt')
 DEP_LINKS = [req for req in ALL_REQS if req.startswith('git+')]
-
 
 setuptools.setup(
     name='oolongt',
