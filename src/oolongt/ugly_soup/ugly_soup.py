@@ -8,7 +8,7 @@ from .ugly_query import UglyQuery
 # pylint: disable=abstract-method
 class UglySoup(BeautifulSoup):
     """Add query features to BS4"""
-    def query(self, query: UglyQuery) -> OptionalString:
+    def _query(self, query: UglyQuery) -> OptionalString:
         """Execute a single UglyQuery on soup
 
         Arguments:
@@ -25,7 +25,7 @@ class UglySoup(BeautifulSoup):
 
         return None
 
-    def query_sequence(
+    def query(
             self,
             *queries: UglyQuery,
             default='') -> str:
@@ -42,7 +42,7 @@ class UglySoup(BeautifulSoup):
             str -- result of queries
         """
         for query in queries:
-            result = self.query(query)
+            result = self._query(query)
 
             if result is not None:
                 return result

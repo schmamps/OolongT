@@ -62,7 +62,7 @@ def param___repr__():
     return parametrize(names, vals, ids)
 
 
-def param_query():
+def param__query():
     """Parametrize `test_query`"""
     names = 'kwargs,expected'
     vals = (
@@ -75,8 +75,8 @@ def param_query():
     return parametrize(names, vals, ids)
 
 
-def param_query_sequence():
-    """Parametrize `test_query_sequence`"""
+def param_query():
+    """Parametrize `test_query`"""
     names = 'tags,kwargs,expected'
     vals = (
         (['div'], {}, ''),

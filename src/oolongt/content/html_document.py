@@ -60,7 +60,7 @@ def get_body(src: UglySoup) -> str:
     Returns:
         str -- best match for content
     """
-    body = src.query_sequence(
+    body = src.query(
         UglyQuery('main'),
         UglyQuery('article'),
         UglyQuery('body'))
@@ -95,7 +95,7 @@ def get_title(src: UglySoup) -> str:
     open_graph = UglyQuery('meta', get_og_title)
     title_tag = UglyQuery('title')
 
-    title = src.query_sequence(open_graph, title_tag)
+    title = src.query(open_graph, title_tag)
 
     return title
 
