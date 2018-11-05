@@ -1,14 +1,20 @@
 """Setup Script"""
-import typing
+try:
+    import typing  # noqa: F401
+
+except Exception:
+    pass
 
 import setuptools
 
 # pylint: disable=no-name-in-module
 from src.oolongt.constants import VERSION
+
 # pylint: enable=no-name-in-module
 
 
-def get_cmdclass() -> typing.Dict[str, typing.Callable]:
+def get_cmdclass():
+    # type: () -> dict
     """List commands available to setuptools
 
     Returns:
@@ -31,7 +37,8 @@ def get_cmdclass() -> typing.Dict[str, typing.Callable]:
         return {}
 
 
-def load_file(path: str) -> typing.List[str]:
+def load_file(path):
+    # type: (str) -> typing.List[str]
     """Get meaningful lines of file at `path`
 
     Arguments:
