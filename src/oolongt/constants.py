@@ -3,15 +3,14 @@ from pathlib import Path
 
 # pylint: disable=unused-import
 from .typings import StringList  # noqa: F401
-
 # pylint: enable=unused-import
 
 # versioning
 PKG_NAME = 'OolongT'
 VERSION_MAJOR = 1
 VERSION_MINOR = 100
-VERSION_REV = 0
-VERSION = '{}.{}.{}'.format(VERSION_MAJOR, VERSION_MINOR, VERSION_REV)
+VERSION_REV = 2
+VERSION = f'{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_REV}'
 
 # summarizer
 DEFAULT_LENGTH = 5

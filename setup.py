@@ -4,16 +4,42 @@ import typing
 import setuptools
 
 # pylint: disable=no-name-in-module
-from src.setup.cleanup_command import CleanupCommand
-from src.setup.generate_command import GenerateCommand
-from src.setup.nltk_command import NltkCommand
-from src.setup.py_test_command import PyTestCommand
-
-VERSION = '1.100.1'  # also in package
-
-
+from src.oolongt.constants import VERSION
 # pylint: enable=no-name-in-module
-def load_file(path) -> typing.List[str]:
+
+
+def get_cmdclass() -> typing.Dict[str, typing.Callable]:
+    """List commands available to setuptools
+
+    Returns:
+        typing.Dict[str, typing.Callable] -- commands
+    """
+    try:
+        from src.setup.cleanup_command import CleanupCommand
+        from src.setup.generate_command import GenerateCommand
+        from src.setup.nltk_command import NltkCommand
+        from src.setup.py_test_command import PyTestCommand
+
+        return {
+            'pytest': PyTestCommand,
+            'generate': GenerateCommand,
+            'nltk': NltkCommand,
+            'cleanup': CleanupCommand,
+        }
+
+    except ModuleNotFoundError:
+        return {}
+
+
+def load_file(path: str) -> typing.List[str]:
+    """Get meaningful lines of file at `path`
+
+    Arguments:
+        path {str} -- path to file
+
+    Returns:
+        typing.List[str] -- list of lines
+    """
     with open(path, 'r') as stream:
         lines = [line.strip() for line in stream.readlines()]
 
@@ -39,12 +65,7 @@ setuptools.setup(
     scripts=['bin/oolongt'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
-    cmdclass={
-        'pytest': PyTestCommand,
-        'generate': GenerateCommand,
-        'nltk': NltkCommand,
-        'cleanup': CleanupCommand,
-    },
+    cmdclass=get_cmdclass(),
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
