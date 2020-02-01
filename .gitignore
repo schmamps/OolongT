@@ -34,6 +34,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
+conftest.py
 
 # Translations
 *.mo
@@ -58,3 +59,4 @@ docs/_build/
 
 # PyTest
 .pytest_cache
+conftest.py
