@@ -17,6 +17,15 @@ SPAM_PARAMS = [SPAM, 1.1, 3.1] + list(range(4, 11))
 SPAM_RESULT = [SPAM, 1, 3, 4.0, 5.0, 6.0, 7.0, 65.0, 0.06, 34.64]
 
 
+def instantiate_scored_sentence(init: typing.Tuple):
+    text = init[0]
+    index = init[1]
+    total = init[2]
+    tlds_scores = tuple(init[3:7])
+
+    return ScoredSentence(text, index, total, tlds_scores)
+
+
 def reverse_kw(score: float) -> SampleKeyword:
     """Reverse a SampleKeyword from the score
 
@@ -29,24 +38,24 @@ def reverse_kw(score: float) -> SampleKeyword:
     return SampleKeyword.by_score(score)
 
 
-def param_calc_decile():
+def param_calc_rank():
     """Parametrize `test_calc_decile`"""
-    names = 'index,total,expected'
+    names = 'index,total,expected,num_ranks'
     vals = (
-        (0, 10, 1),
-        (9, 100, 1),
-        (1, 10, 2),
-        (2, 10, 3),
-        (3, 10, 4),
-        (4, 10, 5),
-        (5, 10, 6),
-        (6, 10, 7),
-        (7, 10, 8),
-        (8, 10, 9),
-        (9, 10, 10),
-        (-1, 100, IndexError),
-        (10, 10, IndexError),
-        (10, 0, IndexError),
+        (0, 10, 1, 10),
+        (9, 100, 1, 10),
+        (1, 10, 2, 10),
+        (2, 10, 3, 10),
+        (3, 10, 4, 10),
+        (4, 10, 5, 10),
+        (5, 10, 6, 10),
+        (6, 10, 7, 10),
+        (7, 10, 8, 10),
+        (8, 10, 9, 10),
+        (9, 10, 10, 10),
+        (-1, 100, IndexError, 10),
+        (10, 10, IndexError, 10),
+        (10, 0, IndexError, 10),
     )
     ids = (
         '00-of-10)',
@@ -124,7 +133,7 @@ def param_scored_sentence__repr__():
     """Parametrize `TestScoredSentence.test___repr___`"""
     names = 'init,expected'
     vals = (
-        (SPAM_PARAMS, 'ScoredSentence(\'spam\', 1, 3, 4.0, 5.0, 6.0, 7.0)'),
+        (SPAM_PARAMS, 'ScoredSentence("spam", 1, 3, (4.0, 5.0, 6.0, 7.0))'),
     )
     ids = (SPAM, )
 
@@ -253,9 +262,9 @@ def permute_sentences():
     gt_params = eq_params.copy()
     gt_params[1] += 1
 
-    eq_perm = (ScoredSentence(*eq_params), 0, 0)
-    lt_perm = (ScoredSentence(*lt_params), 0, 0)
-    gt_perm = (ScoredSentence(*gt_params), 0, 0)
+    eq_perm = (instantiate_scored_sentence(eq_params), 0, 0)
+    lt_perm = (instantiate_scored_sentence(lt_params), 0, 0)
+    gt_perm = (instantiate_scored_sentence(gt_params), 0, 0)
 
     return (
         (lt_perm, eq_perm, True, False),
@@ -286,13 +295,13 @@ def get_inst_comp(inst: ScoredSentence) -> AnyList:
         inst.text,
         inst.index,
         inst.of,
-        inst.title_score,
-        inst.length_score,
-        inst.dbs_score,
-        inst.sbs_score,
-        inst.keyword_score,
-        inst.position_score,
-        inst.total_score
+        inst.score.title,
+        inst.score.length,
+        inst.score.dbs,
+        inst.score.sbs,
+        inst.score.keyword,
+        inst.score.position,
+        inst.score.total,
     ]
 
 

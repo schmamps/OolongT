@@ -172,6 +172,7 @@ class Summarizer:
             list[ScoredSentence] -- list of scored sentences
         """
         sentences = self.parser.split_sentences(body)
+        # TODO: get_key_stems
         title_kw_words = self.parser.get_key_words(title)
         top_kws = self.get_top_keywords(body)
         top_kw_stems = pluck_keyword_words(top_kws)
@@ -231,8 +232,10 @@ class Summarizer:
             sentence_stems, top_kws, top_kw_stems)
 
         scored = ScoredSentence(
-            text, index, of,
-            title_score, length_score, dbs_score, sbs_score)
+            text,
+            index,
+            of,
+            (title_score, length_score, dbs_score, sbs_score))
 
         return scored
 

@@ -54,21 +54,19 @@ class SampleSentence(ScoredSentence):
         """
         text = data_dict.get('text', '')
         index = data_dict.get('index', 0)
-        title_score = data_dict.get('title_score', 0)
-        length_score = data_dict.get('length_score', 0)
-        dbs_score = data_dict.get('dbs_score', 0)
-        sbs_score = data_dict.get('sbs_score', 0)
-        position_score = data_dict.get('position_score', 0)
-        keyword_score = data_dict.get('keyword_score', 0)
-        total_score = data_dict.get('total_score', 0)
+        tlds_scores = (
+            data_dict.get('title_score', 0),
+            data_dict.get('length_score', 0),
+            data_dict.get('dbs_score', 0),
+            data_dict.get('sbs_score', 0),
+        )
 
+        self._init_(text, index, total, tlds_scores)
+        self.score._position = data_dict.get('position_score', 0)
+        self.score._keyword = data_dict.get('keyword_score', 0)
+        self.score._total = data_dict.get('total_score', 0)
         self.rank = data_dict.get('rank', 0)
-        self._init_(
-            text, index, total,
-            title_score, length_score,
-            dbs_score, sbs_score, keyword_score,
-            position_score, total_score)
-        self.id = str(data_dict.get('id', auto_id(index, total)))  # noqa  pylint: disable=line-too-long,invalid-name
+        self.id = str(data_dict.get('id', auto_id(index, total)))
 
     # pylint: disable=too-many-return-statements
     def __eq__(self, other: ScoredSentence) -> bool:
@@ -80,24 +78,12 @@ class SampleSentence(ScoredSentence):
         Returns:
             bool -- sentences are equal
         """
-
-        if self.text != other.text:
-            return False
-
-        if self.index != other.index:
-            return False
-
-        if self.of != other.of:
-            return False
-
-        prop_keys = [
-            'title', 'length', 'dbs', 'sbs', 'position', 'keyword', 'total']
-
-        for key in prop_keys:
-            if is_different(self, other, key + '_score'):
-                return False
-
-        return True
+        return (
+            self.text == other.text and
+            self.index == other.index and
+            self.of == other.of and
+            self.score == other.score
+        )
 
     # pylint: enable=too-many-return-statements
     def equals(self, other) -> bool:
@@ -109,4 +95,9 @@ class SampleSentence(ScoredSentence):
         Returns:
             bool -- all properties match
         """
-        return self == other
+        return (
+            self.text == other.text and
+            self.index == other.index and
+            self.of == other.of and
+            self.score == other.score
+        )

@@ -102,12 +102,12 @@ def test_score_frequency(sample: Sample, sentence: SampleSentence) -> None:
     params = (
         (
             'density score',
-            sentence.dbs_score,
+            sentence.score.dbs,
             score_by_dbs(words, top_keywords, top_keyword_list),
         ),
         (
             'summation score',
-            sentence.sbs_score,
+            sentence.score.sbs,
             score_by_sbs(words, top_keywords, top_keyword_list),
         ), )
 
@@ -218,10 +218,11 @@ class TestSummarizer:
         index = sentence.index
         total = len(sample.sentences)
 
-        expected = sentence.total_score
+        expected = sentence.score.total
         received = summ.get_sentence(
             text, index, total,
-            title_words, top_keywords, top_keyword_list).total_score
+            title_words, top_keywords, top_keyword_list
+        ).score.total
 
         assert kinda.eq(received, expected), assert_ex(
             'sentence score',

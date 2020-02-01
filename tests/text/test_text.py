@@ -24,8 +24,8 @@ def test_score_body_sentences(samp: Sample) -> None:
         samp {Sample} -- sample data
     """
     for i, sent in enumerate(score_body_sentences(samp.body, samp.title)):
-        expected = samp.sentences[i].total_score
-        received = sent.total_score
+        expected = samp.sentences[i].score.total
+        received = sent.score.total
 
         assert kinda.eq(received, expected), assert_ex(
             'sentence score',

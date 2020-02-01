@@ -24,13 +24,13 @@ def dictify(received: ScoredSentence, rank: int) -> OrderedDict:
     """
     sent_dict = OrderedDict()  # type: OrderedDict[str, typing.Any]
     sent_dict['index'] = received.index
-    sent_dict['sbs_score'] = received.sbs_score
-    sent_dict['dbs_score'] = received.dbs_score
-    sent_dict['title_score'] = received.title_score
-    sent_dict['length_score'] = received.length_score
-    sent_dict['position_score'] = received.position_score
-    sent_dict['keyword_score'] = received.keyword_score
-    sent_dict['total_score'] = received.total_score
+    sent_dict['sbs_score'] = received.score.title
+    sent_dict['dbs_score'] = received.score.dbs
+    sent_dict['title_score'] = received.score.title
+    sent_dict['length_score'] = received.score.length
+    sent_dict['position_score'] = received.score.position
+    sent_dict['keyword_score'] = received.score.keyword
+    sent_dict['total_score'] = received.score.total
     sent_dict['text'] = received.text
     sent_dict['rank'] = rank
 
