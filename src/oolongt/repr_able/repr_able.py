@@ -9,11 +9,13 @@ class ReprAble:
         Returns:
             str -- class REPR
         """
-        class_name = self.__class__.__name__
-        p_args = [repr(v) for v in args]
-        k_args = ['{}={!r}'.format(k, v) for k, v in kwargs.items()]
+        all_args = ', '.join(
+            [repr(val) for val in args]
+            +
+            [f'{key}={repr(val)}' for key, val in kwargs.items()]
+        )
 
-        return '{}({})'.format(class_name, ', '.join(p_args + k_args))
+        return f'{self.__class__.__name__}({all_args})'
 
     def __lt__(self, other) -> bool:
         return str(self) < str(other)
