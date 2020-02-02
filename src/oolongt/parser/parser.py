@@ -54,7 +54,7 @@ class Parser:
     def get_words(
             self,
             text: str,
-            stop_words=True,
+            keep_stop_words=True,
             stem=False) -> StringList:
         """List of words from `text`
 
@@ -62,7 +62,7 @@ class Parser:
             text {str} -- text
 
         Keyword Arguments:
-            stop_words {bool} -- remove stop words (default: {True})
+            keep_stop_words {bool} -- keep stop words (default: {True})
             stem {bool} -- get word stems instead of whole (default: {False})
 
         Returns:
@@ -70,7 +70,7 @@ class Parser:
         """
         words = self.split_words(text)
 
-        if not stop_words:
+        if not keep_stop_words:
             words = filter(self.is_not_stop_word, words)
 
         if stem:
@@ -109,7 +109,7 @@ class Parser:
         Returns:
             StringList -- words in text, minus stop words
         """
-        return self.get_words(text, stop_words=False)
+        return self.get_words(text, keep_stop_words=False)
 
     def get_key_stems(self, text: str) -> StringList:
         """List all meaningful stems in `text`
@@ -120,7 +120,7 @@ class Parser:
         Returns:
             StringList -- words in text, minus stop words
         """
-        return self.get_words(text, stop_words=False, stem=True)
+        return self.get_words(text, keep_stop_words=False, stem=True)
 
     def get_keywords(self, text: str) -> typing.List[ScoredKeyword]:
         """List scored keywords in `text`
