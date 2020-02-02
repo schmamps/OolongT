@@ -71,7 +71,7 @@ class Sample:
 
     @property
     def title_keywords(self) -> str:
-        return self._data['title']['filtered']
+        return self._data['title']['keywords']
 
     @property
     def body(self) -> str:

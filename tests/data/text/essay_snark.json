@@ -341,15 +341,15 @@
 	"sentences": [
 		{
 			"index": 0,
-			"rank": 38,
+			"rank": 6,
 			"score": {
-				"title": 0.0,
+				"title": 0.5,
 				"length": -0.05,
 				"dbs": 1.8521801928860451e-06,
 				"sbs": 0.0011701076499037912,
 				"position": 0.17,
 				"keyword": 0.005859799150483387,
-				"total": 0.0391798995752417
+				"total": 0.22667989957499998
 			},
 			"text": "Although best known as the author of Alice\u2019s Adventures in Wonderland (1865) and Through the Looking-Glass (1871), Lewis Carroll \u2013 the pen-name of Charles Lutwidge Dodgson, a mathematical lecturer at Christ Church, Oxford \u2013 was also an avid reader and writer of poetry.",
 			"words": [
@@ -423,6 +423,49 @@
 				"writer",
 				"poetry"
 			],
+			"stemmed": [
+				"although",
+				"best",
+				"known",
+				"as",
+				"the",
+				"author",
+				"of",
+				"alic",
+				"adventur",
+				"in",
+				"wonderland",
+				"1865",
+				"and",
+				"through",
+				"the",
+				"lookingglass",
+				"1871",
+				"lewi",
+				"carrol",
+				"the",
+				"pennam",
+				"of",
+				"charl",
+				"lutwidg",
+				"dodgson",
+				"a",
+				"mathemat",
+				"lectur",
+				"at",
+				"christ",
+				"church",
+				"oxford",
+				"wa",
+				"also",
+				"an",
+				"avid",
+				"reader",
+				"and",
+				"writer",
+				"of",
+				"poetri"
+			],
 			"keywords": [
 				"although",
 				"best",
@@ -454,7 +497,7 @@
 		},
 		{
 			"index": 1,
-			"rank": 9,
+			"rank": 17,
 			"score": {
 				"title": 0.0,
 				"length": 0.8,
@@ -462,7 +505,7 @@
 				"sbs": 0.004397654584221748,
 				"position": 0.17,
 				"keyword": 0.02198827292110874,
-				"total": 0.15349413646055438
+				"total": 0.153494136461
 			},
 			"text": "He greatly enjoyed the poems of Victorian writers such as Alfred, Lord Tennyson, and Christina Rossetti.",
 			"words": [
@@ -495,6 +538,24 @@
 				"christina",
 				"rossetti"
 			],
+			"stemmed": [
+				"he",
+				"greatli",
+				"enjoi",
+				"the",
+				"poem",
+				"of",
+				"victorian",
+				"writer",
+				"such",
+				"as",
+				"alfr",
+				"lord",
+				"tennyson",
+				"and",
+				"christina",
+				"rossetti"
+			],
 			"keywords": [
 				"greatli",
 				"enjoi",
@@ -510,7 +571,7 @@
 		},
 		{
 			"index": 2,
-			"rank": 7,
+			"rank": 13,
 			"score": {
 				"title": 0.0,
 				"length": 0.9,
@@ -518,7 +579,7 @@
 				"sbs": 0.006978096530335336,
 				"position": 0.17,
 				"keyword": 0.03513126607675187,
-				"total": 0.17256563303837594
+				"total": 0.172565633038
 			},
 			"text": "His own poems were varied \u2013 some just humorous nonsense, some filled with hidden meanings, and some serious poems about love and life.",
 			"words": [
@@ -558,6 +619,30 @@
 				"love",
 				"life"
 			],
+			"stemmed": [
+				"hi",
+				"own",
+				"poem",
+				"were",
+				"vari",
+				"some",
+				"just",
+				"humor",
+				"nonsens",
+				"some",
+				"fill",
+				"with",
+				"hidden",
+				"mean",
+				"and",
+				"some",
+				"seriou",
+				"poem",
+				"about",
+				"love",
+				"and",
+				"life"
+			],
 			"keywords": [
 				"poem",
 				"vari",
@@ -574,7 +659,7 @@
 		},
 		{
 			"index": 3,
-			"rank": 33,
+			"rank": 36,
 			"score": {
 				"title": 0.0,
 				"length": 0.2,
@@ -582,7 +667,7 @@
 				"sbs": 0.0007995735607675906,
 				"position": 0.17,
 				"keyword": 0.00433883733934652,
-				"total": 0.06966941866967327
+				"total": 0.06966941867
 			},
 			"text": "Probably his best known is called \u201cJabberwocky,\u201d with its opening line of \u201c\u2019Twas brillig, and the slithy toves\u2026\u201d, and its many invented words, some that have now entered the English language, such as \u201cchortle\u201d and \u201cgalumph\u201d.",
 			"words": [
@@ -644,6 +729,44 @@
 				"chortle",
 				"galumph"
 			],
+			"stemmed": [
+				"probabl",
+				"hi",
+				"best",
+				"known",
+				"is",
+				"call",
+				"jabberwocki",
+				"with",
+				"it",
+				"open",
+				"line",
+				"of",
+				"twa",
+				"brillig",
+				"and",
+				"the",
+				"slithi",
+				"tove",
+				"and",
+				"it",
+				"mani",
+				"invent",
+				"word",
+				"some",
+				"that",
+				"have",
+				"now",
+				"enter",
+				"the",
+				"english",
+				"languag",
+				"such",
+				"as",
+				"chortl",
+				"and",
+				"galumph"
+			],
 			"keywords": [
 				"probabl",
 				"best",
@@ -668,7 +791,7 @@
 		},
 		{
 			"index": 4,
-			"rank": 10,
+			"rank": 18,
 			"score": {
 				"title": 0.0,
 				"length": 0.65,
@@ -676,7 +799,7 @@
 				"sbs": 0.002460226340823356,
 				"position": 0.23,
 				"keyword": 0.013937785474557905,
-				"total": 0.14571889273727895
+				"total": 0.145718892737
 			},
 			"text": "Such nonsense verse is as popular now as it was when first published.",
 			"words": [
@@ -701,6 +824,21 @@
 				"first",
 				"published"
 			],
+			"stemmed": [
+				"such",
+				"nonsens",
+				"vers",
+				"is",
+				"as",
+				"popular",
+				"now",
+				"as",
+				"it",
+				"wa",
+				"when",
+				"first",
+				"publish"
+			],
 			"keywords": [
 				"nonsens",
 				"vers",
@@ -711,7 +849,7 @@
 		},
 		{
 			"index": 5,
-			"rank": 5,
+			"rank": 10,
 			"score": {
 				"title": 0.0,
 				"length": 0.95,
@@ -719,7 +857,7 @@
 				"sbs": 0.0010099876557064303,
 				"position": 0.23,
 				"keyword": 0.005049938278532152,
-				"total": 0.17877496913926608
+				"total": 0.17877496913899998
 			},
 			"text": "His more serious poetry, it must be admitted, is generally inferior to his humorous verse and often over sentimental.",
 			"words": [
@@ -755,6 +893,27 @@
 				"often",
 				"sentimental"
 			],
+			"stemmed": [
+				"hi",
+				"more",
+				"seriou",
+				"poetri",
+				"it",
+				"must",
+				"be",
+				"admit",
+				"is",
+				"gener",
+				"inferior",
+				"to",
+				"hi",
+				"humor",
+				"vers",
+				"and",
+				"often",
+				"over",
+				"sentiment"
+			],
 			"keywords": [
 				"seriou",
 				"poetri",
@@ -770,7 +929,7 @@
 		},
 		{
 			"index": 6,
-			"rank": 22,
+			"rank": 28,
 			"score": {
 				"title": 0.0,
 				"length": 0.35,
@@ -778,7 +937,7 @@
 				"sbs": 0.0021321961620469083,
 				"position": 0.23,
 				"keyword": 0.010660980810234541,
-				"total": 0.10658049040511727
+				"total": 0.10658049040499999
 			},
 			"text": "Between 1860 and 1863 he contributed a dozen or more poems to College Rhymes, a pamphlet issued each term to members of Oxford and Cambridge universities, and which, for a time, he edited.",
 			"words": [
@@ -834,6 +993,41 @@
 				"time",
 				"edited"
 			],
+			"stemmed": [
+				"between",
+				"1860",
+				"and",
+				"1863",
+				"he",
+				"contribut",
+				"a",
+				"dozen",
+				"or",
+				"more",
+				"poem",
+				"to",
+				"colleg",
+				"rhyme",
+				"a",
+				"pamphlet",
+				"issu",
+				"each",
+				"term",
+				"to",
+				"member",
+				"of",
+				"oxford",
+				"and",
+				"cambridg",
+				"univers",
+				"and",
+				"which",
+				"for",
+				"a",
+				"time",
+				"he",
+				"edit"
+			],
 			"keywords": [
 				"1860",
 				"1863",
@@ -855,7 +1049,7 @@
 		},
 		{
 			"index": 7,
-			"rank": 24,
+			"rank": 29,
 			"score": {
 				"title": 0.0,
 				"length": 0.2,
@@ -863,7 +1057,7 @@
 				"sbs": 0.0061300639658848615,
 				"position": 0.23,
 				"keyword": 0.04092734386285918,
-				"total": 0.10296367193142959
+				"total": 0.10296367193099999
 			},
 			"text": "In 1869, he compiled a book of poems, many of which he had already published elsewhere but now issued in revised form, together with one main new poem, which gives its title to the book, Phantasmagoria.",
 			"words": [
@@ -926,6 +1120,44 @@
 				"book",
 				"phantasmagoria"
 			],
+			"stemmed": [
+				"in",
+				"1869",
+				"he",
+				"compil",
+				"a",
+				"book",
+				"of",
+				"poem",
+				"mani",
+				"of",
+				"which",
+				"he",
+				"had",
+				"alreadi",
+				"publish",
+				"elsewher",
+				"but",
+				"now",
+				"issu",
+				"in",
+				"revis",
+				"form",
+				"togeth",
+				"with",
+				"on",
+				"main",
+				"new",
+				"poem",
+				"which",
+				"give",
+				"it",
+				"titl",
+				"to",
+				"the",
+				"book",
+				"phantasmagoria"
+			],
 			"keywords": [
 				"1869",
 				"compil",
@@ -951,15 +1183,15 @@
 		},
 		{
 			"index": 8,
-			"rank": 13,
+			"rank": 5,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": 0.6,
 				"dbs": 0.0003296482813998845,
 				"sbs": 0.00986140724946695,
 				"position": 0.14,
 				"keyword": 0.05095527765433417,
-				"total": 0.13547763882716707
+				"total": 0.229227638827
 			},
 			"text": "One particular poem stands out from all the others that Carroll wrote.",
 			"words": [
@@ -985,6 +1217,20 @@
 				"carroll",
 				"wrote"
 			],
+			"stemmed": [
+				"on",
+				"particular",
+				"poem",
+				"stand",
+				"out",
+				"from",
+				"all",
+				"the",
+				"other",
+				"that",
+				"carrol",
+				"wrote"
+			],
 			"keywords": [
 				"on",
 				"particular",
@@ -997,7 +1243,7 @@
 		},
 		{
 			"index": 9,
-			"rank": 17,
+			"rank": 25,
 			"score": {
 				"title": 0.0,
 				"length": 0.65,
@@ -1005,7 +1251,7 @@
 				"sbs": 0.0,
 				"position": 0.14,
 				"keyword": 0.0,
-				"total": 0.11625
+				"total": 0.11624999999999999
 			},
 			"text": "It has inspired parodies, continuations, musical adaptations, and a wide variety of interpretations.",
 			"words": [
@@ -1033,6 +1279,21 @@
 				"variety",
 				"interpretations"
 			],
+			"stemmed": [
+				"it",
+				"ha",
+				"inspir",
+				"parodi",
+				"continu",
+				"music",
+				"adapt",
+				"and",
+				"a",
+				"wide",
+				"varieti",
+				"of",
+				"interpret"
+			],
 			"keywords": [
 				"inspir",
 				"parodi",
@@ -1046,15 +1307,15 @@
 		},
 		{
 			"index": 10,
-			"rank": 28,
+			"rank": 11,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": 0.3,
 				"dbs": 0.0012111522042543904,
 				"sbs": 0.0034804966762824532,
 				"position": 0.14,
 				"keyword": 0.02345824440268422,
-				"total": 0.08422912220134211
+				"total": 0.17797912220099998
 			},
 			"text": "It is an epic nonsense poem written at a time when Carroll was struggling with his religious beliefs following the serious illness of his cousin and godson, Charlie Wilcox, who eventually died from tuberculosis.",
 			"words": [
@@ -1114,6 +1375,42 @@
 				"died",
 				"tuberculosis"
 			],
+			"stemmed": [
+				"it",
+				"is",
+				"an",
+				"epic",
+				"nonsens",
+				"poem",
+				"written",
+				"at",
+				"a",
+				"time",
+				"when",
+				"carrol",
+				"wa",
+				"struggl",
+				"with",
+				"hi",
+				"religi",
+				"belief",
+				"follow",
+				"the",
+				"seriou",
+				"ill",
+				"of",
+				"hi",
+				"cousin",
+				"and",
+				"godson",
+				"charli",
+				"wilcox",
+				"who",
+				"eventu",
+				"di",
+				"from",
+				"tuberculosi"
+			],
 			"keywords": [
 				"epic",
 				"nonsens",
@@ -1138,7 +1435,7 @@
 		},
 		{
 			"index": 11,
-			"rank": 12,
+			"rank": 20,
 			"score": {
 				"title": 0.0,
 				"length": 0.75,
@@ -1146,7 +1443,7 @@
 				"sbs": 0.005543710021321962,
 				"position": 0.14,
 				"keyword": 0.029218816062847507,
-				"total": 0.14335940803142377
+				"total": 0.143359408031
 			},
 			"text": "Although the poem concerns death and danger, it is filled with humour and whimsical ideas.",
 			"words": [
@@ -1177,6 +1474,23 @@
 				"whimsical",
 				"ideas"
 			],
+			"stemmed": [
+				"although",
+				"the",
+				"poem",
+				"concern",
+				"death",
+				"and",
+				"danger",
+				"it",
+				"is",
+				"fill",
+				"with",
+				"humour",
+				"and",
+				"whimsic",
+				"idea"
+			],
 			"keywords": [
 				"although",
 				"poem",
@@ -1191,7 +1505,7 @@
 		},
 		{
 			"index": 12,
-			"rank": 35,
+			"rank": 38,
 			"score": {
 				"title": 0.0,
 				"length": 0.25,
@@ -1199,7 +1513,7 @@
 				"sbs": 0.0,
 				"position": 0.08,
 				"keyword": 0.0,
-				"total": 0.051250000000000004
+				"total": 0.05125
 			},
 			"text": "Strangely, it was written backwards.",
 			"words": [
@@ -1214,6 +1528,13 @@
 				"written",
 				"backwards"
 			],
+			"stemmed": [
+				"strang",
+				"it",
+				"wa",
+				"written",
+				"backward"
+			],
 			"keywords": [
 				"strang",
 				"written",
@@ -1222,15 +1543,15 @@
 		},
 		{
 			"index": 13,
-			"rank": 36,
+			"rank": 21,
 			"score": {
-				"title": 0.25,
+				"title": 0.5,
 				"length": -0.6,
 				"dbs": 2.479072066949902e-05,
 				"sbs": 0.002890765950467443,
 				"position": 0.08,
 				"keyword": 0.014577783355684711,
-				"total": 0.046038891677842364
+				"total": 0.139788891678
 			},
 			"text": "After a night nursing his cousin, Carroll went for a long walk over the hills near Guildford, and a solitary line of verse came into his head \u2013 \u201cFor the Snark was a Boojum, you see!\u201d The rest of the stanza, the last in the poem, came to him a few days later.",
 			"words": [
@@ -1314,6 +1635,60 @@
 				"days",
 				"later"
 			],
+			"stemmed": [
+				"after",
+				"a",
+				"night",
+				"nurs",
+				"hi",
+				"cousin",
+				"carrol",
+				"went",
+				"for",
+				"a",
+				"long",
+				"walk",
+				"over",
+				"the",
+				"hill",
+				"near",
+				"guildford",
+				"and",
+				"a",
+				"solitari",
+				"line",
+				"of",
+				"vers",
+				"came",
+				"into",
+				"hi",
+				"head",
+				"for",
+				"the",
+				"snark",
+				"wa",
+				"a",
+				"boojum",
+				"you",
+				"see",
+				"the",
+				"rest",
+				"of",
+				"the",
+				"stanza",
+				"the",
+				"last",
+				"in",
+				"the",
+				"poem",
+				"came",
+				"to",
+				"him",
+				"a",
+				"few",
+				"dai",
+				"later"
+			],
 			"keywords": [
 				"night",
 				"nurs",
@@ -1344,15 +1719,15 @@
 		},
 		{
 			"index": 14,
-			"rank": 15,
+			"rank": 7,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": 0.8,
 				"dbs": 2.292072988696481e-05,
 				"sbs": 0.004397654584221748,
 				"position": 0.08,
 				"keyword": 0.022102876570543568,
-				"total": 0.1310514382852718
+				"total": 0.224801438285
 			},
 			"text": "Over a period of six months, the rest of poem was composed, ending up as 141 stanzas in 8 sections that Carroll called \u201cfits.",
 			"words": [
@@ -1397,6 +1772,32 @@
 				"called",
 				"fits"
 			],
+			"stemmed": [
+				"over",
+				"a",
+				"period",
+				"of",
+				"six",
+				"month",
+				"the",
+				"rest",
+				"of",
+				"poem",
+				"wa",
+				"compos",
+				"end",
+				"up",
+				"as",
+				"141",
+				"stanza",
+				"in",
+				"8",
+				"section",
+				"that",
+				"carrol",
+				"call",
+				"fit"
+			],
 			"keywords": [
 				"period",
 				"six",
@@ -1416,7 +1817,7 @@
 		},
 		{
 			"index": 15,
-			"rank": 0,
+			"rank": 4,
 			"score": {
 				"title": 0.25,
 				"length": 0.85,
@@ -1424,7 +1825,7 @@
 				"sbs": 0.0056440486642418165,
 				"position": 0.08,
 				"keyword": 0.028273586110764203,
-				"total": 0.23413679305538207
+				"total": 0.234136793055
 			},
 			"text": "\u201d The poem concerns a quest by a crew sailing to catch a mysterious creature called a Snark.",
 			"words": [
@@ -1458,6 +1859,25 @@
 				"called",
 				"snark"
 			],
+			"stemmed": [
+				"the",
+				"poem",
+				"concern",
+				"a",
+				"quest",
+				"by",
+				"a",
+				"crew",
+				"sail",
+				"to",
+				"catch",
+				"a",
+				"mysteri",
+				"creatur",
+				"call",
+				"a",
+				"snark"
+			],
 			"keywords": [
 				"poem",
 				"concern",
@@ -1473,7 +1893,7 @@
 		},
 		{
 			"index": 16,
-			"rank": 29,
+			"rank": 34,
 			"score": {
 				"title": 0.0,
 				"length": 0.55,
@@ -1535,6 +1955,37 @@
 				"accompanied",
 				"beaver"
 			],
+			"stemmed": [
+				"each",
+				"member",
+				"of",
+				"the",
+				"crew",
+				"ha",
+				"an",
+				"occup",
+				"begin",
+				"with",
+				"the",
+				"letter",
+				"b",
+				"bellman",
+				"the",
+				"captain",
+				"baker",
+				"banker",
+				"barrist",
+				"billiardmark",
+				"boot",
+				"bonnetmak",
+				"broker",
+				"and",
+				"butcher",
+				"accompani",
+				"by",
+				"a",
+				"beaver"
+			],
 			"keywords": [
 				"member",
 				"crew",
@@ -1558,7 +2009,7 @@
 		},
 		{
 			"index": 17,
-			"rank": 34,
+			"rank": 37,
 			"score": {
 				"title": 0.0,
 				"length": 0.35,
@@ -1566,7 +2017,7 @@
 				"sbs": 0.0,
 				"position": 0.05,
 				"keyword": 0.0,
-				"total": 0.056249999999999994
+				"total": 0.05625
 			},
 			"text": "Their maritime map is an absolute blank.",
 			"words": [
@@ -1584,6 +2035,15 @@
 				"absolute",
 				"blank"
 			],
+			"stemmed": [
+				"their",
+				"maritim",
+				"map",
+				"is",
+				"an",
+				"absolut",
+				"blank"
+			],
 			"keywords": [
 				"maritim",
 				"map",
@@ -1593,15 +2053,15 @@
 		},
 		{
 			"index": 18,
-			"rank": 4,
+			"rank": 3,
 			"score": {
-				"title": 0.25,
+				"title": 0.5,
 				"length": 0.55,
 				"dbs": 0.0,
 				"sbs": 0.0023260321767784456,
 				"position": 0.05,
 				"keyword": 0.011630160883892227,
-				"total": 0.18081508044194614
+				"total": 0.274565080442
 			},
 			"text": "They reach an island, and the hunt for a Snark begins.",
 			"words": [
@@ -1624,6 +2084,19 @@
 				"snark",
 				"begins"
 			],
+			"stemmed": [
+				"thei",
+				"reach",
+				"an",
+				"island",
+				"and",
+				"the",
+				"hunt",
+				"for",
+				"a",
+				"snark",
+				"begin"
+			],
 			"keywords": [
 				"reach",
 				"island",
@@ -1634,7 +2107,7 @@
 		},
 		{
 			"index": 19,
-			"rank": 3,
+			"rank": 8,
 			"score": {
 				"title": 0.25,
 				"length": 0.8,
@@ -1642,7 +2115,7 @@
 				"sbs": 0.001599147121535181,
 				"position": 0.05,
 				"keyword": 0.010177940634930736,
-				"total": 0.2113389703174654
+				"total": 0.211338970317
 			},
 			"text": "But the quest is fraught with danger because although Snarks are not in themselves harmful, those that are Boojums are ferocious and will kill.",
 			"words": [
@@ -1682,6 +2155,32 @@
 				"ferocious",
 				"kill"
 			],
+			"stemmed": [
+				"but",
+				"the",
+				"quest",
+				"is",
+				"fraught",
+				"with",
+				"danger",
+				"becaus",
+				"although",
+				"snark",
+				"ar",
+				"not",
+				"in",
+				"themselv",
+				"harm",
+				"those",
+				"that",
+				"ar",
+				"boojum",
+				"ar",
+				"feroci",
+				"and",
+				"will",
+				"kill"
+			],
 			"keywords": [
 				"quest",
 				"fraught",
@@ -1696,15 +2195,15 @@
 		},
 		{
 			"index": 20,
-			"rank": 41,
+			"rank": 30,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": -0.15,
 				"dbs": 0.00035661703791934826,
 				"sbs": 0.004388357217236078,
 				"position": 0.05,
 				"keyword": 0.023724871275777132,
-				"total": 0.005612435637888567
+				"total": 0.099362435638
 			},
 			"text": "The question that naturally arises is \u201cdoes the poem have a meaning?\u201d Carroll denied that he meant anything in particular \u2013 the poem was all nonsense \u2013 but that did not stop people asking him, and it inspired others to give it their own meaning.",
 			"words": [
@@ -1773,6 +2272,51 @@
 				"give",
 				"meaning"
 			],
+			"stemmed": [
+				"the",
+				"question",
+				"that",
+				"natur",
+				"aris",
+				"is",
+				"doe",
+				"the",
+				"poem",
+				"have",
+				"a",
+				"mean",
+				"carrol",
+				"deni",
+				"that",
+				"he",
+				"meant",
+				"anyth",
+				"in",
+				"particular",
+				"the",
+				"poem",
+				"wa",
+				"all",
+				"nonsens",
+				"but",
+				"that",
+				"did",
+				"not",
+				"stop",
+				"peopl",
+				"ask",
+				"him",
+				"and",
+				"it",
+				"inspir",
+				"other",
+				"to",
+				"give",
+				"it",
+				"their",
+				"own",
+				"mean"
+			],
 			"keywords": [
 				"question",
 				"natur",
@@ -1797,7 +2341,7 @@
 		},
 		{
 			"index": 21,
-			"rank": 16,
+			"rank": 23,
 			"score": {
 				"title": 0.0,
 				"length": 0.85,
@@ -1805,7 +2349,7 @@
 				"sbs": 0.0030592379716325203,
 				"position": 0.04,
 				"keyword": 0.015296189858162602,
-				"total": 0.1238980949290813
+				"total": 0.123898094929
 			},
 			"text": "To some extent, the poem is about the relationships that emerge among the crew, and the interaction between this motley bunch of characters.",
 			"words": [
@@ -1845,6 +2389,31 @@
 				"bunch",
 				"characters"
 			],
+			"stemmed": [
+				"to",
+				"some",
+				"extent",
+				"the",
+				"poem",
+				"is",
+				"about",
+				"the",
+				"relationship",
+				"that",
+				"emerg",
+				"among",
+				"the",
+				"crew",
+				"and",
+				"the",
+				"interact",
+				"between",
+				"thi",
+				"motlei",
+				"bunch",
+				"of",
+				"charact"
+			],
 			"keywords": [
 				"extent",
 				"poem",
@@ -1860,7 +2429,7 @@
 		},
 		{
 			"index": 22,
-			"rank": 20,
+			"rank": 27,
 			"score": {
 				"title": 0.0,
 				"length": 0.8,
@@ -1868,7 +2437,7 @@
 				"sbs": 0.0007995735607675906,
 				"position": 0.04,
 				"keyword": 0.003997867803837953,
-				"total": 0.11199893390191898
+				"total": 0.111998933902
 			},
 			"text": "All behave in odd ways, some have close-shaves, and one completely vanishes \u2013 caught by a Boojum.",
 			"words": [
@@ -1900,6 +2469,24 @@
 				"caught",
 				"boojum"
 			],
+			"stemmed": [
+				"all",
+				"behav",
+				"in",
+				"odd",
+				"wai",
+				"some",
+				"have",
+				"closeshav",
+				"and",
+				"on",
+				"complet",
+				"vanish",
+				"caught",
+				"by",
+				"a",
+				"boojum"
+			],
 			"keywords": [
 				"behav",
 				"odd",
@@ -1914,15 +2501,15 @@
 		},
 		{
 			"index": 23,
-			"rank": 1,
+			"rank": 0,
 			"score": {
-				"title": 0.25,
+				"title": 0.5,
 				"length": 0.85,
 				"dbs": 4.898827612204724e-05,
 				"sbs": 0.0056440486642418165,
 				"position": 0.04,
 				"keyword": 0.028465184701819315,
-				"total": 0.22423259235090964
+				"total": 0.317982592351
 			},
 			"text": "The poem was entitled The Hunting of the Snark with the subtitle, An Agony in Eight Fits.",
 			"words": [
@@ -1954,6 +2541,25 @@
 				"eight",
 				"fits"
 			],
+			"stemmed": [
+				"the",
+				"poem",
+				"wa",
+				"entitl",
+				"the",
+				"hunt",
+				"of",
+				"the",
+				"snark",
+				"with",
+				"the",
+				"subtitl",
+				"an",
+				"agoni",
+				"in",
+				"eight",
+				"fit"
+			],
 			"keywords": [
 				"poem",
 				"entitl",
@@ -1967,15 +2573,15 @@
 		},
 		{
 			"index": 24,
-			"rank": 30,
+			"rank": 14,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": 0.45,
 				"dbs": 1.50802064532652e-05,
 				"sbs": 0.0025792695508631953,
 				"position": 0.04,
 				"keyword": 0.012971748786582303,
-				"total": 0.07273587439329114
+				"total": 0.166485874393
 			},
 			"text": "Carroll originally intended it as a set of verses to be included in another of his children\u2019s stories, but it grew too long and became a book in its own right.",
 			"words": [
@@ -2027,6 +2633,39 @@
 				"book",
 				"right"
 			],
+			"stemmed": [
+				"carrol",
+				"origin",
+				"intend",
+				"it",
+				"as",
+				"a",
+				"set",
+				"of",
+				"vers",
+				"to",
+				"be",
+				"includ",
+				"in",
+				"anoth",
+				"of",
+				"hi",
+				"children",
+				"stori",
+				"but",
+				"it",
+				"grew",
+				"too",
+				"long",
+				"and",
+				"becam",
+				"a",
+				"book",
+				"in",
+				"it",
+				"own",
+				"right"
+			],
 			"keywords": [
 				"carrol",
 				"origin",
@@ -2046,7 +2685,7 @@
 		},
 		{
 			"index": 25,
-			"rank": 27,
+			"rank": 33,
 			"score": {
 				"title": 0.0,
 				"length": 0.6,
@@ -2054,7 +2693,7 @@
 				"sbs": 0.0010660980810234541,
 				"position": 0.06,
 				"keyword": 0.005330490405117271,
-				"total": 0.09266524520255863
+				"total": 0.092665245203
 			},
 			"text": "He published it on 1 April 1876 \u2013 the date chosen with care.",
 			"words": [
@@ -2080,6 +2719,20 @@
 				"chosen",
 				"care"
 			],
+			"stemmed": [
+				"he",
+				"publish",
+				"it",
+				"on",
+				"1",
+				"april",
+				"1876",
+				"the",
+				"date",
+				"chosen",
+				"with",
+				"care"
+			],
 			"keywords": [
 				"publish",
 				"1",
@@ -2092,7 +2745,7 @@
 		},
 		{
 			"index": 26,
-			"rank": 26,
+			"rank": 32,
 			"score": {
 				"title": 0.0,
 				"length": 0.6,
@@ -2100,7 +2753,7 @@
 				"sbs": 0.0013326226012793177,
 				"position": 0.06,
 				"keyword": 0.006663113006396588,
-				"total": 0.09333155650319828
+				"total": 0.093331556503
 			},
 			"text": "However, many of his presentation copies to friends are dated 29 March.",
 			"words": [
@@ -2127,6 +2780,20 @@
 				"29",
 				"march"
 			],
+			"stemmed": [
+				"howev",
+				"mani",
+				"of",
+				"hi",
+				"present",
+				"copi",
+				"to",
+				"friend",
+				"ar",
+				"date",
+				"29",
+				"march"
+			],
 			"keywords": [
 				"howev",
 				"mani",
@@ -2140,7 +2807,7 @@
 		},
 		{
 			"index": 27,
-			"rank": 31,
+			"rank": 35,
 			"score": {
 				"title": 0.0,
 				"length": 0.45,
@@ -2148,7 +2815,7 @@
 				"sbs": 0.0004126831281381113,
 				"position": 0.06,
 				"keyword": 0.0020634156406905565,
-				"total": 0.07228170782034528
+				"total": 0.07228170782
 			},
 			"text": "Although issued in a pictorial buff coloured cloth, he had copies bound in red, blue, green, and white cloth, all with gold decoration, to give away to his friends and family.",
 			"words": [
@@ -2205,6 +2872,39 @@
 				"friends",
 				"family"
 			],
+			"stemmed": [
+				"although",
+				"issu",
+				"in",
+				"a",
+				"pictori",
+				"buff",
+				"colour",
+				"cloth",
+				"he",
+				"had",
+				"copi",
+				"bound",
+				"in",
+				"red",
+				"blue",
+				"green",
+				"and",
+				"white",
+				"cloth",
+				"all",
+				"with",
+				"gold",
+				"decor",
+				"to",
+				"give",
+				"awai",
+				"to",
+				"hi",
+				"friend",
+				"and",
+				"famili"
+			],
 			"keywords": [
 				"although",
 				"issu",
@@ -2229,7 +2929,7 @@
 		},
 		{
 			"index": 28,
-			"rank": 40,
+			"rank": 41,
 			"score": {
 				"title": 0.0,
 				"length": -0.1,
@@ -2237,7 +2937,7 @@
 				"sbs": 0.003502893694791349,
 				"position": 0.06,
 				"keyword": 0.018406428078298478,
-				"total": 0.011703214039149238
+				"total": 0.011703214039
 			},
 			"text": "The book was dedicated to one of his friends, Gertrude Chataway, and a dedicatory acrostic poem that introduces the book embodies her name as the first word of each stanza, Gert, Rude, Chat, Away, and also the first letter of each line.",
 			"words": [
@@ -2310,6 +3010,50 @@
 				"letter",
 				"line"
 			],
+			"stemmed": [
+				"the",
+				"book",
+				"wa",
+				"dedic",
+				"to",
+				"on",
+				"of",
+				"hi",
+				"friend",
+				"gertrud",
+				"chatawai",
+				"and",
+				"a",
+				"dedicatori",
+				"acrost",
+				"poem",
+				"that",
+				"introduc",
+				"the",
+				"book",
+				"embodi",
+				"her",
+				"name",
+				"as",
+				"the",
+				"first",
+				"word",
+				"of",
+				"each",
+				"stanza",
+				"gert",
+				"rude",
+				"chat",
+				"awai",
+				"and",
+				"also",
+				"the",
+				"first",
+				"letter",
+				"of",
+				"each",
+				"line"
+			],
 			"keywords": [
 				"book",
 				"dedic",
@@ -2339,7 +3083,7 @@
 		},
 		{
 			"index": 29,
-			"rank": 14,
+			"rank": 22,
 			"score": {
 				"title": 0.0,
 				"length": 0.8,
@@ -2347,7 +3091,7 @@
 				"sbs": 0.007995735607675906,
 				"position": 0.04,
 				"keyword": 0.04431964643732299,
-				"total": 0.13215982321866152
+				"total": 0.132159823219
 			},
 			"text": "Accompanying the poem were illustrations by Henry Holiday (1839-1927), artist, sculptor, stained-glass designer, and book illustrator.",
 			"words": [
@@ -2382,6 +3126,24 @@
 				"book",
 				"illustrator"
 			],
+			"stemmed": [
+				"accompani",
+				"the",
+				"poem",
+				"were",
+				"illustr",
+				"by",
+				"henri",
+				"holidai",
+				"18391927",
+				"artist",
+				"sculptor",
+				"stainedglass",
+				"design",
+				"and",
+				"book",
+				"illustr"
+			],
 			"keywords": [
 				"accompani",
 				"poem",
@@ -2399,15 +3161,15 @@
 		},
 		{
 			"index": 30,
-			"rank": 2,
+			"rank": 1,
 			"score": {
-				"title": 0.25,
+				"title": 0.5,
 				"length": 0.8,
 				"dbs": 0.00023117734507480873,
 				"sbs": 0.004930703624733475,
 				"position": 0.04,
 				"keyword": 0.025809404849041418,
-				"total": 0.21665470242452073
+				"total": 0.310404702425
 			},
 			"text": "He drew nine illustrations for the book; a tenth illustration depicting a Snark was rejected by Carroll \u2013 he wanted the creature to remain unimaginable.",
 			"words": [
@@ -2452,6 +3214,32 @@
 				"remain",
 				"unimaginable"
 			],
+			"stemmed": [
+				"he",
+				"drew",
+				"nine",
+				"illustr",
+				"for",
+				"the",
+				"book",
+				"a",
+				"tenth",
+				"illustr",
+				"depict",
+				"a",
+				"snark",
+				"wa",
+				"reject",
+				"by",
+				"carrol",
+				"he",
+				"want",
+				"the",
+				"creatur",
+				"to",
+				"remain",
+				"unimagin"
+			],
 			"keywords": [
 				"drew",
 				"nine",
@@ -2471,15 +3259,15 @@
 		},
 		{
 			"index": 31,
-			"rank": 23,
+			"rank": 2,
 			"score": {
-				"title": 0.25,
+				"title": 0.75,
 				"length": -0.1,
 				"dbs": 0.00035990733655626535,
 				"sbs": 0.004492841912884556,
 				"position": 0.04,
 				"keyword": 0.024263746247204107,
-				"total": 0.10338187312360206
+				"total": 0.290881873124
 			},
 			"text": "The poem owes a debt to \u201cJabberwocky\u201d \u2013 some of the invented words from these verses reappear in The Hunting of the Snark and Carroll explains their derivation in his Preface, such as frumious being a portmanteau word based on \u201cfuming\u201d and \u201cfurious.",
 			"words": [
@@ -2548,6 +3336,50 @@
 				"fuming",
 				"furious"
 			],
+			"stemmed": [
+				"the",
+				"poem",
+				"ow",
+				"a",
+				"debt",
+				"to",
+				"jabberwocki",
+				"some",
+				"of",
+				"the",
+				"invent",
+				"word",
+				"from",
+				"these",
+				"vers",
+				"reappear",
+				"in",
+				"the",
+				"hunt",
+				"of",
+				"the",
+				"snark",
+				"and",
+				"carrol",
+				"explain",
+				"their",
+				"deriv",
+				"in",
+				"hi",
+				"prefac",
+				"such",
+				"as",
+				"frumiou",
+				"be",
+				"a",
+				"portmanteau",
+				"word",
+				"base",
+				"on",
+				"fume",
+				"and",
+				"furiou"
+			],
 			"keywords": [
 				"poem",
 				"ow",
@@ -2573,7 +3405,7 @@
 		},
 		{
 			"index": 32,
-			"rank": 18,
+			"rank": 25,
 			"score": {
 				"title": 0.0,
 				"length": 0.85,
@@ -2615,6 +3447,25 @@
 				"terrifying",
 				"bandersnatch"
 			],
+			"stemmed": [
+				"some",
+				"of",
+				"the",
+				"creatur",
+				"also",
+				"make",
+				"a",
+				"second",
+				"appear",
+				"the",
+				"viciou",
+				"jubjub",
+				"bird",
+				"and",
+				"the",
+				"terrifi",
+				"bandersnatch"
+			],
 			"keywords": [
 				"creatur",
 				"also",
@@ -2630,7 +3481,7 @@
 		},
 		{
 			"index": 33,
-			"rank": 25,
+			"rank": 31,
 			"score": {
 				"title": 0.0,
 				"length": 0.5,
@@ -2638,7 +3489,7 @@
 				"sbs": 0.008635394456289979,
 				"position": 0.04,
 				"keyword": 0.04333006064433129,
-				"total": 0.09416503032216564
+				"total": 0.09416503032199999
 			},
 			"text": "The poem was very popular \u2013 it was reprinted many times.",
 			"words": [
@@ -2660,6 +3511,18 @@
 				"many",
 				"times"
 			],
+			"stemmed": [
+				"the",
+				"poem",
+				"wa",
+				"veri",
+				"popular",
+				"it",
+				"wa",
+				"reprint",
+				"mani",
+				"time"
+			],
 			"keywords": [
 				"poem",
 				"popular",
@@ -2670,15 +3533,15 @@
 		},
 		{
 			"index": 34,
-			"rank": 32,
+			"rank": 15,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": 0.4,
 				"dbs": 0.0,
 				"sbs": 0.004397654584221748,
 				"position": 0.04,
 				"keyword": 0.02198827292110874,
-				"total": 0.07099413646055437
+				"total": 0.164744136461
 			},
 			"text": "In Carroll\u2019s lifetime, over 20,000 copies were sold.",
 			"words": [
@@ -2698,6 +3561,16 @@
 				"copies",
 				"sold"
 			],
+			"stemmed": [
+				"in",
+				"carrol",
+				"lifetim",
+				"over",
+				"20000",
+				"copi",
+				"were",
+				"sold"
+			],
 			"keywords": [
 				"carrol",
 				"lifetim",
@@ -2708,15 +3581,15 @@
 		},
 		{
 			"index": 35,
-			"rank": 21,
+			"rank": 9,
 			"score": {
-				"title": 0.0,
+				"title": 0.25,
 				"length": 0.6,
 				"dbs": 0.00020628656898268326,
 				"sbs": 0.008795309168443496,
 				"position": 0.04,
 				"keyword": 0.0450079786871309,
-				"total": 0.10750398934356543
+				"total": 0.201253989344
 			},
 			"text": "The poem was incorporated into Carroll\u2019s compendium of humorous poetry entitled Rhyme?",
 			"words": [
@@ -2743,6 +3616,20 @@
 				"entitled",
 				"rhyme"
 			],
+			"stemmed": [
+				"the",
+				"poem",
+				"wa",
+				"incorpor",
+				"into",
+				"carrol",
+				"compendium",
+				"of",
+				"humor",
+				"poetri",
+				"entitl",
+				"rhyme"
+			],
 			"keywords": [
 				"poem",
 				"incorpor",
@@ -2756,7 +3643,7 @@
 		},
 		{
 			"index": 36,
-			"rank": 39,
+			"rank": 40,
 			"score": {
 				"title": 0.0,
 				"length": 0.1,
@@ -2774,13 +3661,17 @@
 			"filtered": [
 				"reason"
 			],
+			"stemmed": [
+				"and",
+				"reason"
+			],
 			"keywords": [
 				"reason"
 			]
 		},
 		{
 			"index": 37,
-			"rank": 37,
+			"rank": 39,
 			"score": {
 				"title": 0.0,
 				"length": 0.05,
@@ -2797,13 +3688,16 @@
 			"filtered": [
 				"1883"
 			],
+			"stemmed": [
+				"1883"
+			],
 			"keywords": [
 				"1883"
 			]
 		},
 		{
 			"index": 38,
-			"rank": 11,
+			"rank": 19,
 			"score": {
 				"title": 0.0,
 				"length": 0.8,
@@ -2811,7 +3705,7 @@
 				"sbs": 0.0023987206823027716,
 				"position": 0.15,
 				"keyword": 0.012173164914588393,
-				"total": 0.1435865824572942
+				"total": 0.14358658245699998
 			},
 			"text": "Since then it has been illustrated by a variety of artists and translated into many languages, and the book rarely goes out of print.",
 			"words": [
@@ -2853,6 +3747,32 @@
 				"goes",
 				"print"
 			],
+			"stemmed": [
+				"sinc",
+				"then",
+				"it",
+				"ha",
+				"been",
+				"illustr",
+				"by",
+				"a",
+				"varieti",
+				"of",
+				"artist",
+				"and",
+				"translat",
+				"into",
+				"mani",
+				"languag",
+				"and",
+				"the",
+				"book",
+				"rare",
+				"goe",
+				"out",
+				"of",
+				"print"
+			],
 			"keywords": [
 				"sinc",
 				"illustr",
@@ -2869,7 +3789,7 @@
 		},
 		{
 			"index": 39,
-			"rank": 19,
+			"rank": 26,
 			"score": {
 				"title": 0.0,
 				"length": 0.45,
@@ -2877,7 +3797,7 @@
 				"sbs": 0.007818052594171997,
 				"position": 0.15,
 				"keyword": 0.03909026297085998,
-				"total": 0.11329513148543
+				"total": 0.11329513148499999
 			},
 			"text": "People are known to memorise and recite the poem.",
 			"words": [
@@ -2898,6 +3818,17 @@
 				"recite",
 				"poem"
 			],
+			"stemmed": [
+				"peopl",
+				"ar",
+				"known",
+				"to",
+				"memoris",
+				"and",
+				"recit",
+				"the",
+				"poem"
+			],
 			"keywords": [
 				"peopl",
 				"known",
@@ -2908,7 +3839,7 @@
 		},
 		{
 			"index": 40,
-			"rank": 6,
+			"rank": 12,
 			"score": {
 				"title": 0.25,
 				"length": 0.25,
@@ -2916,7 +3847,7 @@
 				"sbs": 0.00511727078891258,
 				"position": 0.15,
 				"keyword": 0.025586353944562903,
-				"total": 0.17529317697228144
+				"total": 0.175293176972
 			},
 			"text": "Some people form Snark Clubs.",
 			"words": [
@@ -2932,6 +3863,13 @@
 				"snark",
 				"clubs"
 			],
+			"stemmed": [
+				"some",
+				"peopl",
+				"form",
+				"snark",
+				"club"
+			],
 			"keywords": [
 				"peopl",
 				"form",
@@ -2941,7 +3879,7 @@
 		},
 		{
 			"index": 41,
-			"rank": 8,
+			"rank": 16,
 			"score": {
 				"title": 0.0,
 				"length": 0.95,
@@ -2949,7 +3887,7 @@
 				"sbs": 0.0010099876557064303,
 				"position": 0.15,
 				"keyword": 0.005049938278532152,
-				"total": 0.15877496913926606
+				"total": 0.158774969139
 			},
 			"text": "There is a timeless nature about the verses that make it as relevant today as it did in 1876.",
 			"words": [
@@ -2980,6 +3918,27 @@
 				"make",
 				"relevant",
 				"today",
+				"1876"
+			],
+			"stemmed": [
+				"there",
+				"is",
+				"a",
+				"timeless",
+				"natur",
+				"about",
+				"the",
+				"vers",
+				"that",
+				"make",
+				"it",
+				"as",
+				"relev",
+				"todai",
+				"as",
+				"it",
+				"did",
+				"in",
 				"1876"
 			],
 			"keywords": [

@@ -190,15 +190,15 @@
 	"sentences": [
 		{
 			"index": 0,
-			"rank": 4,
+			"rank": 2,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.55,
 				"dbs": 0.0010602180621653778,
 				"sbs": 0.003784693019343986,
 				"position": 0.17,
 				"keyword": 0.024224555407546818,
-				"total": 0.24836227770377342
+				"total": 0.373362277704
 			},
 			"text": "Cambodia has experienced strong economic growth over the last decade; GDP grew at an average annual rate of over 8% between 2000 and 2010 and about 7% since 2011.",
 			"words": [
@@ -252,6 +252,37 @@
 				"since",
 				"2011"
 			],
+			"stemmed": [
+				"cambodia",
+				"ha",
+				"experienc",
+				"strong",
+				"econom",
+				"growth",
+				"over",
+				"the",
+				"last",
+				"decad",
+				"gdp",
+				"grew",
+				"at",
+				"an",
+				"averag",
+				"annual",
+				"rate",
+				"of",
+				"over",
+				"8",
+				"between",
+				"2000",
+				"and",
+				"2010",
+				"and",
+				"about",
+				"7",
+				"sinc",
+				"2011"
+			],
 			"keywords": [
 				"cambodia",
 				"experienc",
@@ -283,7 +314,7 @@
 				"sbs": 0.005716463414634146,
 				"position": 0.23,
 				"keyword": 0.03208790340571089,
-				"total": 0.17354395170285544
+				"total": 0.173543951703
 			},
 			"text": "The tourism, garment, construction and real estate, and agriculture sectors accounted for the bulk of growth.",
 			"words": [
@@ -316,6 +347,24 @@
 				"bulk",
 				"growth"
 			],
+			"stemmed": [
+				"the",
+				"tourism",
+				"garment",
+				"construct",
+				"and",
+				"real",
+				"estat",
+				"and",
+				"agricultur",
+				"sector",
+				"account",
+				"for",
+				"the",
+				"bulk",
+				"of",
+				"growth"
+			],
 			"keywords": [
 				"tourism",
 				"garment",
@@ -339,7 +388,7 @@
 				"sbs": 0.001793400286944046,
 				"position": 0.23,
 				"keyword": 0.008967001434720229,
-				"total": 0.16823350071736012
+				"total": 0.168233500717
 			},
 			"text": "Around 700,000 people, the majority of whom are women, are employed in the garment and footwear sector.",
 			"words": [
@@ -372,6 +421,25 @@
 				"footwear",
 				"sector"
 			],
+			"stemmed": [
+				"around",
+				"700000",
+				"peopl",
+				"the",
+				"major",
+				"of",
+				"whom",
+				"ar",
+				"women",
+				"ar",
+				"emploi",
+				"in",
+				"the",
+				"garment",
+				"and",
+				"footwear",
+				"sector"
+			],
 			"keywords": [
 				"around",
 				"700000",
@@ -394,7 +462,7 @@
 				"sbs": 0.0028694404591104736,
 				"position": 0.14,
 				"keyword": 0.018065227280680267,
-				"total": 0.15028261364034012
+				"total": 0.15028261364
 			},
 			"text": "An additional 500,000 Cambodians are employed in the tourism sector, and a further 200,000 people in construction.",
 			"words": [
@@ -427,6 +495,25 @@
 				"people",
 				"construction"
 			],
+			"stemmed": [
+				"an",
+				"addit",
+				"500000",
+				"cambodian",
+				"ar",
+				"emploi",
+				"in",
+				"the",
+				"tourism",
+				"sector",
+				"and",
+				"a",
+				"further",
+				"200000",
+				"peopl",
+				"in",
+				"construct"
+			],
 			"keywords": [
 				"addit",
 				"500000",
@@ -449,7 +536,7 @@
 				"sbs": 0.0026511134676564154,
 				"position": 0.08,
 				"keyword": 0.013801460211227638,
-				"total": 0.13315073010561382
+				"total": 0.133150730106
 			},
 			"text": "Tourism has continued to grow rapidly with foreign arrivals exceeding 2 million per year in 2007 and reaching 5.6 million visitors in 2017.",
 			"words": [
@@ -496,6 +583,31 @@
 				"visitors",
 				"2017"
 			],
+			"stemmed": [
+				"tourism",
+				"ha",
+				"continu",
+				"to",
+				"grow",
+				"rapidli",
+				"with",
+				"foreign",
+				"arriv",
+				"exceed",
+				"2",
+				"million",
+				"per",
+				"year",
+				"in",
+				"2007",
+				"and",
+				"reach",
+				"56",
+				"million",
+				"visitor",
+				"in",
+				"2017"
+			],
 			"keywords": [
 				"tourism",
 				"continu",
@@ -526,7 +638,7 @@
 				"sbs": 0.0012195121951219514,
 				"position": 0.08,
 				"keyword": 0.006097560975609757,
-				"total": 0.14804878048780487
+				"total": 0.148048780488
 			},
 			"text": "Mining also is attracting some investor interest and the government has touted opportunities for mining bauxite, gold, iron and gems.",
 			"words": [
@@ -566,6 +678,28 @@
 				"iron",
 				"gems"
 			],
+			"stemmed": [
+				"mine",
+				"also",
+				"is",
+				"attract",
+				"some",
+				"investor",
+				"interest",
+				"and",
+				"the",
+				"govern",
+				"ha",
+				"tout",
+				"opportun",
+				"for",
+				"mine",
+				"bauxit",
+				"gold",
+				"iron",
+				"and",
+				"gem"
+			],
 			"keywords": [
 				"mine",
 				"also",
@@ -584,15 +718,15 @@
 		},
 		{
 			"index": 6,
-			"rank": 6,
+			"rank": 3,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.45,
 				"dbs": 0.0007531324360499701,
 				"sbs": 0.004720692368214005,
 				"position": 0.05,
 				"keyword": 0.027369124021319878,
-				"total": 0.20743456201065993
+				"total": 0.33243456201099997
 			},
 			"text": "Cambodia remains one of the poorest countries in Asia and long-term economic development remains a daunting challenge, inhibited by endemic corruption, limited human resources, high income inequality, and poor job prospects.",
 			"words": [
@@ -654,6 +788,39 @@
 				"job",
 				"prospects"
 			],
+			"stemmed": [
+				"cambodia",
+				"remain",
+				"on",
+				"of",
+				"the",
+				"poorest",
+				"countri",
+				"in",
+				"asia",
+				"and",
+				"longterm",
+				"econom",
+				"develop",
+				"remain",
+				"a",
+				"daunt",
+				"challeng",
+				"inhibit",
+				"by",
+				"endem",
+				"corrupt",
+				"limit",
+				"human",
+				"resourc",
+				"high",
+				"incom",
+				"inequ",
+				"and",
+				"poor",
+				"job",
+				"prospect"
+			],
 			"keywords": [
 				"cambodia",
 				"remain",
@@ -691,7 +858,7 @@
 				"sbs": 0.003048780487804878,
 				"position": 0.05,
 				"keyword": 0.018109880031727147,
-				"total": 0.14655494001586358
+				"total": 0.146554940016
 			},
 			"text": "According to the Asian Development Bank (ADB), the percentage of the population living in poverty decreased to 13.5% in 2016.",
 			"words": [
@@ -730,6 +897,28 @@
 				"135",
 				"2016"
 			],
+			"stemmed": [
+				"accord",
+				"to",
+				"the",
+				"asian",
+				"develop",
+				"bank",
+				"adb",
+				"the",
+				"percentag",
+				"of",
+				"the",
+				"popul",
+				"live",
+				"in",
+				"poverti",
+				"decreas",
+				"to",
+				"135",
+				"in",
+				"2016"
+			],
 			"keywords": [
 				"accord",
 				"asian",
@@ -755,7 +944,7 @@
 				"sbs": 0.0035569105691056905,
 				"position": 0.04,
 				"keyword": 0.017903529645052547,
-				"total": 0.09395176482252626
+				"total": 0.093951764823
 			},
 			"text": "More than 50% of the population is less than 25 years old.",
 			"words": [
@@ -780,6 +969,20 @@
 				"years",
 				"old"
 			],
+			"stemmed": [
+				"more",
+				"than",
+				"50",
+				"of",
+				"the",
+				"popul",
+				"is",
+				"less",
+				"than",
+				"25",
+				"year",
+				"old"
+			],
 			"keywords": [
 				"50",
 				"popul",
@@ -799,7 +1002,7 @@
 				"sbs": 0.0010760401721664275,
 				"position": 0.06,
 				"keyword": 0.005380200860832137,
-				"total": 0.12394010043041606
+				"total": 0.12394010042999999
 			},
 			"text": "The population lacks education and productive skills, particularly in the impoverished countryside, which also lacks basic infrastructure.",
 			"words": [
@@ -835,6 +1038,25 @@
 				"basic",
 				"infrastructure"
 			],
+			"stemmed": [
+				"the",
+				"popul",
+				"lack",
+				"educ",
+				"and",
+				"product",
+				"skill",
+				"particularli",
+				"in",
+				"the",
+				"impoverish",
+				"countrysid",
+				"which",
+				"also",
+				"lack",
+				"basic",
+				"infrastructur"
+			],
 			"keywords": [
 				"popul",
 				"lack",
@@ -852,15 +1074,15 @@
 		},
 		{
 			"index": 10,
-			"rank": 3,
+			"rank": 1,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.7,
 				"dbs": 0.0011607209250446163,
 				"sbs": 0.007739212007504691,
 				"position": 0.06,
 				"keyword": 0.04449966466274654,
-				"total": 0.24974983233137327
+				"total": 0.374749832331
 			},
 			"text": "The World Bank in 2016 formally reclassified Cambodia as a lower middle-income country as a result of continued rapid economic growth over the past several years.",
 			"words": [
@@ -910,6 +1132,34 @@
 				"several",
 				"years"
 			],
+			"stemmed": [
+				"the",
+				"world",
+				"bank",
+				"in",
+				"2016",
+				"formal",
+				"reclassifi",
+				"cambodia",
+				"as",
+				"a",
+				"lower",
+				"middleincom",
+				"countri",
+				"as",
+				"a",
+				"result",
+				"of",
+				"continu",
+				"rapid",
+				"econom",
+				"growth",
+				"over",
+				"the",
+				"past",
+				"sever",
+				"year"
+			],
 			"keywords": [
 				"world",
 				"bank",
@@ -932,7 +1182,7 @@
 		},
 		{
 			"index": 11,
-			"rank": 5,
+			"rank": 6,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.8,
@@ -940,7 +1190,7 @@
 				"sbs": 0.00508130081300813,
 				"position": 0.04,
 				"keyword": 0.026423755700971645,
-				"total": 0.24821187785048585
+				"total": 0.24821187784999998
 			},
 			"text": "Cambodia\u2019s graduation from a low-income country will reduce its eligibility for foreign assistance and will challenge the government to seek new sources of financing.",
 			"words": [
@@ -985,6 +1235,32 @@
 				"sources",
 				"financing"
 			],
+			"stemmed": [
+				"cambodia",
+				"graduat",
+				"from",
+				"a",
+				"lowincom",
+				"countri",
+				"will",
+				"reduc",
+				"it",
+				"elig",
+				"for",
+				"foreign",
+				"assist",
+				"and",
+				"will",
+				"challeng",
+				"the",
+				"govern",
+				"to",
+				"seek",
+				"new",
+				"sourc",
+				"of",
+				"financ"
+			],
 			"keywords": [
 				"cambodia",
 				"graduat",
@@ -1012,7 +1288,7 @@
 				"sbs": 0.003339140534262485,
 				"position": 0.04,
 				"keyword": 0.019931072931519092,
-				"total": 0.0074655364657595456
+				"total": 0.007465536466
 			},
 			"text": "The Cambodian Government has been working with bilateral and multilateral donors, including the Asian Development Bank, the World Bank and IMF, to address the country's many pressing needs; more than 20% of the government budget will come from donor assistance in 2018.",
 			"words": [
@@ -1086,6 +1362,50 @@
 				"assistance",
 				"2018"
 			],
+			"stemmed": [
+				"the",
+				"cambodian",
+				"govern",
+				"ha",
+				"been",
+				"work",
+				"with",
+				"bilater",
+				"and",
+				"multilater",
+				"donor",
+				"includ",
+				"the",
+				"asian",
+				"develop",
+				"bank",
+				"the",
+				"world",
+				"bank",
+				"and",
+				"imf",
+				"to",
+				"address",
+				"the",
+				"countri",
+				"mani",
+				"press",
+				"need",
+				"more",
+				"than",
+				"20",
+				"of",
+				"the",
+				"govern",
+				"budget",
+				"will",
+				"come",
+				"from",
+				"donor",
+				"assist",
+				"in",
+				"2018"
+			],
 			"keywords": [
 				"cambodian",
 				"govern",
@@ -1118,13 +1438,13 @@
 			"index": 13,
 			"rank": 0,
 			"score": {
-				"title": 0.6666666666666666,
+				"title": 1.3333333333333333,
 				"length": 0.5,
 				"dbs": 0.0010671490487926285,
 				"sbs": 0.007317073170731707,
 				"position": 0.04,
 				"keyword": 0.04192111109762167,
-				"total": 0.34346055554881083
+				"total": 0.593460555549
 			},
 			"text": "A major economic challenge for Cambodia over the next decade will be fashioning an economic environment in which the private sector can create enough jobs to handle Cambodia's demographic imbalance.",
 			"words": [
@@ -1179,6 +1499,38 @@
 				"demographic",
 				"imbalance"
 			],
+			"stemmed": [
+				"a",
+				"major",
+				"econom",
+				"challeng",
+				"for",
+				"cambodia",
+				"over",
+				"the",
+				"next",
+				"decad",
+				"will",
+				"be",
+				"fashion",
+				"an",
+				"econom",
+				"environ",
+				"in",
+				"which",
+				"the",
+				"privat",
+				"sector",
+				"can",
+				"creat",
+				"enough",
+				"job",
+				"to",
+				"handl",
+				"cambodia",
+				"demograph",
+				"imbal"
+			],
 			"keywords": [
 				"major",
 				"econom",
@@ -1202,7 +1554,7 @@
 		},
 		{
 			"index": 14,
-			"rank": 1,
+			"rank": 4,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.9,
@@ -1210,7 +1562,7 @@
 				"sbs": 0.00803769401330377,
 				"position": 0.15,
 				"keyword": 0.050556665105220985,
-				"total": 0.3002783325526105
+				"total": 0.300278332553
 			},
 			"text": "Textile exports, which accounted for 68% of total exports in 2017, have driven much of Cambodia\u2019s growth over the past several years.",
 			"words": [
@@ -1253,6 +1605,30 @@
 				"several",
 				"years"
 			],
+			"stemmed": [
+				"textil",
+				"export",
+				"which",
+				"account",
+				"for",
+				"68",
+				"of",
+				"total",
+				"export",
+				"in",
+				"2017",
+				"have",
+				"driven",
+				"much",
+				"of",
+				"cambodia",
+				"growth",
+				"over",
+				"the",
+				"past",
+				"sever",
+				"year"
+			],
 			"keywords": [
 				"textil",
 				"export",
@@ -1272,7 +1648,7 @@
 		},
 		{
 			"index": 15,
-			"rank": 2,
+			"rank": 5,
 			"score": {
 				"title": 0.6666666666666666,
 				"length": -0.35,
@@ -1280,7 +1656,7 @@
 				"sbs": 0.00492994291645044,
 				"position": 0.15,
 				"keyword": 0.02993656783797393,
-				"total": 0.25871828391898694
+				"total": 0.258718283919
 			},
 			"text": "The textile sector relies on exports to the United States and European Union, and Cambodia\u2019s dependence on its comparative advantage in textile production is a key vulnerability for the economy, especially because Cambodia has continued to run a current account deficit above 9% of GDP since 2014.",
 			"words": [
@@ -1360,6 +1736,55 @@
 				"9",
 				"gdp",
 				"since",
+				"2014"
+			],
+			"stemmed": [
+				"the",
+				"textil",
+				"sector",
+				"reli",
+				"on",
+				"export",
+				"to",
+				"the",
+				"unit",
+				"state",
+				"and",
+				"european",
+				"union",
+				"and",
+				"cambodia",
+				"depend",
+				"on",
+				"it",
+				"compar",
+				"advantag",
+				"in",
+				"textil",
+				"product",
+				"is",
+				"a",
+				"kei",
+				"vulner",
+				"for",
+				"the",
+				"economi",
+				"especi",
+				"becaus",
+				"cambodia",
+				"ha",
+				"continu",
+				"to",
+				"run",
+				"a",
+				"current",
+				"account",
+				"deficit",
+				"abov",
+				"9",
+				"of",
+				"gdp",
+				"sinc",
 				"2014"
 			],
 			"keywords": [

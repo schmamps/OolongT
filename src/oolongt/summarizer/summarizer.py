@@ -52,27 +52,27 @@ def get_top_keyword_threshold(kws: typing.Sequence[ScoredKeyword]) -> float:
 
 
 def score_by_title(
-        title_kw_words: StringList,
-        sentence_words: StringList) -> float:
+        title_kw_stems: StringList,
+        sentence_stems: StringList) -> float:
     """Score `sentence_word_list` by matches with `title_words`
 
     Arguments:
-        title_kw_words {StringList} -- key words in title
-        sentence_words {StringList} --
+        title_kw_stems {StringList} -- stemmed key words in title
+        sentence_stems {StringList} --
             list of words in the sentence
 
     Returns:
         float -- score
     """
-    if not title_kw_words:
+    if not title_kw_stems:
         return 0.0
 
-    matched_kw_words = [
-        word
-        for word in sentence_words
-        if word in title_kw_words]
+    matched_stems = [
+        stem
+        for stem in sentence_stems
+        if stem in title_kw_stems]
 
-    score = _float_len(matched_kw_words) / _float_len(title_kw_words)
+    score = _float_len(matched_stems) / _float_len(title_kw_stems)
 
     return score
 
@@ -172,8 +172,7 @@ class Summarizer:
             list[ScoredSentence] -- list of scored sentences
         """
         sentences = self.parser.split_sentences(body)
-        # TODO: get_key_stems
-        title_kw_words = self.parser.get_key_words(title)
+        title_kw_stems = self.parser.get_key_stems(title)
         top_kws = self.get_top_keywords(body)
         top_kw_stems = pluck_keyword_words(top_kws)
         of = len(sentences)  # pylint: disable=invalid-name
@@ -181,7 +180,7 @@ class Summarizer:
         scored_sentences = [
             self.get_sentence(
                 text, idx, of,
-                title_kw_words, top_kws, top_kw_stems)
+                title_kw_stems, top_kws, top_kw_stems)
             for idx, text in enumerate(sentences)]
 
         return scored_sentences
@@ -206,7 +205,7 @@ class Summarizer:
             text: str,
             index: int,
             of: int,
-            title_kw_words: StringList,
+            title_kw_stems: StringList,
             top_kws: typing.Sequence[ScoredKeyword],
             top_kw_stems: StringList) -> ScoredSentence:
         """Score sentence (`text`) on several factors
@@ -215,7 +214,7 @@ class Summarizer:
             text {str} -- text of sentence
             index {int} -- index of sentence in overall text (zero based)
             of {int} -- len() of sentences in `text`
-            title_kw_words {StringList} -- key words in title
+            title_kw_stems {StringList} -- stemmed key words in title
             top_kws {typing.List[ScoredKeyword]} -- top keywords in body
             top_kw_stems {StringList} -- values of 'word' in top_keywords
 
@@ -224,7 +223,7 @@ class Summarizer:
         """
         sentence_stems = self.parser.get_all_stems(text)
 
-        title_score = score_by_title(title_kw_words, sentence_stems)
+        title_score = score_by_title(title_kw_stems, sentence_stems)
         length_score = self.score_by_length(sentence_stems)
         dbs_score = score_by_dbs(
             sentence_stems, top_kws, top_kw_stems)

@@ -157,13 +157,13 @@
 			"index": 0,
 			"rank": 1,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.8,
 				"dbs": 0.0006066371430014394,
 				"sbs": 0.00989321608040201,
 				"position": 0.17,
 				"keyword": 0.052499266117017246,
-				"total": 0.29374963305850865
+				"total": 0.418749633059
 			},
 			"text": "Canada resembles the US in its market-oriented economic system, pattern of production, and high living standards.",
 			"words": [
@@ -197,6 +197,24 @@
 				"living",
 				"standards"
 			],
+			"stemmed": [
+				"canada",
+				"resembl",
+				"the",
+				"us",
+				"in",
+				"it",
+				"marketori",
+				"econom",
+				"system",
+				"pattern",
+				"of",
+				"product",
+				"and",
+				"high",
+				"live",
+				"standard"
+			],
 			"keywords": [
 				"canada",
 				"resembl",
@@ -213,7 +231,7 @@
 		},
 		{
 			"index": 1,
-			"rank": 10,
+			"rank": 11,
 			"score": {
 				"title": 0.0,
 				"length": 0.55,
@@ -221,7 +239,7 @@
 				"sbs": 0.0031190434933287127,
 				"position": 0.23,
 				"keyword": 0.01591611613494147,
-				"total": 0.13420805806747074
+				"total": 0.134208058067
 			},
 			"text": "Since World War II, the impressive growth of the manufacturing, mining, and service sectors has transformed the nation from a largely rural economy into one primarily industrial and urban.",
 			"words": [
@@ -276,6 +294,37 @@
 				"industrial",
 				"urban"
 			],
+			"stemmed": [
+				"sinc",
+				"world",
+				"war",
+				"ii",
+				"the",
+				"impress",
+				"growth",
+				"of",
+				"the",
+				"manufactur",
+				"mine",
+				"and",
+				"servic",
+				"sector",
+				"ha",
+				"transform",
+				"the",
+				"nation",
+				"from",
+				"a",
+				"larg",
+				"rural",
+				"economi",
+				"into",
+				"on",
+				"primarili",
+				"industri",
+				"and",
+				"urban"
+			],
 			"keywords": [
 				"sinc",
 				"world",
@@ -300,7 +349,7 @@
 		},
 		{
 			"index": 2,
-			"rank": 3,
+			"rank": 5,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.7,
@@ -308,7 +357,7 @@
 				"sbs": 0.010726710475454194,
 				"position": 0.14,
 				"keyword": 0.05892461194647377,
-				"total": 0.2769623059732369
+				"total": 0.276962305973
 			},
 			"text": "Canada has a large oil and natural gas sector with the majority of crude oil production derived from oil sands in the western provinces, especially Alberta.",
 			"words": [
@@ -358,6 +407,34 @@
 				"especially",
 				"alberta"
 			],
+			"stemmed": [
+				"canada",
+				"ha",
+				"a",
+				"larg",
+				"oil",
+				"and",
+				"natur",
+				"ga",
+				"sector",
+				"with",
+				"the",
+				"major",
+				"of",
+				"crude",
+				"oil",
+				"product",
+				"deriv",
+				"from",
+				"oil",
+				"sand",
+				"in",
+				"the",
+				"western",
+				"provinc",
+				"especi",
+				"alberta"
+			],
 			"keywords": [
 				"canada",
 				"larg",
@@ -380,7 +457,7 @@
 		},
 		{
 			"index": 3,
-			"rank": 2,
+			"rank": 4,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.85,
@@ -388,7 +465,7 @@
 				"sbs": 0.01179812103998252,
 				"position": 0.08,
 				"keyword": 0.06511734442366958,
-				"total": 0.2838086722118348
+				"total": 0.283808672212
 			},
 			"text": "Canada now ranks third in the world in proved oil reserves behind Venezuela and Saudi Arabia and is the world\u2019s sixth-largest oil producer.",
 			"words": [
@@ -433,6 +510,31 @@
 				"oil",
 				"producer"
 			],
+			"stemmed": [
+				"canada",
+				"now",
+				"rank",
+				"third",
+				"in",
+				"the",
+				"world",
+				"in",
+				"prove",
+				"oil",
+				"reserv",
+				"behind",
+				"venezuela",
+				"and",
+				"saudi",
+				"arabia",
+				"and",
+				"is",
+				"the",
+				"world",
+				"sixthlargest",
+				"oil",
+				"produc"
+			],
 			"keywords": [
 				"canada",
 				"rank",
@@ -453,15 +555,15 @@
 		},
 		{
 			"index": 4,
-			"rank": 7,
+			"rank": 3,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.6,
 				"dbs": 0.0017503326549679998,
 				"sbs": 0.010498923187365398,
 				"position": 0.05,
 				"keyword": 0.06124627921166699,
-				"total": 0.24312313960583348
+				"total": 0.368123139606
 			},
 			"text": "The 1989 Canada-US Free Trade Agreement and the 1994 North American Free Trade Agreement (which includes Mexico) dramatically increased trade and economic integration between the US and Canada.",
 			"words": [
@@ -516,6 +618,36 @@
 				"us",
 				"canada"
 			],
+			"stemmed": [
+				"the",
+				"1989",
+				"canadau",
+				"free",
+				"trade",
+				"agreement",
+				"and",
+				"the",
+				"1994",
+				"north",
+				"american",
+				"free",
+				"trade",
+				"agreement",
+				"which",
+				"includ",
+				"mexico",
+				"dramat",
+				"increas",
+				"trade",
+				"and",
+				"econom",
+				"integr",
+				"between",
+				"the",
+				"us",
+				"and",
+				"canada"
+			],
 			"keywords": [
 				"1989",
 				"canadau",
@@ -541,7 +673,7 @@
 		},
 		{
 			"index": 5,
-			"rank": 9,
+			"rank": 10,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.05,
@@ -549,7 +681,7 @@
 				"sbs": 0.009470429068419018,
 				"position": 0.05,
 				"keyword": 0.052917530313885124,
-				"total": 0.17020876515694258
+				"total": 0.170208765157
 			},
 			"text": "Canada and the US enjoy the world\u2019s most comprehensive and highly balanced bilateral trade and investment relationship, with merchandise trade of $544 billion in 2016, services trade of over $80 billion, and two-way investment stocks of nearly $700 billion.",
 			"words": [
@@ -621,6 +753,47 @@
 				"700",
 				"billion"
 			],
+			"stemmed": [
+				"canada",
+				"and",
+				"the",
+				"us",
+				"enjoi",
+				"the",
+				"world",
+				"most",
+				"comprehens",
+				"and",
+				"highli",
+				"balanc",
+				"bilater",
+				"trade",
+				"and",
+				"invest",
+				"relationship",
+				"with",
+				"merchandis",
+				"trade",
+				"of",
+				"544",
+				"billion",
+				"in",
+				"2016",
+				"servic",
+				"trade",
+				"of",
+				"over",
+				"80",
+				"billion",
+				"and",
+				"twowai",
+				"invest",
+				"stock",
+				"of",
+				"nearli",
+				"700",
+				"billion"
+			],
 			"keywords": [
 				"canada",
 				"us",
@@ -660,7 +833,7 @@
 				"sbs": 0.010050251256281405,
 				"position": 0.04,
 				"keyword": 0.050882553470871936,
-				"total": 0.23544127673543597
+				"total": 0.23544127673499998
 			},
 			"text": "Over three-fourths of Canada\u2019s exports are destined for the US each year.",
 			"words": [
@@ -685,6 +858,20 @@
 				"us",
 				"year"
 			],
+			"stemmed": [
+				"over",
+				"threefourth",
+				"of",
+				"canada",
+				"export",
+				"ar",
+				"destin",
+				"for",
+				"the",
+				"us",
+				"each",
+				"year"
+			],
 			"keywords": [
 				"threefourth",
 				"canada",
@@ -696,7 +883,7 @@
 		},
 		{
 			"index": 7,
-			"rank": 5,
+			"rank": 6,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.7,
@@ -704,7 +891,7 @@
 				"sbs": 0.009277155005798223,
 				"position": 0.06,
 				"keyword": 0.057390042597991894,
-				"total": 0.25619502129899596
+				"total": 0.256195021299
 			},
 			"text": "Canada is the largest foreign supplier of energy to the US, including oil, natural gas, and electric power, and a top source of US uranium imports.",
 			"words": [
@@ -754,6 +941,34 @@
 				"uranium",
 				"imports"
 			],
+			"stemmed": [
+				"canada",
+				"is",
+				"the",
+				"largest",
+				"foreign",
+				"supplier",
+				"of",
+				"energi",
+				"to",
+				"the",
+				"us",
+				"includ",
+				"oil",
+				"natur",
+				"ga",
+				"and",
+				"electr",
+				"power",
+				"and",
+				"a",
+				"top",
+				"sourc",
+				"of",
+				"us",
+				"uranium",
+				"import"
+			],
 			"keywords": [
 				"canada",
 				"largest",
@@ -776,15 +991,15 @@
 		},
 		{
 			"index": 8,
-			"rank": 4,
+			"rank": 2,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.9,
 				"dbs": 0.001421933789550769,
 				"sbs": 0.007195066240292369,
 				"position": 0.04,
 				"keyword": 0.043085000149215694,
-				"total": 0.26904250007460784
+				"total": 0.39404250007499997
 			},
 			"text": "Given its abundant natural resources, highly skilled labor force, and modern capital stock, Canada enjoyed solid economic growth from 1993 through 2007.",
 			"words": [
@@ -831,6 +1046,30 @@
 				"1993",
 				"2007"
 			],
+			"stemmed": [
+				"given",
+				"it",
+				"abund",
+				"natur",
+				"resourc",
+				"highli",
+				"skill",
+				"labor",
+				"forc",
+				"and",
+				"modern",
+				"capit",
+				"stock",
+				"canada",
+				"enjoi",
+				"solid",
+				"econom",
+				"growth",
+				"from",
+				"1993",
+				"through",
+				"2007"
+			],
 			"keywords": [
 				"given",
 				"abund",
@@ -854,15 +1093,15 @@
 		},
 		{
 			"index": 9,
-			"rank": 11,
+			"rank": 9,
 			"score": {
-				"title": 0.0,
+				"title": 0.3333333333333333,
 				"length": 0.5,
 				"dbs": 0.0,
 				"sbs": 0.0012562814070351757,
 				"position": 0.04,
 				"keyword": 0.006281407035175879,
-				"total": 0.07564070351758793
+				"total": 0.200640703518
 			},
 			"text": "The global economic crisis of 2007-08 moved the Canadian economy into sharp recession by late 2008, and Ottawa posted its first fiscal deficit in 2009 after 12 years of surplus.",
 			"words": [
@@ -919,6 +1158,38 @@
 				"years",
 				"surplus"
 			],
+			"stemmed": [
+				"the",
+				"global",
+				"econom",
+				"crisi",
+				"of",
+				"200708",
+				"move",
+				"the",
+				"canadian",
+				"economi",
+				"into",
+				"sharp",
+				"recess",
+				"by",
+				"late",
+				"2008",
+				"and",
+				"ottawa",
+				"post",
+				"it",
+				"first",
+				"fiscal",
+				"deficit",
+				"in",
+				"2009",
+				"after",
+				"12",
+				"year",
+				"of",
+				"surplu"
+			],
 			"keywords": [
 				"global",
 				"econom",
@@ -944,7 +1215,7 @@
 		},
 		{
 			"index": 10,
-			"rank": 6,
+			"rank": 7,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.55,
@@ -952,7 +1223,7 @@
 				"sbs": 0.004938485531103795,
 				"position": 0.15,
 				"keyword": 0.025042797595672003,
-				"total": 0.24377139879783602
+				"total": 0.243771398798
 			},
 			"text": "Canada's major banks emerged from the financial crisis of 2008-09 among the strongest in the world, owing to the financial sector's tradition of conservative lending practices and strong capitalization.",
 			"words": [
@@ -1007,6 +1278,37 @@
 				"strong",
 				"capitalization"
 			],
+			"stemmed": [
+				"canada",
+				"major",
+				"bank",
+				"emerg",
+				"from",
+				"the",
+				"financi",
+				"crisi",
+				"of",
+				"200809",
+				"among",
+				"the",
+				"strongest",
+				"in",
+				"the",
+				"world",
+				"ow",
+				"to",
+				"the",
+				"financi",
+				"sector",
+				"tradit",
+				"of",
+				"conserv",
+				"lend",
+				"practic",
+				"and",
+				"strong",
+				"capit"
+			],
 			"keywords": [
 				"canada",
 				"major",
@@ -1033,13 +1335,13 @@
 			"index": 11,
 			"rank": 0,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.75,
 				"dbs": 0.004275460215651119,
 				"sbs": 0.015577889447236181,
 				"position": 0.15,
 				"keyword": 0.09926674831443649,
-				"total": 0.3058833741572182
+				"total": 0.430883374157
 			},
 			"text": "Since the fall in world oil prices in 2014, Canada has achieved modest economic growth.",
 			"words": [
@@ -1070,6 +1372,23 @@
 				"achieved",
 				"modest",
 				"economic",
+				"growth"
+			],
+			"stemmed": [
+				"sinc",
+				"the",
+				"fall",
+				"in",
+				"world",
+				"oil",
+				"price",
+				"in",
+				"2014",
+				"canada",
+				"ha",
+				"achiev",
+				"modest",
+				"econom",
 				"growth"
 			],
 			"keywords": [

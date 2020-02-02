@@ -139,7 +139,7 @@
 	"sentences": [
 		{
 			"index": 0,
-			"rank": 0,
+			"rank": 1,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.8,
@@ -147,7 +147,7 @@
 				"sbs": 0.012204142011834321,
 				"position": 0.23,
 				"keyword": 0.06814181707573265,
-				"total": 0.3165709085378663
+				"total": 0.316570908538
 			},
 			"text": "Cameroon\u2019s market-based, diversified economy features oil and gas, timber, aluminum, agriculture, mining and the service sector.",
 			"words": [
@@ -183,6 +183,24 @@
 				"service",
 				"sector"
 			],
+			"stemmed": [
+				"cameroon",
+				"marketbas",
+				"diversifi",
+				"economi",
+				"featur",
+				"oil",
+				"and",
+				"ga",
+				"timber",
+				"aluminum",
+				"agricultur",
+				"mine",
+				"and",
+				"the",
+				"servic",
+				"sector"
+			],
 			"keywords": [
 				"cameroon",
 				"marketbas",
@@ -201,7 +219,7 @@
 		},
 		{
 			"index": 1,
-			"rank": 1,
+			"rank": 2,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.95,
@@ -209,7 +227,7 @@
 				"sbs": 0.010744316412332608,
 				"position": 0.14,
 				"keyword": 0.06925589792028478,
-				"total": 0.31337794896014237
+				"total": 0.31337794896
 			},
 			"text": "Oil remains Cameroon\u2019s main export commodity, and despite falling global oil prices, still accounts for nearly 40% of exports.",
 			"words": [
@@ -251,6 +269,27 @@
 				"40",
 				"exports"
 			],
+			"stemmed": [
+				"oil",
+				"remain",
+				"cameroon",
+				"main",
+				"export",
+				"commod",
+				"and",
+				"despit",
+				"fall",
+				"global",
+				"oil",
+				"price",
+				"still",
+				"account",
+				"for",
+				"nearli",
+				"40",
+				"of",
+				"export"
+			],
 			"keywords": [
 				"oil",
 				"remain",
@@ -280,7 +319,7 @@
 				"sbs": 0.0059814767172626715,
 				"position": 0.08,
 				"keyword": 0.0390788383101447,
-				"total": 0.12703941915507233
+				"total": 0.127039419155
 			},
 			"text": "Cameroon\u2019s economy suffers from factors that often impact underdeveloped countries, such as stagnant per capita income, a relatively inequitable distribution of income, a top-heavy civil service, endemic corruption, continuing inefficiencies of a large parastatal system in key sectors, and a generally unfavorable climate for business enterprise.",
 			"words": [
@@ -366,6 +405,54 @@
 				"business",
 				"enterprise"
 			],
+			"stemmed": [
+				"cameroon",
+				"economi",
+				"suffer",
+				"from",
+				"factor",
+				"that",
+				"often",
+				"impact",
+				"underdevelop",
+				"countri",
+				"such",
+				"as",
+				"stagnant",
+				"per",
+				"capita",
+				"incom",
+				"a",
+				"rel",
+				"inequit",
+				"distribut",
+				"of",
+				"incom",
+				"a",
+				"topheavi",
+				"civil",
+				"servic",
+				"endem",
+				"corrupt",
+				"continu",
+				"ineffici",
+				"of",
+				"a",
+				"larg",
+				"parastat",
+				"system",
+				"in",
+				"kei",
+				"sector",
+				"and",
+				"a",
+				"gener",
+				"unfavor",
+				"climat",
+				"for",
+				"busi",
+				"enterpris"
+			],
 			"keywords": [
 				"cameroon",
 				"economi",
@@ -412,7 +499,7 @@
 				"sbs": 0.007039379718424812,
 				"position": 0.05,
 				"keyword": 0.04671813821958809,
-				"total": 0.10460906910979405
+				"total": 0.10460906911
 			},
 			"text": "Since 1990, the government has embarked on various IMF and World Bank programs designed to spur business investment, increase efficiency in agriculture, improve trade, and recapitalize the nation's banks.",
 			"words": [
@@ -469,6 +556,37 @@
 				"nations",
 				"banks"
 			],
+			"stemmed": [
+				"sinc",
+				"1990",
+				"the",
+				"govern",
+				"ha",
+				"embark",
+				"on",
+				"variou",
+				"imf",
+				"and",
+				"world",
+				"bank",
+				"program",
+				"design",
+				"to",
+				"spur",
+				"busi",
+				"invest",
+				"increas",
+				"effici",
+				"in",
+				"agricultur",
+				"improv",
+				"trade",
+				"and",
+				"recapit",
+				"the",
+				"nation",
+				"bank"
+			],
 			"keywords": [
 				"sinc",
 				"1990",
@@ -495,15 +613,15 @@
 		},
 		{
 			"index": 4,
-			"rank": 6,
+			"rank": 3,
 			"score": {
-				"title": 0.0,
+				"title": 0.3333333333333333,
 				"length": 0.85,
 				"dbs": 0.001560804068484997,
 				"sbs": 0.008353637312913333,
 				"position": 0.04,
 				"keyword": 0.04957220690699164,
-				"total": 0.14103610345349582
+				"total": 0.266036103453
 			},
 			"text": "The IMF continues to press for economic reforms, including increased budget transparency, privatization, and poverty reduction programs.",
 			"words": [
@@ -540,6 +658,25 @@
 				"reduction",
 				"programs"
 			],
+			"stemmed": [
+				"the",
+				"imf",
+				"continu",
+				"to",
+				"press",
+				"for",
+				"econom",
+				"reform",
+				"includ",
+				"increas",
+				"budget",
+				"transpar",
+				"privat",
+				"and",
+				"poverti",
+				"reduct",
+				"program"
+			],
 			"keywords": [
 				"imf",
 				"continu",
@@ -558,7 +695,7 @@
 		},
 		{
 			"index": 5,
-			"rank": 5,
+			"rank": 6,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.25,
@@ -566,7 +703,7 @@
 				"sbs": 0.006339814032121724,
 				"position": 0.06,
 				"keyword": 0.04170023698310377,
-				"total": 0.1921001184915519
+				"total": 0.19210011849199998
 			},
 			"text": "The Government of Cameroon provides subsidies for electricity, food, and fuel that have strained the federal budget and diverted funds from education, healthcare, and infrastructure projects, as low oil prices have led to lower revenues.",
 			"words": [
@@ -630,6 +767,43 @@
 				"lower",
 				"revenues"
 			],
+			"stemmed": [
+				"the",
+				"govern",
+				"of",
+				"cameroon",
+				"provid",
+				"subsidi",
+				"for",
+				"electr",
+				"food",
+				"and",
+				"fuel",
+				"that",
+				"have",
+				"strain",
+				"the",
+				"feder",
+				"budget",
+				"and",
+				"divert",
+				"fund",
+				"from",
+				"educ",
+				"healthcar",
+				"and",
+				"infrastructur",
+				"project",
+				"as",
+				"low",
+				"oil",
+				"price",
+				"have",
+				"led",
+				"to",
+				"lower",
+				"revenu"
+			],
 			"keywords": [
 				"govern",
 				"cameroon",
@@ -657,7 +831,7 @@
 		},
 		{
 			"index": 6,
-			"rank": 3,
+			"rank": 4,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.8,
@@ -665,7 +839,7 @@
 				"sbs": 0.008136094674556213,
 				"position": 0.04,
 				"keyword": 0.04931218799820612,
-				"total": 0.25965609399910305
+				"total": 0.25965609399899997
 			},
 			"text": "Cameroon devotes significant resources to several large infrastructure projects currently under construction, including a deep seaport in Kribi and the Lom Pangar Hydropower Project.",
 			"words": [
@@ -714,6 +888,32 @@
 				"hydropower",
 				"project"
 			],
+			"stemmed": [
+				"cameroon",
+				"devot",
+				"signific",
+				"resourc",
+				"to",
+				"sever",
+				"larg",
+				"infrastructur",
+				"project",
+				"current",
+				"under",
+				"construct",
+				"includ",
+				"a",
+				"deep",
+				"seaport",
+				"in",
+				"kribi",
+				"and",
+				"the",
+				"lom",
+				"pangar",
+				"hydropow",
+				"project"
+			],
 			"keywords": [
 				"cameroon",
 				"devot",
@@ -737,7 +937,7 @@
 		},
 		{
 			"index": 7,
-			"rank": 4,
+			"rank": 5,
 			"score": {
 				"title": 0.3333333333333333,
 				"length": 0.7,
@@ -745,7 +945,7 @@
 				"sbs": 0.01267962806424345,
 				"position": 0.04,
 				"keyword": 0.07391447878475643,
-				"total": 0.2594572393923782
+				"total": 0.259457239392
 			},
 			"text": "Cameroon\u2019s energy sector continues to diversify, recently opening a natural gas-powered electricity generating plant.",
 			"words": [
@@ -778,6 +978,22 @@
 				"generating",
 				"plant"
 			],
+			"stemmed": [
+				"cameroon",
+				"energi",
+				"sector",
+				"continu",
+				"to",
+				"diversifi",
+				"recent",
+				"open",
+				"a",
+				"natur",
+				"gaspow",
+				"electr",
+				"gener",
+				"plant"
+			],
 			"keywords": [
 				"cameroon",
 				"energi",
@@ -795,15 +1011,15 @@
 		},
 		{
 			"index": 8,
-			"rank": 2,
+			"rank": 0,
 			"score": {
-				"title": 0.3333333333333333,
+				"title": 0.6666666666666666,
 				"length": 0.5,
 				"dbs": 0.004727682635411926,
 				"sbs": 0.012130177514792898,
 				"position": 0.15,
 				"keyword": 0.08428930075102412,
-				"total": 0.26714465037551205
+				"total": 0.392144650376
 			},
 			"text": "Cameroon continues to seek foreign investment to improve its inadequate infrastructure, create jobs, and improve its economic footprint, but its unfavorable business environment remains a significant deterrent to foreign investment.",
 			"words": [
@@ -860,6 +1076,38 @@
 				"deterrent",
 				"foreign",
 				"investment"
+			],
+			"stemmed": [
+				"cameroon",
+				"continu",
+				"to",
+				"seek",
+				"foreign",
+				"invest",
+				"to",
+				"improv",
+				"it",
+				"inadequ",
+				"infrastructur",
+				"creat",
+				"job",
+				"and",
+				"improv",
+				"it",
+				"econom",
+				"footprint",
+				"but",
+				"it",
+				"unfavor",
+				"busi",
+				"environ",
+				"remain",
+				"a",
+				"signific",
+				"deterr",
+				"to",
+				"foreign",
+				"invest"
 			],
 			"keywords": [
 				"cameroon",
