@@ -212,7 +212,6 @@ class TestSummarizer:
             sentence {SampleSentence} -- individual sentence from sample
         """
         summ = Summarizer()
-        # TODO: this will come up again, change `Sample` class
         title_words = sample.title_keywords
         top_keywords = self._get_top_keywords(sample.keywords)
         top_keyword_list = pluck_keyword_words(top_keywords)

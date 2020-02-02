@@ -84,4 +84,3 @@ def test_score_total(sample: Sample, sentence: SampleSentence):
         sentence.score.length, sentence.score.position)
 
     assert kinda.eq(received, expected)
-# pylint: enable=unused-argument
