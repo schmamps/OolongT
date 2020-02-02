@@ -5,7 +5,9 @@
 		"comments": "the string 'a' is intentional"
 	},
 	"idiom": "default",
-	"title": "A short paragraph here but a longer title",
+	"title": {
+		"text": "A short paragraph here but a longer title"
+	},
 	"keyword_count": 3,
 	"keywords": [
 		{"score": 0.5, "count": 1, "word": "paragraph"},

@@ -4,7 +4,9 @@
 		"license": false
 	},
 	"idiom": "default",
-	"title": "Puppies and Kittens Dance!",
+	"title": {
+		"text": "Puppies and Kittens Dance!"
+	},
 	"keyword_count": 0,
 	"keywords": [],
 	"sentences": [

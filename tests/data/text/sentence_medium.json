@@ -4,7 +4,9 @@
 		"license": false
 	},
 	"idiom": "default",
-	"title": "Kittens Frolic with Tiny Puppies?",
+	"title": {
+		"text": "Kittens Frolic with Tiny Puppies?"
+	},
 	"keyword_count": 7,
 	"keywords": [
 		{"score": 0.21428571428571427, "count": 1, "word": "happili"},

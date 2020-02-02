@@ -18,7 +18,7 @@ class SampleKeyword(ScoredKeyword):
         Returns:
             None -- SampleKeyword
         """
-        self.word = pairs.get('word', 'spam')                   # type: str
+        self.word = pairs.get('stem', 'spam')                   # type: str
         self.count = pairs.get('count', 1)                      # type: int
         self.of = of                                            # type: int
         self.score = (

@@ -54,17 +54,18 @@ class SampleSentence(ScoredSentence):
         """
         text = data_dict.get('text', '')
         index = data_dict.get('index', 0)
+        score_dict = data_dict.get('score', {})
         tlds_scores = (
-            data_dict.get('title_score', 0),
-            data_dict.get('length_score', 0),
-            data_dict.get('dbs_score', 0),
-            data_dict.get('sbs_score', 0),
+            score_dict.get('title', 0),
+            score_dict.get('length', 0),
+            score_dict.get('dbs', 0),
+            score_dict.get('sbs', 0),
         )
 
         self._init_(text, index, total, tlds_scores)
-        self.score._position = data_dict.get('position_score', 0)
-        self.score._keyword = data_dict.get('keyword_score', 0)
-        self.score._total = data_dict.get('total_score', 0)
+        self.score._position = score_dict.get('position', 0)
+        self.score._keyword = score_dict.get('keyword', 0)
+        self.score._total = score_dict.get('total', 0)
         self.rank = data_dict.get('rank', 0)
         self.id = str(data_dict.get('id', auto_id(index, total)))
 
@@ -78,26 +79,16 @@ class SampleSentence(ScoredSentence):
         Returns:
             bool -- sentences are equal
         """
-        return (
-            self.text == other.text and
-            self.index == other.index and
-            self.of == other.of and
-            self.score == other.score
-        )
+        if self.text != other.text:
+            return False
 
-    # pylint: enable=too-many-return-statements
-    def equals(self, other) -> bool:
-        """Compare SampleSentence to ScoredSentence in correct order
+        if self.index != other.index:
+            return False
 
-        Arguments:
-            other {ScoredSentence} -- ScoredSentence received
+        if self.of != other.of:
+            return False
 
-        Returns:
-            bool -- all properties match
-        """
-        return (
-            self.text == other.text and
-            self.index == other.index and
-            self.of == other.of and
-            self.score == other.score
-        )
+        if self.score != other.score:
+            return False
+
+        return True

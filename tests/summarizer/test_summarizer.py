@@ -26,7 +26,8 @@ def test_pluck_keyword_words(
         keyword_list {SampleKeywordList} -- list of ScoredKeywords
         expected {StringList} -- list of word properties
     """
-    received = sorted(pluck_keyword_words(keyword_list))
+    plucked = pluck_keyword_words(keyword_list)
+    received = sorted(plucked)
 
     assert received == expected
 
@@ -163,7 +164,7 @@ class TestSummarizer:
         for index, received in enumerate(receiveds):
             expected = expecteds[index]  # type: SampleSentence
 
-            assert expected.equals(received), assert_ex(
+            assert expected == received, assert_ex(
                 'summary',
                 received,
                 expected,
@@ -211,7 +212,8 @@ class TestSummarizer:
             sentence {SampleSentence} -- individual sentence from sample
         """
         summ = Summarizer()
-        title_words = sample.title_words
+        # TODO: this will come up again, change `Sample` class
+        title_words = sample.title_keywords
         top_keywords = self._get_top_keywords(sample.keywords)
         top_keyword_list = pluck_keyword_words(top_keywords)
         text = sentence.text

@@ -4,7 +4,9 @@
 		"license": false
 	},
 	"idiom": "default",
-	"title": "Puppies, Kittens Dance Happily!",
+	"title": {
+		"text": "Puppies, Kittens Dance Happily!"
+	},
 	"keyword_count": 13,
 	"keywords": [
 		{"score": 0.11538461538461539, "count": 1, "word": "accordion"},

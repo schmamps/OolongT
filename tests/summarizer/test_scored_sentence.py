@@ -46,9 +46,8 @@ class TestScoredSentence:
         """
         inst = instantiate(init)
         received = repr(inst)
-        print(received)
 
-        assert received.replace('\'', '"') == expected
+        assert received.replace("'", '"') == expected
 
     # pylint: disable=unused-argument
     @param_comp()

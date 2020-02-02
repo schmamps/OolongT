@@ -146,14 +146,14 @@ def param_pluck_keyword_words():
     vals = (
         (
             [
-                SampleKeyword({'word': 'spam'}, 1),
-                SampleKeyword({'word': 'eggs'}, 1),
-                SampleKeyword({'word': 'bacon'}, 1)
+                SampleKeyword({'stem': 'spam'}, 1),
+                SampleKeyword({'stem': 'eggs'}, 1),
+                SampleKeyword({'stem': 'bacon'}, 1)
             ],
             ['bacon', 'eggs', 'spam'],
         ),
     )
-    ids = ('spam-eggs', )
+    ids = ('spam-eggs',)
 
     return parametrize(names, vals, ids)
 

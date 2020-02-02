@@ -39,7 +39,7 @@ def load_config(root: Path, name: str) -> DictOfAny:
     sentences = config.pop('sentences', [{'text': ''}])
     sent_of = len(sentences)
     keywords = config.pop('keywords', [])
-    kw_of = config.get('keyword_count', 0)
+    kw_of = sum([kw['count'] for kw in keywords])
 
     config['body'] = text or join_sentences(sentences)
     config['sentences'] = [
@@ -64,6 +64,14 @@ class Sample:
 
         self._data = config
         self._keys = config.keys()
+
+    @property
+    def title(self) -> str:
+        return self._data['title']['text']
+
+    @property
+    def title_keywords(self) -> str:
+        return self._data['title']['filtered']
 
     @property
     def body(self) -> str:
