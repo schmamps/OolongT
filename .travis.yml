@@ -7,7 +7,7 @@ python:
   - "nightly"
 
 before_script:
-	- ln -s conftest conftest.py
+  - ln -s conftest conftest.py
 
 install:
   - pip install -r requirements.txt
