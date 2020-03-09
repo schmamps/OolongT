@@ -10,8 +10,6 @@ before_script:
 
 install:
   - "pip install -r requirements.txt"
-  - "pip install git+https://github.com/schmamps/python-docx2txt.git@v080/pull_request"
-  - "find . -name docx_file.py"
   - "python -m nltk.downloader punkt"
   - "python -m nltk.downloader stopwords"
 

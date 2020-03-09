@@ -3,7 +3,7 @@ attrs==19.3.0
 beautifulsoup4==4.8.2
 bs4==0.0.1
 colorama==0.4.3
-docx2txt==0.8
+docx2python==1.21
 entrypoints==0.3
 flake8==3.7.9
 flake8-quotes==2.1.1

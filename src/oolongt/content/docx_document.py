@@ -1,7 +1,6 @@
 """Content extractor for MS Word files"""
-from docx2txt import DocxFile
+from docx2python import docx2python
 
-from ..io import get_stream
 from ..typings import PathOrString
 from .binary_document import BinaryDocument
 
@@ -9,11 +8,9 @@ from .binary_document import BinaryDocument
 class DocxDocument(BinaryDocument):
     """Parse Word XML"""
     def __init__(self, path: PathOrString) -> None:
-        with get_stream(path) as stream:
-            src = DocxFile(stream)
-
-            body = src.main
-            title = src.properties.get('title')
+        doc = docx2python(path)
+        body = doc.text
+        title = doc.properties.get('title', '')
 
         super().__init__(body, title, path)
 
